@@ -254,6 +254,7 @@ namespace ThornThrone.Mobile
             { "DamageMultiplier_Magical", "% магического урона" }, { "CooldownReductionMultiplier", "% сокращения перезарядки" },
             { "TargetCount", "снаряды в залпе" }, { "ProjectileHitCount", "пробитие" }, { "Range", "дальность" },
             { "ProjectileSpeed", "скорость снаряда" }, { "KnockbackDistance", "отталкивание" },
+            { "ProjectileBounces", "отскоки" }, { "StunDuration", "с оглушения" }, { "Radius", "радиус" },
         };
 
         private static readonly HashSet<string> percentAttributes = new HashSet<string>

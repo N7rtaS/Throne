@@ -329,8 +329,12 @@ namespace ThornThrone.Simulation
 
         // ------------------------------------------------------------------ spawning
 
+        /// <summary>Debug hook: the level schedule spawns nothing (tests that place their own enemies).</summary>
+        public bool DebugNoSpawns;
+
         private void UpdateSpawning()
         {
+            if (DebugNoSpawns) return;
             for (int i = 0; i < spawnEvents.Length; i++)
             {
                 var e = spawnEvents[i];
@@ -498,6 +502,7 @@ namespace ThornThrone.Simulation
             enemy.AttackWindup = -1;
             enemy.AttackCooldown = def.Attacks.Length > 0 ? Rng.Range(0, def.Attacks[0].Cooldown) : 0;
             enemy.ResurrectionsLeft = def.ResurrectionTimes;
+            enemy.StunTimer = 0;
             if (eventIndex >= 0) spawnEvents[eventIndex].Alive++;
             ActiveEnemies++;
             ReportUnsupportedEnemy(def);
@@ -554,7 +559,11 @@ namespace ThornThrone.Simulation
                 var def = enemy.Def;
                 Vec2 toHero = HeroPosition - enemy.Position;
                 Vec2 desired;
-                switch (def.Movement)
+                // Stunned: no own movement and attack timers stand still; separation and contact still apply
+                // (interpretation, Mechanics §15).
+                bool stunned = enemy.StunTimer > 0;
+                if (stunned) { enemy.StunTimer -= dt; desired = Vec2.Zero; }
+                else switch (def.Movement)
                 {
                     case MovementBehavior.Tracking:
                         // Ground walkers go straight while the line to the target is clear, otherwise follow
@@ -618,7 +627,7 @@ namespace ThornThrone.Simulation
                     }
                 }
 
-                if (def.Attacks.Length > 0) { UpdateEnemyAttack(enemy, dt); if (Finished) return; }
+                if (def.Attacks.Length > 0 && !stunned) { UpdateEnemyAttack(enemy, dt); if (Finished) return; }
                 if (def.AbsorbRadius > 0) Absorb(enemy);
 
                 // Despawn enemies left far behind.
@@ -714,6 +723,34 @@ namespace ThornThrone.Simulation
             return count;
         }
 
+        /// <summary>A random targetable enemy within range, skipping those the shot has already hit; null if none.</summary>
+        public Enemy RandomTarget(Vec2 center, float range, Projectile exclude)
+        {
+            int found = grid.Query(center, range, queryBuffer), seen = 0;
+            Enemy pick = null;
+            for (int i = 0; i < found; i++)
+            {
+                var e = Enemies[queryBuffer[i]];
+                if (!e.Targetable || (exclude != null && exclude.HasHit(e.SpawnId))) continue;
+                if (Vec2.DistanceSquared(e.Position, center) > range * range) continue;
+                if (Rng.Next(++seen) == 0) pick = e;
+            }
+            return pick;
+        }
+
+        /// <summary>
+        /// Stuns for duration × (1 − m_flStatusResistance); a longer remaining stun is kept (interpretation).
+        /// Imperia and other enemies with resistance 1 are immune.
+        /// </summary>
+        public void Stun(Enemy enemy, float duration)
+        {
+            if (!enemy.Active || enemy.Def.Movement == MovementBehavior.Stationary) return;
+            float time = duration * Math.Max(0, 1 - enemy.Def.StatusResistance);
+            if (time <= enemy.StunTimer) return;
+            enemy.StunTimer = time;
+            Emit(SimEventKind.EnemyStunned, enemy.Slot, enemy.Position, time);
+        }
+
         // ------------------------------------------------------------------ projectiles
 
         /// <summary>
@@ -797,6 +834,9 @@ namespace ThornThrone.Simulation
             shot.Target = null;
             shot.Hostile = false;
             shot.Homing = false;
+            shot.Bounces = 0;
+            shot.Stun = 0;
+            shot.ArmTime = 0;
             ActiveProjectiles++;
             Emit(SimEventKind.ProjectileFired, shot.Slot, HeroPosition, 0);
             return shot;
@@ -848,6 +888,13 @@ namespace ThornThrone.Simulation
                 Vec2 segment = shot.Velocity * dt;
                 shot.Position = start + segment;
                 shot.Life -= dt;
+                if (shot.ArmTime > 0)
+                {
+                    shot.ArmTime -= dt;
+                    if (shot.Life <= 0) RetireProjectile(shot);
+                    continue;
+                }
+                var handler = shot.Source?.Ability as IProjectileAbility;
 
                 // Swept collision along the segment, nearest first.
                 float segmentLengthSquared = segment.LengthSquared;
@@ -871,6 +918,14 @@ namespace ThornThrone.Simulation
                     if (best == null) break;
                     shot.RecordHit(best.SpawnId);
                     shot.Target = null;
+                    if (handler != null)
+                    {
+                        // The ability resolves the impact; the shot flies on only if it was given a new target.
+                        bool flying = handler.OnHit(this, shot, best);
+                        if (Finished) return;
+                        if (!flying) shot.RemainingHits = 0;
+                        break;
+                    }
                     DamageEnemy(best, shot.Damage);
                     if (Finished) return;
                     Knockback(best, shot.Velocity, shot.Knockback);

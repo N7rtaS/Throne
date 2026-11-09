@@ -37,7 +37,7 @@ namespace ThornThrone.Mobile
             }
         }
 
-        private readonly Kind small, large, elite, boss, friendly, bolt, hostileBolt, experience, gold, heal, roomRing, roomFill,
+        private readonly Kind small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill,
             warnRing, warnFill, fire, portal, portalRing, shield;
         private readonly Kind[] all;
 
@@ -172,7 +172,9 @@ namespace ThornThrone.Mobile
             friendly = Make(cube, template, new Color(.6f, .6f, .55f));
             bolt = Make(sphere, template, new Color(.25f, .9f, 1f));
             hostileBolt = Make(sphere, template, new Color(.75f, .9f, 1f));
+            missile = Make(sphere, template, new Color(.55f, .35f, 1f));     // Vengeful Spirit violet
             var ring = Annulus(0.92f, 1f, 64);
+            stun = Make(ring, template, new Color(1f, .9f, .3f));
             roomRing = Make(ring, template, new Color(0, .5f, 1f));          // m_cEliteGlowColor (0, 128, 255)
             roomFill = Make(Annulus(0f, 1f, 64), template, new Color(0, .25f, .55f));
             var disc = Annulus(0f, 1f, 48);
@@ -185,7 +187,7 @@ namespace ThornThrone.Mobile
             experience = Make(cube, template, new Color(.35f, 1f, .55f));
             gold = Make(cube, template, new Color(1f, .82f, .2f));
             heal = Make(cube, template, new Color(1f, .4f, .45f));
-            all = new[] { small, large, elite, boss, friendly, bolt, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield };
+            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield };
         }
 
         /// <summary>Flat ring in the XZ plane, unit outer radius.</summary>
@@ -245,11 +247,13 @@ namespace ThornThrone.Mobile
                 if (e.Def.IsBoss && HideBoss) continue;
                 if (e.Def.ModelScale < 0.01f) continue; // boss room pillars: drawn by the arena (m_flModelScale 0.001)
                 if (e.Shielded) shield.Add(Matrix4x4.TRS(ToWorld(e.Position, 0.04f), Quaternion.identity, Vector3.one * Mathf.Max(0.8f, e.Radius * 2.5f * Scale)));
+                // Stand-in for generic_stunned.vpcf: a yellow ring; the enemy plays its idle clip.
+                if (e.Stunned) stun.Add(Matrix4x4.TRS(ToWorld(e.Position, 0.05f), Quaternion.identity, Vector3.one * Mathf.Max(0.6f, e.Radius * 2f * Scale)));
                 var look = LookOf(e);
                 if (look != null)
                 {
                     var v = look.Visual;
-                    bool moving = e.Def.Movement != MovementBehavior.Stationary;
+                    bool moving = e.Def.Movement != MovementBehavior.Stationary && !e.Stunned;
                     var clip = moving ? v.run : v.idle;
                     float phase = (e.SpawnId * 0.618034f) % 1f * Mathf.Max(0.01f, clip.Length);
                     look.Add(Matrix4x4.TRS(ToWorld(e.Position), Facing(run, e), Vector3.one * (HeroView.ModelScale * e.Def.ModelScale * e.Scale)),
@@ -266,7 +270,7 @@ namespace ThornThrone.Mobile
             {
                 if (!p.Active) continue;
                 float d = Mathf.Max(0.2f, p.Radius * 2 * Scale);
-                (p.Hostile ? hostileBolt : bolt).Add(Matrix4x4.TRS(ToWorld(p.Position, 0.8f), Quaternion.identity, Vector3.one * d));
+                (p.Hostile ? hostileBolt : p.Source?.Ability is MagicMissile ? missile : bolt).Add(Matrix4x4.TRS(ToWorld(p.Position, 0.8f), Quaternion.identity, Vector3.one * d));
             }
             float trigger = run.Mode.EliteRoomTriggerRadius * Scale;
             foreach (var room in run.EliteRooms)

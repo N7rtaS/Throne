@@ -26,6 +26,9 @@ namespace ThornThrone.Simulation
         /// <summary>Ground walker sees its chase target in a straight line (refreshed every third step).</summary>
         public bool ClearPath;
         public int ResurrectionsLeft;
+        /// <summary>Seconds of stun left: no movement and no attacks (Magic Missile).</summary>
+        public float StunTimer;
+        public bool Stunned => StunTimer > 0;
         public bool Hostile => !Def.PlayerFriendly;
         public bool Targetable => Active && !Def.PlayerFriendly && !Def.Invulnerable && !Shielded;
     }
@@ -45,6 +48,12 @@ namespace ThornThrone.Simulation
         public int RemainingHits;
         public Enemy Target;
         public int TargetSpawnId;
+        /// <summary>Further targets after the first impact (Magic Missile).</summary>
+        public int Bounces;
+        /// <summary>Stun seconds applied on impact.</summary>
+        public float Stun;
+        /// <summary>Seconds after a bounce during which the shot cannot hit (m_flBounceMinimumLifetime).</summary>
+        public float ArmTime;
         public readonly int[] HitSpawnIds = new int[MaxHits];
         public int HitCount;
 
@@ -75,7 +84,7 @@ namespace ThornThrone.Simulation
         EnemySpawned, EnemyDied, EnemyDespawned, EnemyDamaged,
         ProjectileFired, ProjectileEnded,
         PickupSpawned, PickupCollected,
-        HeroDamaged, HeroDashed, HeroTeleported, LevelUp, EnemyResurrected, EnemyAttacked, EliteRoomOpened, EliteRoomStarted, EliteRoomCompleted, ChoicesReady, BossSpawned, RunFinished,
+        HeroDamaged, HeroDashed, HeroTeleported, LevelUp, EnemyResurrected, EnemyStunned, EnemyAttacked, EliteRoomOpened, EliteRoomStarted, EliteRoomCompleted, ChoicesReady, BossSpawned, RunFinished,
     }
 
     /// <summary>Notification for presentation (views, effects, sound). Read and cleared every frame.</summary>

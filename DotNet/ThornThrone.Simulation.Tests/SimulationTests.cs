@@ -235,7 +235,7 @@ namespace ThornThrone.Simulation.Tests
                 }
                 Assert.That(run.Build.Choose(choices[0]), Is.True);
             }
-            Assert.That(rounds, Is.EqualTo(8), "currently Arcane Bolt is the only implemented skill, ranks 2 through 9");
+            Assert.That(rounds, Is.EqualTo(17), "implemented skills: Arcane Bolt ranks 2-9, Magic Missile ranks 1-9");
             TestContext.WriteLine($"{rounds} upgrades until the pool is exhausted");
         }
 

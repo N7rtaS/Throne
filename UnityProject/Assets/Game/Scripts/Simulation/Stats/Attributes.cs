@@ -54,6 +54,9 @@ namespace ThornThrone.Simulation
         public static readonly int KnockbackDistance = Id("KnockbackDistance");
         public static readonly int ProjectileAttackInterval = Id("ProjectileAttackInterval");
         public static readonly int ProjectileAttack = Id("ProjectileAttack");
+        public static readonly int ProjectileBounces = Id("ProjectileBounces");
+        public static readonly int StunDuration = Id("StunDuration");
+        public static readonly int Radius = Id("Radius");
     }
 
     /// <summary>Additive attribute totals.</summary>
