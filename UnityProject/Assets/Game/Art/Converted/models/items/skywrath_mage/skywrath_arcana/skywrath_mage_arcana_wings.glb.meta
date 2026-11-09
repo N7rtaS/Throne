@@ -1,0 +1,62 @@
+fileFormatVersion: 2
+guid: 9f9368ce8cd6342a2a6d5e9fb9612118
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_color_png_69ccea54.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_color_png_69ccea54.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_detailmask_png_91d0e109.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_detailmask_png_91d0e109.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_specmask_psd_320d0c70.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_specmask_psd_320d0c70.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_normal_png_7369efe.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_normal_png_7369efe.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_detailmask_png_91d0e109_orm_2072258344.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_detailmask_png_91d0e109_orm_2072258344.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_color_psd_8714cca8.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_color_psd_8714cca8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_detailmask_png_351efb5f.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_detailmask_png_351efb5f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_specmask_png_a8a6dbb6.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_specmask_png_a8a6dbb6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_normal_png_21bc079f.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_normal_png_21bc079f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_detailmask_png_351efb5f_orm_998563904.png
+    assetPath: Assets/Game/Art/Converted/models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_wings_alt_detailmask_png_351efb5f_orm_998563904.png
+  reportItems:
+  - type: 2
+    code: 20
+    messages:
+    - KHR_materials_specular

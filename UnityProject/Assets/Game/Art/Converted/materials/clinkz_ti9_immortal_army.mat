@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: clinkz_ti9_immortal_army
+  m_Shader: {fileID: 4800000, guid: d459fa5c4fe6348329b88ca5455a1411, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _DETAIL
+  - _DIFFUSE_WARP
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorMap:
+        m_Texture: {fileID: 2800000, guid: 15265e8ee52344e249ab2529d1ee017c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMap:
+        m_Texture: {fileID: 2800000, guid: 4253ddbe6d7d64eb2b48b722857ad307, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseWarp:
+        m_Texture: {fileID: 2800000, guid: 3ccbe02ddcf5040c883f6d6ebe81ff49, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FresnelWarp:
+        m_Texture: {fileID: 2800000, guid: 3ff65f45a151148d591ad9aa4203d633, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks1:
+        m_Texture: {fileID: 2800000, guid: eca2ead54dde240fb85eeb6041e36006, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks2:
+        m_Texture: {fileID: 2800000, guid: a9fb70ffa6f2b4d27a373c135c64324e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: cac5a34c417264bdfa3608d0472d3314, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaTest: 1
+    - _AmbientScale: 10
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DetailBlend: 1
+    - _RimLightScale: 3
+    - _SelfIllumScale: 1
+    - _SpecularExponent: 32
+    - _SpecularScale: 2
+    - _UseDetail: 1
+    - _UseDiffuseWarp: 1
+    m_Colors:
+    - _DetailScale: {r: 3, g: 0.5, b: 0, a: 0}
+    - _DetailTint: {r: 1, g: 1, b: 1, a: 1}
+    - _RimLightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 0.980392, g: 0.498039, b: 0.443137, a: 0}
+    - _VatInfo: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

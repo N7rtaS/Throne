@@ -1,0 +1,47 @@
+fileFormatVersion: 2
+guid: f69a71add39ec4cffb4fe69eb25a65b2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 1
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_color_psd_3a1a0dbe.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_color_psd_3a1a0dbe.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_detailmask_tga_3f1faae8.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_detailmask_tga_3f1faae8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_specmask_tga_2b553616.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_specmask_tga_2b553616.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_normal_psd_af2bc1ee.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_normal_psd_af2bc1ee.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_detailmask_tga_3f1faae8_orm_2805657312.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/eidolon/geodesic_detailmask_tga_3f1faae8_orm_2805657312.png
+  reportItems:
+  - type: 2
+    code: 20
+    messages:
+    - KHR_materials_specular

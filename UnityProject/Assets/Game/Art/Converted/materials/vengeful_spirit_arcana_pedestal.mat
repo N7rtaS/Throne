@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: vengeful_spirit_arcana_pedestal
+  m_Shader: {fileID: 4800000, guid: d459fa5c4fe6348329b88ca5455a1411, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ALPHATEST_ON
+  - _DETAIL
+  - _DIFFUSE_WARP
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorMap:
+        m_Texture: {fileID: 2800000, guid: 491fe67532c934f23b5aab11797c2301, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMap:
+        m_Texture: {fileID: 2800000, guid: d5e38ddca61174f0695964010fdd8cf5, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseWarp:
+        m_Texture: {fileID: 2800000, guid: bc69f0d39e16c4c1c911891e998f07c9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FresnelWarp:
+        m_Texture: {fileID: 2800000, guid: e22cf1044f55e4b5d92ae842479a7d7f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks1:
+        m_Texture: {fileID: 2800000, guid: 9b15cb55f666a486090a25d73e6bbe33, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks2:
+        m_Texture: {fileID: 2800000, guid: aa2f4a49422b14f1ab605bd38bb33a9e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 476b8a57e053842a5b045c4541f175dc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaTest: 1
+    - _AmbientScale: 0.705
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DetailBlend: 1
+    - _RimLightScale: 3
+    - _SelfIllumScale: 1
+    - _SpecularExponent: 10
+    - _SpecularScale: 5
+    - _UseDetail: 1
+    - _UseDiffuseWarp: 1
+    m_Colors:
+    - _DetailScale: {r: 3, g: 3, b: 0, a: 0}
+    - _DetailTint: {r: 1, g: 1, b: 1, a: 0}
+    - _RimLightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
+    - _VatInfo: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

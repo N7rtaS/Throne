@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: undying_zombie
+  m_Shader: {fileID: 4800000, guid: d459fa5c4fe6348329b88ca5455a1411, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _DIFFUSE_WARP
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _ColorMap:
+        m_Texture: {fileID: 2800000, guid: c4e342e62e26d413c997e4e033bef7e4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DiffuseWarp:
+        m_Texture: {fileID: 2800000, guid: d96ad05786d5a4b028e56527c9c72a0c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FresnelWarp:
+        m_Texture: {fileID: 2800000, guid: a26c010ade8bf43ba861659354f7663a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks1:
+        m_Texture: {fileID: 2800000, guid: 8eec8ab513ba04d1b90a29d6f3073b69, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Masks2:
+        m_Texture: {fileID: 2800000, guid: 3c81894307b3a47759d72a33ecdbb23c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: bd50287e9f1d84c10a3af4c40221b07a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaTest: 0
+    - _AmbientScale: 1
+    - _Cull: 2
+    - _Cutoff: 0.5
+    - _DetailBlend: 1
+    - _RimLightScale: 1
+    - _SelfIllumScale: 1
+    - _SpecularExponent: 15
+    - _SpecularScale: 0.25
+    - _UseDetail: 0
+    - _UseDiffuseWarp: 1
+    m_Colors:
+    - _DetailScale: {r: 1, g: 1, b: 1, a: 1}
+    - _DetailTint: {r: 1, g: 1, b: 1, a: 1}
+    - _RimLightColor: {r: 1, g: 1, b: 1, a: 0}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
+    - _VatInfo: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

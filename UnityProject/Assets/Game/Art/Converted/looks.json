@@ -1,0 +1,25 @@
+{
+ "dragonus": {
+  "body": "models/heroes/skywrath_mage/skywrath_mage.glb",
+  "wearables": [
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_arms.glb",
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_shoulder.glb",
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_belt_refit.glb",
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_head.glb",
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_weapon.glb",
+   "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_wings.glb"
+  ],
+  "style": 0
+ },
+ "imperia": {
+  "body": "models/heroes/vengeful/vengeful.glb",
+  "wearables": [
+   "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_shoulders.glb",
+   "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon.glb",
+   "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head_refit.glb",
+   "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs_refit.glb"
+  ],
+  "style": 2,
+  "scale": 2.8
+ }
+}

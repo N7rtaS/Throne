@@ -1,0 +1,47 @@
+fileFormatVersion: 2
+guid: 542375be3fc7049c7bf5cc0b8f8db5b2
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 1
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_color_psd_122dd239.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_color_psd_122dd239.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_metalnessmask_psd_d075732.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_metalnessmask_psd_d075732.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_specmask_psd_802a14e2.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_specmask_psd_802a14e2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_normal_psd_c7e69e0b.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_normal_psd_c7e69e0b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_metalnessmask_psd_d075732_orm_2047195757.png
+    assetPath: Assets/Game/Art/Converted/models/events/crownfall/survivors/breakable/clay_pot001_survivors_metalnessmask_psd_d075732_orm_2047195757.png
+  reportItems:
+  - type: 2
+    code: 20
+    messages:
+    - KHR_materials_specular

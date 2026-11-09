@@ -1,0 +1,1199 @@
+fileFormatVersion: 2
+guid: a47b24c18d94e495c8f557b611b2c1c5
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_refl_psd_94376157.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_refl_psd_94376157.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_color_psd_70d61080.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_color_psd_70d61080.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_color_psd_af3aacc6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_color_psd_af3aacc6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_refl_psd_8adfe33a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_refl_psd_8adfe33a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_normal_psd_2f2fc599.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/moss005_normal_psd_2f2fc599.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_normal_psd_839577eb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_stone_ti10_01_normal_psd_839577eb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/camp_fire_pit001_color_psd_4f346bc4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/camp_fire_pit001_color_psd_4f346bc4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_color_psd_44b9623d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_color_psd_44b9623d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_normal_psd_47c07508.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_normal_psd_47c07508.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_color_png_7af52e67.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_color_png_7af52e67.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_vmat_g_tmasks1_3fd6c990.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_vmat_g_tmasks1_3fd6c990.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_specmask_png_270a72e9.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_specmask_png_270a72e9.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_normal_png_7c2db078.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_normal_png_7c2db078.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_vmat_g_tmasks1_3fd6c990_orm_2307776433.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_wall_dark_vmat_g_tmasks1_3fd6c990_orm_2307776433.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_survivors_transparent_vmat_g_tcolor_dd5cc68b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_survivors_transparent_vmat_g_tcolor_dd5cc68b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/default_normal_tga_7652cb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/default_normal_tga_7652cb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_river_normal_sharp_temp_normal_tga_4ab60bd5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_river_normal_sharp_temp_normal_tga_4ab60bd5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_white_001_color_psd_77eb7e88.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_white_001_color_psd_77eb7e88.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_red_001_scroll_tga_e157fcfb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_red_001_scroll_tga_e157fcfb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_white_001_vmat_g_tspecular_cba705b8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/vapor_white_001_vmat_g_tspecular_cba705b8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_color_psd_23526154.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_color_psd_23526154.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_normal_psd_459bce43.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_normal_psd_459bce43.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_refl_psd_b6a1d97d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_journey_001_refl_psd_b6a1d97d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_normal_psd_482e1c08.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_normal_psd_482e1c08.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_color_psd_5efae7d7.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_color_psd_5efae7d7.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_vmat_g_tspecular_83163e7b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/team_banner_radiant_ti10_vmat_g_tspecular_83163e7b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_normal_psd_c2b38173.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_normal_psd_c2b38173.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_psd_c2f84480.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_psd_c2f84480.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_refl_psd_110f808d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_refl_psd_110f808d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_normal_psd_8afae20d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_normal_psd_8afae20d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_refl_psd_fcb0488.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wardspot_ti10_00_refl_psd_fcb0488.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/primary_black_color_tga_641d9241.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/primary_black_color_tga_641d9241.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/default_normal_tga_b3f4ec4c_orm_3598707198.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/default_normal_tga_b3f4ec4c_orm_3598707198.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_color_psd_299a6bc8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_color_psd_299a6bc8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim003b_color_psd_2f3f1bc1.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim003b_color_psd_2f3f1bc1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_normal_psd_61cf2183.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_normal_psd_61cf2183.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_refl_psd_13b6a54c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_refl_psd_13b6a54c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_refl_psd_3f435c59.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tile_trim001b_refl_psd_3f435c59.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_clump_cliffedge_tintable_color_psd_f43de1fc.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_clump_cliffedge_tintable_color_psd_f43de1fc.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_clump_nospec_tintable_00_vmat_g_tspecular_39888860.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_clump_nospec_tintable_00_vmat_g_tspecular_39888860.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_normal_psd_3eda4f31.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_normal_psd_3eda4f31.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_color_psd_d64a8ed0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_color_psd_d64a8ed0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_vmat_g_tspecular_72ec5ef3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_vmat_g_tspecular_72ec5ef3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_color_psd_fe064f15.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_color_psd_fe064f15.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_trans_tga_9465ced8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_trans_tga_9465ced8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_vmat_g_tspecular_cba705b8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/glow_00_vmat_g_tspecular_cba705b8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_color_psd_bc811b6c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_color_psd_bc811b6c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_vmat_g_tspecular_cba705b8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_vmat_g_tspecular_cba705b8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_scroll_tga_edb7f3c8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_lightrays_scroll_tga_edb7f3c8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_color_psd_657db40d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_color_psd_657db40d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_scroll_tga_90f62c2e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_scroll_tga_90f62c2e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_vmat_g_tspecular_cba705b8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/water_edges_00_vmat_g_tspecular_cba705b8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_color_png_3e6e43e2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_color_png_3e6e43e2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_normal_png_d979fe14.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_normal_png_d979fe14.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_specmask_png_39fd4608.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_diamond_roof_tiles_specmask_png_39fd4608.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_color_png_c33fc90c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_color_png_c33fc90c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_normal_png_76d7c60f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_normal_png_76d7c60f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_specmask_png_eae31e31.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_specmask_png_eae31e31.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_color_png_a7e33751.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_color_png_a7e33751.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_vmat_g_tmasks1_a57d02bf.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_vmat_g_tmasks1_a57d02bf.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_a_specmask_png_dff33674.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_a_specmask_png_dff33674.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_normal_png_101bc51a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_normal_png_101bc51a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_vmat_g_tmasks1_a57d02bf_orm_2824058024.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stained_window_b_vmat_g_tmasks1_a57d02bf_orm_2824058024.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_color_png_880e0c94.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_color_png_880e0c94.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_normal_png_9ac029eb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_normal_png_9ac029eb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_specmask_png_a851b01b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_specmask_png_a851b01b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_color_png_348eacaf.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_color_png_348eacaf.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_detailmask_png_493903dc.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_detailmask_png_493903dc.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_specmask_png_e9c789ce.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_specmask_png_e9c789ce.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_detailmask_png_493903dc_orm_3584469699.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/imperia_throne_detailmask_png_493903dc_orm_3584469699.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_specmask_png_d052f336.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_specmask_png_d052f336.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_dark_color_png_827b177d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_dark_color_png_827b177d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_normal_png_2e8076ac.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_normal_png_2e8076ac.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_specmask_png_3136be6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_specmask_png_3136be6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_color_png_7304cb8b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_color_png_7304cb8b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_normal_png_10b6c2af.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_normal_png_10b6c2af.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_specmask_png_776cb20e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_railing_specmask_png_776cb20e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_color_psd_5668a3e0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_color_psd_5668a3e0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_glass_psd_ac7db0cb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_glass_psd_ac7db0cb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_normal_psd_4164ed35.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_normal_psd_4164ed35.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_color_psd_a0a77d45.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_color_psd_a0a77d45.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_specmask_psd_9dc64fe4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_specmask_psd_9dc64fe4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_normal_psd_ad5e0255.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_dome_normal_psd_ad5e0255.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_color_png_3279cdfd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_color_png_3279cdfd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_normal_png_95f048cd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_normal_png_95f048cd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_specmask_png_3420cbde.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_side_buildings_trim_specmask_png_3420cbde.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_none_vmat_g_tcolor_f18d566b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_none_vmat_g_tcolor_f18d566b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_color_png_a6d360e8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_color_png_a6d360e8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_color_png_4c68026a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_color_png_4c68026a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_normal_png_a2174441.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_normal_png_a2174441.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_normal_png_bcc46d11.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_normal_png_bcc46d11.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_specmask_png_8d41f27b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_garden_path_specmask_png_8d41f27b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_refl_png_3e5664ee.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dirt_refl_png_3e5664ee.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_specmask_png_edd9c7f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_square_specmask_png_edd9c7f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_color_png_c6e8af0e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_color_png_c6e8af0e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_color_png_1fc878bd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_color_png_1fc878bd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_normal_png_8237da83.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_normal_png_8237da83.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_specmask_png_6c582552.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_specmask_png_6c582552.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_specmask_png_5ffc712f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_gravel_specmask_png_5ffc712f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_color_png_37dc4f1.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_color_png_37dc4f1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_normal_png_eabf5985.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_normal_png_eabf5985.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_specmask_png_d6470d21.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_stone_specmask_png_d6470d21.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_01_color_psd_4ba2d50a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_01_color_psd_4ba2d50a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_color_psd_e6bba88f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_color_psd_e6bba88f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_00_normal_psd_764982b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_00_normal_psd_764982b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_00_refl_psd_e623e39c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/rocky_00_refl_psd_e623e39c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_normal_psd_2c0f3580.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_normal_psd_2c0f3580.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_refl_psd_3a1da4cb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_long_01_refl_psd_3a1da4cb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path009_color_psd_a290f30d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path009_color_psd_a290f30d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_color_psd_cb55ed99.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_color_psd_cb55ed99.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path001_normal_psd_5df4e78b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path001_normal_psd_5df4e78b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_normal_psd_fa3b0671.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_normal_psd_fa3b0671.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path001_refl_psd_a526345e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/sand_path001_refl_psd_a526345e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_refl_psd_b08ccfb5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_spring_00_refl_psd_b08ccfb5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_ti10_02_color_psd_d9034285.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_ti10_02_color_psd_d9034285.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_bumpy_00_refl_psd_5a1737b2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_bumpy_00_refl_psd_5a1737b2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_bumpy_00_normal_psd_ad867ef2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/grass_bumpy_00_normal_psd_ad867ef2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_color_psd_4479a520.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_color_psd_4479a520.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_normal_psd_df3b71fd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_normal_psd_df3b71fd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_refl_psd_e453c9c1.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/props_generic_02_refl_psd_e453c9c1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_10_color_tga_7f23337e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_10_color_tga_7f23337e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_30b_color_tga_15b0c1d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_30b_color_tga_15b0c1d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_60b_color_tga_4ed59073.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/reflectivity_60b_color_tga_4ed59073.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_psd_3147266b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_psd_3147266b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_normal_psd_e491075b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_normal_psd_e491075b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_vmat_g_tspecular_5431f3b4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bones_tintable_002_vmat_g_tspecular_5431f3b4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_color_psd_ea153fc9.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_color_psd_ea153fc9.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_normal_psd_e3cf15c4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_normal_psd_e3cf15c4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_refl_psd_fac1542b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/campfire_rocks001_refl_psd_fac1542b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/candles001_color_psd_a1d07469.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/candles001_color_psd_a1d07469.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/candles001_refl_tga_359d0b94.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/candles001_refl_tga_359d0b94.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_color_psd_ce30b5ea.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_event_bg_color_psd_ce30b5ea.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_color_png_91eba02c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_color_png_91eba02c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_normal_png_d79277be.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_normal_png_d79277be.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_specmask_png_3a885fe8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_braizer_specmask_png_3a885fe8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_color_png_cab8c874.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_color_png_cab8c874.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_normal_png_365328cd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_normal_png_365328cd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_specmask_png_14d1a223.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_a_specmask_png_14d1a223.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_color_png_3f06e039.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_color_png_3f06e039.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_normal_png_16f556e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_normal_png_16f556e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_specmask_png_cf7495c4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_specmask_png_cf7495c4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_alt_color_png_d2d3711.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_a_alt_color_png_d2d3711.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_color_png_3c84062.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_color_png_3c84062.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_normal_png_8f24a7d5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_normal_png_8f24a7d5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_specmask_png_fdde9473.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_b_specmask_png_fdde9473.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_color_png_56f730ea.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_color_png_56f730ea.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_normal_png_e18d9c18.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_normal_png_e18d9c18.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_specmask_png_818071a8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_specmask_png_818071a8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_alt_color_png_ed68ba0b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_c_alt_color_png_ed68ba0b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_color_png_5cd4b3e0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_color_png_5cd4b3e0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_normal_png_a83cadc4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_normal_png_a83cadc4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_specmask_png_51f05fb6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_specmask_png_51f05fb6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_alt_color_png_134a10da.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_d_alt_color_png_134a10da.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_color_png_cd507f73.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_color_png_cd507f73.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_normal_png_4affd7e5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_normal_png_4affd7e5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_specmask_png_179e149f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_specmask_png_179e149f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_alt_color_png_f50d61e0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_e_alt_color_png_f50d61e0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_color_png_aa3e52c6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_color_png_aa3e52c6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_normal_png_95b3d909.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_normal_png_95b3d909.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_specmask_png_6bf55c3c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_specmask_png_6bf55c3c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_alt_color_png_44bcb8f2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_circle_f_alt_color_png_44bcb8f2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dark_color_png_7f84fb89.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_dark_color_png_7f84fb89.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_normal_png_c9ed4677.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_normal_png_c9ed4677.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_specmask_png_b8a11a4b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_floor_specmask_png_b8a11a4b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_color_png_41d101c7.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_color_png_41d101c7.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_normal_png_c9feb1c0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_normal_png_c9feb1c0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_vmat_g_tspecular_c6237396.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_vmat_g_tspecular_c6237396.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_color_desat_png_d7fb3084.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_color_desat_png_d7fb3084.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_desat_vmat_g_tspecular_c6237396.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_desat_vmat_g_tspecular_c6237396.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_statue_desat_vmat_g_tspecular_c6237396.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_statue_desat_vmat_g_tspecular_c6237396.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_color_png_deb922ad.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_color_png_deb922ad.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_normal_png_207055e4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_normal_png_207055e4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_color_desat_png_6e98b489.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_color_desat_png_6e98b489.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_desat_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_desat_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_statue_desat_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_statue_desat_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_color_desat_png_656a2071.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_color_desat_png_656a2071.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_normal_png_49e0dfbc.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_normal_png_49e0dfbc.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_desat_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_desat_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_color_desat_png_b9d64e9b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_color_desat_png_b9d64e9b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_desat_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_desat_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_color_png_4520fa36.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_color_png_4520fa36.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_normal_png_1f2ad0c4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_normal_png_1f2ad0c4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_specmask_png_29970fa.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trims_specmask_png_29970fa.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_color_png_cfb40f39.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_color_png_cfb40f39.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_normal_png_945b2e1a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_normal_png_945b2e1a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_specmask_png_711ac2ff.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_specmask_png_711ac2ff.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_color_png_c38e3f36.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_color_png_c38e3f36.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_normal_png_cb1a5b03.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_normal_png_cb1a5b03.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_specmask_png_353a50fc.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_specmask_png_353a50fc.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_color_png_53628adf.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_color_png_53628adf.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_normal_png_11dc1fb4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_normal_png_11dc1fb4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_specmask_png_1c56ca35.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_railing_post_cap_specmask_png_1c56ca35.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_color_png_d6ef9b75.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_color_png_d6ef9b75.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_normal_png_d19adfdc.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_normal_png_d19adfdc.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_specmask_png_ac85102b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_rug_specmask_png_ac85102b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_color_png_f3bae5d0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_color_png_f3bae5d0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_normal_png_1bac355c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_normal_png_1bac355c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_specmask_png_a04b4c37.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_throne_room_floor_specmask_png_a04b4c37.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/crystal001_color_psd_aefbe59.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/crystal001_color_psd_aefbe59.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/crystal001_normal_tga_aa269e6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/crystal001_normal_tga_aa269e6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_normal_psd_9c869048.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_normal_psd_9c869048.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_color_psd_d45efc2a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_color_psd_d45efc2a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_refl_psd_ac1e2ac8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/flowers_ti10_01_refl_psd_ac1e2ac8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_color_psd_e87608e7.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_color_psd_e87608e7.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_normal_psd_1b1aa2d1.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_normal_psd_1b1aa2d1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_refl_psd_3608822b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ground_rock001_refl_psd_3608822b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/leanto_fur_color_psd_2841222f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/leanto_fur_color_psd_2841222f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/leanto_sticks_color_psd_664feec5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/leanto_sticks_color_psd_664feec5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_normal_psd_8c3a24d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_normal_psd_8c3a24d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_color_psd_d1d70e40.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_color_psd_d1d70e40.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_refl_psd_6727a79f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/plants_jungle_001_refl_psd_6727a79f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_color_psd_69480412.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_color_psd_69480412.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_normal_psd_efa110ba.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_normal_psd_efa110ba.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_refl_psd_75a80889.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/lilypad_ti10_01_refl_psd_75a80889.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_color_psd_eb8264c8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_color_psd_eb8264c8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_normal_psd_ec977254.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_normal_psd_ec977254.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_refl_psd_4a1866b4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/neutral_creep_camp001_refl_psd_4a1866b4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_color_psd_d62c13b3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_color_psd_d62c13b3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_normal_psd_68d738ff.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_normal_psd_68d738ff.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_refl_psd_310cbf21.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/radiant_barracks_pool001_refl_psd_310cbf21.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_color_psd_8ccd02e5.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_color_psd_8ccd02e5.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_normal_psd_ae1e512f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_normal_psd_ae1e512f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_color_psd_67a92369.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall002_color_psd_67a92369.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_color_psd_ecc7fc4f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_color_psd_ecc7fc4f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_normal_psd_5721d484.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_normal_psd_5721d484.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_color_psd_ae7d925e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stone_wall003_color_psd_ae7d925e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stonewallstatue001_color_psd_46b5d9a2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stonewallstatue001_color_psd_46b5d9a2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stonewallstatue003_color_psd_cd43da0d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/stonewallstatue003_color_psd_cd43da0d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/survivors_env_color_psd_36bac2b2.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/survivors_env_color_psd_36bac2b2.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/survivors_env_bg_color_psd_47a4dd62.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/survivors_env_bg_color_psd_47a4dd62.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_color_psd_2cbf7888.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_color_psd_2cbf7888.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_normal_psd_10ed077b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_normal_psd_10ed077b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_refl_psd_b618931b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/temple_stairs001_refl_psd_b618931b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_normal_psd_f0428309.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_normal_psd_f0428309.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_color_psd_929555fe.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_color_psd_929555fe.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_refl_psd_ddc4da63.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_cliffs_refl_psd_ddc4da63.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_normal_psd_b0a3d136.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_normal_psd_b0a3d136.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_color_psd_d0ea750f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_color_psd_d0ea750f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_vmat_g_tspecular_a4bcb692.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_trees01_vmat_g_tspecular_a4bcb692.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/universal_vines001_color_psd_8a269b29.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/universal_vines001_color_psd_8a269b29.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/universal_vines001_refl_tga_6b1e90fe.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/universal_vines001_refl_tga_6b1e90fe.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_color_psd_ba8d477e.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_color_psd_ba8d477e.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_normal_psd_72b72ef0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_normal_psd_72b72ef0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_refl_psd_ec441e2a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_column_large_interior_refl_psd_ec441e2a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_color_png_c9214d33.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_new_capital_color_png_c9214d33.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_color_png_10b30399.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_outer_wall_a_column_color_png_10b30399.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_color_psd_8fa319c1.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_color_psd_8fa319c1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_normal_psd_3f233e11.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_normal_psd_3f233e11.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_vmat_g_tspecular_e9956b56.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_vmat_g_tspecular_e9956b56.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_block_color_psd_714a26b3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_block_color_psd_714a26b3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_block_vmat_g_tspecular_e9956b56.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_topiary002_block_vmat_g_tspecular_e9956b56.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_color_png_3c6ef4f9.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_color_png_3c6ef4f9.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_normal_png_18f78f25.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_normal_png_18f78f25.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_specmask_png_eda7dd26.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_specmask_png_eda7dd26.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_a_color_png_7907b363.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_a_color_png_7907b363.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_ripples_normal_png_722fd53d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_ripples_normal_png_722fd53d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_a_specmask_png_40360030.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_banner_a_specmask_png_40360030.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_color_png_879ae82b.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_color_png_879ae82b.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_color_png_5fb8e13c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_color_png_5fb8e13c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_trim_flowers_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_roof_glass_enterance_vmat_g_tcolor_b56e7355.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_roof_glass_enterance_vmat_g_tcolor_b56e7355.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_roof_glass_enterance_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_roof_glass_enterance_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_statue_vmat_g_tspecular_c6237396.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_atlas_statue_vmat_g_tspecular_c6237396.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_statue_vmat_g_tspecular_863958db.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_garden_topiary_statue_vmat_g_tspecular_863958db.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_color_png_da542b5d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_new_trim_color_png_da542b5d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_bridge_glass_color_png_dabcf00f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_bridge_glass_color_png_dabcf00f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_bridge_glass_fadeout_vmat_g_tspecular_600c6cea.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_bridge_glass_fadeout_vmat_g_tspecular_600c6cea.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_color_png_6a57a7b4.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/cf_palace_hall_door_color_png_6a57a7b4.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_psd_559b0477.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_psd_559b0477.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_fade_vmat_g_tspecular_ae81057.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/ti10_tileset_misc_fade_vmat_g_tspecular_ae81057.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife001_color_psd_4b61b7d3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife001_color_psd_4b61b7d3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife001_refl_tga_214f35b6.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife001_refl_tga_214f35b6.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife_psd_f960c4c3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife_psd_f960c4c3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife_spec_psd_3aa88a4a.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wildlife_spec_psd_3aa88a4a.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_color_psd_d4b74fc0.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_color_psd_d4b74fc0.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_refl_psd_966ce792.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_refl_psd_966ce792.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_color_psd_b152c22f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_color_psd_b152c22f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_normal_psd_5892aecf.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cypress001_normal_psd_5892aecf.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_low_color_psd_3f905beb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_low_color_psd_3f905beb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_low_refl_tga_e39faaff.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_low_refl_tga_e39faaff.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_normal_psd_e7d381fb.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_00_normal_psd_e7d381fb.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_low_color_psd_e2afb9e8.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_low_color_psd_e2afb9e8.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_normal_psd_1ace5b3c.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_normal_psd_1ace5b3c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_low_refl_psd_2ecbaedd.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/tree_cine_02_low_refl_psd_2ecbaedd.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_color_psd_96a9b97d.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_color_psd_96a9b97d.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_normal_psd_98f83888.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_normal_psd_98f83888.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_refl_psd_2cf0feff.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/snow_owl_refl_psd_2cf0feff.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/logo_plate_round_00_color_psd_b196dd43.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/logo_plate_round_00_color_psd_b196dd43.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wall_miscdetails_normal_psd_bf68eeac.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wall_miscdetails_normal_psd_bf68eeac.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wall_miscdetails_refl_psd_59f9b86f.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/wall_miscdetails_refl_psd_59f9b86f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_fade_vmat_g_tspecular_72ec5ef3.png
+    assetPath: Assets/Game/Art/Converted/maps/scenes/crownfall/survivors_arena/bush_ti10_01_fade_vmat_g_tspecular_72ec5ef3.png
+  reportItems:
+  - type: 2
+    code: 20
+    messages:
+    - KHR_materials_specular
+  - type: 2
+    code: 3
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []
+  - type: 2
+    code: 41
+    messages: []

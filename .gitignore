@@ -15,9 +15,8 @@
 /DotNet/**/bin/
 /DotNet/**/obj/
 /Converted/
-# Models converted from the local Dota 2 install (Tools/convert-models.py)
-/UnityProject/Assets/Game/Art/Converted/
-/UnityProject/Assets/Game/Art/Converted.meta
+# Models converted from the local Dota 2 install (Tools/convert-models.py) are versioned
+# so the project opens on Windows and builds for Android without a Dota 2 install. *.glb go through Git LFS.
 /Research/Наблюдение/Видео/
 *.mp4
 *.mov
@@ -28,9 +27,7 @@
 .DS_Store
 __pycache__/
 
-# Original Valve resources: re-extracted from the local Dota 2 install, not versioned.
-# The manifest stays tracked so the extraction can be reproduced and verified.
-/NestOfThorns/*
-!/NestOfThorns/manifest.tsv
+# Original Valve resources extracted from the local Dota 2 install (Tools/extract-resources.py) are versioned;
+# manifest.tsv lists their CRC32 so a re-extraction can be verified.
 # Obsolete files kept for review before deletion
 /Удалить/

@@ -1,0 +1,269 @@
+{
+ "absorber": {
+  "models": [
+   "models/creeps/ice_biome/undeadtusk/fx_skeleball.glb"
+  ],
+  "scale": 1,
+  "skin": "survivors"
+ },
+ "baby_roshan_item_holder": {
+  "models": [
+   "models/courier/baby_rosh/babyroshan_alt.glb"
+  ],
+  "scale": 1.9,
+  "skin": "1"
+ },
+ "catapult": {
+  "models": [
+   "models/creeps/lane_creeps/creep_2021_dire/creep_2021_dire_siege.glb"
+  ],
+  "scale": 0.85,
+  "skin": null
+ },
+ "death": {
+  "models": [
+   "models/events/crownfall/survivors/reaper_scythe/reaper_scythe.glb"
+  ],
+  "scale": 1.7,
+  "skin": "survivors"
+ },
+ "eidolon": {
+  "models": [
+   "models/events/crownfall/survivors/eidolon/eidolon.glb"
+  ],
+  "scale": 1.5,
+  "skin": "survivors"
+ },
+ "eidolon_2": {
+  "models": [
+   "models/events/crownfall/survivors/eidolon/eidolon.glb"
+  ],
+  "scale": 2,
+  "skin": "survivors"
+ },
+ "flyer": {
+  "models": [
+   "models/events/crownfall/survivors/pernicious_firebrand_mount/pernicious_firebrand_mount_enemy.glb"
+  ],
+  "scale": 0.6,
+  "skin": null
+ },
+ "ghost": {
+  "models": [
+   "models/events/crownfall/survivors/ghost_a/n_creep_ghost_a_enemy.glb"
+  ],
+  "scale": 1.5,
+  "skin": null
+ },
+ "granite_golem_large": {
+  "models": [
+   "models/events/crownfall/survivors/golem_a/golem_a_enemy.glb"
+  ],
+  "scale": 2.5,
+  "skin": null
+ },
+ "granite_golem_medium": {
+  "models": [
+   "models/events/crownfall/survivors/golem_a/golem_a_medium_enemy.glb"
+  ],
+  "scale": 1.5,
+  "skin": null
+ },
+ "granite_golem_small": {
+  "models": [
+   "models/creeps/neutral_creeps/n_creep_golem_a/neutral_creep_golem_a.glb"
+  ],
+  "scale": 0.5,
+  "skin": null
+ },
+ "hulk": {
+  "models": [
+   "models/events/crownfall/survivors/creep_dire_ancient_hulk/creep_dire_ancient_hulk_enemy.glb"
+  ],
+  "scale": 1.7,
+  "skin": null
+ },
+ "hulk_summon": {
+  "models": [
+   "models/events/crownfall/survivors/creep_dire_ancient_hulk/creep_dire_ancient_hulk_enemy.glb"
+  ],
+  "scale": 1.3,
+  "skin": "survivors2"
+ },
+ "mud_golem": {
+  "models": [
+   "models/events/crownfall/survivors/golem_b/golem_b_enemy.glb"
+  ],
+  "scale": 1.5,
+  "skin": "survivors2"
+ },
+ "mud_golem_shard": {
+  "models": [
+   "models/creeps/neutral_creeps/n_creep_golem_b/n_creep_golem_b.glb"
+  ],
+  "scale": 0.5,
+  "skin": "survivors2"
+ },
+ "ogre": {
+  "models": [
+   "models/events/crownfall/survivors/ogre_med/ogre.glb"
+  ],
+  "scale": 1.2,
+  "skin": "survivors"
+ },
+ "ogre_summon": {
+  "models": [
+   "models/events/crownfall/survivors/ogre_med/n_creep_ogre_med_enemy.glb"
+  ],
+  "scale": 1.5,
+  "skin": "survivors2"
+ },
+ "resurrector": {
+  "models": [
+   "models/events/crownfall/survivors/golem/golem.glb"
+  ],
+  "scale": 1.8,
+  "skin": null
+ },
+ "satyr": {
+  "models": [
+   "models/creeps/neutral_creeps/n_creep_satyr_a/n_creep_satyr_a.glb"
+  ],
+  "scale": 0.9,
+  "skin": null
+ },
+ "satyr_boss": {
+  "models": [
+   "models/events/crownfall/survivors/satyr_boss/satyr_boss.glb"
+  ],
+  "scale": 1.7,
+  "skin": null
+ },
+ "satyr_boss_2": {
+  "models": [
+   "models/events/crownfall/survivors/satyr_boss/satyr_boss.glb"
+  ],
+  "scale": 1.7,
+  "skin": null
+ },
+ "skeleton": {
+  "models": [
+   "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.glb"
+  ],
+  "scale": 1.2,
+  "skin": null
+ },
+ "skeleton_archer": {
+  "models": [
+   "models/items/clinkz/clinkz_ti9_immortal_weapon/clinkz_ti9_immortal_army.glb"
+  ],
+  "scale": 2.5,
+  "skin": null
+ },
+ "skeleton_archer_normal": {
+  "models": [
+   "models/items/clinkz/clinkz_ti9_immortal_weapon/clinkz_ti9_immortal_army.glb"
+  ],
+  "scale": 2,
+  "skin": null
+ },
+ "skeleton_boss": {
+  "models": [
+   "models/events/crownfall/survivors/skeleton_boss/skeleton_boss.glb"
+  ],
+  "scale": 2.5,
+  "skin": null
+ },
+ "skeleton_boss_2": {
+  "models": [
+   "models/events/crownfall/survivors/skeleton_boss/skeleton_boss.glb"
+  ],
+  "scale": 2.5,
+  "skin": null
+ },
+ "skeleton_gold": {
+  "models": [
+   "models/creeps/neutral_creeps/n_creep_troll_skeleton/n_creep_skeleton_melee.glb"
+  ],
+  "scale": 1.2,
+  "skin": "survivors"
+ },
+ "skeleton_intro": {
+  "models": [
+   "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.glb"
+  ],
+  "scale": 1.2,
+  "skin": null
+ },
+ "skeleton_summon": {
+  "models": [
+   "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.glb"
+  ],
+  "scale": 1.6,
+  "skin": "survivors2"
+ },
+ "snotty": {
+  "models": [
+   "models/events/crownfall/survivors/snotty/snotty_survivors.glb"
+  ],
+  "scale": 0.75,
+  "skin": null
+ },
+ "spider": {
+  "models": [
+   "models/events/crownfall/survivors/spiderling_elder_brood/spiderling_elder_blood_enemy.glb"
+  ],
+  "scale": 0.4,
+  "skin": null
+ },
+ "vase": {
+  "models": [
+   "models/events/crownfall/survivors/breakable/clay_pot001_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot002_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot002b_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot004_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot005_breakable.glb"
+  ],
+  "scale": 1,
+  "skin": null
+ },
+ "vase_always_cheese": {
+  "models": [
+   "models/events/crownfall/survivors/breakable/clay_pot001_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot002_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot002b_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot004_breakable.glb",
+   "models/events/crownfall/survivors/breakable/clay_pot005_breakable.glb"
+  ],
+  "scale": 1,
+  "skin": null
+ },
+ "zombie": {
+  "models": [
+   "models/events/crownfall/survivors/undying_minion/undying_minion_enemy.glb"
+  ],
+  "scale": 1.4,
+  "skin": "survivors"
+ },
+ "zombie_2": {
+  "models": [
+   "models/events/crownfall/survivors/wight_minion/ruin_wight_minion_enemy.glb"
+  ],
+  "scale": 1.4,
+  "skin": "survivors"
+ },
+ "zombie_torso": {
+  "models": [
+   "models/events/crownfall/survivors/undying_minion_torso/undying_minion_torso_enemy.glb"
+  ],
+  "scale": 1.15,
+  "skin": "survivors"
+ },
+ "zombie_torso_2": {
+  "models": [
+   "models/events/crownfall/survivors/wight_minion_torso/ruin_wight_minion_torso_enemy.glb"
+  ],
+  "scale": 1.4,
+  "skin": "survivors"
+ }
+}

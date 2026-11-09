@@ -1,0 +1,77 @@
+fileFormatVersion: 2
+guid: f1b41ba4a5b9741ab85cab39ccc2ce39
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    texturesReadable: 0
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon2_color_psd_319aa5ce.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon2_color_psd_319aa5ce.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_specmask_tga_4868a2d1.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_specmask_tga_4868a2d1.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_normal_tga_5c618308.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_normal_tga_5c618308.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef_orm_3419748898.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_detailmask_tga_5a1ee6ef_orm_3419748898.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_color_psd_c726165.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_color_psd_c726165.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_specmask_tga_66a5db43.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_specmask_tga_66a5db43.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_normal_tga_51691c0c.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_normal_tga_51691c0c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70_orm_1179741394.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon_alt_detailmask_tga_a2faba70_orm_1179741394.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_color_psd_f058e0c9.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_color_psd_f058e0c9.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_detailmask_tga_4ef2fed3.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_detailmask_tga_4ef2fed3.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_specmask_psd_3e3b730c.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_specmask_psd_3e3b730c.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_normal_tga_2de73b2f.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_normal_tga_2de73b2f.png
+  - type: 1
+    originalUri: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_detailmask_tga_4ef2fed3_orm_501425812.png
+    assetPath: Assets/Game/Art/Converted/models/items/vengefulspirit/vengeful_spirit_arcana/imperia_weapon_detailmask_tga_4ef2fed3_orm_501425812.png
+  reportItems:
+  - type: 2
+    code: 20
+    messages:
+    - KHR_materials_specular
