@@ -27,6 +27,7 @@ namespace ThornThrone.Simulation
         private readonly ModeDef mode;
         private readonly HeroDef hero;
         private readonly Func<PowerUpDef, bool> implemented;
+        private bool itemChoices;
         private readonly HashSet<int> consumed = new HashSet<int>();
         // Pre-sized above the 47 powerups: list growth inside a step is an allocation.
         private readonly List<PowerUpDef> candidates = new List<PowerUpDef>(64);
@@ -84,16 +85,17 @@ namespace ThornThrone.Simulation
 
         /// <summary>
         /// Up to m_nLevelUpChoices different options, weighted: new 0.7, already owned 0.35,
-        /// both multiplied by 0.6 for passive items (interpretation of the three weights; Mechanics §12.3).
+        /// Level-ups offer active skills only; treasure offers passive items only.
         /// </summary>
-        public void GenerateChoices(Rng rng)
+        public void GenerateChoices(Rng rng, bool items = false)
         {
+            itemChoices = items;
             Choices.Clear();
             candidates.Clear();
             weights.Clear();
             foreach (var def in data.PowerUps.Values)
             {
-                if (!CanUpgrade(def)) continue;
+                if (!CanUpgrade(def) || (items ? !def.IsPassive : !def.IsActive)) continue;
                 float weight = Find(def) != null ? mode.ExistingItemWeight : mode.NewItemWeight;
                 if (def.IsPassive) weight *= mode.PassiveItemWeight;
                 if (weight <= 0) continue;
@@ -118,7 +120,7 @@ namespace ThornThrone.Simulation
         {
             if (RerollsLeft <= 0 || ChoicesAreFallback) return false;
             RerollsLeft--;
-            GenerateChoices(rng);
+            GenerateChoices(rng, itemChoices);
             return true;
         }
 

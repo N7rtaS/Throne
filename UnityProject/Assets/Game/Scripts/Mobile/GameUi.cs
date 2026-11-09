@@ -24,7 +24,7 @@ namespace ThornThrone.Mobile
         private readonly RectTransform safe;
         private readonly GameObject menu, hud, choices, pause, results;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
-        private readonly Text levelText, timeText, killsText, bossText, resultText, rerollText;
+        private readonly Text levelText, timeText, killsText, bossText, resultText, rerollText, choiceTitle;
         private readonly Button[] cards = new Button[3];
         private readonly Text[] cardTexts = new Text[3];
         private readonly Button reroll;
@@ -71,7 +71,7 @@ namespace ThornThrone.Mobile
 
             // Level-up choices
             choices = Panel(safe, "Choices", new Color(0, 0, 0, .7f));
-            Label(choices.transform, "Title", new Vector2(.5f, 1), new Vector2(-500, -60), new Vector2(1000, 80), 56, TextAnchor.UpperCenter).text = "Новый уровень";
+            choiceTitle = Label(choices.transform, "Title", new Vector2(.5f, 1), new Vector2(-500, -60), new Vector2(1000, 80), 56, TextAnchor.UpperCenter);
             for (int i = 0; i < 3; i++)
             {
                 int index = i;
@@ -129,6 +129,7 @@ namespace ThornThrone.Mobile
         public void ShowChoices(Run run)
         {
             choices.SetActive(true);
+            choiceTitle.text = run.ChoosingItems ? "Выберите предмет" : "Новый уровень";
             for (int i = 0; i < cards.Length; i++)
             {
                 bool visible = run.ChoicesAreFallback ? i == 1 : i < run.Choices.Count;

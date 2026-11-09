@@ -229,12 +229,13 @@ namespace ThornThrone.Simulation.Tests
                 Assert.That(choices.Distinct().Count(), Is.EqualTo(choices.Count));
                 foreach (var c in choices)
                 {
+                    Assert.That(c.IsActive, Is.True, "level-ups only offer skills");
                     Assert.That(run.Build.CanUpgrade(c), Is.True, c.Key);
                     Assert.That(Run.IsImplemented(c), Is.True, c.Key);
                 }
                 Assert.That(run.Build.Choose(choices[0]), Is.True);
             }
-            Assert.That(rounds, Is.GreaterThan(20), "Arcane Bolt ranks and several passives are available");
+            Assert.That(rounds, Is.EqualTo(8), "currently Arcane Bolt is the only implemented skill, ranks 2 through 9");
             TestContext.WriteLine($"{rounds} upgrades until the pool is exhausted");
         }
 

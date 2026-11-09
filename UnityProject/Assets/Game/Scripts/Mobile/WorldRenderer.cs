@@ -300,7 +300,7 @@ namespace ThornThrone.Mobile
             foreach (var p in run.Pickups)
             {
                 if (!p.Active) continue;
-                Kind kind = p.Def.HealAmount > 0 ? heal : p.Def.GoldAmount > 0 ? gold : experience;
+                Kind kind = p.Def.HealAmount > 0 ? heal : (p.Def.GoldAmount > 0 || p.Def.RewardsTreasure) ? gold : experience;
                 kind.Add(Matrix4x4.TRS(ToWorld(p.Position, 0.2f), Quaternion.Euler(45, 45, 0), Vector3.one * 0.25f));
             }
             Shader.SetGlobalFloat("_ThornVatDebug", DebugDrawMode == 8 ? 1 : 0);

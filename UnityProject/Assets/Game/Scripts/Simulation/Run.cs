@@ -48,6 +48,8 @@ namespace ThornThrone.Simulation
         public float Experience { get; private set; }
         public int PendingLevels { get; private set; }
         public bool Choosing { get; private set; }
+        public bool ChoosingItems { get; private set; }
+        public int PendingItems { get; private set; }
         public int Kills { get; private set; }
         public int Gold { get; private set; }
         public bool Finished { get; private set; }
@@ -167,6 +169,7 @@ namespace ThornThrone.Simulation
             DashCharges = Math.Max(0, (int)Build.Global[Attr.NumDashes]);
             CreateAbilities();
             CreateEliteRooms();
+            SpawnInitialPickups();
             ReportUnsupportedRules();
         }
 
@@ -198,7 +201,6 @@ namespace ThornThrone.Simulation
         {
             if (Difficulty.EnableMeteorModifier) Diagnostics.Report("difficulty:meteor", "Meteor modifier is not implemented");
             if (Difficulty.EnemyTouchMovementSlowDuration > 0) Diagnostics.Report("difficulty:slow", "Touch movement slow is not implemented");
-            if (Mode.InitialItemSpawns > 0 || Mode.InitialMagnetSpawns > 0) Diagnostics.Report("mode:initial", "Initial item and magnet spawns are not implemented");
         }
 
         // ------------------------------------------------------------------ public control
@@ -234,9 +236,10 @@ namespace ThornThrone.Simulation
                 if (index < 0 || index >= Build.Choices.Count || !Build.Choose(Build.Choices[index])) return false;
                 OnBuildChanged();
             }
-            PendingLevels--;
+            if (ChoosingItems) PendingItems--;
+            else PendingLevels--;
             Choosing = false;
-            if (PendingLevels > 0) OpenChoices();
+            if (PendingItems > 0 || PendingLevels > 0) OpenChoices();
             return true;
         }
 
@@ -259,6 +262,7 @@ namespace ThornThrone.Simulation
             for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
             UpdateProjectiles(dt);
             UpdatePickups(dt);
+            if (PendingItems > 0 && !Choosing) OpenChoices();
             if (PendingLevels > 0 && !Choosing)
             {
                 choiceDelay -= dt;
@@ -919,9 +923,43 @@ namespace ThornThrone.Simulation
         private void Drop(PickupDef pickup, Vec2 position, int experience)
         {
             if (pickup == experienceDef) AddExperiencePickup(position, experience);
-            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet") SpawnPickup(pickup, ClampToMap(position), 0);
+            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet" || (pickup.RewardsTreasure && pickup.TreasureVariant == 0)) SpawnPickup(pickup, ClampToMap(position), 0);
             else if (pickup.Key == "nothing") { }
             else if (FirstTime(pickup)) Diagnostics.Report("pickup:" + pickup.Key, $"Pickup {pickup.Key} is not implemented");
+        }
+
+        /// <summary>Two item chests and one magnet at distinct authored item-drop groups.</summary>
+        private void SpawnInitialPickups()
+        {
+            for (int i = 0; i < Mode.InitialItemSpawns; i++)
+                SpawnInitialPickup("treasure", "item_drop_" + (i + 1));
+            for (int i = 0; i < Mode.InitialMagnetSpawns; i++)
+                SpawnInitialPickup("magnet", "item_drop_" + (Mode.InitialItemSpawns + i + 1));
+        }
+
+        private void SpawnInitialPickup(string key, string target)
+        {
+            if (!Data.Pickups.TryGetValue(key, out var def)) return;
+            if (!Data.ArenaTargets.TryGetValue(target, out var points) || points.Length == 0)
+            {
+                Diagnostics.Report("initial:" + target, "Missing initial pickup positions: " + target);
+                return;
+            }
+            // Select only positions the hero can reach on the main floor.
+            int count = 0;
+            foreach (var point in points)
+                if (Data.Nav == null || Data.Nav.Allows(point, Rules.HeroRadius, NavMask)) count++;
+            if (count == 0)
+            {
+                Diagnostics.Report("initial:" + target, "No walkable initial pickup positions: " + target);
+                return;
+            }
+            int selected = Rng.Next(count);
+            foreach (var point in points)
+            {
+                if (Data.Nav != null && !Data.Nav.Allows(point, Rules.HeroRadius, NavMask)) continue;
+                if (selected-- == 0) { SpawnPickup(def, point, 0); return; }
+            }
         }
 
         private Pickup SpawnPickup(PickupDef def, Vec2 position, int value)
@@ -993,6 +1031,7 @@ namespace ThornThrone.Simulation
             if (p.Def.Key == "magnet")
                 for (int i = 0; i < Pickups.Length; i++)
                     if (Pickups[i].Active && Pickups[i].Def == experienceDef) Pickups[i].Attracted = true;
+            if (p.Def.RewardsTreasure && p.Def.TreasureVariant == 0) PendingItems++;
             Gold += p.Def.GoldAmount;
             Emit(SimEventKind.PickupCollected, p.Slot, p.Position, p.Value);
         }
@@ -1026,7 +1065,8 @@ namespace ThornThrone.Simulation
 
         private void OpenChoices()
         {
-            Build.GenerateChoices(Rng);
+            ChoosingItems = PendingItems > 0;
+            Build.GenerateChoices(Rng, ChoosingItems);
             Choosing = true;
             Emit(SimEventKind.ChoicesReady, -1, HeroPosition, Build.Choices.Count);
         }
