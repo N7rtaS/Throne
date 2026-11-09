@@ -1,0 +1,811 @@
+{
+ "events": 82,
+ "files": 138,
+ "eventsReferencedByData": [
+  "survivors.item.drop",
+  "survivors.player_hit.dragonus",
+  "survivors.player_hit.kez",
+  "survivors.player_hit.shen"
+ ],
+ "eventsReferencedByDataButUndefined": [],
+ "definitions": {
+  "survivors.game_music.setup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "misc",
+   "vsnd": [
+    "sounds/misc/crownfall/music/survivors_boss.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.game_music.active": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "misc",
+   "vsnd": [
+    "sounds/misc/crownfall/music/survivors_main.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.game_music.boss": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "misc",
+   "vsnd": [
+    "sounds/misc/crownfall/music/survivors_boss.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.game_music.loss": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "misc",
+   "vsnd": [
+    "sounds/music/valve_dota_001/music/killed.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.game_music.win": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "misc",
+   "vsnd": [
+    "sounds/music/valve_dota_001/stingers/radiant_win.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.levelup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/power_up_06.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.xp_pickup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "physics",
+   "vsnd": [
+    "sounds/misc/crownfall/xp_pickup.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.acquire_item": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/buy.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.acquire_shard": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/hud_equip_shard.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.acquire_scepter": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/hud_equip_scepter.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.gold_pickup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/coins.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.cheese_pickup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/items/cheese.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.cookie_pickup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/weapons/hero/snapfire/cookie_target.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.magnet_pickup": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/weapons/hero/magnataur/reverse_polarity.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.miniboss.arrived": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": "Stingers",
+   "vsnd": [
+    "sounds/music/valve_dota_001/music/ganked_sml_01.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.miniboss.incoming": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/misc/crownfall/boss_warn.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.miniboss.ressurect": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/weapons/hero/skeleton_king/reincarnate.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.item.drop": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/ui/npe_objective_given.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.arcane_bolt.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/skywrath/arcane_bolt_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.arcane_bolt.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Physics",
+   "vsnd": [
+    "sounds/weapons/hero/skywrath/arcane_bolt_target.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.counter_helix.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/axe/counterhelix.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.counter_helix.tick": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.echo_strike.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.echo_strike.tick": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/kez/echo_katana_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.kez.innate.proc": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/kez/vulnerable_target.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.kez.innate.crit": {
+   "file": "soundevents_survivors",
+   "type": "dota_update_default",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/kez/sai_crit.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.frostbite.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/crystal_maiden/frostbite.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.knife_throw.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "physics",
+   "vsnd": [
+    "sounds/weapons/hero/shared/small_blade/whoosh03.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.knife_throw.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/ringmaster/impale_stab_1.vsnd",
+    "sounds/weapons/hero/ringmaster/impale_stab_2.vsnd",
+    "sounds/weapons/hero/ringmaster/impale_stab_3.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.laguna_blade.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/lina/lagunablade.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.land_mine.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/techies/land_mine_plant.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.land_mine.armed": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/techies/land_mine_primed.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.land_mine.explode": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/techies/land_mine01.vsnd",
+    "sounds/weapons/hero/techies/land_mine02.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.magic_missile.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/vengeful_spirit/magic_missile1.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile2.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile3.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile4.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.magic_missile.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Physics",
+   "vsnd": [
+    "sounds/weapons/hero/vengeful_spirit/magic_missile_impact.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.rot.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.stampede.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/centaur/stampede_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.swashbuckle.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/pangolier/swashbuckle_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.swashbuckle.tick": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.torrent.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/kunkka/ability_geyser.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.torrent.tick": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.annihilation.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/zuus/gods_wrath_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.chain_frost.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/misc/crownfall/chain_frost_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.chain_frost.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Physics",
+   "vsnd": [
+    "sounds/weapons/hero/lich/chain_frost_impact.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.track.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/bounty_hunter/track.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.spirits.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/wisp/spirits_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.mortimer_kisses.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/snapfire/lizard_blob_launch.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.mortimer_kisses.tick": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Physics",
+   "vsnd": [
+    "sounds/weapons/hero/snapfire/lizard_blob_impact.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.snotty_bat.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/misc/crownfall/snotty_bat.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.vase": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Physics",
+   "vsnd": [
+    "sounds/misc/crownfall/urn_break.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.baby_roshan_item_holder": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/ui/npe_objective_given.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.absorber": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/ui/npe_objective_given.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.granite_golem_large": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/physics/deaths/common/body_impact_heavy_01.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.granite_golem_medium": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/physics/deaths/common/body_impact_medium_01.vsnd",
+    "sounds/physics/deaths/common/body_impact_medium_02.vsnd",
+    "sounds/physics/deaths/common/body_impact_medium_03.vsnd",
+    "sounds/physics/deaths/common/body_impact_medium_04.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.granite_golem_small": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/physics/deaths/common/body_impact_light_01.vsnd",
+    "sounds/physics/deaths/common/body_impact_light_02.vsnd",
+    "sounds/physics/deaths/common/body_impact_light_03.vsnd",
+    "sounds/physics/deaths/common/body_impact_light_04.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.resurrector": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/ui/npe_objective_given.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.skeleton_archer": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/misc/creep_deaths/death_skeleton_01.vsnd",
+    "sounds/misc/creep_deaths/death_skeleton_02.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.burning_ground.impact": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "ambient",
+   "vsnd": [
+    "sounds/weapons/hero/invoker/meteor.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.burning_ground.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/invoker/meteor_cast.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.radiate_rays.start": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Ultimates",
+   "vsnd": [
+    "sounds/weapons/hero/phoenix/sunray_beam_loop.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.magic_missile.projectile.shoot": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/vengeful_spirit/magic_missile1.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile2.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile3.vsnd",
+    "sounds/weapons/hero/vengeful_spirit/magic_missile4.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.magic_missile.projectile.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/weapons/hero/vengeful_spirit/magic_missile_impact.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.radiate_rays.teleport": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.radiate_rays.projectile.shoot": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.radiate_rays.projectile.hit": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.demon_portal.create": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.demon_portal.remove": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.pillar.destroy": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/physics/damage/building/dire_tower_destruction_01.vsnd",
+    "sounds/physics/damage/building/dire_tower_destruction_02.vsnd",
+    "sounds/physics/damage/building/dire_tower_destruction_03.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.player_hit.shen": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/venge_crown_anger_01.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_02.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_03.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_04.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_05.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_06.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_07.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_08.vsnd",
+    "sounds/vo/vengefulspirit/venge_crown_anger_09.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.player_hit.dragonus": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/skywrath_mage/skywrath_crown_anger_01.vsnd",
+    "sounds/vo/skywrath_mage/skywrath_crown_anger_02.vsnd",
+    "sounds/vo/skywrath_mage/skywrath_crown_anger_03.vsnd",
+    "sounds/vo/skywrath_mage/skywrath_crown_anger_04.vsnd",
+    "sounds/vo/skywrath_mage/skywrath_crown_anger_05.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.player_hit.kez": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/kez/kez_pain_01.vsnd",
+    "sounds/vo/kez/kez_pain_02.vsnd",
+    "sounds/vo/kez/kez_pain_03.vsnd",
+    "sounds/vo/kez/kez_pain_04.vsnd",
+    "sounds/vo/kez/kez_pain_05.vsnd",
+    "sounds/vo/kez/kez_pain_06.vsnd",
+    "sounds/vo/kez/kez_pain_07.vsnd",
+    "sounds/vo/kez/kez_pain_08.vsnd",
+    "sounds/vo/kez/kez_pain_09.vsnd",
+    "sounds/vo/kez/kez_pain_10.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.enrage": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_early_02.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_early_04.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_early_05.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_mid_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_late_06.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wheel_all_16.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wheel_all_17.vsnd",
+    "sounds/vo/vengefulspirit/imperia_kill_09.vsnd",
+    "sounds/vo/vengefulspirit/imperia_kill_10.vsnd",
+    "sounds/vo/vengefulspirit/imperia_kill_11.vsnd",
+    "sounds/vo/vengefulspirit/imperia_spawn_04.vsnd",
+    "sounds/vo/vengefulspirit/imperia_spawn_10.vsnd",
+    "sounds/vo/vengefulspirit/imperia_spawn_11.vsnd",
+    "sounds/vo/vengefulspirit/imperia_swap_10.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_02.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_04.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_07.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wave_09.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.demon_portal.0": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_early_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_early_06.vsnd",
+    "sounds/vo/vengefulspirit/imperia_battlebegins_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_lasthit_06.vsnd",
+    "sounds/vo/vengefulspirit/imperia_missile_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_water_02.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.demon_portal.1": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_mid_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_mid_04.vsnd",
+    "sounds/vo/vengefulspirit/imperia_battlebegins_02.vsnd",
+    "sounds/vo/vengefulspirit/imperia_firstblood_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_attack_07.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.demon_portal.2": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_late_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_late_02.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_late_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_wheel_deny_01.vsnd",
+    "sounds/vo/vengefulspirit/imperia_crownfall_boss_flee_05.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.imperia.burning_ground": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_laugh_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_07.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_08.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_09.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_11.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_15.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_26.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_27.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.ambient.lightning": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_3d",
+   "mixgroup": "Weapons",
+   "vsnd": [
+    "sounds/misc/crownfall/enc/lightning01.vsnd",
+    "sounds/misc/crownfall/enc/lightning02.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.vengeful_spirit_innate.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.kez_innate.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.skywrath_mage_innate.cast": {
+   "file": "soundevents_survivors",
+   "type": "dota_null_start",
+   "mixgroup": null,
+   "vsnd": [],
+   "missing": []
+  },
+  "survivors.imperia.magic_missile": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_laugh_03.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_07.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_08.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_09.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_11.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_15.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_26.vsnd",
+    "sounds/vo/vengefulspirit/imperia_laugh_27.vsnd"
+   ],
+   "missing": []
+  },
+  "survivors.death.imperia": {
+   "file": "soundevents_survivors",
+   "type": "dota_src1_2d",
+   "mixgroup": null,
+   "vsnd": [
+    "sounds/vo/vengefulspirit/imperia_death_01.vsnd"
+   ],
+   "missing": []
+  }
+ }
+}

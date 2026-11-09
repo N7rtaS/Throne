@@ -1,0 +1,381 @@
+{
+ "dota": "/Users/adikan/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota",
+ "dryRun": false,
+ "files": 5791,
+ "newFiles": 496,
+ "bytes": 1685655087,
+ "byReason": {
+  "dependency": 3348,
+  "map-dependency": 180,
+  "manifest": 1482,
+  "econ-18539": 64,
+  "vdata-reference": 17,
+  "econ-22718": 138,
+  "hero-145": 42,
+  "hero-101": 9,
+  "hero-20": 9,
+  "econ-18544": 1,
+  "econ-18541": 1,
+  "econ-18543": 1,
+  "econ-18540": 1,
+  "econ-22719": 1,
+  "soundevents": 1,
+  "sound": 496
+ },
+ "newByExtension": {
+  "vsnd_c": 496
+ },
+ "heroModelFolders": {
+  "20": "models/heroes/vengeful/",
+  "101": "models/heroes/skywrath_mage/",
+  "145": "models/heroes/kez/"
+ },
+ "econItems": {
+  "18539": {
+   "name": "The Devotions of Dragonus - Wings",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_arcana.vmdl",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_arcana_pedestal.vmdl",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_belt.vmdl",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_belt_refit.vmdl",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_wings.vmdl",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_alt_run.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_alt_run_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ambient_head.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ambient_v2_head.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ambient_wings.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ambient_wings_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ancient_seal_debuff.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ancient_seal_v2_debuff.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_base_attack.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_base_attack_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_bolt.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_bolt_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_cast.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_cast_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_failure.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_failure_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_slow_debuff.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_slow_debuff_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_concussive_shot_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_death.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_death_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_deny.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_deny_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_kill_caster.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_kill_caster_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_kill_target.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_kill_target_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_loadout.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_loadout_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_mystic_flare_ambient.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_mystic_flare_hit_ambient.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_mystic_flare_hit_ambient_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_mystic_flare_v2_ambient.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_phylactery.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_phylactery_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_rod_of_atos.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_rod_of_atos_projectile.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_rod_of_atos_projectile_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_rod_of_atos_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_spell_lifesteal.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_spell_lifesteal_v2.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_weapon_ambient.vpcf",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_weapon_ambient_v2.vpcf",
+    "particles/items2_fx/rod_of_atos.vpcf",
+    "particles/items2_fx/rod_of_atos_attack.vpcf",
+    "particles/items3_fx/octarine_core_lifesteal.vpcf",
+    "particles/items_fx/phylactery.vpcf",
+    "particles/msg_fx/msg_deny.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_ancient_seal_debuff.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_arcane_bolt.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_base_attack.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_concussive_shot.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_concussive_shot_cast.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_concussive_shot_failure.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_concussive_shot_slow_debuff.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_mystic_flare_ambient.vpcf",
+    "particles/units/heroes/hero_skywrath_mage/skywrath_mage_mystic_flare_hit_ambient.vpcf"
+   ]
+  },
+  "18540": {
+   "name": "The Devotions of Dragonus - Weapon",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_weapon.vmdl",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_weapon_ambient.vpcf"
+   ]
+  },
+  "18541": {
+   "name": "The Devotions of Dragonus - Head",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_head.vmdl",
+    "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_ambient_head.vpcf"
+   ]
+  },
+  "18542": {
+   "name": "The Devotions of Dragonus - Belt",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_belt_refit.vmdl"
+   ]
+  },
+  "18543": {
+   "name": "The Devotions of Dragonus - Shoulder",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_shoulder.vmdl"
+   ]
+  },
+  "18544": {
+   "name": "The Devotions of Dragonus - Arms",
+   "usedBy": [
+    "dragonus"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/skywrath_mage/skywrath_arcana/skywrath_mage_arcana_arms.vmdl"
+   ]
+  },
+  "22718": {
+   "name": "The Resurrection of Shen - Wings",
+   "usedBy": [
+    "imperia",
+    "shen"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/development/invisiblebox.vmdl",
+    "models/heroes/vengeful/vengeful_hair.vmdl",
+    "models/heroes/vengeful/vengeful_hair_refit.vmdl",
+    "models/heroes/vengeful/vengeful_lowerbody.vmdl",
+    "models/heroes/vengeful/vengeful_lowerbody_refit.vmdl",
+    "models/items/vengefulspirit/banished_princess_head/banished_princess_head.vmdl",
+    "models/items/vengefulspirit/banished_princess_head/banished_princess_head_refit.vmdl",
+    "models/items/vengefulspirit/banished_princess_legs/banished_princess_legs.vmdl",
+    "models/items/vengefulspirit/banished_princess_legs/banished_princess_legs_refit.vmdl",
+    "models/items/vengefulspirit/crownmerciless_head/crownmerciless_head.vmdl",
+    "models/items/vengefulspirit/crownmerciless_head/crownmerciless_head_refit.vmdl",
+    "models/items/vengefulspirit/dark_arts_countess_head/dark_arts_countess_head.vmdl",
+    "models/items/vengefulspirit/dark_arts_countess_head/dark_arts_countess_head_refit.vmdl",
+    "models/items/vengefulspirit/dark_arts_countess_legs/dark_arts_countess_legs.vmdl",
+    "models/items/vengefulspirit/dark_arts_countess_legs/dark_arts_countess_legs_refit.vmdl",
+    "models/items/vengefulspirit/dark_spirit_head/dark_spirit_head.vmdl",
+    "models/items/vengefulspirit/dark_spirit_head/dark_spirit_head_refit.vmdl",
+    "models/items/vengefulspirit/dark_spirit_legs/dark_spirit_legs.vmdl",
+    "models/items/vengefulspirit/dark_spirit_legs/dark_spirit_legs_refit.vmdl",
+    "models/items/vengefulspirit/dark_throne_head/dark_throne_head.vmdl",
+    "models/items/vengefulspirit/dark_throne_head/dark_throne_head_refit.vmdl",
+    "models/items/vengefulspirit/dark_throne_legs/dark_throne_legs.vmdl",
+    "models/items/vengefulspirit/dark_throne_legs/dark_throne_legs_refit.vmdl",
+    "models/items/vengefulspirit/dark_valkyrie_head/dark_valkyrie_head.vmdl",
+    "models/items/vengefulspirit/dark_valkyrie_head/dark_valkyrie_head_refit.vmdl",
+    "models/items/vengefulspirit/dark_valkyrie_legs/dark_valkyrie_legs.vmdl",
+    "models/items/vengefulspirit/dark_valkyrie_legs/dark_valkyrie_legs_refit.vmdl",
+    "models/items/vengefulspirit/dreadhawk_head/dreadhawk_head.vmdl",
+    "models/items/vengefulspirit/dreadhawk_head/dreadhawk_head_refit.vmdl",
+    "models/items/vengefulspirit/dreadhawk_legs/dreadhawk_legs.vmdl",
+    "models/items/vengefulspirit/dreadhawk_legs/dreadhawk_legs_refit.vmdl",
+    "models/items/vengefulspirit/echoes_eyrie_head/echoes_eyrie_head.vmdl",
+    "models/items/vengefulspirit/echoes_eyrie_head/echoes_eyrie_head_refit.vmdl",
+    "models/items/vengefulspirit/echoes_eyrie_legs/echoes_eyrie_legs.vmdl",
+    "models/items/vengefulspirit/echoes_eyrie_legs/echoes_eyrie_legs_refit.vmdl",
+    "models/items/vengefulspirit/fallen_valkyrie_head/fallen_valkyrie_head.vmdl",
+    "models/items/vengefulspirit/fallen_valkyrie_head/fallen_valkyrie_head_refit.vmdl",
+    "models/items/vengefulspirit/fallen_valkyrie_legs/fallen_valkyrie_legs.vmdl",
+    "models/items/vengefulspirit/fallen_valkyrie_legs/fallen_valkyrie_legs_refit.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head/fallenprincess_head.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head/fallenprincess_head_refit.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head_s1/fallenprincess_head_s1.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head_s1/fallenprincess_head_s1_refit.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head_s2/fallenprincess_head_s2.vmdl",
+    "models/items/vengefulspirit/fallenprincess_head_s2/fallenprincess_head_s2_refit.vmdl",
+    "models/items/vengefulspirit/fallenprincess_legs/fallenprincess_legs.vmdl",
+    "models/items/vengefulspirit/fallenprincess_legs/fallenprincess_legs_refit.vmdl",
+    "models/items/vengefulspirit/flightless_fury_head/flightless_fury_head.vmdl",
+    "models/items/vengefulspirit/flightless_fury_head/flightless_fury_head_refit.vmdl",
+    "models/items/vengefulspirit/flightless_fury_legs/flightless_fury_legs.vmdl",
+    "models/items/vengefulspirit/flightless_fury_legs/flightless_fury_legs_refit.vmdl",
+    "models/items/vengefulspirit/forsaken_wings_head/forsaken_wings_head.vmdl",
+    "models/items/vengefulspirit/forsaken_wings_head/forsaken_wings_head_refit.vmdl",
+    "models/items/vengefulspirit/forsaken_wings_legs/forsaken_wings_legs.vmdl",
+    "models/items/vengefulspirit/forsaken_wings_legs/forsaken_wings_legs_refit.vmdl",
+    "models/items/vengefulspirit/huangs_umbra_head/huangs_umbra_head.vmdl",
+    "models/items/vengefulspirit/huangs_umbra_head/huangs_umbra_head_refit.vmdl",
+    "models/items/vengefulspirit/huangs_umbra_skirt/huangs_umbra_skirt.vmdl",
+    "models/items/vengefulspirit/huangs_umbra_skirt/huangs_umbra_skirt_refit.vmdl",
+    "models/items/vengefulspirit/imperia/imperia.vmdl",
+    "models/items/vengefulspirit/imperia/imperia_pedestal.vmdl",
+    "models/items/vengefulspirit/regal_ruin_head/regal_ruin_head.vmdl",
+    "models/items/vengefulspirit/regal_ruin_head/regal_ruin_head_refit.vmdl",
+    "models/items/vengefulspirit/regal_ruin_legs/regal_ruin_legs.vmdl",
+    "models/items/vengefulspirit/regal_ruin_legs/regal_ruin_legs_refit.vmdl",
+    "models/items/vengefulspirit/titanias_fury_legs/titanias_fury_legs.vmdl",
+    "models/items/vengefulspirit/titanias_fury_legs/titanias_fury_legs_refit.vmdl",
+    "models/items/vengefulspirit/venge_lost_seraph_head/venge_lost_seraph_head.vmdl",
+    "models/items/vengefulspirit/venge_lost_seraph_head/venge_lost_seraph_head_refit.vmdl",
+    "models/items/vengefulspirit/venge_lost_seraph_legs/venge_lost_seraph_legs.vmdl",
+    "models/items/vengefulspirit/venge_lost_seraph_legs/venge_lost_seraph_legs_refit.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head_refit.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs_refit.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_pedestal.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_pedestal_alt.vmdl",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_shoulders.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_head/vengeful_valkyrie_head.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_head/vengeful_valkyrie_head_refit.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_head_alternate/vengeful_valkyrie_head_alternate.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_head_alternate/vengeful_valkyrie_head_alternate_refit.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_legs/vengeful_valkyrie_legs.vmdl",
+    "models/items/vengefulspirit/vengeful_valkyrie_legs/vengeful_valkyrie_legs_refit.vmdl",
+    "particles/econ/items/vengeful/vengeful_arcana/status_effect_vengeful_arcana_illusion.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/status_effect_vengeful_arcana_illusion_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_head.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_head_crown.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_head_v2_crown.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_v2_head.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_wings.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_wings_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_wings_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_aura_cast.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_aura_cast_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_base_attack.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_base_attack_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_base_attack_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_buff_overhead.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_buff_overhead_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_deny.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_deny_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_forcestaff.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_forcestaff_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_forcestaff_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_ambient_head_crown.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_weapon_ambient.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_kill_caster.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_kill_caster_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_kill_target.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_kill_target_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_magic_missile.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_magic_missile_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_magic_missile_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap_target.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap_target_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_nether_swap_v3_target.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_v2_buff_overhead.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror_buff_recipient.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror_buff_recipient_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror_buff_recipient_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror_v2.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_wave_of_terror_v3.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_weapon_ambient.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_weapon_ambient_v2.vpcf",
+    "particles/error/null.vpcf",
+    "particles/items_fx/force_staff.vpcf",
+    "particles/msg_fx/msg_deny.vpcf",
+    "particles/status_fx/status_effect_dark_seer_illusion.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_ambient.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_base_attack.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_magic_missle.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_nether_swap.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_nether_swap_target.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_swap_buff_overhead.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_venge_aura_cast.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_wave_of_terror.vpcf",
+    "particles/units/heroes/hero_vengeful/vengeful_wave_of_terror_recipient.vpcf"
+   ]
+  },
+  "22719": {
+   "name": "The Resurrection of Shen - Weapon",
+   "usedBy": [
+    "imperia",
+    "shen"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_weapon.vmdl",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_weapon_ambient.vpcf"
+   ]
+  },
+  "22720": {
+   "name": "The Resurrection of Shen - Head",
+   "usedBy": [
+    "imperia",
+    "shen"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_head_refit.vmdl",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_head_crown.vpcf"
+   ]
+  },
+  "22721": {
+   "name": "The Resurrection of Shen - Legs",
+   "usedBy": [
+    "imperia",
+    "shen"
+   ],
+   "assets": [
+    "materials/vgui/econ/item_icon_bg.vmat",
+    "models/items/vengefulspirit/vengeful_spirit_arcana/vengeful_spirit_arcana_legs_refit.vmdl"
+   ]
+  }
+ },
+ "maps": {
+  "maps/scenes/crownfall/survivors_arena.vpk": {
+   "entries": 512,
+   "bytes": 62783016
+  }
+ },
+ "referencesResolvedInsideMaps": 508,
+ "unresolved": [
+  "materials/dev/primary_black.vmat_c",
+  "materials/models/courier/baby_rosh/babyroshan_alt_default/babyroshan_alt_ti2023.vmat_c",
+  "materials/models/heroes_staging/blob/blob_ball.vmat_c",
+  "materials/particle/particle_debris_02b.vtex_c",
+  "materials/particle/particle_flares/basic_flare/basic_flare_rays.vtex_c",
+  "materials/particle/particle_flares/particle_flare_004_mod.vtex_c",
+  "materials/particles/light_flare/light_glow_01.vtex_c",
+  "materials/particles/light_flare/point_spotlight_cone.vtex_c",
+  "materials/particles/smoke/smoke.vtex_c"
+ ],
+ "unresolvedReferencedBy": {
+  "materials/dev/primary_black.vmat_c": "maps/scenes/crownfall/survivors_arena/worldnodes/n0_lr0_c2_s_cb_mesh.vmdl_c",
+  "materials/models/courier/baby_rosh/babyroshan_alt_default/babyroshan_alt_ti2023.vmat_c": "models/courier/baby_rosh/babyroshan_alt.vmdl_c",
+  "materials/models/heroes_staging/blob/blob_ball.vmat_c": "models/creeps/ice_biome/undeadtusk/fx_skeleball.vmdl_c",
+  "materials/particle/particle_debris_02b.vtex_c": "particles/econ/items/vengeful/vengeful_arcana/imperia_loadout_bird_dust.vpcf_c",
+  "materials/particle/particle_flares/basic_flare/basic_flare_rays.vtex_c": "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_ambient_head_gem_sparkle.vpcf_c",
+  "materials/particle/particle_flares/particle_flare_004_mod.vtex_c": "particles/events/crownfall/survivors/abilities/ability_anticipation_glow.vpcf_c",
+  "materials/particles/light_flare/light_glow_01.vtex_c": "particles/econ/items/skywrath_mage/skywrath_arcana/skywrath_arcana_mystic_flare_sphere_spawn.vpcf_c",
+  "materials/particles/light_flare/point_spotlight_cone.vtex_c": "particles/events/crownfall/survivors/treasure_pickup_rays.vpcf_c",
+  "materials/particles/smoke/smoke.vtex_c": "models/heroes/marci/debut/particles/marci_debut_furbolg_impact_dust.vpcf_c"
+ },
+ "soundFilesNamed": 498,
+ "notCovered": [
+  "Sound files are taken only from decoded soundevents_survivors and soundevents_crownfall (run decode-data.sh, then this script again). Events defined in other soundevents files are not followed.",
+  "Econ item styles (m_unStyleIndex) are not interpreted: all assets named in the item block are taken, but which of them a style uses must be resolved during conversion."
+ ]
+}

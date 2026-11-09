@@ -1,0 +1,47 @@
+[
+  {
+    "file": "survivors_attributes.vdata",
+    "type": "CSurvivorsAttributeDefinition",
+    "entries": 65
+  },
+  {
+    "file": "survivors_difficulty.vdata",
+    "type": "CSurvivorsDifficultyDefinition",
+    "entries": 8
+  },
+  {
+    "file": "survivors_enemies.vdata",
+    "type": "CSurvivorsEnemyDefinition",
+    "entries": 43
+  },
+  {
+    "file": "survivors_game_modes.vdata",
+    "type": "CSurvivorsGameModeDefinition",
+    "entries": 1
+  },
+  {
+    "file": "survivors_heroes.vdata",
+    "type": "CSurvivorsHeroDefinition",
+    "entries": 3
+  },
+  {
+    "file": "survivors_levels.vdata",
+    "type": "CSurvivorsLevelDefinition",
+    "entries": 1
+  },
+  {
+    "file": "survivors_pickups.vdata",
+    "type": "CSurvivorsPickupDefinition",
+    "entries": 11
+  },
+  {
+    "file": "survivors_powerups.vdata",
+    "type": "CSurvivorsPowerUpDefinition",
+    "entries": 47
+  },
+  {
+    "file": "survivors_spawners.vdata",
+    "type": "CSurvivorsSpawnerDefinition",
+    "entries": 43
+  }
+]

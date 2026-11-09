@@ -1,0 +1,6483 @@
+{
+ "schema": 1,
+ "statusValues": {
+  "prototype": [
+   "none",
+   "partial",
+   "implemented",
+   "verified"
+  ]
+ },
+ "summary": {
+  "game_modes": {
+   "role:game_mode": 1,
+   "prototype:partial": 1,
+   "reachable": 1
+  },
+  "levels": {
+   "role:level": 1,
+   "prototype:partial": 1,
+   "reachable": 1
+  },
+  "difficulty": {
+   "role:difficulty": 8,
+   "prototype:none": 8,
+   "reachable": 8
+  },
+  "heroes": {
+   "role:hero": 3,
+   "prototype:partial": 1,
+   "reachable": 3,
+   "prototype:none": 2
+  },
+  "powerups": {
+   "role:service:not-rollable": 1,
+   "prototype:none": 37,
+   "unreachable": 2,
+   "role:service:gold": 1,
+   "role:passive-item": 16,
+   "prototype:partial": 10,
+   "reachable": 45,
+   "role:recipe": 9,
+   "role:active-ability": 17,
+   "role:innate": 3
+  },
+  "enemies": {
+   "role:horde": 28,
+   "prototype:partial": 24,
+   "reachable": 38,
+   "role:split-spawn": 1,
+   "unreachable": 5,
+   "prototype:none": 19,
+   "role:elite": 8,
+   "role:destructible": 3,
+   "role:final-boss": 1,
+   "role:friendly": 2
+  },
+  "spawners": {
+   "role:spawner": 39,
+   "prototype:none": 26,
+   "unreachable": 7,
+   "reachable": 36,
+   "prototype:partial": 17,
+   "role:elite-room": 4
+  },
+  "pickups": {
+   "role:pickup": 11,
+   "prototype:partial": 1,
+   "reachable": 7,
+   "prototype:none": 10,
+   "unreachable": 4
+  },
+  "attributes": {
+   "role:meta-progression": 14,
+   "prototype:partial": 15,
+   "reachable": 59,
+   "role:attribute": 51,
+   "prototype:none": 50,
+   "unreachable": 6
+  }
+ },
+ "attributesUsedWithoutDefinition": [
+  "DashCooldown",
+  "DashDuration",
+  "DashSpeed",
+  "DurationEffect",
+  "InitialTickDelay",
+  "LifeTime",
+  "NumDashes",
+  "ProjectileRadius",
+  "TriggerTime"
+ ],
+ "nativeBinary": "/Users/adikan/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota/bin/osx64/libclient.dylib",
+ "definitions": {
+  "game_modes/crownfall_act4": {
+   "category": "game_modes",
+   "key": "crownfall_act4",
+   "id": 1,
+   "class": "CSurvivorsGameModeDefinition",
+   "nativeRuntimeClass": "CSurvivorsGameMode",
+   "nativeDefinitionClassFound": true,
+   "role": "game_mode",
+   "name": null,
+   "references": [
+    "difficulty/echelon_mastery",
+    "difficulty/endurance_run",
+    "difficulty/footmen_frenzy",
+    "difficulty/harder_punches",
+    "difficulty/meteor_mayhem",
+    "difficulty/spooky_follower",
+    "difficulty/sticky_situation",
+    "difficulty/story",
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen",
+    "levels/skywrath",
+    "pickups/gold_bag",
+    "pickups/gold_coin",
+    "pickups/magnet",
+    "spawners/elite_absorber",
+    "spawners/elite_granite_golem_large",
+    "spawners/elite_resurrecting_enemy",
+    "spawners/elite_turrets"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/revive.vpcf",
+    "particles/events/crownfall/survivors/abilities/generic_stunned.vpcf",
+    "particles/events/crownfall/survivors/abilities/physical_weakness.vpcf",
+    "particles/events/crownfall/survivors/arrow_enemy_direction.vpcf",
+    "particles/events/crownfall/survivors/attack_indicator_circle.vpcf",
+    "particles/events/crownfall/survivors/collision_indicator.vpcf",
+    "particles/events/crownfall/survivors/damage_numbers.vpcf",
+    "particles/events/crownfall/survivors/damage_numbers_crit.vpcf",
+    "particles/events/crownfall/survivors/damage_numbers_glow.vpcf",
+    "particles/events/crownfall/survivors/elite_timer.vpcf",
+    "particles/events/crownfall/survivors/health_bar.vpcf",
+    "particles/events/crownfall/survivors/level_up_knockback.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf",
+    "particles/generic_hero_status/hero_levelup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "levels/skywrath": {
+   "category": "levels",
+   "key": "skywrath",
+   "id": 1,
+   "class": "CSurvivorsLevelDefinition",
+   "nativeRuntimeClass": "CSurvivorsLevel",
+   "nativeDefinitionClassFound": true,
+   "role": "level",
+   "name": null,
+   "references": [
+    "spawners/baby_roshan_item_holder",
+    "spawners/catapult",
+    "spawners/catapult_swarm",
+    "spawners/eidolon",
+    "spawners/eidolon_2",
+    "spawners/flyer_swarm",
+    "spawners/ghost_swarm",
+    "spawners/hulk",
+    "spawners/imperia_portal",
+    "spawners/mud_golem",
+    "spawners/ogre",
+    "spawners/satyr",
+    "spawners/satyr_boss",
+    "spawners/satyr_boss_2",
+    "spawners/satyr_fixed_direction",
+    "spawners/skeleton",
+    "spawners/skeleton_archer_normal",
+    "spawners/skeleton_boss",
+    "spawners/skeleton_boss_2",
+    "spawners/skeleton_gold",
+    "spawners/skeleton_intro",
+    "spawners/spider",
+    "spawners/spider_swarm",
+    "spawners/vase_boss",
+    "spawners/vase_random",
+    "spawners/zombie",
+    "spawners/zombie_2",
+    "spawners/zombie_torso",
+    "spawners/zombie_torso_2"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "difficulty/story": {
+   "category": "difficulty",
+   "key": "story",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Полёт фантазии",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/harder_punches": {
+   "category": "difficulty",
+   "key": "harder_punches",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Боевая готовность",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/sticky_situation": {
+   "category": "difficulty",
+   "key": "sticky_situation",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Неловкая ситуация",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/footmen_frenzy": {
+   "category": "difficulty",
+   "key": "footmen_frenzy",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Скорость презрения",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/spooky_follower": {
+   "category": "difficulty",
+   "key": "spooky_follower",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Дамоклова коса",
+   "references": [
+    "spawners/death"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/endurance_run": {
+   "category": "difficulty",
+   "key": "endurance_run",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Стойкость вождей",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/meteor_mayhem": {
+   "category": "difficulty",
+   "key": "meteor_mayhem",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Падение Безумной луны",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "difficulty/echelon_mastery": {
+   "category": "difficulty",
+   "key": "echelon_mastery",
+   "id": null,
+   "class": "CSurvivorsDifficultyDefinition",
+   "nativeRuntimeClass": "CSurvivorsDifficulty",
+   "nativeDefinitionClassFound": true,
+   "role": "difficulty",
+   "name": "Властелин эшелонов",
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "heroes/dragonus": {
+   "category": "heroes",
+   "key": "dragonus",
+   "id": 2,
+   "class": "CSurvivorsHeroDefinition",
+   "nativeRuntimeClass": "CSurvivorsHero",
+   "nativeDefinitionClassFound": true,
+   "role": "hero",
+   "name": "Драгонус",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Luck",
+    "attributes/k_eSurvivorsAttribute_MaxHP",
+    "attributes/k_eSurvivorsAttribute_MaxRerolls",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "attributes/k_eSurvivorsAttribute_PickupRadius",
+    "powerups/arcane_bolt",
+    "powerups/skywrath_mage_innate"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [
+    "DashCooldown",
+    "DashDuration",
+    "DashSpeed",
+    "Luck",
+    "MaxHP",
+    "MaxRerolls",
+    "MovementSpeed",
+    "NumDashes",
+    "PickupRadius"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "heroes/shen": {
+   "category": "heroes",
+   "key": "shen",
+   "id": 1,
+   "class": "CSurvivorsHeroDefinition",
+   "nativeRuntimeClass": "CSurvivorsHero",
+   "nativeDefinitionClassFound": true,
+   "role": "hero",
+   "name": "Шен",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Luck",
+    "attributes/k_eSurvivorsAttribute_MaxHP",
+    "attributes/k_eSurvivorsAttribute_MaxRerolls",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "attributes/k_eSurvivorsAttribute_PickupRadius",
+    "powerups/magic_missile",
+    "powerups/vengeful_spirit_innate"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [
+    "DashCooldown",
+    "DashDuration",
+    "DashSpeed",
+    "Luck",
+    "MaxHP",
+    "MaxRerolls",
+    "MovementSpeed",
+    "NumDashes",
+    "PickupRadius"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "heroes/kez": {
+   "category": "heroes",
+   "key": "kez",
+   "id": 3,
+   "class": "CSurvivorsHeroDefinition",
+   "nativeRuntimeClass": "CSurvivorsHero",
+   "nativeDefinitionClassFound": true,
+   "role": "hero",
+   "name": "Кез",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Luck",
+    "attributes/k_eSurvivorsAttribute_MaxHP",
+    "attributes/k_eSurvivorsAttribute_MaxRerolls",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "attributes/k_eSurvivorsAttribute_PickupRadius",
+    "powerups/echo_strike",
+    "powerups/kez_innate"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [
+    "DashCooldown",
+    "DashDuration",
+    "DashSpeed",
+    "Luck",
+    "MaxHP",
+    "MaxRerolls",
+    "MovementSpeed",
+    "NumDashes",
+    "PickupRadius"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "powerups/pile_of_coal": {
+   "category": "powerups",
+   "key": "pile_of_coal",
+   "id": 1000,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "service:not-rollable",
+   "name": "Гора угля",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/gold": {
+   "category": "powerups",
+   "key": "gold",
+   "id": 999,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "service:gold",
+   "name": "Мешочек с золотом",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/yasha": {
+   "category": "powerups",
+   "key": "yasha",
+   "id": 1,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Яша",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_MovementSpeed"
+   ],
+   "referencedBy": [
+    "powerups/kns_trident",
+    "powerups/sange_and_yasha",
+    "powerups/yasha_and_kaya"
+   ],
+   "attributes": [
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/blade_mail": {
+   "category": "powerups",
+   "key": "blade_mail",
+   "id": 2,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Лезвийный доспех",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Armor",
+    "attributes/k_eSurvivorsAttribute_DamageReflection"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Armor",
+    "DamageReflection"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/kaya": {
+   "category": "powerups",
+   "key": "kaya",
+   "id": 3,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Кайя",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical"
+   ],
+   "referencedBy": [
+    "powerups/kaya_and_sange",
+    "powerups/sny_trident",
+    "powerups/yasha_and_kaya"
+   ],
+   "attributes": [
+    "DamageMultiplier_Magical"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/crystalys": {
+   "category": "powerups",
+   "key": "crystalys",
+   "id": 20,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Кристалис",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_Chance",
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier"
+   ],
+   "referencedBy": [
+    "powerups/daedalus",
+    "powerups/khanda"
+   ],
+   "attributes": [
+    "CriticalStrike_Physical_Chance",
+    "CriticalStrike_Physical_DamageMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/reaver": {
+   "category": "powerups",
+   "key": "reaver",
+   "id": 4,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Губитель",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_MaxHP"
+   ],
+   "referencedBy": [
+    "powerups/heart_of_tarrasque"
+   ],
+   "attributes": [
+    "MaxHP"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/ring_of_tarrasque": {
+   "category": "powerups",
+   "key": "ring_of_tarrasque",
+   "id": 5,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Кольцо Тарраска",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_HPRegen"
+   ],
+   "referencedBy": [
+    "powerups/heart_of_tarrasque"
+   ],
+   "attributes": [
+    "HPRegen"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/tome_of_knowledge": {
+   "category": "powerups",
+   "key": "tome_of_knowledge",
+   "id": 6,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Книга знаний",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_ExpMultiplier"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "ExpMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/octarine_core": {
+   "category": "powerups",
+   "key": "octarine_core",
+   "id": 7,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Октариновое ядро",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "CooldownReductionMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/bloodstone": {
+   "category": "powerups",
+   "key": "bloodstone",
+   "id": 8,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Камень крови",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_AoEIncrease"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "AoEIncrease"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/world_chasm_artifact": {
+   "category": "powerups",
+   "key": "world_chasm_artifact",
+   "id": 9,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Артефакт мировой бездны",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_PickupRadius"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "PickupRadius"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/apex": {
+   "category": "powerups",
+   "key": "apex",
+   "id": 101,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Величие",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_ActiveAbilitySlots"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "ActiveAbilitySlots"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/echo_stone": {
+   "category": "powerups",
+   "key": "echo_stone",
+   "id": 90,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Набор специалиста",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "TargetCount"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/sange": {
+   "category": "powerups",
+   "key": "sange",
+   "id": 91,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Сандж",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier"
+   ],
+   "referencedBy": [
+    "powerups/kaya_and_sange",
+    "powerups/sange_and_yasha",
+    "powerups/ynk_trident"
+   ],
+   "attributes": [
+    "KnockbackDistanceMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/sange_and_yasha": {
+   "category": "powerups",
+   "key": "sange_and_yasha",
+   "id": 92,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Сандж и Яша",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "powerups/sange",
+    "powerups/yasha"
+   ],
+   "referencedBy": [
+    "powerups/sny_trident"
+   ],
+   "attributes": [
+    "KnockbackDistanceMultiplier",
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/kaya_and_sange": {
+   "category": "powerups",
+   "key": "kaya_and_sange",
+   "id": 93,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Кайя и Сандж",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+    "powerups/kaya",
+    "powerups/sange"
+   ],
+   "referencedBy": [
+    "powerups/kns_trident"
+   ],
+   "attributes": [
+    "DamageMultiplier_Magical",
+    "KnockbackDistanceMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/yasha_and_kaya": {
+   "category": "powerups",
+   "key": "yasha_and_kaya",
+   "id": 94,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Яша и Кайя",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "powerups/kaya",
+    "powerups/yasha"
+   ],
+   "referencedBy": [
+    "powerups/ynk_trident"
+   ],
+   "attributes": [
+    "DamageMultiplier_Magical",
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/heart_of_tarrasque": {
+   "category": "powerups",
+   "key": "heart_of_tarrasque",
+   "id": 95,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Сердце Тарраска",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_HPRegen",
+    "attributes/k_eSurvivorsAttribute_MaxHP",
+    "powerups/reaver",
+    "powerups/ring_of_tarrasque"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "HPRegen",
+    "MaxHP"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/phylactery": {
+   "category": "powerups",
+   "key": "phylactery",
+   "id": 97,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Филактерия",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Projectile_BonusMagicDamage"
+   ],
+   "referencedBy": [
+    "powerups/khanda"
+   ],
+   "attributes": [
+    "Projectile_BonusMagicDamage"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/demon_edge": {
+   "category": "powerups",
+   "key": "demon_edge",
+   "id": 98,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Лезвие демона",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_BonusPhysicalDamage"
+   ],
+   "referencedBy": [
+    "powerups/daedalus"
+   ],
+   "attributes": [
+    "BonusPhysicalDamage"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/daedalus": {
+   "category": "powerups",
+   "key": "daedalus",
+   "id": 99,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Дедал",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_BonusPhysicalDamage",
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_Chance",
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier",
+    "powerups/crystalys",
+    "powerups/demon_edge"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "BonusPhysicalDamage",
+    "CriticalStrike_Physical_Chance",
+    "CriticalStrike_Physical_DamageMultiplier"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/khanda": {
+   "category": "powerups",
+   "key": "khanda",
+   "id": 100,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Кханда",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance",
+    "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier",
+    "attributes/k_eSurvivorsAttribute_Projectile_BonusMagicDamage",
+    "powerups/crystalys",
+    "powerups/phylactery"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "CriticalStrike_Projectile_Chance",
+    "CriticalStrike_Projectile_DamageMultiplier",
+    "Projectile_BonusMagicDamage"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/sny_trident": {
+   "category": "powerups",
+   "key": "sny_trident",
+   "id": 140,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Трезубец",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "powerups/kaya",
+    "powerups/sange_and_yasha"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "DamageMultiplier_Magical",
+    "KnockbackDistanceMultiplier",
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/kns_trident": {
+   "category": "powerups",
+   "key": "kns_trident",
+   "id": 141,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Трезубец",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "powerups/kaya_and_sange",
+    "powerups/yasha"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "DamageMultiplier_Magical",
+    "KnockbackDistanceMultiplier",
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/ynk_trident": {
+   "category": "powerups",
+   "key": "ynk_trident",
+   "id": 143,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "recipe",
+   "name": "Трезубец",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "powerups/sange",
+    "powerups/yasha_and_kaya"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "DamageMultiplier_Magical",
+    "KnockbackDistanceMultiplier",
+    "MovementSpeed"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/timeless_relic": {
+   "category": "powerups",
+   "key": "timeless_relic",
+   "id": 23,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "passive-item",
+   "name": "Извечная реликвия",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_DurationExtension"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "DurationExtension"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/magic_missile": {
+   "category": "powerups",
+   "key": "magic_missile",
+   "id": 10,
+   "class": "CSurvivorsPowerUpDefinition_MagicMissile",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_MagicMissile",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Магический снаряд",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_ProjectileBounces",
+    "attributes/k_eSurvivorsAttribute_ProjectileSpeed",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_StunDuration",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [
+    "heroes/shen"
+   ],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "DurationEffect",
+    "ProjectileAttack",
+    "ProjectileBounces",
+    "ProjectileRadius",
+    "ProjectileSpeed",
+    "Radius",
+    "Range",
+    "StunDuration",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/generic_stunned.vpcf",
+    "particles/events/crownfall/survivors/abilities/vengeful/magic_missile_aoe_stun_explosion.vpcf",
+    "particles/events/crownfall/survivors/abilities/vengeful/vengeful_magic_missile.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "vengefulspirit",
+   "missingResources": []
+  },
+  "powerups/arcane_bolt": {
+   "category": "powerups",
+   "key": "arcane_bolt",
+   "id": 11,
+   "class": "CSurvivorsPowerUpDefinition_ArcaneBolt",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_ArcaneBolt",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Волшебный заряд",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttackInterval",
+    "attributes/k_eSurvivorsAttribute_ProjectileHitCount",
+    "attributes/k_eSurvivorsAttribute_ProjectileSpeed",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [
+    "heroes/dragonus"
+   ],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "KnockbackDistance",
+    "ProjectileAttack",
+    "ProjectileAttackInterval",
+    "ProjectileHitCount",
+    "ProjectileRadius",
+    "ProjectileSpeed",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/skywrath/skywrath_arcane_bolt.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "skywrath_mage",
+   "missingResources": []
+  },
+  "powerups/echo_strike": {
+   "category": "powerups",
+   "key": "echo_strike",
+   "id": 12,
+   "class": "CSurvivorsPowerUpDefinition_EchoStrike",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_EchoStrike",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Вторящий выпад",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_AoEIncrease",
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_DamageTicks",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_Length",
+    "attributes/k_eSurvivorsAttribute_TimeBetweenTicks",
+    "attributes/k_eSurvivorsAttribute_Width"
+   ],
+   "referencedBy": [
+    "heroes/kez"
+   ],
+   "attributes": [
+    "AoEIncrease",
+    "Cooldown",
+    "DamageTicks",
+    "Damage_Physical",
+    "InitialTickDelay",
+    "KnockbackDistance",
+    "Length",
+    "TimeBetweenTicks",
+    "Width"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/ability_anticipation.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf",
+    "particles/units/heroes/hero_kez/kez_katana_echo_strike_survivors.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "kez",
+   "missingResources": []
+  },
+  "powerups/swashbuckle": {
+   "category": "powerups",
+   "key": "swashbuckle",
+   "id": 120,
+   "class": "CSurvivorsPowerUpDefinition_Swashbuckle",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Swashbuckle",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Лихой выпад",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_AoEIncrease",
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_DamageTicks",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_Directions",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_Length",
+    "attributes/k_eSurvivorsAttribute_TimeBetweenTicks",
+    "attributes/k_eSurvivorsAttribute_Width"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "AoEIncrease",
+    "Cooldown",
+    "DamageTicks",
+    "Damage_Physical",
+    "Directions",
+    "KnockbackDistance",
+    "Length",
+    "TimeBetweenTicks",
+    "Width"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/pangolier/pangolier_swashbuckler.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "pangolier",
+   "missingResources": []
+  },
+  "powerups/stampede": {
+   "category": "powerups",
+   "key": "stampede",
+   "id": 130,
+   "class": "CSurvivorsPowerUpDefinition_Stampede",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Stampede",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Набег",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_Duration",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_StampedeMovementSpeed"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "Damage_Physical",
+    "Duration",
+    "DurationEffect",
+    "KnockbackDistance",
+    "Radius",
+    "StampedeMovementSpeed"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/ability_anticipation.vpcf",
+    "particles/events/crownfall/survivors/abilities/centaur/stampede_buff_overhead.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "centaur",
+   "missingResources": []
+  },
+  "powerups/counter_helix": {
+   "category": "powerups",
+   "key": "counter_helix",
+   "id": 13,
+   "class": "CSurvivorsPowerUpDefinition_CounterHelix",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_CounterHelix",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Ответный оборот",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_DamageTicks",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_Radius"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "DamageTicks",
+    "Damage_Physical",
+    "InitialTickDelay",
+    "KnockbackDistance",
+    "Radius"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/axe/axe_counter_helix.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "source": "axe",
+   "missingResources": []
+  },
+  "powerups/rot": {
+   "category": "powerups",
+   "key": "rot",
+   "id": 14,
+   "class": "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_AreaAttack_CircleConstant",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Гниение",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_Duration",
+    "attributes/k_eSurvivorsAttribute_FreezeDuration",
+    "attributes/k_eSurvivorsAttribute_FreezeStrength",
+    "attributes/k_eSurvivorsAttribute_Radius"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "Duration",
+    "DurationEffect",
+    "FreezeDuration",
+    "FreezeStrength",
+    "Radius"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/pudge/pudge_rot.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "pudge",
+   "missingResources": []
+  },
+  "powerups/annihilation": {
+   "category": "powerups",
+   "key": "annihilation",
+   "id": 102,
+   "class": "CSurvivorsPowerUpDefinition_InstantAttack",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_InstantAttack",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Аннигиляция",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "Damage_Physical",
+    "ProjectileAttack",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/ability_anticipation.vpcf",
+    "particles/events/crownfall/survivors/abilities/zeus/zuus_thundergods_wrath.vpcf",
+    "particles/units/heroes/hero_zeus/zues_kill_empty.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "skreeauk",
+   "missingResources": []
+  },
+  "powerups/chain_frost": {
+   "category": "powerups",
+   "key": "chain_frost",
+   "id": 103,
+   "class": "CSurvivorsPowerUpDefinition_ProjectileAttack",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_ProjectileAttack",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Цепная стужа",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_FreezeDuration",
+    "attributes/k_eSurvivorsAttribute_FreezeSplashRadius",
+    "attributes/k_eSurvivorsAttribute_FreezeStrength",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_ProjectileBounces",
+    "attributes/k_eSurvivorsAttribute_ProjectileSpeed",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_StunDuration",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "DurationEffect",
+    "FreezeDuration",
+    "FreezeSplashRadius",
+    "FreezeStrength",
+    "ProjectileAttack",
+    "ProjectileBounces",
+    "ProjectileRadius",
+    "ProjectileSpeed",
+    "Range",
+    "StunDuration",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/chain_frost.vpcf",
+    "particles/events/crownfall/survivors/abilities/chain_frost_cold.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "lich",
+   "missingResources": []
+  },
+  "powerups/frostbite": {
+   "category": "powerups",
+   "key": "frostbite",
+   "id": 16,
+   "class": "CSurvivorsPowerUpDefinition_Frostbite",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Frostbite",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Обморожение",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_FreezeDuration",
+    "attributes/k_eSurvivorsAttribute_FreezeStrength",
+    "attributes/k_eSurvivorsAttribute_ModifierDamagePerTick",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_ProjectileDamagePercent",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount",
+    "attributes/k_eSurvivorsAttribute_TimeBetweenTicks"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "DurationEffect",
+    "FreezeDuration",
+    "FreezeStrength",
+    "ModifierDamagePerTick",
+    "ProjectileAttack",
+    "ProjectileDamagePercent",
+    "Range",
+    "TargetCount",
+    "TimeBetweenTicks"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/crystal_maiden/crystal_maiden_frost_bite_projectile.vpcf",
+    "particles/events/crownfall/survivors/abilities/crystal_maiden/crystal_maiden_frostbite.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_frost.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "source": "crystal_maiden",
+   "missingResources": []
+  },
+  "powerups/laguna_blade": {
+   "category": "powerups",
+   "key": "laguna_blade",
+   "id": 17,
+   "class": "CSurvivorsPowerUpDefinition_LagunaBlade",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_LagunaBlade",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Раскалённая молния",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "ProjectileAttack",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/lina/lina_laguna_blade.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "lina",
+   "missingResources": []
+  },
+  "powerups/land_mine": {
+   "category": "powerups",
+   "key": "land_mine",
+   "id": 18,
+   "class": "CSurvivorsPowerUpDefinition_LandMine",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_LandMine",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Неконтактная мина",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_ArmingTime",
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_Radius"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "ArmingTime",
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Physical",
+    "LifeTime",
+    "Radius",
+    "TriggerTime"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/techies/remote_mine/techies_remote_mine.vpcf",
+    "particles/events/crownfall/survivors/abilities/techies/remote_mines/techies_remote_mines_detonate_arcana.vpcf",
+    "particles/events/crownfall/survivors/abilities/techies/stasis_trap/techies_stasis_trap.vpcf",
+    "particles/events/crownfall/survivors/abilities/techies/stasis_trap/techies_stasis_trap_explode.vpcf",
+    "particles/events/crownfall/survivors/abilities/techies/techies_explosion_land_mine_explode.vpcf",
+    "particles/events/crownfall/survivors/abilities/techies/techies_land_mine.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "techies",
+   "missingResources": []
+  },
+  "powerups/knife_throw": {
+   "category": "powerups",
+   "key": "knife_throw",
+   "id": 19,
+   "class": "CSurvivorsPowerUpDefinition_KnifeThrow",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_KnifeThrow",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Бросок ножа",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_KnockbackDistance",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttackInterval",
+    "attributes/k_eSurvivorsAttribute_ProjectileHitCount",
+    "attributes/k_eSurvivorsAttribute_ProjectileHorizontalOffset",
+    "attributes/k_eSurvivorsAttribute_ProjectileSpeed",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Physical",
+    "KnockbackDistance",
+    "ProjectileAttack",
+    "ProjectileAttackInterval",
+    "ProjectileHitCount",
+    "ProjectileHorizontalOffset",
+    "ProjectileRadius",
+    "ProjectileSpeed",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/ringmaster_wheel_dagger_crownfall.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "bakeet",
+   "missingResources": []
+  },
+  "powerups/track": {
+   "category": "powerups",
+   "key": "track",
+   "id": 21,
+   "class": "CSurvivorsPowerUpDefinition_Track",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Track",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Метка",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_IncomingDamageAmplification",
+    "attributes/k_eSurvivorsAttribute_IncomingDamageAmplificationDuration",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttack",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Physical",
+    "DurationEffect",
+    "IncomingDamageAmplification",
+    "IncomingDamageAmplificationDuration",
+    "ProjectileAttack",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/bounty_hunter/bounty_hunter_track_cast.vpcf",
+    "particles/events/crownfall/survivors/abilities/bounty_hunter/track_new_shield.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "source": "bounty_hunter",
+   "missingResources": []
+  },
+  "powerups/spirits": {
+   "category": "powerups",
+   "key": "spirits",
+   "id": 210,
+   "class": "CSurvivorsPowerUpDefinition_Spirits",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Spirits",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Духи",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_Duration",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "Damage_Magical",
+    "Duration",
+    "DurationEffect",
+    "Radius",
+    "Range",
+    "TargetCount"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/wisp/wisp_guardian.vpcf",
+    "particles/events/crownfall/survivors/abilities/wisp/wisp_guardian_explosion.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "source": "wisp",
+   "missingResources": []
+  },
+  "powerups/mortimer_kisses": {
+   "category": "powerups",
+   "key": "mortimer_kisses",
+   "id": 15,
+   "class": "CSurvivorsPowerUpDefinition_MortimerKisses",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_MortimerKisses",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Поцелуйчики Мортимера",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_DamageTicks",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_ProjectileAttackInterval",
+    "attributes/k_eSurvivorsAttribute_ProjectileSpeed",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount",
+    "attributes/k_eSurvivorsAttribute_TimeBetweenTicks",
+    "pickups/cookie"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "DamageTicks",
+    "Damage_Magical",
+    "ProjectileAttackInterval",
+    "ProjectileSpeed",
+    "Radius",
+    "Range",
+    "TargetCount",
+    "TimeBetweenTicks"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/snapfire/snapfire_ground_aoe.vpcf",
+    "particles/events/crownfall/survivors/abilities/snapfire/snapfire_lizard_blobs_arced.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "m_unHeroID 14 is a Dota hero ID"
+   ],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/snotty_bat": {
+   "category": "powerups",
+   "key": "snotty_bat",
+   "id": 22,
+   "class": "CSurvivorsPowerUpDefinition_Snotty",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_Snotty",
+   "nativeDefinitionClassFound": true,
+   "role": "active-ability",
+   "name": "Сопливчик",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_Damage_Physical",
+    "attributes/k_eSurvivorsAttribute_PickupRadius",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_SlowDuration",
+    "attributes/k_eSurvivorsAttribute_SlowStrength",
+    "enemies/snotty"
+   ],
+   "referencedBy": [],
+   "attributes": [
+    "Cooldown",
+    "CooldownReductionMultiplier",
+    "Damage_Magical",
+    "Damage_Physical",
+    "DurationEffect",
+    "PickupRadius",
+    "Radius",
+    "SlowDuration",
+    "SlowStrength"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/snotty/snotty_goo.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf",
+    "particles/events/crownfall/survivors/status_effect_snotty.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": "snotty",
+   "missingResources": []
+  },
+  "powerups/vengeful_spirit_innate": {
+   "category": "powerups",
+   "key": "vengeful_spirit_innate",
+   "id": 500,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "innate",
+   "name": "Нескончаемый ужас",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration",
+    "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage"
+   ],
+   "referencedBy": [
+    "heroes/shen"
+   ],
+   "attributes": [
+    "MagicDamageWeakensPhysicalDamageResistance_Duration",
+    "MagicDamageWeakensPhysicalDamageResistance_Percentage"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/skywrath_mage_innate": {
+   "category": "powerups",
+   "key": "skywrath_mage_innate",
+   "id": 501,
+   "class": "CSurvivorsPowerUpDefinition",
+   "nativeRuntimeClass": "CSurvivorsPowerUp",
+   "nativeDefinitionClassFound": true,
+   "role": "innate",
+   "name": "Потомок Скайраса",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_MaxHP",
+    "attributes/k_eSurvivorsAttribute_TargetCount"
+   ],
+   "referencedBy": [
+    "heroes/dragonus"
+   ],
+   "attributes": [
+    "MaxHP",
+    "TargetCount"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "powerups/kez_innate": {
+   "category": "powerups",
+   "key": "kez_innate",
+   "id": 502,
+   "class": "CSurvivorsPowerUpDefinition_InstantAttack",
+   "nativeRuntimeClass": "CSurvivorsPowerUp_InstantAttack",
+   "nativeDefinitionClassFound": true,
+   "role": "innate",
+   "name": "Слабое место",
+   "references": [
+    "attributes/k_eSurvivorsAttribute_Cooldown",
+    "attributes/k_eSurvivorsAttribute_Damage_Magical",
+    "attributes/k_eSurvivorsAttribute_MovementSpeed",
+    "attributes/k_eSurvivorsAttribute_Radius",
+    "attributes/k_eSurvivorsAttribute_Range",
+    "attributes/k_eSurvivorsAttribute_TargetCount",
+    "attributes/k_eSurvivorsAttribute_VulnerabilityDamagePercent",
+    "attributes/k_eSurvivorsAttribute_VulnerabilityDuration",
+    "attributes/k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration"
+   ],
+   "referencedBy": [
+    "heroes/kez"
+   ],
+   "attributes": [
+    "Cooldown",
+    "Damage_Magical",
+    "MovementSpeed",
+    "Radius",
+    "Range",
+    "TargetCount",
+    "VulnerabilityDamagePercent",
+    "VulnerabilityDuration",
+    "VulnerabilityStunOnHitDuration"
+   ],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/kez/kez_vulnerable_marker.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "source": null,
+   "missingResources": []
+  },
+  "enemies/skeleton_intro": {
+   "category": "enemies",
+   "key": "skeleton_intro",
+   "id": 16,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Skeleton",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton_intro"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/skeleton": {
+   "category": "enemies",
+   "key": "skeleton",
+   "id": 1,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Skeleton",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/skeleton_gold": {
+   "category": "enemies",
+   "key": "skeleton_gold",
+   "id": 30,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Skeleton",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton_gold"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/neutral_creeps/n_creep_troll_skeleton/n_creep_skeleton_melee.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/ogre": {
+   "category": "enemies",
+   "key": "ogre",
+   "id": 17,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Ogre",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/ogre"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/ogre_med/ogre.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/skeleton_boss": {
+   "category": "enemies",
+   "key": "skeleton_boss",
+   "id": 15,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Big Skeleton",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton_boss"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/skeleton_boss/skeleton_boss.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/skeleton_boss_2": {
+   "category": "enemies",
+   "key": "skeleton_boss_2",
+   "id": 151,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Big Skeleton",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton_boss_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/skeleton_boss/skeleton_boss.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/zombie": {
+   "category": "enemies",
+   "key": "zombie",
+   "id": 101,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Undying Zombie",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/zombie"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/undying_minion/undying_minion_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/zombie_torso": {
+   "category": "enemies",
+   "key": "zombie_torso",
+   "id": 102,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Undying Zombie Torso",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/zombie_torso"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/undying_minion_torso/undying_minion_torso_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/zombie_2": {
+   "category": "enemies",
+   "key": "zombie_2",
+   "id": 103,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Wight",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/zombie_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/wight_minion/ruin_wight_minion_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/zombie_torso_2": {
+   "category": "enemies",
+   "key": "zombie_torso_2",
+   "id": 104,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Wight Torso",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/zombie_torso_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/wight_minion_torso/ruin_wight_minion_torso_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/satyr": {
+   "category": "enemies",
+   "key": "satyr",
+   "id": 2,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Satyr",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/satyr",
+    "spawners/satyr_fixed_direction"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/neutral_creeps/n_creep_satyr_a/n_creep_satyr_a.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/mud_golem": {
+   "category": "enemies",
+   "key": "mud_golem",
+   "id": 22,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Mud Golem",
+   "references": [
+    "enemies/mud_golem_shard",
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/mud_golem"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/golem_b/golem_b_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/mud_golem_shard": {
+   "category": "enemies",
+   "key": "mud_golem_shard",
+   "id": 23,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "split-spawn",
+   "name": "Mud Golem Shard",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "enemies/mud_golem"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/neutral_creeps/n_creep_golem_b/n_creep_golem_b.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/satyr_boss": {
+   "category": "enemies",
+   "key": "satyr_boss",
+   "id": 14,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Satyr",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/satyr_boss"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/satyr_boss/satyr_boss.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/satyr_boss_2": {
+   "category": "enemies",
+   "key": "satyr_boss_2",
+   "id": 32,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Satyr",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/satyr_boss_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/satyr_boss/satyr_boss.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/spider": {
+   "category": "enemies",
+   "key": "spider",
+   "id": 3,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Spider",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/spider",
+    "spawners/spider_swarm"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/spiderling_elder_brood/spiderling_elder_blood_enemy.vmdl",
+    "particles/events/crownfall/survivors/enemies/spider_death.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/hellbear": {
+   "category": "enemies",
+   "key": "hellbear",
+   "id": 12,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Hellbear",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/hellbear"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/neutral_creeps/n_creep_furbolg/n_creep_furbolg_disrupter.vmdl",
+    "particles/neutral_fx/ursa_thunderclap.vpcf"
+   ],
+   "reachable": false,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/hulk": {
+   "category": "enemies",
+   "key": "hulk",
+   "id": 4,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Hulk",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/hulk"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/creep_dire_ancient_hulk/creep_dire_ancient_hulk_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/eidolon": {
+   "category": "enemies",
+   "key": "eidolon",
+   "id": 5,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Eidolon",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/eidolon",
+    "spawners/eidolon_swarm"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/eidolon/eidolon.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR_SIN_WAVE",
+   "missingResources": []
+  },
+  "enemies/eidolon_2": {
+   "category": "enemies",
+   "key": "eidolon_2",
+   "id": 50,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Eidolon",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/eidolon_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/eidolon/eidolon.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR_SIN_WAVE",
+   "missingResources": []
+  },
+  "enemies/ghost": {
+   "category": "enemies",
+   "key": "ghost",
+   "id": 24,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Ghost",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/ghost_swarm"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/ghost_a/n_creep_ghost_a_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR_SIN_WAVE",
+   "missingResources": []
+  },
+  "enemies/catapult": {
+   "category": "enemies",
+   "key": "catapult",
+   "id": 6,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Catapult",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/catapult",
+    "spawners/catapult_swarm"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/lane_creeps/creep_2021_dire/creep_2021_dire_siege.vmdl",
+    "particles/events/crownfall/survivors/enemies/catapult_attack.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/resurrector": {
+   "category": "enemies",
+   "key": "resurrector",
+   "id": 7,
+   "class": "CSurvivorsEnemyDefinition_Resurrector",
+   "nativeRuntimeClass": "CSurvivorsEnemyResurrector",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Resurrector",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin",
+    "pickups/scepter"
+   ],
+   "referencedBy": [
+    "spawners/elite_resurrecting_enemy"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/golem/golem.vmdl",
+    "particles/events/crownfall/survivors/enemies/golem_respawn.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/flyer": {
+   "category": "enemies",
+   "key": "flyer",
+   "id": 8,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Flyer",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/flyer_2_swarm",
+    "spawners/flyer_swarm"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/pernicious_firebrand_mount/pernicious_firebrand_mount_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR",
+   "missingResources": []
+  },
+  "enemies/flyer_2": {
+   "category": "enemies",
+   "key": "flyer_2",
+   "id": 31,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Flyer",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/pernicious_firebrand_mount/pernicious_firebrand_mount_enemy.vmdl"
+   ],
+   "reachable": false,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR",
+   "missingResources": []
+  },
+  "enemies/skeleton_archer": {
+   "category": "enemies",
+   "key": "skeleton_archer",
+   "id": 9,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Skeleton Archer",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin",
+    "pickups/scepter"
+   ],
+   "referencedBy": [
+    "spawners/elite_turrets"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/items/clinkz/clinkz_ti9_immortal_weapon/clinkz_ti9_immortal_army.vmdl",
+    "particles/events/crownfall/survivors/enemies/skeleton_archer_frost_arrow.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/skeleton_archer_normal": {
+   "category": "enemies",
+   "key": "skeleton_archer_normal",
+   "id": 60,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Skeleton Archer",
+   "references": [
+    "pickups/experience"
+   ],
+   "referencedBy": [
+    "spawners/skeleton_archer_normal"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/items/clinkz/clinkz_ti9_immortal_weapon/clinkz_ti9_immortal_army.vmdl",
+    "particles/events/crownfall/survivors/enemies/skeleton_archer_frost_arrow.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/baby_roshan_item_holder": {
+   "category": "enemies",
+   "key": "baby_roshan_item_holder",
+   "id": 1505,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Baby Roshan",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin",
+    "pickups/treasure"
+   ],
+   "referencedBy": [
+    "spawners/baby_roshan_item_holder"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/courier/baby_rosh/babyroshan_alt.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/vase": {
+   "category": "enemies",
+   "key": "vase",
+   "id": 1000,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "destructible",
+   "name": "Vase",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin"
+   ],
+   "referencedBy": [
+    "spawners/vase",
+    "spawners/vase_random"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/breakable/clay_pot001_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot002_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot002b_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot004_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot005_breakable.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/vase_always_cheese": {
+   "category": "enemies",
+   "key": "vase_always_cheese",
+   "id": 2001,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "destructible",
+   "name": "Vase",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin"
+   ],
+   "referencedBy": [
+    "spawners/vase_boss"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/breakable/clay_pot001_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot002_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot002b_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot004_breakable.vmdl",
+    "models/events/crownfall/survivors/breakable/clay_pot005_breakable.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/box": {
+   "category": "enemies",
+   "key": "box",
+   "id": 1001,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "destructible",
+   "name": "Box",
+   "references": [],
+   "referencedBy": [
+    "spawners/box"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/gameplay/breakingcrate_dest.vmdl"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/tower": {
+   "category": "enemies",
+   "key": "tower",
+   "id": 1002,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Tower",
+   "references": [],
+   "referencedBy": [
+    "spawners/tower"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/props_structures/dire_tower002.vmdl",
+    "particles/events/crownfall/survivors/enemies/skeleton_archer_attack.vpcf"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/absorber": {
+   "category": "enemies",
+   "key": "absorber",
+   "id": 20,
+   "class": "CSurvivorsEnemyDefinition_Absorber",
+   "nativeRuntimeClass": "CSurvivorsEnemyAbsorber",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Skeleton Ball",
+   "references": [
+    "pickups/gold_bag",
+    "pickups/gold_coin",
+    "pickups/scepter"
+   ],
+   "referencedBy": [
+    "spawners/elite_absorber"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/ice_biome/undeadtusk/fx_skeleball.vmdl",
+    "particles/events/crownfall/survivors/enemies/absorber_absorb.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/granite_golem_large": {
+   "category": "enemies",
+   "key": "granite_golem_large",
+   "id": 27,
+   "class": "CSurvivorsEnemyDefinition_Golem",
+   "nativeRuntimeClass": "CSurvivorsEnemyGolem",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Large Granite Golem",
+   "references": [
+    "enemies/granite_golem_medium"
+   ],
+   "referencedBy": [
+    "spawners/elite_granite_golem_large"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/golem_a/golem_a_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/granite_golem_medium": {
+   "category": "enemies",
+   "key": "granite_golem_medium",
+   "id": 28,
+   "class": "CSurvivorsEnemyDefinition_Golem",
+   "nativeRuntimeClass": "CSurvivorsEnemyGolem",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Medium Granite Golem",
+   "references": [
+    "enemies/granite_golem_small"
+   ],
+   "referencedBy": [
+    "enemies/granite_golem_large"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/golem_a/golem_a_medium_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/granite_golem_small": {
+   "category": "enemies",
+   "key": "granite_golem_small",
+   "id": 29,
+   "class": "CSurvivorsEnemyDefinition_Golem",
+   "nativeRuntimeClass": "CSurvivorsEnemyGolem",
+   "nativeDefinitionClassFound": true,
+   "role": "elite",
+   "name": "Small Granite Golem",
+   "references": [
+    "pickups/gold_coin",
+    "pickups/scepter"
+   ],
+   "referencedBy": [
+    "enemies/granite_golem_medium"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/creeps/neutral_creeps/n_creep_golem_a/neutral_creep_golem_a.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/imperia": {
+   "category": "enemies",
+   "key": "imperia",
+   "id": 9999,
+   "class": "CSurvivorsEnemyDefinition_ImperiaBoss",
+   "nativeRuntimeClass": "CSurvivorsImperiaBoss",
+   "nativeDefinitionClassFound": true,
+   "role": "final-boss",
+   "name": "Imperia",
+   "references": [
+    "spawners/imperia_portal",
+    "spawners/imperia_portal_2",
+    "spawners/imperia_portal_3"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_powerup_ambient.vpcf",
+    "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_powerup_ambient_body.vpcf",
+    "particles/events/crownfall/survivors/abilities/imperia/demon_portal.vpcf",
+    "particles/events/crownfall/survivors/abilities/imperia/demon_portal_buff_overhead_v3.vpcf",
+    "particles/events/crownfall/survivors/abilities/imperia/magic_missile.vpcf",
+    "particles/events/crownfall/survivors/imperia_portal_projectile.vpcf",
+    "particles/events/crownfall/survivors/meteor.vpcf",
+    "particles/events/crownfall/survivors/meteor_dot.vpcf",
+    "particles/events/crownfall/survivors/status/status_effect_burn.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [
+    "spawned by the mode after m_flFirstFloorTimeLimit (no spawner in data)"
+   ],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/hulk_summon": {
+   "category": "enemies",
+   "key": "hulk_summon",
+   "id": 13,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Hulk",
+   "references": [],
+   "referencedBy": [
+    "spawners/imperia_portal_3"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/creep_dire_ancient_hulk/creep_dire_ancient_hulk_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/skeleton_summon": {
+   "category": "enemies",
+   "key": "skeleton_summon",
+   "id": 19,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Skeleton",
+   "references": [],
+   "referencedBy": [
+    "spawners/imperia_portal"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/ogre_summon": {
+   "category": "enemies",
+   "key": "ogre_summon",
+   "id": 21,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Ogre",
+   "references": [],
+   "referencedBy": [
+    "spawners/imperia_portal_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/ogre_med/n_creep_ogre_med_enemy.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/boss_tower": {
+   "category": "enemies",
+   "key": "boss_tower",
+   "id": 25,
+   "class": "CSurvivorsEnemyDefinition_Pillar",
+   "nativeRuntimeClass": "CSurvivorsEnemyPillar",
+   "nativeDefinitionClassFound": true,
+   "role": "friendly",
+   "name": "Pillar",
+   "references": [],
+   "referencedBy": [
+    "spawners/tower_boss"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/breakable/cf_palace_new_column_large_a_breakable.vmdl"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "enemies/death": {
+   "category": "enemies",
+   "key": "death",
+   "id": 999,
+   "class": "CSurvivorsEnemyDefinition",
+   "nativeRuntimeClass": "CSurvivorsEnemy",
+   "nativeDefinitionClassFound": true,
+   "role": "horde",
+   "name": "Scythe",
+   "references": [],
+   "referencedBy": [
+    "spawners/death"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/reaper_scythe/reaper_scythe.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
+   "missingResources": []
+  },
+  "enemies/snotty": {
+   "category": "enemies",
+   "key": "snotty",
+   "id": 400,
+   "class": "CSurvivorsEnemyDefinition_Snotty",
+   "nativeRuntimeClass": null,
+   "nativeDefinitionClassFound": true,
+   "role": "friendly",
+   "name": "Snotty",
+   "references": [],
+   "referencedBy": [
+    "powerups/snotty_bat"
+   ],
+   "attributes": [],
+   "resources": [
+    "models/events/crownfall/survivors/snotty/snotty_survivors.vmdl"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
+   "missingResources": []
+  },
+  "spawners/vase": {
+   "category": "spawners",
+   "key": "vase",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/vase"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "spawnBehavior": "STATIC_IN_MAP",
+   "missingResources": []
+  },
+  "spawners/vase_boss": {
+   "category": "spawners",
+   "key": "vase_boss",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/vase_always_cheese"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "STATIC_IN_MAP",
+   "missingResources": []
+  },
+  "spawners/vase_random": {
+   "category": "spawners",
+   "key": "vase_random",
+   "id": null,
+   "class": "CSurvivorsSpawnerDestructiblesDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawnerDestructibles",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/vase"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/box": {
+   "category": "spawners",
+   "key": "box",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/box"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "spawnBehavior": "STATIC_IN_MAP",
+   "missingResources": []
+  },
+  "spawners/tower": {
+   "category": "spawners",
+   "key": "tower",
+   "id": null,
+   "class": "CSurvivorsSpawnerTowerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawnerTower",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/tower"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "spawnBehavior": "STATIC_IN_MAP",
+   "missingResources": []
+  },
+  "spawners/tower_boss": {
+   "category": "spawners",
+   "key": "tower_boss",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/boss_tower"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "spawnBehavior": "STATIC_IN_MAP_IGNORE_PLAYER_RADIUS",
+   "missingResources": []
+  },
+  "spawners/skeleton_intro": {
+   "category": "spawners",
+   "key": "skeleton_intro",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_intro"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/skeleton": {
+   "category": "spawners",
+   "key": "skeleton",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/skeleton_gold": {
+   "category": "spawners",
+   "key": "skeleton_gold",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_gold"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/ogre": {
+   "category": "spawners",
+   "key": "ogre",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/ogre"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/skeleton_boss": {
+   "category": "spawners",
+   "key": "skeleton_boss",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_boss"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/skeleton_boss_2": {
+   "category": "spawners",
+   "key": "skeleton_boss_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_boss_2"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/zombie": {
+   "category": "spawners",
+   "key": "zombie",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/zombie"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/zombie_torso": {
+   "category": "spawners",
+   "key": "zombie_torso",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/zombie_torso"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/zombie_2": {
+   "category": "spawners",
+   "key": "zombie_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/zombie_2"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/zombie_torso_2": {
+   "category": "spawners",
+   "key": "zombie_torso_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/zombie_torso_2"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/satyr_fixed_direction": {
+   "category": "spawners",
+   "key": "satyr_fixed_direction",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/satyr"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/satyr": {
+   "category": "spawners",
+   "key": "satyr",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/satyr"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/mud_golem": {
+   "category": "spawners",
+   "key": "mud_golem",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/mud_golem"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/satyr_boss": {
+   "category": "spawners",
+   "key": "satyr_boss",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/satyr_boss"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/satyr_boss_2": {
+   "category": "spawners",
+   "key": "satyr_boss_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/satyr_boss_2"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/eidolon": {
+   "category": "spawners",
+   "key": "eidolon",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/eidolon"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/eidolon_2": {
+   "category": "spawners",
+   "key": "eidolon_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/eidolon_2"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/hulk": {
+   "category": "spawners",
+   "key": "hulk",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/hulk"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/hellbear": {
+   "category": "spawners",
+   "key": "hellbear",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/hellbear"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/skeleton_archer_normal": {
+   "category": "spawners",
+   "key": "skeleton_archer_normal",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_archer_normal"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/flyer_swarm": {
+   "category": "spawners",
+   "key": "flyer_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/flyer"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/flyer_2_swarm": {
+   "category": "spawners",
+   "key": "flyer_2_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/flyer"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/ghost_swarm": {
+   "category": "spawners",
+   "key": "ghost_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/ghost"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION_PERPENDICULAR_WALL",
+   "missingResources": []
+  },
+  "spawners/catapult": {
+   "category": "spawners",
+   "key": "catapult",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/catapult"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/catapult_swarm": {
+   "category": "spawners",
+   "key": "catapult_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/catapult"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/spider": {
+   "category": "spawners",
+   "key": "spider",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/spider"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/spider_swarm": {
+   "category": "spawners",
+   "key": "spider_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/spider"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/eidolon_swarm": {
+   "category": "spawners",
+   "key": "eidolon_swarm",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/eidolon"
+   ],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "spawnBehavior": "FIXED_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/elite_resurrecting_enemy": {
+   "category": "spawners",
+   "key": "elite_resurrecting_enemy",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "elite-room",
+   "name": null,
+   "references": [
+    "enemies/resurrector"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/miniboss_spawner_effect_landing.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "OVAL_AROUND_PLAYER",
+   "missingResources": []
+  },
+  "spawners/elite_turrets": {
+   "category": "spawners",
+   "key": "elite_turrets",
+   "id": null,
+   "class": "CSurvivorsSpawnerEliteTurretDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawnerEliteTurret",
+   "nativeDefinitionClassFound": true,
+   "role": "elite-room",
+   "name": null,
+   "references": [
+    "enemies/skeleton_archer"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/enemies/skeleton_archer_invulnerable.vpcf",
+    "particles/events/crownfall/survivors/miniboss_spawner_effect_landing.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "OVAL_AROUND_PLAYER",
+   "missingResources": []
+  },
+  "spawners/elite_absorber": {
+   "category": "spawners",
+   "key": "elite_absorber",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "elite-room",
+   "name": null,
+   "references": [
+    "enemies/absorber"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/miniboss_spawner_effect_landing.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "OVAL_AROUND_PLAYER",
+   "missingResources": []
+  },
+  "spawners/elite_granite_golem_large": {
+   "category": "spawners",
+   "key": "elite_granite_golem_large",
+   "id": null,
+   "class": "CSurvivorsSpawnerGolemDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawnerGolem",
+   "nativeDefinitionClassFound": true,
+   "role": "elite-room",
+   "name": null,
+   "references": [
+    "enemies/granite_golem_large"
+   ],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/miniboss_spawner_effect_landing.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "OVAL_AROUND_PLAYER",
+   "missingResources": []
+  },
+  "spawners/imperia_portal": {
+   "category": "spawners",
+   "key": "imperia_portal",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/skeleton_summon"
+   ],
+   "referencedBy": [
+    "enemies/imperia",
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/imperia/spawner_effect.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
+   "missingResources": []
+  },
+  "spawners/imperia_portal_2": {
+   "category": "spawners",
+   "key": "imperia_portal_2",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/ogre_summon"
+   ],
+   "referencedBy": [
+    "enemies/imperia"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/imperia/spawner_effect.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
+   "missingResources": []
+  },
+  "spawners/imperia_portal_3": {
+   "category": "spawners",
+   "key": "imperia_portal_3",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/hulk_summon"
+   ],
+   "referencedBy": [
+    "enemies/imperia"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/abilities/imperia/spawner_effect.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
+   "missingResources": []
+  },
+  "spawners/baby_roshan_item_holder": {
+   "category": "spawners",
+   "key": "baby_roshan_item_holder",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/baby_roshan_item_holder"
+   ],
+   "referencedBy": [
+    "levels/skywrath"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "spawners/death": {
+   "category": "spawners",
+   "key": "death",
+   "id": null,
+   "class": "CSurvivorsSpawnerDefinition",
+   "nativeRuntimeClass": "CSurvivorsSpawner",
+   "nativeDefinitionClassFound": true,
+   "role": "spawner",
+   "name": null,
+   "references": [
+    "enemies/death"
+   ],
+   "referencedBy": [
+    "difficulty/spooky_follower"
+   ],
+   "attributes": [],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "spawnBehavior": "RANDOM_DIRECTION",
+   "missingResources": []
+  },
+  "pickups/experience": {
+   "category": "pickups",
+   "key": "experience",
+   "id": 1,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "enemies/catapult",
+    "enemies/eidolon",
+    "enemies/eidolon_2",
+    "enemies/flyer",
+    "enemies/flyer_2",
+    "enemies/ghost",
+    "enemies/hellbear",
+    "enemies/hulk",
+    "enemies/mud_golem",
+    "enemies/mud_golem_shard",
+    "enemies/ogre",
+    "enemies/satyr",
+    "enemies/satyr_boss",
+    "enemies/satyr_boss_2",
+    "enemies/skeleton",
+    "enemies/skeleton_archer_normal",
+    "enemies/skeleton_boss",
+    "enemies/skeleton_boss_2",
+    "enemies/skeleton_gold",
+    "enemies/skeleton_intro",
+    "enemies/spider",
+    "enemies/zombie",
+    "enemies/zombie_2",
+    "enemies/zombie_torso",
+    "enemies/zombie_torso_2"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/experience_pickup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "pickups/cheese": {
+   "category": "pickups",
+   "key": "cheese",
+   "id": 3,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/cheese_pickup.vpcf",
+    "particles/events/crownfall/survivors/cheese_pickup_overhead_effect.vpcf"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "pickups/shard": {
+   "category": "pickups",
+   "key": "shard",
+   "id": 4,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/arrow_pickup_direction.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup.vpcf"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "pickups/scepter": {
+   "category": "pickups",
+   "key": "scepter",
+   "id": 5,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "enemies/absorber",
+    "enemies/granite_golem_small",
+    "enemies/resurrector",
+    "enemies/skeleton_archer"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/arrow_pickup_direction.vpcf",
+    "particles/events/crownfall/survivors/scepter_pickup_overhead_effect.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "pickups/gold_coin": {
+   "category": "pickups",
+   "key": "gold_coin",
+   "id": 6,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "enemies/absorber",
+    "enemies/baby_roshan_item_holder",
+    "enemies/granite_golem_small",
+    "enemies/resurrector",
+    "enemies/skeleton_archer",
+    "enemies/vase",
+    "enemies/vase_always_cheese",
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/gold_pickup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "pickups/gold_bag": {
+   "category": "pickups",
+   "key": "gold_bag",
+   "id": 7,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "enemies/absorber",
+    "enemies/baby_roshan_item_holder",
+    "enemies/resurrector",
+    "enemies/skeleton_archer",
+    "enemies/vase",
+    "enemies/vase_always_cheese",
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/gold_pickup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "pickups/treasure": {
+   "category": "pickups",
+   "key": "treasure",
+   "id": 8,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "enemies/baby_roshan_item_holder"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/arrow_pickup_direction.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup_overhead_effect.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "pickups/magnet": {
+   "category": "pickups",
+   "key": "magnet",
+   "id": 9,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "game_modes/crownfall_act4"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/magnet_pickup_overhead_effect.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "pickups/treasure_no_directional_arrow": {
+   "category": "pickups",
+   "key": "treasure_no_directional_arrow",
+   "id": 10,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/treasure_pickup.vpcf",
+    "particles/events/crownfall/survivors/treasure_pickup_overhead_effect.vpcf"
+   ],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+   ],
+   "nameInClientBinary": false,
+   "missingResources": []
+  },
+  "pickups/cookie": {
+   "category": "pickups",
+   "key": "cookie",
+   "id": 11,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "powerups/mortimer_kisses"
+   ],
+   "attributes": [],
+   "resources": [
+    "particles/events/crownfall/survivors/cookie_pickup.vpcf",
+    "particles/events/crownfall/survivors/cookie_pickup_overhead_effect.vpcf"
+   ],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "pickups/nothing": {
+   "category": "pickups",
+   "key": "nothing",
+   "id": 99,
+   "class": "CSurvivorsPickupDefinition",
+   "nativeRuntimeClass": "CSurvivorsPickup",
+   "nativeDefinitionClassFound": true,
+   "role": "pickup",
+   "name": null,
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_MaxHP": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_MaxHP",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Макс. здоровье",
+   "references": [],
+   "referencedBy": [
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen",
+    "powerups/heart_of_tarrasque",
+    "powerups/reaver",
+    "powerups/skywrath_mage_innate"
+   ],
+   "attributes": [
+    "MaxHP_LocDescription",
+    "MaxHP_LocName",
+    "MaxHP_LocTooltip"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_HPRegen": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_HPRegen",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Восстановление здоровья",
+   "references": [],
+   "referencedBy": [
+    "powerups/heart_of_tarrasque",
+    "powerups/ring_of_tarrasque"
+   ],
+   "attributes": [
+    "HPRegen_LocDescription",
+    "HPRegen_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_LifeSteal": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_LifeSteal",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Вампиризм",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "LifeSteal_LocName"
+   ],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Damage": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Damage",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Урон",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "Damage_LocDescription",
+    "Damage_LocName"
+   ],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DamageMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DamageMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Урон",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "DamageMultiplier_LocDescription",
+    "DamageMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Damage_Physical": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Damage_Physical",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Физический урон",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/counter_helix",
+    "powerups/echo_strike",
+    "powerups/knife_throw",
+    "powerups/land_mine",
+    "powerups/snotty_bat",
+    "powerups/stampede",
+    "powerups/swashbuckle",
+    "powerups/track"
+   ],
+   "attributes": [
+    "Damage_Physical_LocDescription",
+    "Damage_Physical_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DamageMultiplier_Physical": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DamageMultiplier_Physical",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Множитель физ. урона",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "DamageMultiplier_Physical_LocDescription",
+    "DamageMultiplier_Physical_LocName"
+   ],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Damage_Magical": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Damage_Magical",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Магический урон",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/frostbite",
+    "powerups/kez_innate",
+    "powerups/laguna_blade",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/rot",
+    "powerups/snotty_bat",
+    "powerups/spirits"
+   ],
+   "attributes": [
+    "Damage_Magical_LocDescription",
+    "Damage_Magical_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DamageMultiplier_Magical": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DamageMultiplier_Magical",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Множитель маг. урона",
+   "references": [],
+   "referencedBy": [
+    "powerups/kaya",
+    "powerups/kaya_and_sange",
+    "powerups/kns_trident",
+    "powerups/sny_trident",
+    "powerups/yasha_and_kaya",
+    "powerups/ynk_trident"
+   ],
+   "attributes": [
+    "DamageMultiplier_Magical_LocDescription",
+    "DamageMultiplier_Magical_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_Chance": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_CriticalStrike_Physical_Chance",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Шанс критического урона",
+   "references": [],
+   "referencedBy": [
+    "powerups/crystalys",
+    "powerups/daedalus"
+   ],
+   "attributes": [
+    "CriticalStrike_Physical_Chance_LocDescription",
+    "CriticalStrike_Physical_Chance_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Критический физический урон",
+   "references": [],
+   "referencedBy": [
+    "powerups/crystalys",
+    "powerups/daedalus"
+   ],
+   "attributes": [
+    "CriticalStrike_Physical_DamageMultiplier_LocDescription",
+    "CriticalStrike_Physical_DamageMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_MovementSpeed": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_MovementSpeed",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Скорость передвижения",
+   "references": [],
+   "referencedBy": [
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen",
+    "powerups/kez_innate",
+    "powerups/kns_trident",
+    "powerups/sange_and_yasha",
+    "powerups/sny_trident",
+    "powerups/yasha",
+    "powerups/yasha_and_kaya",
+    "powerups/ynk_trident"
+   ],
+   "attributes": [
+    "MovementSpeed_LocDescription",
+    "MovementSpeed_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Cooldown": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Cooldown",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Перезарядка",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/counter_helix",
+    "powerups/echo_strike",
+    "powerups/frostbite",
+    "powerups/kez_innate",
+    "powerups/knife_throw",
+    "powerups/laguna_blade",
+    "powerups/land_mine",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/rot",
+    "powerups/snotty_bat",
+    "powerups/spirits",
+    "powerups/stampede",
+    "powerups/swashbuckle",
+    "powerups/track"
+   ],
+   "attributes": [
+    "Cooldown_LocDescription",
+    "Cooldown_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_CooldownReductionMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_CooldownReductionMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Уменьшение перезарядок",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/counter_helix",
+    "powerups/frostbite",
+    "powerups/knife_throw",
+    "powerups/laguna_blade",
+    "powerups/land_mine",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/octarine_core",
+    "powerups/rot",
+    "powerups/snotty_bat",
+    "powerups/track"
+   ],
+   "attributes": [
+    "CooldownReductionMultiplier_LocDescription",
+    "CooldownReductionMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Range": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Range",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Дальность",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/frostbite",
+    "powerups/kez_innate",
+    "powerups/knife_throw",
+    "powerups/laguna_blade",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/spirits",
+    "powerups/track"
+   ],
+   "attributes": [
+    "Range_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Armor": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Armor",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Сопротивление урону",
+   "references": [],
+   "referencedBy": [
+    "powerups/blade_mail"
+   ],
+   "attributes": [
+    "Armor_LocDescription",
+    "Armor_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DamageReflection": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DamageReflection",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Отражение урона",
+   "references": [],
+   "referencedBy": [
+    "powerups/blade_mail"
+   ],
+   "attributes": [
+    "DamageReflection_LocDescription",
+    "DamageReflection_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Dodge": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Dodge",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": null,
+   "references": [],
+   "referencedBy": [],
+   "attributes": [],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ExpMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ExpMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Множитель опыта",
+   "references": [],
+   "referencedBy": [
+    "powerups/tome_of_knowledge"
+   ],
+   "attributes": [
+    "ExpMultiplier_LocDescription",
+    "ExpMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_PickupRadius": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_PickupRadius",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Радиус подбора",
+   "references": [],
+   "referencedBy": [
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen",
+    "powerups/snotty_bat",
+    "powerups/world_chasm_artifact"
+   ],
+   "attributes": [
+    "PickupRadius_LocDescription",
+    "PickupRadius_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_StunDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_StunDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длительность оглушения",
+   "references": [],
+   "referencedBy": [
+    "powerups/chain_frost",
+    "powerups/magic_missile"
+   ],
+   "attributes": [
+    "StunDuration_LocDescription",
+    "StunDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileBounces": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileBounces",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Отскоки снарядов",
+   "references": [],
+   "referencedBy": [
+    "powerups/chain_frost",
+    "powerups/magic_missile"
+   ],
+   "attributes": [
+    "ProjectileBounces_LocDescription",
+    "ProjectileBounces_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_AoEIncrease": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_AoEIncrease",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Увеличение радиусов",
+   "references": [],
+   "referencedBy": [
+    "powerups/bloodstone",
+    "powerups/echo_strike",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "AoEIncrease_LocDescription",
+    "AoEIncrease_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_KnockbackDistance": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_KnockbackDistance",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Дальность отталкивания",
+   "references": [],
+   "referencedBy": [
+    "powerups/arcane_bolt",
+    "powerups/counter_helix",
+    "powerups/echo_strike",
+    "powerups/knife_throw",
+    "powerups/stampede",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "KnockbackDistance_LocDescription",
+    "KnockbackDistance_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_FreezeDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_FreezeDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длит. приморозки",
+   "references": [],
+   "referencedBy": [
+    "powerups/chain_frost",
+    "powerups/frostbite",
+    "powerups/rot"
+   ],
+   "attributes": [
+    "FreezeDuration_LocDescription",
+    "FreezeDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_FreezeStrength": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_FreezeStrength",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Сила приморозки",
+   "references": [],
+   "referencedBy": [
+    "powerups/chain_frost",
+    "powerups/frostbite",
+    "powerups/rot"
+   ],
+   "attributes": [
+    "FreezeStrength_LocDescription",
+    "FreezeStrength_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_VulnerabilityDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_VulnerabilityDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длительность уязвимости",
+   "references": [],
+   "referencedBy": [
+    "powerups/kez_innate"
+   ],
+   "attributes": [
+    "VulnerabilityDuration_LocDescription",
+    "VulnerabilityDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_VulnerabilityDamagePercent": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_VulnerabilityDamagePercent",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Урон при уязвимости",
+   "references": [],
+   "referencedBy": [
+    "powerups/kez_innate"
+   ],
+   "attributes": [
+    "VulnerabilityDamagePercent_LocDescription",
+    "VulnerabilityDamagePercent_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длит. оглушения при уязвимости",
+   "references": [],
+   "referencedBy": [
+    "powerups/kez_innate"
+   ],
+   "attributes": [
+    "VulnerabilityStunOnHitDuration_LocDescription",
+    "VulnerabilityStunOnHitDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_MaxRerolls": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_MaxRerolls",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Замены",
+   "references": [],
+   "referencedBy": [
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen"
+   ],
+   "attributes": [
+    "MaxRerolls_LocDescription",
+    "MaxRerolls_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DamageTicks": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DamageTicks",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Число срабатываний",
+   "references": [],
+   "referencedBy": [
+    "powerups/counter_helix",
+    "powerups/echo_strike",
+    "powerups/mortimer_kisses",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "DamageTicks_LocDescription",
+    "DamageTicks_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_TimeBetweenTicks": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_TimeBetweenTicks",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Интервал срабатываний",
+   "references": [],
+   "referencedBy": [
+    "powerups/echo_strike",
+    "powerups/frostbite",
+    "powerups/mortimer_kisses",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "TimeBetweenTicks_LocDescription",
+    "TimeBetweenTicks_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ModifierDamagePerTick": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ModifierDamagePerTick",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Маг. урон за срабатывание",
+   "references": [],
+   "referencedBy": [
+    "powerups/frostbite"
+   ],
+   "attributes": [
+    "ModifierDamagePerTick_LocDescription",
+    "ModifierDamagePerTick_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Radius": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Radius",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Радиус",
+   "references": [],
+   "referencedBy": [
+    "powerups/counter_helix",
+    "powerups/kez_innate",
+    "powerups/land_mine",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/rot",
+    "powerups/snotty_bat",
+    "powerups/spirits",
+    "powerups/stampede"
+   ],
+   "attributes": [
+    "Radius_LocDescription",
+    "Radius_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Length": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Length",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Дальность",
+   "references": [],
+   "referencedBy": [
+    "powerups/echo_strike",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "Length_LocDescription",
+    "Length_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ArmingTime": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ArmingTime",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Ускорение подготовки",
+   "references": [],
+   "referencedBy": [
+    "powerups/land_mine"
+   ],
+   "attributes": [
+    "ArmingTime_LocDescription",
+    "ArmingTime_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileHitCount": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileHitCount",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Число пробитий",
+   "references": [],
+   "referencedBy": [
+    "powerups/arcane_bolt",
+    "powerups/knife_throw"
+   ],
+   "attributes": [
+    "ProjectileHitCount_LocDescription",
+    "ProjectileHitCount_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileHorizontalOffset": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileHorizontalOffset",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "powerups/knife_throw"
+   ],
+   "attributes": [
+    "ProjectileHorizontalOffset_LocDescription"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_SplashDamagePercentage": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_SplashDamagePercentage",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Урон по области",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "SplashDamagePercentage_LocDescription",
+    "SplashDamagePercentage_LocName"
+   ],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Directions": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Directions",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Число направлений",
+   "references": [],
+   "referencedBy": [
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "Directions_LocDescription",
+    "Directions_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Duration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Duration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длительность",
+   "references": [],
+   "referencedBy": [
+    "powerups/rot",
+    "powerups/spirits",
+    "powerups/stampede"
+   ],
+   "attributes": [
+    "Duration_LocDescription",
+    "Duration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_DurationExtension": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_DurationExtension",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Доп. длительность эффектов",
+   "references": [],
+   "referencedBy": [
+    "powerups/timeless_relic"
+   ],
+   "attributes": [
+    "DurationExtension_LocDescription",
+    "DurationExtension_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_StampedeMovementSpeed": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_StampedeMovementSpeed",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Скорость при срабатывании",
+   "references": [],
+   "referencedBy": [
+    "powerups/stampede"
+   ],
+   "attributes": [
+    "StampedeMovementSpeed_LocDescription",
+    "StampedeMovementSpeed_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ActiveAbilitySlots": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ActiveAbilitySlots",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Доп. ячейки способностей",
+   "references": [],
+   "referencedBy": [
+    "powerups/apex"
+   ],
+   "attributes": [
+    "ActiveAbilitySlots_LocDescription",
+    "ActiveAbilitySlots_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Усиление отталкивания",
+   "references": [],
+   "referencedBy": [
+    "powerups/kaya_and_sange",
+    "powerups/kns_trident",
+    "powerups/sange",
+    "powerups/sange_and_yasha",
+    "powerups/sny_trident",
+    "powerups/ynk_trident"
+   ],
+   "attributes": [
+    "KnockbackDistanceMultiplier_LocDescription",
+    "KnockbackDistanceMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileSpeed": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileSpeed",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Скорость снарядов",
+   "references": [],
+   "referencedBy": [
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/knife_throw",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses"
+   ],
+   "attributes": [
+    "ProjectileSpeed_LocDescription",
+    "ProjectileSpeed_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Width": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Width",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Ширина",
+   "references": [],
+   "referencedBy": [
+    "powerups/echo_strike",
+    "powerups/swashbuckle"
+   ],
+   "attributes": [
+    "Width_LocDescription",
+    "Width_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_FreezeSplashRadius": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_FreezeSplashRadius",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Радиус приморозки",
+   "references": [],
+   "referencedBy": [
+    "powerups/chain_frost"
+   ],
+   "attributes": [
+    "FreezeSplashRadius_LocDescription",
+    "FreezeSplashRadius_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Шанс критического урона снарядами",
+   "references": [],
+   "referencedBy": [
+    "powerups/khanda"
+   ],
+   "attributes": [
+    "CriticalStrike_Projectile_Chance_LocDescription",
+    "CriticalStrike_Projectile_Chance_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Критический урон снарядами",
+   "references": [],
+   "referencedBy": [
+    "powerups/khanda"
+   ],
+   "attributes": [
+    "CriticalStrike_Projectile_DamageMultiplier_LocDescription",
+    "CriticalStrike_Projectile_DamageMultiplier_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Projectile_BonusMagicDamage": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Projectile_BonusMagicDamage",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Доп. урон от снарядов",
+   "references": [],
+   "referencedBy": [
+    "powerups/khanda",
+    "powerups/phylactery"
+   ],
+   "attributes": [
+    "Projectile_BonusMagicDamage_LocDescription",
+    "Projectile_BonusMagicDamage_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Снижение физ. сопротивления от маг. урона",
+   "references": [],
+   "referencedBy": [
+    "powerups/vengeful_spirit_innate"
+   ],
+   "attributes": [
+    "MagicDamageWeakensPhysicalDamageResistance_Percentage_LocDescription",
+    "MagicDamageWeakensPhysicalDamageResistance_Percentage_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длительность снижения физ. сопротивления от маг. урона",
+   "references": [],
+   "referencedBy": [
+    "powerups/vengeful_spirit_innate"
+   ],
+   "attributes": [
+    "MagicDamageWeakensPhysicalDamageResistance_Duration_LocDescription",
+    "MagicDamageWeakensPhysicalDamageResistance_Duration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_LimitBreak": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_LimitBreak",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Превосходство",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "LimitBreak_LocDescription",
+    "LimitBreak_LocName"
+   ],
+   "resources": [],
+   "reachable": false,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [
+    "no reference from the game mode in data; the name appears in the client binary, likely spawned/used by native code - verify by observation"
+   ],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_BonusPhysicalDamage": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_BonusPhysicalDamage",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Доп. физический урон",
+   "references": [],
+   "referencedBy": [
+    "powerups/daedalus",
+    "powerups/demon_edge"
+   ],
+   "attributes": [
+    "BonusPhysicalDamage_LocDescription",
+    "BonusPhysicalDamage_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_IncomingDamageAmplification": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_IncomingDamageAmplification",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Бонус к урону",
+   "references": [],
+   "referencedBy": [
+    "powerups/track"
+   ],
+   "attributes": [
+    "IncomingDamageAmplification_LocDescription",
+    "IncomingDamageAmplification_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_IncomingDamageAmplificationDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_IncomingDamageAmplificationDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длит. бонуса к урону",
+   "references": [],
+   "referencedBy": [
+    "powerups/track"
+   ],
+   "attributes": [
+    "IncomingDamageAmplificationDuration_LocDescription",
+    "IncomingDamageAmplificationDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileDamagePercent": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileDamagePercent",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Множитель урона снарядов",
+   "references": [],
+   "referencedBy": [
+    "powerups/frostbite"
+   ],
+   "attributes": [
+    "ProjectileDamagePercent_LocDescription",
+    "ProjectileDamagePercent_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileAttack": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileAttack",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": null,
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/frostbite",
+    "powerups/knife_throw",
+    "powerups/laguna_blade",
+    "powerups/magic_missile",
+    "powerups/track"
+   ],
+   "attributes": [
+    "ProjectileAttack_LocDescription"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_ProjectileAttackInterval": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_ProjectileAttackInterval",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Интервал атак снарядами",
+   "references": [],
+   "referencedBy": [
+    "powerups/arcane_bolt",
+    "powerups/knife_throw",
+    "powerups/mortimer_kisses"
+   ],
+   "attributes": [
+    "ProjectileAttackInterval_LocDescription",
+    "ProjectileAttackInterval_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Luck": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Luck",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Удача",
+   "references": [],
+   "referencedBy": [
+    "heroes/dragonus",
+    "heroes/kez",
+    "heroes/shen"
+   ],
+   "attributes": [
+    "Luck_LocDescription",
+    "Luck_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_TargetCount": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_TargetCount",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Число снарядов",
+   "references": [],
+   "referencedBy": [
+    "powerups/annihilation",
+    "powerups/arcane_bolt",
+    "powerups/chain_frost",
+    "powerups/echo_stone",
+    "powerups/frostbite",
+    "powerups/kez_innate",
+    "powerups/knife_throw",
+    "powerups/laguna_blade",
+    "powerups/magic_missile",
+    "powerups/mortimer_kisses",
+    "powerups/skywrath_mage_innate",
+    "powerups/spirits",
+    "powerups/track"
+   ],
+   "attributes": [
+    "TargetCount_LocDescription",
+    "TargetCount_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "partial",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_Lives": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_Lives",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "meta-progression",
+   "name": "Эгида",
+   "references": [],
+   "referencedBy": [],
+   "attributes": [
+    "Lives_LocDescription",
+    "Lives_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_SlowStrength": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_SlowStrength",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Замедление передвижения",
+   "references": [],
+   "referencedBy": [
+    "powerups/snotty_bat"
+   ],
+   "attributes": [
+    "SlowStrength_LocDescription",
+    "SlowStrength_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  },
+  "attributes/k_eSurvivorsAttribute_SlowDuration": {
+   "category": "attributes",
+   "key": "k_eSurvivorsAttribute_SlowDuration",
+   "id": null,
+   "class": "CSurvivorsAttributeDefinition",
+   "nativeRuntimeClass": "CSurvivorsAttribute",
+   "nativeDefinitionClassFound": true,
+   "role": "attribute",
+   "name": "Длительность замедления",
+   "references": [],
+   "referencedBy": [
+    "powerups/snotty_bat"
+   ],
+   "attributes": [
+    "SlowDuration_LocDescription",
+    "SlowDuration_LocName"
+   ],
+   "resources": [],
+   "reachable": true,
+   "prototype": "none",
+   "testScenario": null,
+   "notes": [],
+   "nameInClientBinary": true,
+   "missingResources": []
+  }
+ }
+}

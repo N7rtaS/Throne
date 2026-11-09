@@ -1,0 +1,43 @@
+{
+ "dota": {
+  "ClientVersion": "6972",
+  "SourceRevision": "11209448",
+  "VersionDate": "Nov 05 2026",
+  "VersionTime": "11:17:10"
+ },
+ "dotaPak01DirSha256": "eaee44204cdb97c0c7d04be107c38b5bc5e2fcb4425b0e7003c61ffe36d2f5b6",
+ "unity": "6000.6.7f1",
+ "unityPackages": {
+  "com.unity.nuget.newtonsoft-json": "3.2.2",
+  "com.unity.ide.rider": "3.0.40",
+  "com.unity.ide.visualstudio": "2.0.28",
+  "com.unity.inputsystem": "1.20.0",
+  "com.unity.render-pipelines.universal": "17.6.0",
+  "com.unity.ugui": "2.6.0",
+  "com.unity.collab-proxy": "2.13.6",
+  "com.unity.modules.vectorgraphics": "1.0.0"
+ },
+ "tools": {
+  "source2viewer": "Version: 20.1.7467+9e2e6c7f67e3c4e5a5f443a60c3a5d841ba8f304",
+  "python": "3.13.3",
+  "node": "v18.16.0"
+ },
+ "inputs": {
+  "Research/Json/soundevents_crownfall.json": "ca31633b4981e1d00737e0981c2ef7ffee1725851cb282e43dcd437611ae744a",
+  "Research/Json/soundevents_survivors.json": "544821d91d6a6eb2791488c3a447ef097b4c2e4073cdba4dc6b5268553a4ff5c",
+  "Research/Json/summary.json": "67e7bdc26a6bab1848a07ddcb5f2eafc0c4757b1e23c85a424320b688a69085e",
+  "Research/Json/survivors_attributes.json": "113d3770f86ba86e053563f79aed1793f37e5a1f83d0bf95cb0058f5bec9e637",
+  "Research/Json/survivors_difficulty.json": "9488608124e0877847f12083f242278c5cc30fccdcf1a54bcf4a735069620c6d",
+  "Research/Json/survivors_enemies.json": "f30a8a89949cbe0ba268c451113c433b2c5fc92ffc3d4a5dfd5cb4c518940108",
+  "Research/Json/survivors_game_modes.json": "92788a9659d7575a9c5755dc5d1711361738c31caa823b3d21dd277fd9ec93cf",
+  "Research/Json/survivors_heroes.json": "a8a2f3a850c8db695e6bafcfeb4f2b42e96f1579365926199162415e2e2946ec",
+  "Research/Json/survivors_levels.json": "f2f06a862e0b8d8a474c852386c96c1b5a6cb00563c99b847196e234670df338",
+  "Research/Json/survivors_pickups.json": "0f397a6fd460856228812ec8aec89a35a238d4db8d50cce0f666685e6638778a",
+  "Research/Json/survivors_powerups.json": "2190f282222ccbb1b5d67f220a91a88b71543a1a508d780407b20d0af772a2ec",
+  "Research/Json/survivors_spawners.json": "5ff6548c88fdf0b63d11696ebdf531dbddaad4f8805ce92c6c445a4eef038ba3"
+ },
+ "manifest": {
+  "path": "NestOfThorns/manifest.tsv",
+  "sha256": "3009ca536584fd656c24479c5781fcbdd6d4169598c75a8ff4878af388b60623"
+ }
+}

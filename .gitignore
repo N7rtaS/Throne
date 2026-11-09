@@ -1,0 +1,36 @@
+/UnityProject/Library/
+/UnityProject/Temp/
+/UnityProject/Obj/
+/UnityProject/Logs/
+/UnityProject/UserSettings/
+/UnityProject/MemoryCaptures/
+/UnityProject/Build/
+/UnityProject/Builds/
+/Builds/
+/Tools/Source2Viewer/
+# Unity regenerates its own project files; projects under DotNet/ are versioned.
+/UnityProject/*.csproj
+/UnityProject/*.sln
+/UnityProject/*.slnx
+/DotNet/**/bin/
+/DotNet/**/obj/
+/Converted/
+# Models converted from the local Dota 2 install (Tools/convert-models.py)
+/UnityProject/Assets/Game/Art/Converted/
+/UnityProject/Assets/Game/Art/Converted.meta
+/Research/Наблюдение/Видео/
+*.mp4
+*.mov
+/*.zip
+*.apk
+*.aab
+*.keystore
+.DS_Store
+__pycache__/
+
+# Original Valve resources: re-extracted from the local Dota 2 install, not versioned.
+# The manifest stays tracked so the extraction can be reproduced and verified.
+/NestOfThorns/*
+!/NestOfThorns/manifest.tsv
+# Obsolete files kept for review before deletion
+/Удалить/

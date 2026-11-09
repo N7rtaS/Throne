@@ -1,0 +1,410 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using ThornThrone.Simulation;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.UI;
+
+namespace ThornThrone.Mobile
+{
+    /// <summary>
+    /// uGUI built from code: menu, HUD, level-up cards, pause and results. Reference resolution 1920×1080,
+    /// everything inside the screen safe area. Temporary look; layout and text sizes target a 6" phone.
+    /// </summary>
+    public sealed class GameUi
+    {
+        public event Action<string> StartRequested;
+        public event Action<int> ChoiceSelected;
+        public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
+
+        private readonly Font font;
+        private readonly Dictionary<string, string> names;
+        private readonly RectTransform safe;
+        private readonly GameObject menu, hud, choices, pause, results;
+        private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
+        private readonly Text levelText, timeText, killsText, bossText, resultText, rerollText;
+        private readonly Button[] cards = new Button[3];
+        private readonly Text[] cardTexts = new Text[3];
+        private readonly Button reroll;
+        private readonly RectTransform dashButton, pauseButton;
+        private Rect lastSafe;
+        private readonly StringBuilder text = new StringBuilder(256);
+
+        public GameUi(Dictionary<string, string> localization)
+        {
+            names = localization;
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+            if (EventSystem.current == null)
+                new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
+
+            var canvasObject = new GameObject("UI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
+            var canvas = canvasObject.GetComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            var scaler = canvasObject.GetComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.matchWidthOrHeight = 0.5f;
+            safe = Rect(canvasObject.transform, "Safe area", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+
+            // HUD
+            hud = Rect(safe, "HUD", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).gameObject;
+            healthFill = Bar(hud.transform, "Health", new Vector2(0, 1), new Vector2(40, -40), new Vector2(520, 36), new Color(.85f, .2f, .2f));
+            experienceFill = Bar(hud.transform, "Experience", new Vector2(0, 1), new Vector2(40, -86), new Vector2(520, 20), new Color(.3f, .9f, .5f));
+            levelText = Label(hud.transform, "Level", new Vector2(0, 1), new Vector2(580, -40), new Vector2(240, 60), 40, TextAnchor.UpperLeft);
+            timeText = Label(hud.transform, "Time", new Vector2(.5f, 1), new Vector2(-150, -30), new Vector2(300, 70), 56, TextAnchor.UpperCenter);
+            killsText = Label(hud.transform, "Kills", new Vector2(.5f, 1), new Vector2(-150, -100), new Vector2(300, 50), 32, TextAnchor.UpperCenter);
+            bossText = Label(hud.transform, "Boss", new Vector2(.5f, 1), new Vector2(-400, -150), new Vector2(800, 60), 40, TextAnchor.UpperCenter);
+            bossText.color = new Color(1, .5f, .9f);
+            pauseButton = Button(hud.transform, "Pause", new Vector2(1, 1), new Vector2(-150, -150), new Vector2(120, 120), "II", 56, () => PauseRequested?.Invoke()).GetComponent<RectTransform>();
+            dashButton = Rect(hud.transform, "Dash", new Vector2(1, 0), new Vector2(1, 0), new Vector2(-300, 60), new Vector2(-60, 300));
+            var dashBack = dashButton.gameObject.AddComponent<Image>();
+            dashBack.color = new Color(1, 1, 1, .18f);
+            dashFill = Bar(dashButton, "Charge", new Vector2(0, 0), new Vector2(0, 16), new Vector2(240, 16), new Color(.4f, .8f, 1f));
+            Label(dashButton, "Label", Vector2.zero, new Vector2(0, 240), new Vector2(240, 240), 40, TextAnchor.MiddleCenter).text = "Рывок";
+            joystickBase = Circle(hud.transform, "Joystick", 260, new Color(1, 1, 1, .15f));
+            joystickKnob = Circle(hud.transform, "Knob", 110, new Color(1, 1, 1, .35f));
+            eliteArrow = Circle(hud.transform, "Elite room arrow", 70, new Color(0, .55f, 1f, .95f));
+            eliteArrow.sprite = ArrowSprite;
+
+            // Level-up choices
+            choices = Panel(safe, "Choices", new Color(0, 0, 0, .7f));
+            Label(choices.transform, "Title", new Vector2(.5f, 1), new Vector2(-500, -60), new Vector2(1000, 80), 56, TextAnchor.UpperCenter).text = "Новый уровень";
+            for (int i = 0; i < 3; i++)
+            {
+                int index = i;
+                cards[i] = Button(choices.transform, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, () => ChoiceSelected?.Invoke(index));
+                cardTexts[i] = cards[i].GetComponentInChildren<Text>();
+                cardTexts[i].alignment = TextAnchor.UpperCenter;
+            }
+            reroll = Button(choices.transform, "Reroll", new Vector2(.5f, 0), new Vector2(-220, 40), new Vector2(440, 110), "", 38, () => RerollRequested?.Invoke());
+            rerollText = reroll.GetComponentInChildren<Text>();
+
+            // Pause
+            pause = Panel(safe, "Pause", new Color(0, 0, 0, .75f));
+            Label(pause.transform, "Title", new Vector2(.5f, .5f), new Vector2(-400, 160), new Vector2(800, 100), 72, TextAnchor.MiddleCenter).text = "Пауза";
+            Button(pause.transform, "Resume", new Vector2(.5f, .5f), new Vector2(-260, 0), new Vector2(520, 120), "Продолжить", 44, () => ResumeRequested?.Invoke());
+            Button(pause.transform, "Quit", new Vector2(.5f, .5f), new Vector2(-260, -160), new Vector2(520, 120), "Завершить забег", 44, () => QuitRunRequested?.Invoke());
+
+            // Results
+            results = Panel(safe, "Results", new Color(0, 0, 0, .8f));
+            resultText = Label(results.transform, "Text", new Vector2(.5f, .5f), new Vector2(-600, 260), new Vector2(1200, 360), 52, TextAnchor.MiddleCenter);
+            Button(results.transform, "Menu", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "В меню", 44, () => MenuRequested?.Invoke());
+
+            // Menu
+            menu = Panel(safe, "Menu", new Color(.03f, .04f, .07f, 1));
+            Label(menu.transform, "Title", new Vector2(.5f, 1), new Vector2(-600, -120), new Vector2(1200, 140), 96, TextAnchor.MiddleCenter).text = "Терновый трон";
+            Label(menu.transform, "Subtitle", new Vector2(.5f, 1), new Vector2(-600, -230), new Vector2(1200, 60), 34, TextAnchor.MiddleCenter).text = "Выберите героя";
+            string[] heroes = { "dragonus", "shen", "kez" };
+            string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез\n(в разработке)" };
+            for (int i = 0; i < heroes.Length; i++)
+            {
+                string key = heroes[i];
+                var b = Button(menu.transform, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 300), titles[i], 52, () => StartRequested?.Invoke(key));
+                b.interactable = key == "dragonus";
+            }
+            ShowMenu();
+        }
+
+        // ------------------------------------------------------------------ screens
+
+        public void ShowMenu() => Show(menu);
+        public void ShowRun() => Show(hud);
+
+        public void ShowPause(bool visible)
+        {
+            pause.SetActive(visible);
+            hud.SetActive(true);
+        }
+
+        public void ShowResults(Run run)
+        {
+            Show(results);
+            resultText.text = (run.Victory ? "Победа!" : "Поражение") +
+                $"\n\nВремя {FormatTime(run.Time)}   Уровень {run.HeroLevel}   Убито {run.Kills}";
+        }
+
+        public void ShowChoices(Run run)
+        {
+            choices.SetActive(true);
+            for (int i = 0; i < cards.Length; i++)
+            {
+                bool visible = run.ChoicesAreFallback ? i == 1 : i < run.Choices.Count;
+                cards[i].gameObject.SetActive(visible);
+                if (!visible) continue;
+                cardTexts[i].text = run.ChoicesAreFallback
+                    ? $"Восстановление\n\n+{run.Rules.FallbackHeal:0} здоровья\n\nВсе улучшения получены"
+                    : Describe(run, run.Choices[i]);
+            }
+            reroll.gameObject.SetActive(!run.ChoicesAreFallback);
+            reroll.interactable = run.Build.RerollsLeft > 0;
+            rerollText.text = $"Перебросить ({run.Build.RerollsLeft})";
+        }
+
+        public void HideChoices() => choices.SetActive(false);
+
+        private void Show(GameObject screen)
+        {
+            menu.SetActive(screen == menu);
+            hud.SetActive(screen == hud);
+            results.SetActive(screen == results);
+            choices.SetActive(false);
+            pause.SetActive(false);
+        }
+
+        // ------------------------------------------------------------------ per frame
+
+        public void UpdateHud(Run run, GameInput input)
+        {
+            ApplySafeArea();
+            healthFill.fillAmount = run.MaxHealth > 0 ? run.Health / run.MaxHealth : 0;
+            experienceFill.fillAmount = Mathf.Clamp01(run.Experience / run.RequiredExperience);
+            int maxDashes = Mathf.Max(1, (int)run.Build.Global[Attr.NumDashes]);
+            float cooldown = Mathf.Max(0.01f, run.Build.Global[Attr.DashCooldown]);
+            dashFill.fillAmount = Mathf.Clamp01((run.DashCharges + (run.DashCharges < maxDashes ? run.DashRecharge / cooldown : 0)) / maxDashes);
+            SetText(levelText, "Ур. ", run.HeroLevel);
+            timeText.text = FormatTime(run.Time);
+            SetText(killsText, "Убито ", run.Kills);
+            bossText.gameObject.SetActive(run.BossSpawned && run.Boss != null && run.Boss.Active);
+            if (bossText.gameObject.activeSelf) bossText.text = $"Империя {Mathf.CeilToInt(run.Boss.Health)}";
+
+            joystickBase.gameObject.SetActive(input.JoystickActive);
+            joystickKnob.gameObject.SetActive(input.JoystickActive);
+            if (input.JoystickActive)
+            {
+                joystickBase.rectTransform.position = input.JoystickOrigin;
+                joystickKnob.rectTransform.position = input.JoystickOrigin + Vector2.ClampMagnitude(input.JoystickPosition - input.JoystickOrigin, input.JoystickRadius);
+            }
+            input.DashArea = ScreenRect(dashButton);
+            input.Blocked = blocked;
+            blocked[0] = ScreenRect(pauseButton);
+        }
+
+        private readonly Rect[] blocked = new Rect[1];
+
+        /// <summary>Arrow at the screen edge towards an open elite room that is off screen (m_sEliteRoomDirectionalArrowEffect).</summary>
+        public void UpdateEliteArrow(bool visible, Vector2 screenPosition, Vector2 direction)
+        {
+            eliteArrow.gameObject.SetActive(visible);
+            if (!visible) return;
+            eliteArrow.rectTransform.position = screenPosition;
+            eliteArrow.rectTransform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        }
+
+        private static Sprite arrow;
+
+        private static Sprite ArrowSprite
+        {
+            get
+            {
+                if (arrow) return arrow;
+                const int size = 64;
+                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    // Triangle pointing to +x.
+                    float u = x / (float)size, v = Mathf.Abs(y / (float)size - 0.5f) * 2;
+                    texture.SetPixel(x, y, new Color(1, 1, 1, v <= 1 - u ? 1 : 0));
+                }
+                texture.Apply();
+                return arrow = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f));
+            }
+        }
+
+        private void SetText(Text label, string prefix, int value)
+        {
+            text.Clear().Append(prefix).Append(value);
+            label.text = text.ToString();
+        }
+
+        private static string FormatTime(float seconds)
+        {
+            int s = Mathf.FloorToInt(seconds);
+            return $"{s / 60:00}:{s % 60:00}";
+        }
+
+        private void ApplySafeArea()
+        {
+            var area = Screen.safeArea;
+            if (area == lastSafe || Screen.width == 0) return;
+            lastSafe = area;
+            safe.anchorMin = new Vector2(area.xMin / Screen.width, area.yMin / Screen.height);
+            safe.anchorMax = new Vector2(area.xMax / Screen.width, area.yMax / Screen.height);
+        }
+
+        private static readonly Vector3[] corners = new Vector3[4];
+
+        private static Rect ScreenRect(RectTransform rect)
+        {
+            rect.GetWorldCorners(corners);
+            return new Rect(corners[0].x, corners[0].y, corners[2].x - corners[0].x, corners[2].y - corners[0].y);
+        }
+
+        // ------------------------------------------------------------------ card text
+
+        private static readonly Dictionary<string, string> attributeNames = new Dictionary<string, string>
+        {
+            { "MaxHP", "здоровье" }, { "HPRegen", "восстановление здоровья в секунду" },
+            { "MovementSpeed", "скорость передвижения" }, { "PickupRadius", "радиус подбора" },
+            { "ExpMultiplier", "% опыта" }, { "Damage_Magical", "магический урон" },
+            { "DamageMultiplier_Magical", "% магического урона" }, { "CooldownReductionMultiplier", "% сокращения перезарядки" },
+            { "TargetCount", "снаряды в залпе" }, { "ProjectileHitCount", "пробитие" }, { "Range", "дальность" },
+            { "ProjectileSpeed", "скорость снаряда" }, { "KnockbackDistance", "отталкивание" },
+        };
+
+        private static readonly HashSet<string> percentAttributes = new HashSet<string>
+            { "ExpMultiplier", "DamageMultiplier_Magical", "CooldownReductionMultiplier" };
+
+        private string Describe(Run run, PowerUpDef def)
+        {
+            var owned = run.Build.Find(def);
+            int rank = owned?.Rank ?? 0;
+            var sb = new StringBuilder();
+            sb.Append(Name(def)).Append("\n\n");
+            sb.Append(rank == 0 ? "Новое" : $"Уровень {rank} → {rank + 1}").Append(" / ").Append(def.MaxLevel).Append("\n\n");
+            if (def.IsPassive)
+            {
+                if (def.Minor.Length > 0) Lines(sb, def.Minor[0].Global);
+            }
+            else if (rank == 0) sb.Append(Text(def, "LocAbilityDesc"));
+            else
+            {
+                int index = rank - run.Rules.AuthoredUpgradeOffset;
+                if (index >= 0 && index < def.Authored.Length)
+                {
+                    Lines(sb, def.Authored[index].Local);
+                    Lines(sb, def.Authored[index].Global);
+                }
+            }
+            return sb.ToString();
+        }
+
+        private static void Lines(StringBuilder sb, AttributeValue[] values)
+        {
+            foreach (var a in values)
+            {
+                string key = Attr.Name(a.Id);
+                string label = attributeNames.TryGetValue(key, out var n) ? n : key;
+                if (percentAttributes.Contains(key)) sb.Append($"+{a.Value * 100:0.#}{label}\n");
+                else sb.Append($"{a.Value:+0.##;-0.##} {label}\n");
+            }
+        }
+
+        private string Name(PowerUpDef def) => Text(def, "LocAbilityName") ?? def.Key;
+
+        private string Text(PowerUpDef def, string field) =>
+            names != null && names.TryGetValue($"DOTA_VData_survivors_powerups_{def.Key}_{field}", out var value) ? value : null;
+
+        // ------------------------------------------------------------------ widgets
+
+        private static RectTransform Rect(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
+        {
+            var go = new GameObject(name, typeof(RectTransform));
+            var rect = go.GetComponent<RectTransform>();
+            rect.SetParent(parent, false);
+            rect.anchorMin = anchorMin;
+            rect.anchorMax = anchorMax;
+            rect.offsetMin = offsetMin;
+            rect.offsetMax = offsetMax;
+            return rect;
+        }
+
+        /// <summary>Rect of <paramref name="size"/> whose bottom-left corner is at <paramref name="position"/> from the anchor.</summary>
+        private static RectTransform Place(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size)
+        {
+            var rect = Rect(parent, name, anchor, anchor, Vector2.zero, Vector2.zero);
+            rect.pivot = Vector2.zero;
+            rect.anchoredPosition = position;
+            rect.sizeDelta = size;
+            return rect;
+        }
+
+        private GameObject Panel(Transform parent, string name, Color color)
+        {
+            var rect = Rect(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            rect.gameObject.AddComponent<Image>().color = color;
+            return rect.gameObject;
+        }
+
+        private Text Label(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
+        {
+            var rect = Place(parent, name, anchor, position - new Vector2(0, size.y), size);
+            var label = rect.gameObject.AddComponent<Text>();
+            label.font = font;
+            label.fontSize = fontSize;
+            label.alignment = alignment;
+            label.color = Color.white;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.raycastTarget = false;
+            return label;
+        }
+
+        private Image Bar(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, Color color)
+        {
+            var back = Place(parent, name, anchor, position - new Vector2(0, size.y), size);
+            back.gameObject.AddComponent<Image>().color = new Color(0, 0, 0, .55f);
+            var fill = Rect(back, "Fill", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).gameObject.AddComponent<Image>();
+            fill.sprite = WhiteSprite;
+            fill.type = Image.Type.Filled;
+            fill.fillMethod = Image.FillMethod.Horizontal;
+            fill.color = color;
+            fill.raycastTarget = false;
+            return fill;
+        }
+
+        private Image Circle(Transform parent, string name, float size, Color color)
+        {
+            var rect = Rect(parent, name, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero);
+            rect.sizeDelta = new Vector2(size, size);
+            var image = rect.gameObject.AddComponent<Image>();
+            image.sprite = CircleSprite;
+            image.color = color;
+            image.raycastTarget = false;
+            rect.gameObject.SetActive(false);
+            return image;
+        }
+
+        private Button Button(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, string caption, int fontSize, Action onClick)
+        {
+            var rect = Place(parent, name, anchor, position, size);
+            var image = rect.gameObject.AddComponent<Image>();
+            image.color = new Color(.16f, .2f, .28f, .95f);
+            var button = rect.gameObject.AddComponent<Button>();
+            button.onClick.AddListener(() => onClick());
+            var label = Label(rect, "Text", Vector2.zero, Vector2.zero, size, fontSize, TextAnchor.MiddleCenter);
+            var labelRect = label.rectTransform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(24, 24);
+            labelRect.offsetMax = new Vector2(-24, -24);
+            label.text = caption;
+            return button;
+        }
+
+        private static Sprite white, circle;
+
+        private static Sprite WhiteSprite => white ? white : white = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 4, 4), new Vector2(.5f, .5f));
+
+        private static Sprite CircleSprite
+        {
+            get
+            {
+                if (circle) return circle;
+                const int size = 128;
+                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    float d = Vector2.Distance(new Vector2(x, y), new Vector2(size / 2f, size / 2f)) / (size / 2f);
+                    texture.SetPixel(x, y, new Color(1, 1, 1, Mathf.Clamp01((1 - d) * 8)));
+                }
+                texture.Apply();
+                return circle = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f));
+            }
+        }
+    }
+}

@@ -1,0 +1,802 @@
+[
+  {
+    "path": "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/neutral_creeps/n_creep_troll_skeleton/n_creep_skeleton_melee.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/ogre_med/ogre.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/skeleton_boss/skeleton_boss.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/undying_minion/undying_minion_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/undying_minion_torso/undying_minion_torso_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/wight_minion/ruin_wight_minion_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/wight_minion_torso/ruin_wight_minion_torso_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/neutral_creeps/n_creep_satyr_a/n_creep_satyr_a.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/golem_b/golem_b_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/neutral_creeps/n_creep_golem_b/n_creep_golem_b.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/satyr_boss/satyr_boss.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/spiderling_elder_brood/spiderling_elder_blood_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/spider_death.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/neutral_creeps/n_creep_furbolg/n_creep_furbolg_disrupter.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/neutral_fx/ursa_thunderclap.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/creep_dire_ancient_hulk/creep_dire_ancient_hulk_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/eidolon/eidolon.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/ghost_a/n_creep_ghost_a_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/lane_creeps/creep_2021_dire/creep_2021_dire_siege.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/catapult_attack.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/golem/golem.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/golem_respawn.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/pernicious_firebrand_mount/pernicious_firebrand_mount_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/items/clinkz/clinkz_ti9_immortal_weapon/clinkz_ti9_immortal_army.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/skeleton_archer_frost_arrow.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/courier/baby_rosh/babyroshan_alt.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/clay_pot001_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/clay_pot002_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/clay_pot002b_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/clay_pot004_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/clay_pot005_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/gameplay/breakingcrate_dest.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/props_structures/dire_tower002.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/skeleton_archer_attack.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/ice_biome/undeadtusk/fx_skeleball.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/absorber_absorb.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/golem_a/golem_a_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/golem_a/golem_a_medium_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/creeps/neutral_creeps/n_creep_golem_a/neutral_creep_golem_a.vmdl",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/meteor.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/meteor_dot.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/status/status_effect_burn.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/imperia/magic_missile.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/imperia/demon_portal_buff_overhead_v3.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/imperia/demon_portal.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/imperia_portal_projectile.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_powerup_ambient_body.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/econ/items/vengeful/vengeful_arcana/vengeful_arcana_imperia_powerup_ambient.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/ogre_med/n_creep_ogre_med_enemy.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/breakable/cf_palace_new_column_large_a_breakable.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/reaper_scythe/reaper_scythe.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "models/events/crownfall/survivors/snotty/snotty_survivors.vmdl",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_enemies.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/revive.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/elite_timer.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/arrow_enemy_direction.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/attack_indicator_circle.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/collision_indicator.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/physical_weakness.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/generic_stunned.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json",
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/damage_numbers_glow.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/damage_numbers.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/damage_numbers_crit.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/health_bar.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/generic_hero_status/hero_levelup.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/level_up_knockback.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_game_modes.json",
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/experience_pickup.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/cheese_pickup.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/cheese_pickup_overhead_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/treasure_pickup.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/arrow_pickup_direction.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/scepter_pickup_overhead_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/gold_pickup.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/treasure_pickup_overhead_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/magnet_pickup_overhead_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/cookie_pickup.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/cookie_pickup_overhead_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_pickups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/vengeful/vengeful_magic_missile.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/vengeful/magic_missile_aoe_stun_explosion.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/skywrath/skywrath_arcane_bolt.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/units/heroes/hero_kez/kez_katana_echo_strike_survivors.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/ability_anticipation.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/pangolier/pangolier_swashbuckler.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/centaur/stampede_buff_overhead.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/axe/axe_counter_helix.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/pudge/pudge_rot.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/zeus/zuus_thundergods_wrath.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/units/heroes/hero_zeus/zues_kill_empty.vpcf",
+    "presentInExtract": false,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/chain_frost.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/chain_frost_cold.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/crystal_maiden/crystal_maiden_frost_bite_projectile.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/crystal_maiden/crystal_maiden_frostbite.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/status/status_effect_frost.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/lina/lina_laguna_blade.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/techies_land_mine.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/techies_explosion_land_mine_explode.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/stasis_trap/techies_stasis_trap.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/stasis_trap/techies_stasis_trap_explode.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/remote_mine/techies_remote_mine.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/techies/remote_mines/techies_remote_mines_detonate_arcana.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/ringmaster_wheel_dagger_crownfall.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/bounty_hunter/bounty_hunter_track_cast.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/bounty_hunter/track_new_shield.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/wisp/wisp_guardian.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/wisp/wisp_guardian_explosion.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/snapfire/snapfire_ground_aoe.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/snapfire/snapfire_lizard_blobs_arced.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/snotty/snotty_goo.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/status_effect_snotty.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/kez/kez_vulnerable_marker.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_powerups.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/miniboss_spawner_effect_landing.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_spawners.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/enemies/skeleton_archer_invulnerable.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_spawners.json"
+    ]
+  },
+  {
+    "path": "particles/events/crownfall/survivors/abilities/imperia/spawner_effect.vpcf",
+    "presentInExtract": true,
+    "sources": [
+      "survivors_spawners.json"
+    ]
+  }
+]
