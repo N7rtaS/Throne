@@ -20,6 +20,8 @@ namespace ThornThrone.Mobile
     /// </summary>
     public sealed class GameUi
     {
+        /// <summary>Pause screen line: an unfinished run is not saved (ТЗ_Мобильная_версия_v2.md §9, Mechanics §22 Р6).</summary>
+        public const string RunLossWarning = "Незаконченный забег не сохраняется: если система закроет игру, он будет потерян.";
         public event Action<string> StartRequested;
         public event Action<int> ChoiceSelected;
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
@@ -148,6 +150,8 @@ namespace ThornThrone.Mobile
             Button(pauseContent, "Resume", new Vector2(.5f, .5f), new Vector2(-260, 40), new Vector2(520, 120), "Продолжить", 44, () => ResumeRequested?.Invoke());
             Button(pauseContent, "Pause settings", new Vector2(.5f, .5f), new Vector2(-260, -110), new Vector2(520, 120), "Настройки", 44, () => SettingsRequested?.Invoke());
             Button(pauseContent, "Quit", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "Завершить забег", 44, () => QuitRunRequested?.Invoke());
+            // ТЗ §9: the player sees the rule when coming back from the background (Mechanics §22 Р6).
+            Label(pauseContent, "Run loss warning", new Vector2(.5f, .5f), new Vector2(-700, -300), new Vector2(1400, 100), 34, TextAnchor.MiddleCenter).text = RunLossWarning;
 
             // Quit confirmation: an unfinished run is not saved (ТЗ §9).
             confirm = Panel(safe, "Confirm", new Color(0, 0, 0, .85f));

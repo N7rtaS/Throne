@@ -98,6 +98,7 @@ namespace ThornThrone.Mobile
                 cameraOffset = new Vector3((float)offset[0], (float)offset[2], (float)offset[1]) * WorldRenderer.Scale;
 
             input = new GameInput();
+            lifecycle = new AppLifecycle(Suspend, () => AudioListener.pause = false);
             world = new WorldRenderer(instancedMaterial, enemyLooks, heroYawOffset);
             BuildScene();
             ui = new GameUi(names, uiFont);
@@ -519,11 +520,26 @@ namespace ThornThrone.Mobile
             ui.ShowResults(run);
         }
 
-        // Phone lifecycle: minimising, a call or locking the screen pauses the run.
-        // Held touches are dropped as well: the system may never report their end (ТЗ §6 «нет залипания движения»).
-        private void OnApplicationPause(bool paused) { if (paused && !smoke) LoseFocus(); }
-        private void OnApplicationFocus(bool focused) { if (!focused && !smoke) LoseFocus(); }
+        // Phone lifecycle (Mechanics §22): minimising, a call, the notification shade or locking the screen suspend the
+        // app once per transition. Events before Start are skipped (the app starts active); smoke ignores them (Р7).
+        private AppLifecycle lifecycle;
+        private void OnApplicationPause(bool paused) { if (!smoke) lifecycle?.OnPause(paused); }
+        private void OnApplicationFocus(bool focused) { if (!smoke) lifecycle?.OnFocus(focused); }
 
+        /// <summary>
+        /// Р2: sound paused, input dropped, the fight paused, a failed profile save retried. No frames run in the
+        /// background, so everything happens here. The return only unpauses the sound.
+        /// </summary>
+        private void Suspend()
+        {
+            AudioListener.pause = true;
+            LoseFocus();
+            if (settings == null || !settings.RetryFailedSave()) return;
+            ui.SetSettingsError(settings.SaveFailed);
+            if (settings.SaveFailed) Debug.LogWarning($"[Profile] retry on suspend failed: {settings.LastSave.Status} {settings.LastSave.Message}");
+        }
+
+        // Held touches are dropped as well: the system may never report their end (ТЗ §6 «нет залипания движения»).
         private void LoseFocus()
         {
             if (input == null) return;
@@ -537,6 +553,8 @@ namespace ThornThrone.Mobile
 
         private void Update()
         {
+            // Р3: taken every frame, so the frame after a lifecycle event is dropped even while the run is paused.
+            float delta = lifecycle.FrameDelta(Time.unscaledDeltaTime);
             input.Update(state == State.Playing);
             ui.UpdateLayout(input.Controller);
             if (input.BackPressed) Back();
@@ -544,7 +562,7 @@ namespace ThornThrone.Mobile
 
             if (state == State.Playing)
             {
-                run.Update(Time.unscaledDeltaTime, ScreenToPlane(input.Move), input.DashPressed);
+                run.Update(delta, ScreenToPlane(input.Move), input.DashPressed);
                 world.Consume(run);
                 inputScript?.CountEvents(run);
                 run.ClearEvents();

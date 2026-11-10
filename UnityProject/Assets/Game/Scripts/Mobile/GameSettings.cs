@@ -134,6 +134,17 @@ namespace ThornThrone.Mobile
         /// <summary>П12: a reset after corruption is shown in the menu; a restore from backup is only logged.</summary>
         public static bool WarnsAbout(LoadStatus status) => status == LoadStatus.ResetAfterCorruption;
 
+        /// <summary>
+        /// Going to the background (Mechanics §22 Р5): writes the profile again if the last save failed and returns true;
+        /// otherwise writes nothing (confirmed changes are already saved) and returns false.
+        /// </summary>
+        public bool RetryFailedSave()
+        {
+            if (!SaveFailed) return false;
+            Save();
+            return true;
+        }
+
         /// <summary>Applies every setting at start-up; does not save.</summary>
         public void ApplyAll()
         {
