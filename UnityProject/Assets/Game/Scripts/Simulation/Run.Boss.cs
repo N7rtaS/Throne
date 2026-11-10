@@ -28,13 +28,12 @@ namespace ThornThrone.Simulation
     ///   * enrage level +1 at m_flInitialEnrageTime, then every m_flIncrementalEnrageTime, and when health
     ///     drops below each of m_vecMandatoryEnrageHealthThresholds (difficulty may override);
     ///   * every enrage step: Radiate Rays from boss_radiating_rays_teleport, then a demon portal;
-    ///   * between steps, Magic Missile and Burning Ground alternate every <see cref="BossAttackInterval"/> s.
+    ///   * between steps, Magic Missile and Burning Ground alternate every <see cref="Rules.BossAttackInterval"/> s.
     /// Pillars (boss_tower, solid, invulnerable) at destructible_boss_tower block rays and the hero.
+    /// Data fields come from <see cref="ImperiaDef"/>, numbers without data from <see cref="Rules"/> (Р).
     /// </summary>
     public sealed partial class Run
     {
-        public const float BossAttackInterval = 4;
-
         public readonly Hazard[] Hazards = CreateHazards(64);
         public int BossEnrage { get; private set; }
         public BossAttack BossCurrentAttack { get; private set; }
@@ -75,13 +74,13 @@ namespace ThornThrone.Simulation
 
         private void StartBossFight()
         {
-            var def = bossDef;
+            var d = bossDef.Imperia;
             bossFightTime = 0;
-            bossNextEnrage = F(def, "m_flInitialEnrageTime", 30);
-            bossNextAttack = 2;
+            bossNextEnrage = d.InitialEnrageTime;
+            bossNextAttack = Rules.BossFirstAttackDelay;
             bossThresholds = Difficulty.OverrideImperiaEnrageHealthThresholds.Length > 0
                 ? Difficulty.OverrideImperiaEnrageHealthThresholds
-                : Floats(def, "m_vecMandatoryEnrageHealthThresholds");
+                : d.MandatoryEnrageHealthThresholds;
             // Pillars of the boss room (tower_boss spawner: boss_tower at destructible_boss_tower).
             if (Data.Spawners.TryGetValue("tower_boss", out var towers) && Data.Enemies.TryGetValue(towers.EnemyName, out var pillar)
                 && Data.ArenaTargets.TryGetValue(towers.SpawnInfoTargetName ?? "", out var points))
@@ -102,22 +101,12 @@ namespace ThornThrone.Simulation
             float floor = boss.MaxHealth * bossThresholds[bossThresholdIndex];
             if (boss.Health < floor) boss.Health = floor;
         }
-        private static float F(EnemyDef def, string field, float fallback) =>
-            def.Raw.TryGetValue(field, out var t) ? (float)t : fallback;
-
-        private static float[] Floats(EnemyDef def, string field)
-        {
-            if (!(def.Raw[field] is Newtonsoft.Json.Linq.JArray items)) return new float[0];
-            var result = new float[items.Count];
-            for (int i = 0; i < result.Length; i++) result[i] = (float)items[i];
-            return result;
-        }
 
         private void UpdateBoss(float dt)
         {
             UpdateHazards(dt);
             if (Boss == null || !Boss.Active) return;
-            var def = Boss.Def;
+            var d = bossDef.Imperia;
             // Video 09.11.2026: the 30 s enrage clock does not run during Radiate Rays (no third ray phase
             // although the 30 s mark fell inside the second one).
             bool raysActive = raysPending || raysTime > 0;
@@ -128,7 +117,7 @@ namespace ThornThrone.Simulation
             if (bossFightTime >= bossNextEnrage)
             {
                 enrage = true;
-                bossNextEnrage += F(def, "m_flIncrementalEnrageTime", 30);
+                bossNextEnrage += d.IncrementalEnrageTime;
             }
             if (bossThresholdIndex < bossThresholds.Length && Boss.Health <= Boss.MaxHealth * bossThresholds[bossThresholdIndex])
             {
@@ -153,38 +142,39 @@ namespace ThornThrone.Simulation
             }
             bossNextAttack -= dt;
             if (bossNextAttack > 0) return;
-            bossNextAttack = BossAttackInterval;
-            if (bossAlternate++ % 2 == 0) MagicMissiles(def);
-            else BurningGround(def);
+            bossNextAttack = Rules.BossAttackInterval;
+            if (bossAlternate++ % 2 == 0) MagicMissiles(d);
+            else BurningGround(d);
         }
 
-        private void MagicMissiles(EnemyDef def)
+        private void MagicMissiles(ImperiaDef d)
         {
             BossCurrentAttack = BossAttack.MagicMissile;
-            int count = (int)F(def, "m_nNumMagicMissiles", 3);
-            float speed = F(def, "m_flMagicMissileProjectileSpeed", 700) + BossEnrage * F(def, "m_flMagicMissileProjectileSpeedIncreasePerEnrage", 40);
-            float spread = 0.35f;
+            int count = d.NumMagicMissiles;
+            float speed = d.MagicMissileProjectileSpeed + BossEnrage * d.MagicMissileProjectileSpeedIncreasePerEnrage;
+            float spread = Rules.BossMagicMissileSpread;
             var toHero = (HeroPosition - Boss.Position).Normalized;
             float baseAngle = (float)Math.Atan2(toHero.Y, toHero.X);
             for (int i = 0; i < count; i++)
             {
                 float a = baseAngle + (i - (count - 1) * 0.5f) * spread;
-                FireHostile(Boss.Position, Vec2.FromAngle(a), speed, F(def, "m_flMagicMissileProjectileRadius", 50),
-                    F(def, "m_flMagicMissileDamage", 15), 4, true);
+                FireHostile(Boss.Position, Vec2.FromAngle(a), speed, d.MagicMissileProjectileRadius,
+                    d.MagicMissileDamage, Rules.BossMagicMissileLife, true);
             }
             Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.MagicMissile);
         }
 
-        private void BurningGround(EnemyDef def)
+        private void BurningGround(ImperiaDef d)
         {
             BossCurrentAttack = BossAttack.BurningGround;
-            int count = (int)F(def, "m_nBurningGroundInstancesPerEnrageLevel", 3) * (BossEnrage + 1);
-            float radius = F(def, "m_flBurningGroundImpactRadius", 280);
-            float delay = F(def, "m_flBurningGroundImpactSpawnDelay", 2);
+            int count = d.BurningGroundInstancesPerEnrageLevel * (BossEnrage + 1);
+            float radius = d.BurningGroundImpactRadius;
+            float delay = d.BurningGroundImpactSpawnDelay;
             for (int i = 0; i < count; i++)
             {
                 // First meteor on the hero, the rest scattered around (design decision).
-                var at = i == 0 ? HeroPosition : HeroPosition + Vec2.FromAngle(Rng.Angle()) * Rng.Range(radius, radius * 4);
+                var at = i == 0 ? HeroPosition : HeroPosition + Vec2.FromAngle(Rng.Angle())
+                    * Rng.Range(radius * Rules.BossMeteorScatterMin, radius * Rules.BossMeteorScatterMax);
                 AddHazard(HazardKind.MeteorTelegraph, ClampToMap(at), radius, delay);
             }
             Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.BurningGround);
@@ -194,27 +184,28 @@ namespace ThornThrone.Simulation
         {
             BossCurrentAttack = BossAttack.RadiateRays;
             if (Data.TryArenaPoint("boss_radiating_rays_teleport", out var center)) Boss.Position = center;
-            raysTime = F(Boss.Def, "m_flRadiateRaysDuration", 8) + F(Boss.Def, "m_flRadiateRaysCastStartDuration", 0.5f);
-            raysEmit = F(Boss.Def, "m_flRadiateRaysCastStartDuration", 0.5f);
+            var d = bossDef.Imperia;
+            raysTime = d.RadiateRaysDuration + d.RadiateRaysCastStartDuration;
+            raysEmit = d.RadiateRaysCastStartDuration;
             raysAngle = Rng.Angle();
-            AddHazard(HazardKind.RaysTelegraph, Boss.Position, 300, raysEmit);
+            AddHazard(HazardKind.RaysTelegraph, Boss.Position, Rules.BossRaysTelegraphRadius, raysEmit);
             Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.RadiateRays);
         }
 
         /// <summary>One ray every m_flRadiateRaysInterval, turning by m_flRadiateRaysAngle degrees.</summary>
         private void UpdateRays(float dt)
         {
-            var def = Boss.Def;
+            var d = bossDef.Imperia;
             raysTime -= dt;
             raysEmit -= dt;
-            float interval = Math.Max(0.01f, F(def, "m_flRadiateRaysInterval", 0.02f));
-            float step = F(def, "m_flRadiateRaysAngle", 20) * (float)Math.PI / 180;
+            float interval = Math.Max(0.01f, d.RadiateRaysInterval);
+            float step = d.RadiateRaysAngle * (float)Math.PI / 180;
             while (raysEmit <= 0 && raysTime > 0)
             {
                 raysEmit += interval;
                 raysAngle += step;
-                FireHostile(Boss.Position, Vec2.FromAngle(raysAngle), F(def, "m_flRadiateRaysSpeed", 1300),
-                    F(def, "m_flRadiateRaysProjectileRadius", 50), F(def, "m_flRadiateRaysDamage", 15), 3, false);
+                FireHostile(Boss.Position, Vec2.FromAngle(raysAngle), d.RadiateRaysSpeed,
+                    d.RadiateRaysProjectileRadius, d.RadiateRaysDamage, Rules.BossRayLife, false);
             }
             if (raysTime <= 0) BossCurrentAttack = BossAttack.None;
         }
@@ -222,17 +213,17 @@ namespace ThornThrone.Simulation
         /// <summary>Opens m_nDemonPortalsNumToCreate portals (at most m_nMaxDemonPortalCount) at boss_demon_portal_spawn.</summary>
         private void OpenDemonPortals()
         {
-            var def = Boss.Def;
+            var d = bossDef.Imperia;
             if (!Data.ArenaTargets.TryGetValue("boss_demon_portal_spawn", out var points) || points.Length == 0) return;
             int open = 0;
             foreach (var h in Hazards) if (h.Active && h.Kind == HazardKind.DemonPortal) open++;
-            int create = Math.Min((int)F(def, "m_nDemonPortalsNumToCreate", 1), (int)F(def, "m_nMaxDemonPortalCount", 3) - open);
+            int create = Math.Min(d.DemonPortalsNumToCreate, d.MaxDemonPortalCount - open);
             for (int n = 0; n < create; n++)
             {
                 var p = points[Rng.Next(points.Length)];
-                var portal = AddHazard(HazardKind.DemonPortal, p, F(def, "m_flDemonPortalDeactivateRadius", 350), float.MaxValue);
+                var portal = AddHazard(HazardKind.DemonPortal, p, d.DemonPortalDeactivateRadius, float.MaxValue);
                 if (portal == null) return;
-                portal.Spawner = Math.Min(open + n, 2);
+                portal.Spawner = Math.Min(open + n, d.DemonPortalSpawners.Length - 1);
             }
         }
 
@@ -253,15 +244,16 @@ namespace ThornThrone.Simulation
 
         private void UpdateHazards(float dt)
         {
-            var def = bossDef;
+            // Burning and hazards exist only in the boss fight, so the boss definition is present when used.
+            var d = bossDef?.Imperia;
             burnTime -= dt;
             if (burnTime > 0)
             {
                 burnTick -= dt;
                 if (burnTick <= 0)
                 {
-                    burnTick += 1;
-                    DamageHero(F(def, "m_flBurningGroundDoTDamage", 4) * (1 + Difficulty.EnemyDamageMultiplier));
+                    burnTick += Rules.BossBurnTickInterval;
+                    DamageHero(d.BurningGroundDoTDamage * (1 + Difficulty.EnemyDamageMultiplier));
                     if (Finished) return;
                 }
             }
@@ -276,16 +268,16 @@ namespace ThornThrone.Simulation
                     case HazardKind.MeteorTelegraph:
                         if (h.Time < h.Duration) break;
                         if (heroInside && !(Rules.DashGrantsInvulnerability && Dashing))
-                            DamageHero(F(def, "m_flBurningGroundImpactDamage", 20) * (1 + Difficulty.EnemyDamageMultiplier));
+                            DamageHero(d.BurningGroundImpactDamage * (1 + Difficulty.EnemyDamageMultiplier));
                         h.Kind = HazardKind.BurningGround;
                         h.Time = 0;
-                        h.Duration = F(def, "m_flBurningGroundFlamesDuration", 5);
+                        h.Duration = d.BurningGroundFlamesDuration;
                         break;
                     case HazardKind.BurningGround:
                         if (heroInside)
                         {
-                            if (burnTime <= 0) burnTick = 1;
-                            burnTime = F(def, "m_flBurningGroundDoTDuration", 3);
+                            if (burnTime <= 0) burnTick = Rules.BossBurnTickInterval;
+                            burnTime = d.BurningGroundDoTDuration;
                         }
                         if (h.Time >= h.Duration) h.Active = false;
                         break;
@@ -294,7 +286,7 @@ namespace ThornThrone.Simulation
                         break;
                     case HazardKind.DemonPortal:
                         // Interpretation: standing in the deactivation radius for m_flDemonPortalDeactivateTime closes it.
-                        if (heroInside) h.Progress += dt / Math.Max(0.1f, F(def, "m_flDemonPortalDeactivateTime", 15));
+                        if (heroInside) h.Progress += dt / Math.Max(0.1f, d.DemonPortalDeactivateTime);
                         if (h.Progress >= 1 || Boss == null || !Boss.Active) { h.Active = false; break; }
                         SpawnFromPortal(h, i);
                         break;
@@ -309,15 +301,15 @@ namespace ThornThrone.Simulation
         /// </summary>
         private void SpawnFromPortal(Hazard portal, int index)
         {
-            var names = bossDef.Raw["m_vecDemonPortalSpawners"] as Newtonsoft.Json.Linq.JArray;
-            if (names == null || portal.Spawner < 0 || portal.Spawner >= names.Count) return;
-            if (!Data.Spawners.TryGetValue((string)names[portal.Spawner], out var spawner) || !Data.Enemies.TryGetValue(spawner.EnemyName, out var def)) return;
+            var names = bossDef.Imperia.DemonPortalSpawners;
+            if (portal.Spawner < 0 || portal.Spawner >= names.Length) return;
+            if (!Data.Spawners.TryGetValue(names[portal.Spawner], out var spawner) || !Data.Enemies.TryGetValue(spawner.EnemyName, out var def)) return;
             if (portal.Time < portal.NextSpawn) return;
             portal.NextSpawn = portal.Time + Math.Max(Rules.Step, spawner.SpawnInterval);
             portal.Alive = 0;
             for (int e = 0; e < Enemies.Length; e++) if (Enemies[e].Active && Enemies[e].Portal == index) portal.Alive++;
             int missing = Math.Min(spawner.MinimumCount - portal.Alive, spawner.MaxSpawnCountPerInterval ?? 1);
-            float radius = spawner.OvalRadius.X > 0 ? spawner.OvalRadius.X : 300;
+            float radius = spawner.OvalRadius.X > 0 ? spawner.OvalRadius.X : Rules.PortalSpawnRadius;
             for (int n = 0; n < missing; n++)
             {
                 var enemy = SpawnEnemy(def, ClampToMap(portal.Position + Vec2.FromAngle(Rng.Angle()) * Rng.Range(0, radius)), -1);
@@ -330,10 +322,10 @@ namespace ThornThrone.Simulation
         private bool PortalOrigin(string spawnerKey, out Vec2 origin)
         {
             origin = Vec2.Zero;
-            var names = bossDef?.Raw["m_vecDemonPortalSpawners"] as Newtonsoft.Json.Linq.JArray;
+            var names = bossDef?.Imperia.DemonPortalSpawners;
             if (names == null) return false;
             int index = -1;
-            for (int i = 0; i < names.Count; i++) if ((string)names[i] == spawnerKey) index = i;
+            for (int i = 0; i < names.Length; i++) if (string.Equals(names[i], spawnerKey, StringComparison.Ordinal)) index = i;
             if (index < 0) return false;
             foreach (var h in Hazards)
                 if (h.Active && h.Kind == HazardKind.DemonPortal && h.Spawner == index) { origin = h.Position; return true; }

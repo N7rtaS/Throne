@@ -72,7 +72,7 @@ inclusion: manual
 - `Build.Recalculate`: `BaseAttributes` врождённой в `Global` только для пассивного класса без действия; врождённую с активным классом (`_InstantAttack`) создавать через `AbilityFactory` (пока нет — диагностика, не бонусы). Dragonus/Shen без изменений.
 - Тесты: `KezInnateDoesNotLeakRangeIntoGlobals`; `DragonusStartsWithInnateBonuses` проходит.
 
-Task 4: Типизированные параметры Империи (Quick Spec)
+✅ (2026-11-10, коммит «Перенести параметры Империи в типизированный ImperiaDef») Task 4: Типизированные параметры Империи (Quick Spec)
 - `ImperiaDef` в `Content/Definitions.cs`, заполняет `GameData` при загрузке (ярость, пороги, ракеты, метеоры, лучи, спавнеры порталов). `Run.Boss.cs` использует поля. Отсутствующие в данных значения — в `Rules` с пометкой Р.
 - Тесты: все `BossTests`; новый `BossStepsDoNotAllocate` (300 шагов боя, без роста аллокаций).
 - Демо: smoke `-thornBoss` как раньше.

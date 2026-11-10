@@ -57,6 +57,35 @@ namespace ThornThrone.Simulation
         /// <summary>Speed of a pickup attracted to the hero, units per second.</summary>
         public float PickupAttractSpeed = 1000;
 
+        // ---- Imperia: numbers enemies/imperia does not define (Р, Mechanics §7) ----
+
+        /// <summary>First regular attack after the boss fight starts, seconds.</summary>
+        public float BossFirstAttackDelay = 2;
+
+        /// <summary>Magic Missile and Burning Ground alternate with this period between enrage steps, seconds.</summary>
+        public float BossAttackInterval = 4;
+
+        /// <summary>Angle between Imperia's Magic Missiles in one volley, radians.</summary>
+        public float BossMagicMissileSpread = 0.35f;
+
+        /// <summary>Lifetime of Imperia's Magic Missile, seconds.</summary>
+        public float BossMagicMissileLife = 4;
+
+        /// <summary>Lifetime of one Radiate Rays projectile, seconds.</summary>
+        public float BossRayLife = 3;
+
+        /// <summary>Radius of the Radiate Rays telegraph (presentation only).</summary>
+        public float BossRaysTelegraphRadius = 300;
+
+        /// <summary>Meteors after the first land this many impact radii from the hero (min..max).</summary>
+        public float BossMeteorScatterMin = 1, BossMeteorScatterMax = 4;
+
+        /// <summary>Burning ground deals m_flBurningGroundDoTDamage once per this interval, seconds.</summary>
+        public float BossBurnTickInterval = 1;
+
+        /// <summary>SPAWNER_ORIGIN_RADIUS spawn radius around a portal when the spawner has no m_vecOvalRadius.</summary>
+        public float PortalSpawnRadius = 300;
+
         /// <summary>Hard pool limits; reaching them is reported and never stops the run.</summary>
         public int MaxEnemies = 1024, MaxProjectiles = 1024, MaxPickups = 1024;
     }

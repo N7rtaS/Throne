@@ -432,7 +432,7 @@ namespace ThornThrone.Simulation
                     // Imperia's portal spawners only spawn from an open demon portal.
                     if (PortalOrigin(s.Key, out var portal)) origin = portal;
                     else if (bossDef != null && s.Key.StartsWith("imperia_portal", StringComparison.Ordinal)) { position = Vec2.Zero; return false; }
-                    float radius = s.OvalRadius.X > 0 ? s.OvalRadius.X : 300;
+                    float radius = s.OvalRadius.X > 0 ? s.OvalRadius.X : Rules.PortalSpawnRadius;
                     position = origin + Vec2.FromAngle(Rng.Angle()) * radius;
                     if (FirstTime(s))
                         Diagnostics.Report("spawn:origin:" + s.Key, $"SPAWNER_ORIGIN_RADIUS ({s.Key}) uses the boss or hero as origin; portal positions are not implemented");

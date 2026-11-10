@@ -127,7 +127,31 @@ namespace ThornThrone.Simulation
         public float AbsorbRadius, PercentHealthAbsorbed, ModelScaleIncreasePerAbsorb, MaxModelScale;
         public int SplitOnDeathNumUnits, SplitOnDeathEnemyId;
         public float SplitOnDeathKnockbackDistance;
+        /// <summary>Fight parameters of CSurvivorsEnemyDefinition_ImperiaBoss; null for other enemies.</summary>
+        public ImperiaDef Imperia;
         public bool IsBoss => Class.EndsWith("ImperiaBoss");
+    }
+
+    /// <summary>
+    /// Imperia's fight parameters (enemies/imperia, Mechanics §7). Every field is required in the data;
+    /// numbers the data does not define live in <see cref="Rules"/>.
+    /// </summary>
+    public sealed class ImperiaDef
+    {
+        public float InitialEnrageTime, IncrementalEnrageTime;
+        public float[] MandatoryEnrageHealthThresholds;
+        public int NumMagicMissiles;
+        public float MagicMissileProjectileSpeed, MagicMissileProjectileSpeedIncreasePerEnrage,
+            MagicMissileDamage, MagicMissileProjectileRadius;
+        public float BurningGroundImpactDamage, BurningGroundImpactRadius, BurningGroundImpactSpawnDelay,
+            BurningGroundFlamesDuration, BurningGroundDoTDuration, BurningGroundDoTDamage, BurningGroundImpactStunDuration;
+        public int BurningGroundInstancesPerEnrageLevel;
+        public float RadiateRaysCastStartDuration, RadiateRaysDuration, RadiateRaysInterval, RadiateRaysAngle,
+            RadiateRaysSpeed, RadiateRaysDamage, RadiateRaysProjectileRadius;
+        public int DemonPortalsNumToCreate, MaxDemonPortalCount;
+        public float DemonPortalDeactivateTime, DemonPortalDeactivateRadius;
+        /// <summary>m_vecDemonPortalSpawners: spawner keys, one per portal in opening order.</summary>
+        public string[] DemonPortalSpawners;
     }
 
     public sealed class HeroDef

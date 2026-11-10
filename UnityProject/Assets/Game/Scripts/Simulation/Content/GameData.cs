@@ -353,7 +353,61 @@ namespace ThornThrone.Simulation
                 ModelScaleIncreasePerAbsorb = F(v, "m_flModelScaleIncreasePerAbsorb"), MaxModelScale = F(v, "m_flMaxModelScale"),
                 SplitOnDeathNumUnits = I(v, "m_nSplitOnDeathNumUnits"), SplitOnDeathEnemyId = I(v, "m_unSplitOnDeathEnemyID"),
                 SplitOnDeathKnockbackDistance = F(v, "m_flSplitOnDeathKnockbackDistance"),
+                Imperia = (S(v, "_class") ?? "").EndsWith("ImperiaBoss", StringComparison.Ordinal) ? ReadImperia(key, v) : null,
             };
+        }
+
+        /// <summary>
+        /// Imperia's fight fields (Mechanics §7). All are required: a missing one fails loading instead of
+        /// becoming zero or a number from code.
+        /// </summary>
+        private static ImperiaDef ReadImperia(string key, JObject v)
+        {
+            var missing = new List<string>();
+            JToken Need(string name)
+            {
+                if (v.TryGetValue(name, out var t) && t.Type != JTokenType.Null) return t;
+                missing.Add(name);
+                return null;
+            }
+            float RF(string name) => Need(name) is JToken t ? (float)t : 0;
+            int RI(string name) => Need(name) is JToken t ? (int)t : 0;
+            float[] RFloats(string name) => Need(name) is JArray t ? t.Select(x => (float)x).ToArray() : new float[0];
+            string[] RStrings(string name) => Need(name) is JArray t ? t.Select(x => (string)x).ToArray() : new string[0];
+            var d = new ImperiaDef
+            {
+                InitialEnrageTime = RF("m_flInitialEnrageTime"),
+                IncrementalEnrageTime = RF("m_flIncrementalEnrageTime"),
+                MandatoryEnrageHealthThresholds = RFloats("m_vecMandatoryEnrageHealthThresholds"),
+                NumMagicMissiles = RI("m_nNumMagicMissiles"),
+                MagicMissileProjectileSpeed = RF("m_flMagicMissileProjectileSpeed"),
+                MagicMissileProjectileSpeedIncreasePerEnrage = RF("m_flMagicMissileProjectileSpeedIncreasePerEnrage"),
+                MagicMissileDamage = RF("m_flMagicMissileDamage"),
+                MagicMissileProjectileRadius = RF("m_flMagicMissileProjectileRadius"),
+                BurningGroundImpactDamage = RF("m_flBurningGroundImpactDamage"),
+                BurningGroundImpactRadius = RF("m_flBurningGroundImpactRadius"),
+                BurningGroundImpactSpawnDelay = RF("m_flBurningGroundImpactSpawnDelay"),
+                BurningGroundFlamesDuration = RF("m_flBurningGroundFlamesDuration"),
+                BurningGroundDoTDuration = RF("m_flBurningGroundDoTDuration"),
+                BurningGroundDoTDamage = RF("m_flBurningGroundDoTDamage"),
+                BurningGroundImpactStunDuration = RF("m_flBurningGroundImpactStunDuration"),
+                BurningGroundInstancesPerEnrageLevel = RI("m_nBurningGroundInstancesPerEnrageLevel"),
+                RadiateRaysCastStartDuration = RF("m_flRadiateRaysCastStartDuration"),
+                RadiateRaysDuration = RF("m_flRadiateRaysDuration"),
+                RadiateRaysInterval = RF("m_flRadiateRaysInterval"),
+                RadiateRaysAngle = RF("m_flRadiateRaysAngle"),
+                RadiateRaysSpeed = RF("m_flRadiateRaysSpeed"),
+                RadiateRaysDamage = RF("m_flRadiateRaysDamage"),
+                RadiateRaysProjectileRadius = RF("m_flRadiateRaysProjectileRadius"),
+                DemonPortalsNumToCreate = RI("m_nDemonPortalsNumToCreate"),
+                MaxDemonPortalCount = RI("m_nMaxDemonPortalCount"),
+                DemonPortalDeactivateTime = RF("m_flDemonPortalDeactivateTime"),
+                DemonPortalDeactivateRadius = RF("m_flDemonPortalDeactivateRadius"),
+                DemonPortalSpawners = RStrings("m_vecDemonPortalSpawners"),
+            };
+            if (missing.Count > 0)
+                throw new System.IO.InvalidDataException($"enemies/{key}: missing Imperia fields {string.Join(", ", missing)}");
+            return d;
         }
     }
 }

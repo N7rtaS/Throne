@@ -596,6 +596,99 @@ namespace ThornThrone.Simulation.Tests
             }
             Assert.That(run.Finished && run.Victory, Is.True);
         }
+
+        /// <summary>Values of enemies/imperia in survivors_enemies.json (Mechanics §7).</summary>
+        [Test]
+        public void ImperiaDefinitionIsReadFromData()
+        {
+            var data = TestData.Load();
+            var d = data.Enemies["imperia"].Imperia;
+            Assert.That(d, Is.Not.Null);
+            Assert.That(data.Enemies["boss_tower"].Imperia, Is.Null);
+            Assert.That(d.InitialEnrageTime, Is.EqualTo(30).Within(1e-6));
+            Assert.That(d.IncrementalEnrageTime, Is.EqualTo(30).Within(1e-6));
+            Assert.That(d.MandatoryEnrageHealthThresholds, Is.EqualTo(new[] { 0.66f, 0.33f }));
+            Assert.That(d.NumMagicMissiles, Is.EqualTo(3));
+            Assert.That(d.MagicMissileProjectileSpeed, Is.EqualTo(700).Within(1e-6));
+            Assert.That(d.MagicMissileProjectileSpeedIncreasePerEnrage, Is.EqualTo(40).Within(1e-6));
+            Assert.That(d.MagicMissileDamage, Is.EqualTo(15).Within(1e-6));
+            Assert.That(d.MagicMissileProjectileRadius, Is.EqualTo(50).Within(1e-6));
+            Assert.That(d.BurningGroundImpactDamage, Is.EqualTo(20).Within(1e-6));
+            Assert.That(d.BurningGroundImpactRadius, Is.EqualTo(280).Within(1e-6));
+            Assert.That(d.BurningGroundImpactSpawnDelay, Is.EqualTo(2).Within(1e-6));
+            Assert.That(d.BurningGroundFlamesDuration, Is.EqualTo(5).Within(1e-6));
+            Assert.That(d.BurningGroundDoTDuration, Is.EqualTo(3).Within(1e-6));
+            Assert.That(d.BurningGroundDoTDamage, Is.EqualTo(4).Within(1e-6));
+            Assert.That(d.BurningGroundImpactStunDuration, Is.EqualTo(0).Within(1e-6));
+            Assert.That(d.BurningGroundInstancesPerEnrageLevel, Is.EqualTo(3));
+            Assert.That(d.RadiateRaysCastStartDuration, Is.EqualTo(0.5f).Within(1e-6));
+            Assert.That(d.RadiateRaysDuration, Is.EqualTo(8).Within(1e-6));
+            Assert.That(d.RadiateRaysInterval, Is.EqualTo(0.02f).Within(1e-6));
+            Assert.That(d.RadiateRaysAngle, Is.EqualTo(20).Within(1e-6));
+            Assert.That(d.RadiateRaysSpeed, Is.EqualTo(1300).Within(1e-6));
+            Assert.That(d.RadiateRaysDamage, Is.EqualTo(15).Within(1e-6));
+            Assert.That(d.RadiateRaysProjectileRadius, Is.EqualTo(50).Within(1e-6));
+            Assert.That(d.DemonPortalsNumToCreate, Is.EqualTo(1));
+            Assert.That(d.MaxDemonPortalCount, Is.EqualTo(3));
+            Assert.That(d.DemonPortalDeactivateTime, Is.EqualTo(15).Within(1e-6));
+            Assert.That(d.DemonPortalDeactivateRadius, Is.EqualTo(350).Within(1e-6));
+            Assert.That(d.DemonPortalSpawners, Is.EqualTo(new[] { "imperia_portal", "imperia_portal_2", "imperia_portal_3" }));
+        }
+
+        /// <summary>A missing required field is a load error, not a zero (product.md, reliability rules).</summary>
+        [Test]
+        public void MissingImperiaFieldFailsLoading()
+        {
+            var dir = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
+            while (!Directory.Exists(Path.Combine(dir.FullName, "Research", "Json"))) dir = dir.Parent;
+            string json = Path.Combine(dir.FullName, "Research", "Json");
+            string Read(string c)
+            {
+                string text = File.ReadAllText(Path.Combine(json, $"survivors_{c}.json"));
+                return c == "enemies" ? text.Replace("\"m_flRadiateRaysSpeed\"", "\"m_flRadiateRaysSpeed_removed\"") : text;
+            }
+            var error = Assert.Throws<InvalidDataException>(() => GameData.Load(Read));
+            Assert.That(error.Message, Does.Contain("imperia").And.Contain("m_flRadiateRaysSpeed"));
+        }
+
+        /// <summary>
+        /// 300 boss-fight steps after warm-up allocate nothing: Magic Missile and Burning Ground, a health
+        /// threshold, Radiate Rays and a new demon portal. Same exception as StepsDoNotAllocateAfterWarmUp.
+        /// </summary>
+        [Test]
+        public void BossStepsDoNotAllocate()
+        {
+            var run = ImmortalBossRun();
+            TestData.Simulate(run, 12, r => Vec2.Zero);
+            run.DamageEnemy(run.Boss, 1e7f); // 0.66: rays and the first portal
+            TestData.Simulate(run, 10, r => Vec2.Zero);
+            Assert.That(run.BossEnrage, Is.EqualTo(1));
+            long allocated = 0;
+            bool regular = false, rays = false;
+            for (int i = 0; i < 300; i++)
+            {
+                Assert.That(run.Finished, Is.False);
+                if (i == 150) run.DamageEnemy(run.Boss, 1e7f); // 0.33: rays and the second portal
+                int messages = run.Diagnostics.Messages.Count;
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                run.Update(run.Rules.Step, Vec2.Zero, false);
+                long bytes = GC.GetAllocatedBytesForCurrentThread() - before;
+                if (run.Diagnostics.Messages.Count == messages) allocated += bytes;
+                if (bytes > 0) TestContext.WriteLine($"step {i}: {bytes} B, attack {run.BossCurrentAttack}");
+                for (int k = 0; k < run.EventCount; k++)
+                {
+                    if (run.Events[k].Kind != SimEventKind.EnemyAttacked || run.Events[k].Slot != run.Boss.Slot) continue;
+                    var attack = (BossAttack)run.Events[k].Value;
+                    regular |= attack == BossAttack.MagicMissile || attack == BossAttack.BurningGround;
+                    rays |= attack == BossAttack.RadiateRays;
+                }
+                run.ClearEvents();
+            }
+            Assert.That(regular && rays, Is.True, "the window covers a regular attack and the rays");
+            Assert.That(run.BossEnrage, Is.EqualTo(2));
+            Assert.That(run.Hazards.Count(h => h.Active && h.Kind == HazardKind.DemonPortal), Is.EqualTo(2));
+            Assert.That(allocated, Is.EqualTo(0), "bytes allocated by boss-fight steps");
+        }
     }
 
     public class RunTests
