@@ -31,3 +31,5 @@ __pycache__/
 # manifest.tsv lists their CRC32 so a re-extraction can be verified.
 # Obsolete files kept for review before deletion
 /Удалить/
+# Scratch files of Kiro workflow runs (current task, verification result)
+/.kiro/workflow-output/

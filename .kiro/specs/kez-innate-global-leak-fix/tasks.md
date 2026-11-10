@@ -76,7 +76,7 @@
   - Если возникли вопросы, спросить пользователя
   - _Requirements: 3.8_
 
-- [-] 6. Отметить Task 3 в `.kiro/steering/roadmap.md` и закоммитить
+- [x] 6. Отметить Task 3 в `.kiro/steering/roadmap.md` и закоммитить
   - Отметка ставится ДО коммита, чтобы войти в него. Хеш коммита до коммита неизвестен, а `--amend` не используется, поэтому вместо хеша указать заголовок коммита (по аналогии с Task 1, где стоит «коммит с .kiro»): в начале строки заголовка Task 3 поставить `✅ (ГГГГ-ММ-ДД, коммит «<заголовок коммита>») ` с текущей датой из `date +%F`, остальной текст строки не менять. Формат Task 2 для сравнения: `✅ (2026-11-10, 1c7a102) Task 2: …`
   - Добавить в индекс только файлы задачи по имени: `UnityProject/Assets/Game/Scripts/Simulation/Content/Definitions.cs`, `UnityProject/Assets/Game/Scripts/Simulation/Build/Build.cs`, `UnityProject/Assets/Game/Scripts/Simulation/Run.cs`, `DotNet/ThornThrone.Simulation.Tests/KezInnateTests.cs`, `Research/FullGame/Mechanics.md`, `.kiro/steering/roadmap.md` и файлы спека `.kiro/specs/kez-innate-global-leak-fix/` (`.config.kiro`, `bugfix.md`, `design.md`, `tasks.md`, `tasks.meta.json`, если есть). Не добавлять `Research/mac-build.log`, `UnityProject/Assets/Game/Scenes/Mobile.unity`, `Builds/`, `bin/`, `obj/`, `TestResults/`; не использовать `git add -A` и `git add .`
   - Сообщение коммита на русском по `tech.md`: заголовок — короткое предложение без префиксов, что сделано, например `Не добавлять атрибуты врождённой Kez к атрибутам героя`

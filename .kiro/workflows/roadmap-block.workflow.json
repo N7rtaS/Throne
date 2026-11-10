@@ -1,0 +1,49 @@
+{
+  "name": "roadmap-block",
+  "description": "Выполняет по очереди все незакрытые задачи одного блока дорожной карты (.kiro/steering/roadmap.md): выбор задачи и режима, выполнение, независимая проверка. Останавливается при ошибке проверки и в конце блока.",
+  "inputs": {
+    "block": "string",
+    "approve": "string"
+  },
+  "steps": [
+    {
+      "type": "repeat",
+      "id": "tasks",
+      "maxIterations": 14,
+      "onMaxIterations": "pause",
+      "stopCondition": {
+        "fileCheck": {
+          "path": ".kiro/workflow-output/current-task.json",
+          "jsonPath": "blockDone",
+          "value": true
+        }
+      },
+      "steps": [
+        {
+          "type": "step",
+          "id": "pick",
+          "agent": "tt-dispatcher",
+          "prompt": "Выбери следующую незакрытую задачу блока {{block}} из .kiro/steering/roadmap.md и запиши .kiro/workflow-output/current-task.json."
+        },
+        {
+          "type": "step",
+          "id": "execute",
+          "agent": "tt-executor",
+          "prompt": "Режим утверждения: {{approve}} (spec — останавливаться на утверждение документов в задачах режима Spec; never — не останавливаться).\n\nЗадача от диспетчера:\n\n{{pick.output}}"
+        },
+        {
+          "type": "step",
+          "id": "verify",
+          "agent": "tt-verifier",
+          "prompt": "Проверь выполненную задачу.\n\nЗадача от диспетчера:\n\n{{pick.output}}\n\nОтчёт исполнителя:\n\n{{execute.output}}"
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "id": "report",
+      "agent": "tt-dispatcher",
+      "prompt": "Напиши итоговый отчёт блока {{block}} для владельца."
+    }
+  ]
+}
