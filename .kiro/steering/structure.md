@@ -23,8 +23,9 @@
 | `Scripts/Simulation/Core/` | | `Rng`, `Vec2`, `SpatialGrid`, `NavGrid`, `FlowField` |
 | `Scripts/Simulation/Content/` | | `GameData` (загрузка JSON), `Definitions` (типизированные определения) |
 | `Scripts/Simulation/Abilities/`, `Build/`, `Stats/`, `World/` | | Способности, билд/слоты/улучшения, атрибуты, сущности и пулы |
-| `Scripts/Mobile/` | `ThornThrone.Mobile` | Представление Unity: `MobileGame` (владеет `Run`), `GameInput`, `GameUi`, `WorldRenderer`, `HeroView`, `EnemyVisual` |
-| `Editor/` | `ThornThrone.Editor` | `MobileBuilder`, `ArenaBaker`, `EnemyBaker` |
+| `Scripts/Mobile/` | `ThornThrone.Mobile` | Представление Unity: `MobileGame` (владеет `Run`), `GameInput`, `GameUi`, `WorldRenderer`, `HeroView`, `EnemyVisual`. asmdef `ThornThrone.Mobile` (ссылки: Simulation, Input System, URP, uGUI, Newtonsoft) |
+| `Editor/` | `ThornThrone.Editor` | `MobileBuilder`, `ArenaBaker`, `EnemyBaker` (без asmdef, сборка `Assembly-CSharp-Editor`) |
+| `Tests/EditMode/` | `ThornThrone.Mobile.Tests` | EditMode-тесты Unity-слоя, asmdef `ThornThrone.Mobile.Tests` (только Editor), запуск `Tools/unity-tests.sh` |
 | `Scenes/Mobile.unity` | | Единственная сцена, генерируется `MobileBuilder` |
 | `Data/Source/` | | Копия `survivors_*.json` и `survivors_arena.gnv.bytes` (через `Tools/import-unity-data.sh`, не править вручную) |
 | `Data/Localization/` | | Русская локализация (`powerups_ru.json`) |
@@ -50,6 +51,7 @@
 - Тесты используют реальные данные (`Research/Json` и VPK арены из `NestOfThorns`), ожидаемые значения берутся из данных и `Mechanics.md`.
 - Поведение со случайностью проверяется циклом по нескольким seed. Стиль утверждений NUnit: `Assert.That(x, Is.EqualTo(y).Within(eps))`.
 - После изменения симуляции запускать `dotnet test DotNet/ThornThrone.Simulation.Tests`, все тесты должны проходить.
+- Код Unity-слоя, который нельзя проверить `dotnet test` (загрузка `TextAsset`, чистые функции представления), проверяется EditMode-тестами в `Assets/Game/Tests/EditMode` (`Tools/unity-tests.sh`).
 
 ## Язык документов
 - ТЗ, `Research/*.md`, `Tools/README.md` — на русском.

@@ -42,6 +42,16 @@ Tools/build-android.sh               # APK → Builds/Android/ThornThrone.apk, �
 
 Инструменты Android (Gradle, NDK) не работают с путём, в котором есть кириллица («Терновый Трон»). Поэтому скрипт копирует `UnityProject` в `~/Library/Caches/ThornThroneAndroid`, собирает там и возвращает APK. Первая сборка занимает около 5 минут, следующие быстрее.
 
+Проверки Unity-слоя (batchmode; Unity Editor с этим проектом должен быть закрыт, иначе код 2):
+```sh
+Tools/unity-tests.sh                 # EditMode-тесты → Research/unity-tests.xml (NUnit XML), лог Research/unity-tests.log
+Tools/mac-smoke.sh                   # сборка Builds/MacSmoke + прогон -thornSmoke → Research/mac-smoke.log
+Tools/mac-smoke.sh --no-build -thornElite   # без сборки, с дополнительными аргументами плеера
+Tools/mac-smoke.sh --check-log FILE  # только разбор готового лога
+```
+`unity-tests.sh` запускает тесты сборки `ThornThrone.Mobile.Tests` (`UnityProject/Assets/Game/Tests/EditMode`) и печатает `Unity EditMode: N passed`. Коды выхода: 0 — все прошли; 1 — есть упавший тест (имена печатаются) или Unity завершился с ненулевым кодом; 2 — файл результата не создан (например, ошибки компиляции — первые строки `error CS` печатаются); 3 — не выполнено ни одного теста.
+`mac-smoke.sh` собирает `MobileBuilder.BuildMacSmoke` (лог `Research/mac-build.log`), запускает плеер напрямую в окне 1280×720 с `-thornSmoke` и ждёт выхода. Нужен активный сеанс пользователя на Mac. Успех — печать строки `THORN_MOBILE_SMOKE …` и код 0. Коды выхода: 2 — сборка не удалась (нет `THORN_MAC_BUILD_OK`) или плеер не найден; 3 — плеер не завершился за `THORN_SMOKE_TIMEOUT` секунд (по умолчанию 180); 4 — в логе нет строки `THORN_MOBILE_SMOKE`; 5 — `kills=0`; 6 — в логе необработанное исключение (строка, начинающаяся с `…Exception:`, или `Crash!!!`); 7 — проверки лога прошли, но код выхода плеера ненулевой. `diagnostics=N` ошибкой не считается. Лог плеера — `THORN_SMOKE_LOG` (по умолчанию `Research/mac-smoke.log`). Тесты разбора лога — `Tools/tests/test_mac_smoke.py` на образцах `Tools/tests/smoke-logs/`.
+Скриншот готовой macOS-сборки: `Tools/mac-screenshot.sh out.png [аргументы плеера]`.
 Повторный запуск безопасен: уже извлечённые файлы с верной контрольной суммой не перезаписываются.
 
 Windows-скрипты `*.ps1` из прототипа больше не используются и перенесены в `Удалить/Tools/`. `kv3-to-json.mjs` остаётся: его вызывает `decode-data.sh`.

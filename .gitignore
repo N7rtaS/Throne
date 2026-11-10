@@ -33,3 +33,7 @@ __pycache__/
 /Удалить/
 # Scratch files of Kiro workflow runs (current task, verification result)
 /.kiro/workflow-output/
+# Results of the last local test/smoke run (Tools/unity-tests.sh, Tools/mac-smoke.sh)
+/Research/unity-tests.xml
+/Research/unity-tests.log
+/Research/mac-smoke.log

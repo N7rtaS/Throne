@@ -90,7 +90,7 @@ inclusion: manual
 - Граф: определения → vmdl/vpcf/vsnd → vmat → vtex; связь с `manifest.tsv` (CRC32), выходами в `Art/Converted`, Unity GUID из `.meta`, статус (конвертирован/запечён/воссоздан/нет/не используется).
 - Проверка: у каждой обязательной сущности хотя бы одна запись; отчёт о недостающих (сейчас 27 из 94: 16 пассивок, 9 рецептов, 2 врождённые — ресурсов в данных нет).
 
-Task 8: README сборки, Unity-тесты, автоматический smoke (Spec)
+✅ (2026-11-11, коммит «Добавить README сборки, Unity EditMode-тесты и автоматический smoke») Task 8: README сборки, Unity-тесты, автоматический smoke (Spec)
 - Корневой `README.md`: версии (Unity, пакеты из lock, Python, Node, Source2Viewer, SDK/NDK/JDK), конвейер, команды, переменные окружения.
 - asmdef `ThornThrone.Mobile` и `ThornThrone.Mobile.Tests` (EditMode, `com.unity.test-framework`).
 - `Tools/mac-smoke.sh` (сборка, запуск `-thornSmoke`, разбор лога, ненулевой код при ошибке/kills=0/исключениях); `Tools/unity-tests.sh` → `Research/unity-tests.xml`.

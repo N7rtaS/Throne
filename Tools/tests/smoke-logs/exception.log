@@ -1,0 +1,5 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+NullReferenceException: Object reference not set to an instance of an object
+  at ThornThrone.Mobile.WorldRenderer.Draw (ThornThrone.Simulation.Run run) [0x00000] in <00000000000000000000000000000000>:0 
+  at ThornThrone.Mobile.MobileGame.Update () [0x00000] in <00000000000000000000000000000000>:0 
+THORN_MOBILE_SMOKE time=30.0 kills=148 level=9 hp=410/620 enemies=57 diagnostics=3

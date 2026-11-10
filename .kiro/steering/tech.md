@@ -27,11 +27,17 @@ Tools/build-android.sh
 
 # Скриншот macOS smoke-сборки
 Tools/mac-screenshot.sh out.png
+
+# Unity EditMode-тесты → Research/unity-tests.xml
+Tools/unity-tests.sh
+
+# macOS smoke: сборка, прогон -thornSmoke, разбор лога (код 0 — успех; --no-build, аргументы плеера)
+Tools/mac-smoke.sh
 ```
 - `build-android.sh` копирует `UnityProject` в `~/Library/Caches/ThornThroneAndroid` (Gradle/NDK не работают с кириллицей в пути). Переменные: `THORN_UNITY`, `THORN_ANDROID_STAGE`.
 - Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildAndroid`, `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`. Успех в логе: `THORN_ANDROID_BUILD_OK`, `THORN_MAC_BUILD_OK`.
 - Сцена `Mobile.unity` генерируется `MobileBuilder.CreateScene` при каждой сборке — не править её вручную, менять генератор.
-- Агент сам запускает для проверки задач: `dotnet test`, Unity batchmode (`MobileBuilder.BuildMacSmoke`, `Tools/build-android.sh`, `Tools/mac-screenshot.sh`) и macOS smoke-сборку с `-thornSmoke`. Долгие команды запускать с достаточным таймаутом.
+- Агент сам запускает для проверки задач: `dotnet test`, `Tools/unity-tests.sh`, `Tools/mac-smoke.sh` (сборка `MobileBuilder.BuildMacSmoke` и прогон с `-thornSmoke`), `Tools/build-android.sh`, `Tools/mac-screenshot.sh`. Долгие команды запускать с достаточным таймаутом.
 - Smoke успешен, если в логе есть `THORN_MOBILE_SMOKE` с kills > 0 и нет необработанных исключений.
 - Открывать Unity Editor с интерфейсом, менять настройки Unity Hub и ставить модули — только с согласия пользователя.
 

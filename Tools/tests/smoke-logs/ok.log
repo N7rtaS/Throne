@@ -1,0 +1,6 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+UnloadTime: 0.512000 ms
+THORN_MOBILE_SMOKE time=30.0 kills=148 level=9 hp=410/620 enemies=57 diagnostics=3
+(Filename: ./Runtime/Export/Debug/Debug.bindings.h Line: 39)
+
+Setting up 6 worker threads for Enlighten.
