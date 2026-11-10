@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ThornThrone.Simulation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -12,6 +13,8 @@ namespace ThornThrone.Mobile
     /// <summary>
     /// uGUI built from code: menu, HUD, level-up cards, pause and results. Reference resolution 1920×1080,
     /// everything inside the screen safe area. Temporary look; layout and text sizes target a 6" phone.
+    /// Texts are TextMeshPro with the baked PT Sans SDF font (ТЗ_Мобильная_версия_v2.md §7); the HUD writes a
+    /// label only when its value changes and without creating strings (§8).
     /// </summary>
     public sealed class GameUi
     {
@@ -19,23 +22,25 @@ namespace ThornThrone.Mobile
         public event Action<int> ChoiceSelected;
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
 
-        private readonly Font font;
+        private readonly TMP_FontAsset font;
         private readonly Dictionary<string, string> names;
         private readonly RectTransform safe;
         private readonly GameObject menu, hud, choices, pause, results;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
-        private readonly Text levelText, timeText, killsText, bossText, resultText, rerollText, choiceTitle;
+        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle;
+        private readonly HudText level, time, kills, boss;
         private readonly Button[] cards = new Button[3];
-        private readonly Text[] cardTexts = new Text[3];
+        private readonly TMP_Text[] cardTexts = new TMP_Text[3];
         private readonly Button reroll;
         private readonly RectTransform dashButton, pauseButton;
         private Rect lastSafe;
-        private readonly StringBuilder text = new StringBuilder(256);
 
-        public GameUi(Dictionary<string, string> localization)
+        /// <param name="localization">Power-up texts by localization key, or null.</param>
+        /// <param name="uiFont">UI font; null takes the TMP Settings default font.</param>
+        public GameUi(Dictionary<string, string> localization, TMP_FontAsset uiFont)
         {
             names = localization;
-            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            font = uiFont ? uiFont : TMP_Settings.defaultFontAsset;
 
             if (EventSystem.current == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
@@ -53,12 +58,22 @@ namespace ThornThrone.Mobile
             hud = Rect(safe, "HUD", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).gameObject;
             healthFill = Bar(hud.transform, "Health", new Vector2(0, 1), new Vector2(40, -40), new Vector2(520, 36), new Color(.85f, .2f, .2f));
             experienceFill = Bar(hud.transform, "Experience", new Vector2(0, 1), new Vector2(40, -86), new Vector2(520, 20), new Color(.3f, .9f, .5f));
-            levelText = Label(hud.transform, "Level", new Vector2(0, 1), new Vector2(580, -40), new Vector2(240, 60), 40, TextAnchor.UpperLeft);
-            timeText = Label(hud.transform, "Time", new Vector2(.5f, 1), new Vector2(-150, -30), new Vector2(300, 70), 56, TextAnchor.UpperCenter);
-            killsText = Label(hud.transform, "Kills", new Vector2(.5f, 1), new Vector2(-150, -100), new Vector2(300, 50), 32, TextAnchor.UpperCenter);
+            level = new HudText(Label(hud.transform, "Level", new Vector2(0, 1), new Vector2(580, -40), new Vector2(240, 60), 40, TextAnchor.UpperLeft), "Ур. {0}");
+            // 80 px: one PT Sans line at 56 px is 72 px high, TMP hides a line that does not fit (Truncate).
+            time = new HudText(Label(hud.transform, "Time", new Vector2(.5f, 1), new Vector2(-150, -30), new Vector2(300, 80), 56, TextAnchor.UpperCenter), "{0:00}:{1:00}");
+            kills = new HudText(Label(hud.transform, "Kills", new Vector2(.5f, 1), new Vector2(-150, -100), new Vector2(300, 50), 32, TextAnchor.UpperCenter), "Убито {0}");
             bossText = Label(hud.transform, "Boss", new Vector2(.5f, 1), new Vector2(-400, -150), new Vector2(800, 60), 40, TextAnchor.UpperCenter);
             bossText.color = new Color(1, .5f, .9f);
+            boss = new HudText(bossText, "Империя {0}");
+            // TMP grows its character and vertex buffers when a text gets longer (kills 9 → 10); size them once
+            // for the widest values here so that later changes do not allocate.
+            level.Warm(WidestValue, 0);
+            time.Warm(99, 59);
+            kills.Warm(WidestValue, 0);
+            boss.Warm(WidestValue, 0);
             pauseButton = Button(hud.transform, "Pause", new Vector2(1, 1), new Vector2(-150, -150), new Vector2(120, 120), "II", 56, () => PauseRequested?.Invoke()).GetComponent<RectTransform>();
+            // The 56 px line (72 px in PT Sans) exactly fills the 72 px caption box; Truncate would hide it.
+            pauseButton.GetComponentInChildren<TMP_Text>().overflowMode = TextOverflowModes.Overflow;
             dashButton = Rect(hud.transform, "Dash", new Vector2(1, 0), new Vector2(1, 0), new Vector2(-300, 60), new Vector2(-60, 300));
             var dashBack = dashButton.gameObject.AddComponent<Image>();
             dashBack.color = new Color(1, 1, 1, .18f);
@@ -76,11 +91,11 @@ namespace ThornThrone.Mobile
             {
                 int index = i;
                 cards[i] = Button(choices.transform, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, () => ChoiceSelected?.Invoke(index));
-                cardTexts[i] = cards[i].GetComponentInChildren<Text>();
-                cardTexts[i].alignment = TextAnchor.UpperCenter;
+                cardTexts[i] = cards[i].GetComponentInChildren<TMP_Text>();
+                cardTexts[i].alignment = TextAlignmentOptions.Top;
             }
             reroll = Button(choices.transform, "Reroll", new Vector2(.5f, 0), new Vector2(-220, 40), new Vector2(440, 110), "", 38, () => RerollRequested?.Invoke());
-            rerollText = reroll.GetComponentInChildren<Text>();
+            rerollText = reroll.GetComponentInChildren<TMP_Text>();
 
             // Pause
             pause = Panel(safe, "Pause", new Color(0, 0, 0, .75f));
@@ -111,7 +126,15 @@ namespace ThornThrone.Mobile
         // ------------------------------------------------------------------ screens
 
         public void ShowMenu() => Show(menu);
-        public void ShowRun() => Show(hud);
+        public void ShowRun()
+        {
+            Show(hud);
+            // A new run may start with the same values as the last one ended with.
+            level.Reset();
+            time.Reset();
+            kills.Reset();
+            boss.Reset();
+        }
 
         public void ShowPause(bool visible)
         {
@@ -165,11 +188,13 @@ namespace ThornThrone.Mobile
             int maxDashes = Mathf.Max(1, (int)run.Build.Global[Attr.NumDashes]);
             float cooldown = Mathf.Max(0.01f, run.Build.Global[Attr.DashCooldown]);
             dashFill.fillAmount = Mathf.Clamp01((run.DashCharges + (run.DashCharges < maxDashes ? run.DashRecharge / cooldown : 0)) / maxDashes);
-            SetText(levelText, "Ур. ", run.HeroLevel);
-            timeText.text = FormatTime(run.Time);
-            SetText(killsText, "Убито ", run.Kills);
-            bossText.gameObject.SetActive(run.BossSpawned && run.Boss != null && run.Boss.Active);
-            if (bossText.gameObject.activeSelf) bossText.text = $"Империя {Mathf.CeilToInt(run.Boss.Health)}";
+            level.Set(run.HeroLevel);
+            int seconds = Mathf.FloorToInt(run.Time);
+            time.Set(seconds / 60, seconds % 60);
+            kills.Set(run.Kills);
+            bool bossVisible = run.BossSpawned && run.Boss != null && run.Boss.Active;
+            if (bossText.gameObject.activeSelf != bossVisible) bossText.gameObject.SetActive(bossVisible);
+            if (bossVisible) boss.Set(Mathf.CeilToInt(run.Boss.Health));
 
             joystickBase.gameObject.SetActive(input.JoystickActive);
             joystickKnob.gameObject.SetActive(input.JoystickActive);
@@ -184,6 +209,9 @@ namespace ThornThrone.Mobile
         }
 
         private readonly Rect[] blocked = new Rect[1];
+
+        /// <summary>Widest HUD number the label buffers are sized for (kills, level, boss HP).</summary>
+        private const int WidestValue = 9999999;
 
         /// <summary>Arrow at the screen edge towards an open elite room that is off screen (m_sEliteRoomDirectionalArrowEffect).</summary>
         public void UpdateEliteArrow(bool visible, Vector2 screenPosition, Vector2 direction)
@@ -213,12 +241,6 @@ namespace ThornThrone.Mobile
                 texture.Apply();
                 return arrow = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f));
             }
-        }
-
-        private void SetText(Text label, string prefix, int value)
-        {
-            text.Clear().Append(prefix).Append(value);
-            label.text = text.ToString();
         }
 
         private static string FormatTime(float seconds)
@@ -266,7 +288,7 @@ namespace ThornThrone.Mobile
             int rank = owned?.Rank ?? 0;
             var sb = new StringBuilder();
             sb.Append(Name(def)).Append("\n\n");
-            sb.Append(rank == 0 ? "Новое" : $"Уровень {rank} → {rank + 1}").Append(" / ").Append(def.MaxLevel).Append("\n\n");
+            sb.Append(rank == 0 ? "Новое" : $"Уровень {rank} » {rank + 1}").Append(" / ").Append(def.MaxLevel).Append("\n\n");
             if (def.IsPassive)
             {
                 if (def.Minor.Length > 0) Lines(sb, def.Minor[0].Global);
@@ -331,18 +353,30 @@ namespace ThornThrone.Mobile
             return rect.gameObject;
         }
 
-        private Text Label(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
+        private TMP_Text Label(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
         {
             var rect = Place(parent, name, anchor, position - new Vector2(0, size.y), size);
-            var label = rect.gameObject.AddComponent<Text>();
+            var label = rect.gameObject.AddComponent<TextMeshProUGUI>();
             label.font = font;
             label.fontSize = fontSize;
-            label.alignment = alignment;
+            label.alignment = Alignment(alignment);
             label.color = Color.white;
-            label.horizontalOverflow = HorizontalWrapMode.Wrap;
-            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.textWrappingMode = TextWrappingModes.Normal;
+            label.overflowMode = TextOverflowModes.Truncate;
+            label.richText = true;
             label.raycastTarget = false;
             return label;
+        }
+
+        private static TextAlignmentOptions Alignment(TextAnchor anchor)
+        {
+            switch (anchor)
+            {
+                case TextAnchor.UpperLeft: return TextAlignmentOptions.TopLeft;
+                case TextAnchor.UpperCenter: return TextAlignmentOptions.Top;
+                case TextAnchor.MiddleCenter: return TextAlignmentOptions.Center;
+                default: throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null);
+            }
         }
 
         private Image Bar(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, Color color)
@@ -407,6 +441,61 @@ namespace ThornThrone.Mobile
                 texture.Apply();
                 return circle = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f));
             }
+        }
+    }
+
+    /// <summary>
+    /// HUD label with a fixed format and integer arguments. Writes the label only when a value changes, through
+    /// <see cref="TMP_Text.SetText(string, float)"/>, which formats into TMP's character buffer without strings.
+    /// </summary>
+    public sealed class HudText
+    {
+        private readonly TMP_Text label;
+        private readonly string format;
+        private int lastA = int.MinValue, lastB = int.MinValue;
+
+        public HudText(TMP_Text label, string format)
+        {
+            this.label = label;
+            this.format = format;
+        }
+
+        /// <summary>Sets a one-argument format; false if the value is unchanged and the label was not touched.</summary>
+        public bool Set(int value)
+        {
+            if (value == lastA) return false;
+            lastA = value;
+            label.SetText(format, (float)value);
+            return true;
+        }
+
+        /// <summary>Sets a two-argument format; false if both values are unchanged and the label was not touched.</summary>
+        public bool Set(int a, int b)
+        {
+            if (a == lastA && b == lastB) return false;
+            lastA = a;
+            lastB = b;
+            // Explicit float: SetText(ReadOnlySpan<char>, int, int) is a substring overload, not a format.
+            label.SetText(format, (float)a, (float)b);
+            return true;
+        }
+
+        /// <summary>
+        /// Lays out the label once with the given (widest) values so TMP sizes its buffers for them, then clears
+        /// it. Allocates; call while building the UI.
+        /// </summary>
+        public void Warm(int a, int b)
+        {
+            label.SetText(format, (float)a, (float)b);
+            label.ForceMeshUpdate(true, true);
+            label.SetText(string.Empty);
+            Reset();
+        }
+
+        /// <summary>Forgets the last values so the next <c>Set</c> writes the label.</summary>
+        public void Reset()
+        {
+            lastA = lastB = int.MinValue;
         }
     }
 }

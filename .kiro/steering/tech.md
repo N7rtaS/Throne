@@ -2,7 +2,7 @@
 
 ## Стек
 - Unity 6000.6.7f1, URP 17.6.0 (пайплайны `Assets/Settings/Mobile_RPAsset` и `PC_RPAsset`, назначены по уровням качества).
-- Пакеты: Input System 1.20.0 (единственный путь ввода, старый Input Manager выключен), uGUI 2.6.0, Newtonsoft JSON 3.2.2, glTFast 6.19.0. Версии зафиксированы `Packages/packages-lock.json`. TextMeshPro по ТЗ обязателен, но в манифесте пока нет.
+- Пакеты: Input System 1.20.0 (единственный путь ввода, старый Input Manager выключен), uGUI 2.6.0, Newtonsoft JSON 3.2.2, glTFast 6.19.0. Версии зафиксированы `Packages/packages-lock.json`. TextMeshPro входит в uGUI 2.6.0 (сборка `Unity.TextMeshPro`); Essential Resources лежат в `Assets/TextMesh Pro`, шрифт PT Sans SDF запекается `ThornThrone.Editor.FontBaker.Bake` (`THORN_FONT_BAKE_OK`).
 - Android: IL2CPP, ARM64, min API 26, target API Auto, Vulkan + OpenGL ES 3, только landscape, `com.thornthrone.mobile`. Настройки задаются кодом в `MobileBuilder.ConfigureAndroid()` — менять там, а не только в Player Settings.
 - Симуляция: чистый C# (netstandard2.1, C# 9), без ссылок на UnityEngine.
 - Тесты: .NET 8, NUnit 3.14.
@@ -49,7 +49,7 @@ Tools/mac-smoke.sh
 4. `python3 Tools/audit.py` → `Research/FullGame/`
 5. `Tools/import-unity-data.sh` → `UnityProject/Assets/Game/Data/Source`
 6. `python3 Tools/convert-models.py [--heroes ...] [--enemies ...]` → `Assets/Game/Art/Converted`
-7. Запекание в редакторе: `ArenaBaker`, `EnemyBaker`
+7. Запекание в редакторе: `ArenaBaker`, `EnemyBaker`, `FontBaker` (шрифт UI)
 
 Каждый шаг завершается ненулевым кодом при ошибке; повторный запуск безопасен; GUID существующих ассетов не должны меняться.
 

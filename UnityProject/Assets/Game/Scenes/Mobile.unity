@@ -287,6 +287,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 56b82a1dac7a2af46ad3eed1520da471, type: 3}
   - {fileID: 4900000, guid: a9f542543d4f2f54fb295b9309835a9f, type: 3}
   powerupLocalization: {fileID: 4900000, guid: 3ca75de515273324f9a166aa7596c4bf, type: 3}
+  uiFont: {fileID: 11400000, guid: df0c92030200d4a68aa588358c44922c, type: 2}
   arenaEntities: {fileID: 4900000, guid: bbb11d6f5de9f46b2b3c61511520f988, type: 3}
   arenaNav: {fileID: 4900000, guid: 2c1bd86ffb0bd4db4bca2ec8ba5d2fe8, type: 3}
   arenaTiles:

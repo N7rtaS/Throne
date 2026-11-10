@@ -44,6 +44,7 @@
 | 5 | `Tools/import-unity-data.sh` | `UnityProject/Assets/Game/Data/Source` |
 | 6 | `python3 Tools/convert-models.py [--heroes …] [--enemies …]` | `UnityProject/Assets/Game/Art/Converted` |
 | 7 | Запекание в редакторе: `ArenaBaker`, `EnemyBaker` | запечённые арена и враги |
+| 8 | Запекание шрифта: `ThornThrone.Editor.FontBaker.Bake` (меню `Thorn Throne/Fonts/Bake UI font` или batchmode, см. «Шрифты») | `Assets/Game/Art/Fonts/PTSans-Regular SDF.asset`, `Assets/TextMesh Pro/` |
 
 ## Проверки и сборка
 Все команды — из корня репозитория.
@@ -58,6 +59,14 @@
 | `Tools/build-android.sh` | `Builds/Android/ThornThrone.apk`, `Research/android-build-report.json`, `Research/android-build.log` | `THORN_ANDROID_BUILD_OK` в логе |
 
 Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Логи и отчёты последнего прогона в `Research/` (`unity-tests.*`, `mac-build.log`, `mac-smoke.log`, `android-build.log`, `android-build-report.json`) не хранятся в git. Сцена `Mobile.unity` генерируется при каждой сборке детерминированно и хранится в git: при неизменном `MobileBuilder` сборка её не меняет. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`.
+
+## Шрифты
+- Интерфейс использует TextMeshPro (входит в uGUI 2.6.0) и шрифт **PT Sans Regular** © 2010 ParaType Ltd., лицензия SIL Open Font License 1.1. Файлы: `UnityProject/Assets/Game/Art/Fonts/PTSans-Regular.ttf` и текст лицензии `UnityProject/Assets/Game/Art/Fonts/OFL.txt`. Источник: репозиторий Google Fonts, `https://raw.githubusercontent.com/google/fonts/main/ofl/ptsans/PT_Sans-Web-Regular.ttf` и `.../ofl/ptsans/OFL.txt`.
+- `FontBaker.Bake` запекает статический SDF-атлас `PTSans-Regular SDF.asset` (1024×1024 Alpha8, 48 pt, отступ 6, шейдер `TextMeshPro/Mobile/Distance Field`). Набор символов: печатный ASCII, русский алфавит с Ё/ё, `«»—–…№°×`, все символы `Data/Localization/powerups_ru.json` и строковых литералов `Scripts/Mobile/*.cs`. Если какого-то символа нет в шрифте, запекание падает со списком символов. Повторное запекание перезаписывает ассет на месте, GUID не меняется. Запускать после изменения текстов UI или локализации:
+  ```sh
+  "$THORN_UNITY" -batchmode -nographics -quit -projectPath UnityProject -executeMethod ThornThrone.Editor.FontBaker.Bake -logFile -   # успех: THORN_FONT_BAKE_OK
+  ```
+- При первом запуске `FontBaker` распаковывает TMP Essential Resources из пакета uGUI в `UnityProject/Assets/TextMesh Pro/` (шейдеры, `TMP Settings`, запасной `LiberationSans SDF`, OFL) и делает PT Sans SDF шрифтом по умолчанию в `TMP Settings`. `MobileBuilder.CreateScene` без ассета шрифта падает с подсказкой запустить `FontBaker.Bake`.
 
 ## Переменные окружения
 | Переменная | Умолчание | Где используется |

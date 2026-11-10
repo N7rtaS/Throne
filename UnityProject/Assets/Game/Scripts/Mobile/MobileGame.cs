@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using ThornThrone.Simulation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -17,6 +18,8 @@ namespace ThornThrone.Mobile
         [Tooltip("survivors_*.json from Assets/Game/Data/Source")]
         public TextAsset[] sourceData;
         public TextAsset powerupLocalization;
+        /// <summary>UI font: PT Sans SDF baked by FontBaker, assigned by MobileBuilder.CreateScene.</summary>
+        public TMP_FontAsset uiFont;
         [Tooltip("survivors_arena_entities.json: named arena points (player spawn, vases, elite rooms, boss)")]
         public TextAsset arenaEntities;
         [Tooltip("survivors_arena.gnv.bytes: arena grid navigation")]
@@ -90,7 +93,7 @@ namespace ThornThrone.Mobile
             input = new GameInput();
             world = new WorldRenderer(instancedMaterial, enemyLooks, heroYawOffset);
             BuildScene();
-            ui = new GameUi(names);
+            ui = new GameUi(names, uiFont);
             ui.StartRequested += StartRun;
             ui.ChoiceSelected += i => { if (state == State.Choosing && run.Choose(i)) AfterChoice(); };
             ui.RerollRequested += () => { if (state == State.Choosing && run.Reroll()) ui.ShowChoices(run); };
