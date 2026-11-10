@@ -54,7 +54,15 @@ namespace ThornThrone.Simulation
         public int Gold { get; private set; }
         public bool Finished { get; private set; }
         public bool Victory { get; private set; }
-        public bool Paused { get; set; }
+        public bool Paused
+        {
+            get => paused;
+            set
+            {
+                paused = value;
+                if (value) pendingDash = false;
+            }
+        }
         public bool BossSpawned { get; private set; }
         public Enemy Boss { get; private set; }
         public float BossTime { get; }
@@ -90,6 +98,11 @@ namespace ThornThrone.Simulation
         private readonly EnemyDef bossDef;
         private readonly PickupDef experienceDef;
         private float accumulator, dashTimer, contactTimer, choiceDelay;
+        /// <summary>
+        /// Dash request from a frame without a fixed step waits for the next Tick
+        /// (ТЗ_Мобильная_версия_v2.md §6, §8).
+        /// </summary>
+        private bool paused, pendingDash;
         private int spawnSerial;
         private readonly Vec2[] heroHistory;
         private int stepIndex;
@@ -210,12 +223,13 @@ namespace ThornThrone.Simulation
         {
             if (!CanSimulate) { accumulator = 0; return; }
             accumulator = Math.Min(accumulator + deltaTime, Rules.Step * 8);
-            bool dashRequest = dash;
+            pendingDash |= dash;
             while (accumulator >= Rules.Step && CanSimulate)
             {
                 accumulator -= Rules.Step;
-                Tick(move, dashRequest);
-                dashRequest = false;
+                bool dashNow = pendingDash;
+                pendingDash = false;
+                Tick(move, dashNow);
             }
         }
 
@@ -1120,6 +1134,7 @@ namespace ThornThrone.Simulation
 
         private void OpenChoices()
         {
+            pendingDash = false; // a stop drops the pending dash (ТЗ_Мобильная_версия_v2.md §6, §8)
             ChoosingItems = PendingItems > 0;
             Build.GenerateChoices(Rng, ChoosingItems);
             Choosing = true;
