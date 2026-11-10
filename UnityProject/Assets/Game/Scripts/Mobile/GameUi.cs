@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ThornThrone.App;
 using ThornThrone.Simulation;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,8 @@ using UnityEngine.UI;
 namespace ThornThrone.Mobile
 {
     /// <summary>
-    /// uGUI built from code: menu, HUD, level-up cards, pause, settings and results. Reference resolution 1920×1080
+    /// uGUI built from code: menu, hero and difficulty screens, HUD, level-up cards, pause, settings and results
+    /// (screen order: Mechanics §23, FlowScreens). Reference resolution 1920×1080
     /// divided by the UI scale, everything inside the screen safe area; screens with a fixed layout sit in a
     /// 1920×1080 container fitted into the safe area (Mechanics §20 П5). Temporary look; layout and text sizes
     /// target a 6" phone.
@@ -22,7 +24,16 @@ namespace ThornThrone.Mobile
     {
         /// <summary>Pause screen line: an unfinished run is not saved (ТЗ_Мобильная_версия_v2.md §9, Mechanics §22 Р6).</summary>
         public const string RunLossWarning = "Незаконченный забег не сохраняется: если система закроет игру, он будет потерян.";
-        public event Action<string> StartRequested;
+        /// <summary>«Играть» in the menu (Mechanics §23 Ф9).</summary>
+        public event Action PlayRequested;
+        /// <summary>A hero card; an unavailable hero's card is not interactable.</summary>
+        public event Action<string> HeroSelected;
+        /// <summary>An echelon card 1..8; a locked card is not interactable (Ф6).</summary>
+        public event Action<int> EchelonSelected;
+        /// <summary>«Далее» (hero), «Начать» (difficulty), «Назад» on both screens (Ф10).</summary>
+        public event Action NextRequested, StartRequested, BackRequested;
+        /// <summary>Results: «Сыграть ещё», «Выбор героя», «Сложность» (Ф8); «В меню» is <see cref="MenuRequested"/>.</summary>
+        public event Action PlayAgainRequested, HeroScreenRequested, DifficultyRequested;
         public event Action<int> ChoiceSelected;
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
         /// <summary>«Завершить» and «Отмена» of the quit confirmation (ТЗ_Мобильная_версия_v2.md §6).</summary>
@@ -42,9 +53,24 @@ namespace ThornThrone.Mobile
         private readonly Dictionary<string, string> names;
         private readonly RectTransform safe;
         private readonly Canvas canvas;
-        private readonly GameObject menu, hud, choices, pause, confirm, results, settings;
+        private readonly GameObject menu, heroSelect, difficulty, hud, choices, pause, confirm, results, settings;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
-        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle, settingsError, profileWarning;
+        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle, settingsError, profileWarning, resultUnlocked, resultSaveError;
+        private readonly Dictionary<string, string> difficultyNames;
+        /// <summary>Hero cards in display order with their selection frames.</summary>
+        private readonly List<(string Key, Button Button, GameObject Selected)> heroCards = new List<(string, Button, GameObject)>();
+        /// <summary>Echelon cards 1..MaxEchelons (index n − 1).</summary>
+        private readonly EchelonCard[] echelonCards = new EchelonCard[MaxEchelons];
+        /// <summary>Cards on the difficulty screen: survivors_difficulty.json has 8 (Mechanics §8).</summary>
+        public const int MaxEchelons = 8;
+
+        private struct EchelonCard
+        {
+            public Button Button;
+            public Image Back;
+            public TMP_Text Text, Locked;
+            public GameObject Lock, Selected;
+        }
         private readonly TMP_Text[] settingValues = new TMP_Text[SettingsOptions.Count];
         private readonly CanvasScaler scaler;
         /// <summary>1920×1080 containers of the screens with a fixed layout (П5).</summary>
@@ -75,9 +101,11 @@ namespace ThornThrone.Mobile
 
         /// <param name="localization">Power-up texts by localization key, or null.</param>
         /// <param name="uiFont">UI font; null takes the TMP Settings default font.</param>
-        public GameUi(Dictionary<string, string> localization, TMP_FontAsset uiFont)
+        /// <param name="difficultyLocalization">Echelon names and descriptions by localization key (difficulty_ru.json), or null.</param>
+        public GameUi(Dictionary<string, string> localization, TMP_FontAsset uiFont, Dictionary<string, string> difficultyLocalization = null)
         {
             names = localization;
+            difficultyNames = difficultyLocalization;
             font = uiFont ? uiFont : TMP_Settings.defaultFontAsset;
 
             if (EventSystem.current == null)
@@ -164,28 +192,55 @@ namespace ThornThrone.Mobile
             // Results
             results = Panel(safe, "Results", new Color(0, 0, 0, .8f));
             var resultsContent = Content(results);
-            resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-600, 260), new Vector2(1200, 360), 52, TextAnchor.MiddleCenter);
-            Button(resultsContent, "Menu", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "В меню", 44, () => MenuRequested?.Invoke());
+            resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-700, 360), new Vector2(1400, 440), 52, TextAnchor.MiddleCenter);
+            // DOTA_Survivors_NewDifficultyUnlocked.
+            resultUnlocked = Label(resultsContent, "Unlocked", new Vector2(.5f, .5f), new Vector2(-700, -100), new Vector2(1400, 80), 48, TextAnchor.MiddleCenter);
+            resultUnlocked.text = "Открыта новая сложность!";
+            resultUnlocked.color = new Color(1, .82f, .4f);
+            resultSaveError = Label(resultsContent, "Save error", new Vector2(.5f, .5f), new Vector2(-700, -190), new Vector2(1400, 60), 34, TextAnchor.MiddleCenter);
+            resultSaveError.text = "Не удалось сохранить результат";
+            resultSaveError.color = new Color(1, .45f, .4f);
+            // Ф8: four buttons in a row; «В меню» is the mobile addition (the original closes the window).
+            Button(resultsContent, "Play again", new Vector2(.5f, .5f), new Vector2(-900, -400), new Vector2(420, 120), "Сыграть ещё", 44, () => PlayAgainRequested?.Invoke());
+            Button(resultsContent, "Hero", new Vector2(.5f, .5f), new Vector2(-440, -400), new Vector2(420, 120), "Выбор героя", 44, () => HeroScreenRequested?.Invoke());
+            Button(resultsContent, "Difficulty", new Vector2(.5f, .5f), new Vector2(20, -400), new Vector2(420, 120), "Сложность", 44, () => DifficultyRequested?.Invoke());
+            Button(resultsContent, "Menu", new Vector2(.5f, .5f), new Vector2(480, -400), new Vector2(420, 120), "В меню", 44, () => MenuRequested?.Invoke());
 
             // Menu
             menu = Panel(safe, "Menu", new Color(.03f, .04f, .07f, 1));
             var menuContent = Content(menu);
             Label(menuContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -120), new Vector2(1200, 140), 96, TextAnchor.MiddleCenter).text = "Терновый трон";
-            Label(menuContent, "Subtitle", new Vector2(.5f, 1), new Vector2(-600, -230), new Vector2(1200, 60), 34, TextAnchor.MiddleCenter).text = "Выберите героя";
-            string[] heroes = { "dragonus", "shen", "kez" };
-            string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез\n(в разработке)" };
-            for (int i = 0; i < heroes.Length; i++)
-            {
-                string key = heroes[i];
-                var b = Button(menuContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 300), titles[i], 52, () => StartRequested?.Invoke(key));
-                b.interactable = key == "dragonus";
-            }
+            Button(menuContent, "Play", new Vector2(.5f, .5f), new Vector2(-300, -40), new Vector2(600, 150), "Играть", 64, () => PlayRequested?.Invoke());
             Button(menuContent, "Menu settings", new Vector2(.5f, 0), new Vector2(-260, 180), new Vector2(520, 110), "Настройки", 44, () => SettingsRequested?.Invoke());
             // П12: shown after a reset of a corrupt profile until the first run starts.
             profileWarning = Label(menuContent, "Profile warning", new Vector2(.5f, 0), new Vector2(-800, 160), new Vector2(1600, 110), 34, TextAnchor.MiddleCenter);
             profileWarning.text = "Сохранение повреждено. Создан новый профиль, старые файлы сохранены.";
             profileWarning.color = new Color(1, .82f, .4f);
             profileWarning.gameObject.SetActive(false);
+
+            // Hero select (DOTASurvivorsGameMenuHeroScreen): cards, «Назад», «Далее».
+            heroSelect = Panel(safe, "Hero select", new Color(.03f, .04f, .07f, 1));
+            var heroContent = Content(heroSelect);
+            Label(heroContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -60), new Vector2(1200, 110), 72, TextAnchor.MiddleCenter).text = "Выберите героя";
+            string[] heroes = { "dragonus", "shen", "kez" };
+            string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез\n(в разработке)" };
+            for (int i = 0; i < heroes.Length; i++)
+            {
+                string key = heroes[i];
+                var b = Button(heroContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 340), titles[i], 52, () => HeroSelected?.Invoke(key));
+                heroCards.Add((key, b, Frame(b.transform)));
+            }
+            Button(heroContent, "Back", new Vector2(.5f, 0), new Vector2(-560, 40), new Vector2(520, 120), "Назад", 44, () => BackRequested?.Invoke());
+            Button(heroContent, "Next", new Vector2(.5f, 0), new Vector2(40, 40), new Vector2(520, 120), "Далее", 44, () => NextRequested?.Invoke());
+
+            // Difficulty (DOTASurvivorsGameMenuDifficultyScreen): 2 × 4 echelon cards, «Назад», «Начать».
+            difficulty = Panel(safe, "Difficulty", new Color(.03f, .04f, .07f, 1));
+            var difficultyContent = Content(difficulty);
+            Label(difficultyContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -20), new Vector2(1200, 100), 64, TextAnchor.MiddleCenter).text = "Сложность";
+            for (int i = 0; i < MaxEchelons; i++)
+                echelonCards[i] = NewEchelonCard(difficultyContent, i + 1, new Vector2(-930 + (i % 4) * 470, i < 4 ? 30 : -350));
+            Button(difficultyContent, "Back", new Vector2(.5f, 0), new Vector2(-560, 40), new Vector2(520, 120), "Назад", 44, () => BackRequested?.Invoke());
+            Button(difficultyContent, "Start", new Vector2(.5f, 0), new Vector2(40, 40), new Vector2(520, 120), "Начать", 44, () => StartRequested?.Invoke());
 
             // Settings: last, so it covers the menu or the pause it was opened from (П10).
             settings = Panel(safe, "Settings", new Color(.03f, .04f, .07f, 1));
@@ -291,12 +346,78 @@ namespace ThornThrone.Mobile
             hud.SetActive(true);
         }
 
-        public void ShowResults(Run run)
+        /// <summary>Ф9: hero cards; an unavailable hero is not interactable, the chosen one is framed.</summary>
+        public void ShowHeroSelect(AppFlow flow)
+        {
+            Show(heroSelect);
+            foreach (var card in heroCards)
+            {
+                card.Button.interactable = flow.IsHeroPlayable(card.Key);
+                card.Selected.SetActive(card.Key == flow.Hero);
+            }
+        }
+
+        /// <summary>
+        /// Ф6: «Эшелон N», name and description of the N-th difficulty; a locked echelon is grey with a lock and
+        /// «НЕДОСТУПНО» and is not interactable; the chosen one is framed (colour plus shape, ТЗ §7).
+        /// </summary>
+        public void ShowDifficulty(AppFlow flow)
+        {
+            if (flow.EchelonCount > MaxEchelons) throw new ArgumentException($"{flow.EchelonCount} echelons, the screen has {MaxEchelons} cards");
+            Show(difficulty);
+            for (int i = 0; i < MaxEchelons; i++)
+            {
+                int n = i + 1;
+                var card = echelonCards[i];
+                bool exists = n <= flow.EchelonCount;
+                card.Button.gameObject.SetActive(exists);
+                if (!exists) continue;
+                bool open = flow.IsUnlocked(n);
+                var def = flow.EchelonDifficulty(n);
+                card.Text.text = $"<size=40>Эшелон {n}</size>\n<b>{EchelonText(def, "m_sLocDifficultyName") ?? def.Key}</b>\n<size=28>{EchelonText(def, "m_sLocDifficultyDescription")}</size>";
+                card.Text.color = open ? Color.white : LockedText;
+                card.Back.color = open ? OpenCard : LockedCard;
+                card.Button.interactable = open;
+                card.Lock.SetActive(!open);
+                card.Locked.gameObject.SetActive(!open);
+                card.Selected.SetActive(open && n == flow.Echelon);
+            }
+        }
+
+        /// <summary>Echelon name for the results screen and the smoke log.</summary>
+        public string EchelonName(AppFlow flow, int echelon) =>
+            echelon >= 1 && echelon <= flow.EchelonCount ? EchelonText(flow.EchelonDifficulty(echelon), "m_sLocDifficultyName") ?? flow.EchelonDifficulty(echelon).Key : "";
+
+        /// <summary>Ф8: outcome, echelon, time, level, kills; «Открыта новая сложность!» when the run opened one; Ф11 error line.</summary>
+        public void ShowResults(AppFlow flow)
         {
             Show(results);
-            resultText.text = (run.Victory ? "Победа!" : "Поражение") +
-                $"\n\nВремя {FormatTime(run.Time)}   Уровень {run.HeroLevel}   Убито {run.Kills}";
+            var outcome = flow.LastOutcome;
+            var r = outcome.Result;
+            resultText.text = (r.Victory ? "Победа!" : "Поражение") +
+                $"\n\nЭшелон {outcome.Echelon} — {EchelonName(flow, outcome.Echelon)}" +
+                $"\n\nВремя {FormatTime((float)r.DurationSeconds)}   Уровень {r.Level}   Убито {r.Kills}";
+            resultUnlocked.gameObject.SetActive(outcome.UnlockedEchelon > 0);
+            SetResultSaveError(flow.SaveFailed);
         }
+
+        /// <summary>Ф11: «Не удалось сохранить результат» on the results screen.</summary>
+        public void SetResultSaveError(bool visible) => resultSaveError.gameObject.SetActive(visible);
+
+        /// <summary>VData markup for TMP: &lt;b&gt; stays, &lt;br/&gt; becomes a line break (Ф6).</summary>
+        public static string DifficultyText(string text) =>
+            text?.Replace("<br/>", "\n").Replace("<br />", "\n").Replace("<br>", "\n");
+
+        /// <summary>Localized text of a difficulty field such as m_sLocDifficultyName («#key»), or null.</summary>
+        private string EchelonText(DifficultyDef def, string field)
+        {
+            var key = ((string)def.Raw[field])?.TrimStart('#');
+            return key != null && difficultyNames != null && difficultyNames.TryGetValue(key, out var value) ? DifficultyText(value) : null;
+        }
+
+        private static readonly Color OpenCard = new Color(.16f, .2f, .28f, .95f);
+        private static readonly Color LockedCard = new Color(.22f, .22f, .22f, .95f);
+        private static readonly Color LockedText = new Color(.55f, .55f, .55f, 1);
 
         public void ShowChoices(Run run)
         {
@@ -322,6 +443,8 @@ namespace ThornThrone.Mobile
         {
             settings.SetActive(false);
             menu.SetActive(screen == menu);
+            heroSelect.SetActive(screen == heroSelect);
+            difficulty.SetActive(screen == difficulty);
             hud.SetActive(screen == hud);
             results.SetActive(screen == results);
             choices.SetActive(false);
@@ -655,6 +778,89 @@ namespace ThornThrone.Mobile
             label.text = caption;
             AddTarget(rect);
             return rect;
+        }
+
+        /// <summary>Echelon card 440×360: text, lock in the top right corner, «НЕДОСТУПНО» at the bottom, selection frame.</summary>
+        private EchelonCard NewEchelonCard(Transform parent, int echelon, Vector2 position)
+        {
+            var rect = ButtonBase(parent, "Echelon " + echelon, new Vector2(.5f, .5f), position, new Vector2(440, 360), "", 30, out var text);
+            var card = new EchelonCard { Back = rect.GetComponent<Image>(), Text = text };
+            card.Button = rect.gameObject.AddComponent<Button>();
+            card.Button.onClick.AddListener(() => EchelonSelected?.Invoke(echelon));
+            text.alignment = TextAlignmentOptions.Top;
+            text.rectTransform.offsetMin = new Vector2(20, 60);
+            text.rectTransform.offsetMax = new Vector2(-20, -16);
+            // DOTA_Survivors_DifficultyLocked; the lock is drawn: PT Sans has no 🔒.
+            card.Locked = Label(rect, "Locked", Vector2.zero, new Vector2(20, 56), new Vector2(400, 46), 34, TextAnchor.MiddleCenter);
+            card.Locked.text = "НЕДОСТУПНО";
+            card.Locked.color = new Color(.8f, .8f, .8f, 1);
+            var lockRect = Place(rect, "Lock", Vector2.one, new Vector2(-76, -76), new Vector2(60, 60));
+            var lockImage = lockRect.gameObject.AddComponent<Image>();
+            lockImage.sprite = LockSprite;
+            lockImage.color = new Color(.85f, .85f, .85f, 1);
+            lockImage.raycastTarget = false;
+            card.Lock = lockRect.gameObject;
+            card.Selected = Frame(rect);
+            return card;
+        }
+
+        /// <summary>Gold frame around a card, 8 units outside it; hidden until the card is chosen.</summary>
+        private static GameObject Frame(Transform card)
+        {
+            var rect = Rect(card, "Selected", Vector2.zero, Vector2.one, new Vector2(-8, -8), new Vector2(8, 8));
+            var image = rect.gameObject.AddComponent<Image>();
+            image.sprite = FrameSprite;
+            image.type = Image.Type.Sliced;
+            image.fillCenter = false;
+            image.color = new Color(1, .82f, .4f, 1);
+            image.raycastTarget = false;
+            rect.gameObject.SetActive(false);
+            return rect.gameObject;
+        }
+
+        private static Sprite lockSprite, frameSprite;
+
+        /// <summary>Padlock: a body in the lower half and a shackle ring above it.</summary>
+        private static Sprite LockSprite
+        {
+            get
+            {
+                if (lockSprite) return lockSprite;
+                const int size = 64;
+                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+                var center = new Vector2(32, 38);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    bool body = x >= 10 && x < 54 && y >= 2 && y < 36;
+                    float d = Vector2.Distance(new Vector2(x + .5f, y + .5f), center);
+                    bool shackle = y >= 34 && d >= 12 && d <= 19;
+                    bool keyhole = Vector2.Distance(new Vector2(x + .5f, y + .5f), new Vector2(32, 22)) < 5 || (x >= 30 && x < 34 && y >= 9 && y < 22);
+                    texture.SetPixel(x, y, new Color(1, 1, 1, (body && !keyhole) || shackle ? 1 : 0));
+                }
+                texture.Apply();
+                return lockSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f));
+            }
+        }
+
+        /// <summary>9-sliced 6 px border.</summary>
+        private static Sprite FrameSprite
+        {
+            get
+            {
+                if (frameSprite) return frameSprite;
+                const int size = 32, border = 6;
+                var texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+                for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    bool edge = x < border || y < border || x >= size - border || y >= size - border;
+                    texture.SetPixel(x, y, new Color(1, 1, 1, edge ? 1 : 0));
+                }
+                texture.Apply();
+                return frameSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(.5f, .5f), 100, 0,
+                    SpriteMeshType.FullRect, new Vector4(border, border, border, border));
+            }
         }
 
         private static void Stretch(RectTransform rect, float margin)

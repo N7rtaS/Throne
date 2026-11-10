@@ -23,7 +23,12 @@ namespace ThornThrone.Editor
         public const string SourceFont = "Assets/Game/Art/Fonts/PTSans-Regular.ttf";
         public const string FontAssetPath = "Assets/Game/Art/Fonts/PTSans-Regular SDF.asset";
         public const string TmpSettingsPath = "Assets/TextMesh Pro/Resources/TMP Settings.asset";
-        private const string Localization = "Assets/Game/Data/Localization/powerups_ru.json";
+        /// <summary>Localized data texts the UI shows: power-ups and echelons (Ф12, .kiro/specs/screen-flow/design.md).</summary>
+        public static readonly string[] Localizations =
+        {
+            "Assets/Game/Data/Localization/powerups_ru.json",
+            "Assets/Game/Data/Localization/difficulty_ru.json",
+        };
         private const string MobileScripts = "Assets/Game/Scripts/Mobile";
         private const string MobileShader = "TextMeshPro/Mobile/Distance Field";
         private const int SamplingPointSize = 48;
@@ -181,8 +186,9 @@ namespace ThornThrone.Editor
             set.Add('Ё');
             set.Add('ё');
             foreach (char c in Typography) set.Add(c);
-            var localization = JObject.Parse(File.ReadAllText(Localization));
-            foreach (var property in localization.Properties()) Add(set, (string)property.Value);
+            foreach (var path in Localizations)
+            foreach (var property in JObject.Parse(File.ReadAllText(path)).Properties())
+                Add(set, (string)property.Value);
             var files = Directory.GetFiles(MobileScripts, "*.cs");
             Array.Sort(files, StringComparer.Ordinal);
             foreach (var file in files)

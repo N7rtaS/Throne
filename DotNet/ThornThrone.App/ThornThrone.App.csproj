@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Builds the Unity app flow sources (screens, run creation, result recording) outside Unity so they can be tested
+       with `dotnet test`. Target and language version match Unity 6 (.NET Standard 2.1, C# 9). -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>ThornThrone.App</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../UnityProject/Assets/Game/Scripts/App/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ThornThrone.Simulation/ThornThrone.Simulation.csproj" />
+    <ProjectReference Include="../ThornThrone.Progression/ThornThrone.Progression.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- com.unity.nuget.newtonsoft-json 3.2.2 ships Newtonsoft.Json 13.0.2 -->
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+  </ItemGroup>
+</Project>

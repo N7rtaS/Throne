@@ -1227,6 +1227,9 @@ namespace ThornThrone.Simulation
         /// <summary>Debug hook: the hero takes no damage (tests and showcase runs).</summary>
         public bool DebugInvulnerable;
 
+        /// <summary>Debug hook: ends the run as a victory (the original menu has a «Win Game» debug button; smoke -thornFlow).</summary>
+        public void DebugWin() => Finish(true);
+
         private void DamageHero(float amount)
         {
             if (amount <= 0 || Finished || DebugInvulnerable) return;

@@ -2,14 +2,18 @@
 # Automatic macOS smoke check (design: .kiro/specs/build-readme-unity-tests-smoke/design.md §4).
 # Builds Builds/MacSmoke (MobileBuilder.BuildMacSmoke), runs the player with -thornSmoke in a 1280x720 window,
 # waits for it to quit and checks its log.
-# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [extra player args, e.g. -thornBoss -thornElite]
-#        Tools/mac-smoke.sh --check-log FILE   (only the log check, step 4)
+# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [--flow] [extra player args, e.g. -thornBoss -thornElite]
+#        Tools/mac-smoke.sh --check-log FILE        (only the log check, step 4)
+#        Tools/mac-smoke.sh --check-flow-log FILE   (THORN_FLOW ok=1, then the log check)
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
 #   run 2 expects them after the restart (-thornExpectSettings), run 3 restores the defaults of the test profile.
+# --flow (design: .kiro/specs/screen-flow/design.md §4): run 1 walks the screens on a new test profile (-thornFlow,
+#   log mac-smoke-flow-1.log), run 2 checks the saved result and unlock after the restart (-thornExpectFlow).
 # Exit codes: 0 ok, 2 build failed or player missing, 3 player timed out, 4 no THORN_MOBILE_SMOKE line,
 #             5 kills=0, 6 unhandled exception in the log, 7 player exit code is not 0,
 #             8 -thornInputScript=FILE given and no THORN_INPUT_SCRIPT ok=1 line (design: .kiro/specs/touch-controls-contract),
-#             9 -thornSettings / -thornExpectSettings given and no THORN_SETTINGS_SET / THORN_SETTINGS ok=1 line.
+#             9 -thornSettings / -thornExpectSettings given and no THORN_SETTINGS_SET / THORN_SETTINGS ok=1 line,
+#             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line.
 set -euo pipefail
 root="${0:A:h:h}"
 unity="${THORN_UNITY:-/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity}"
@@ -37,6 +41,18 @@ check_log()
   print -r -- "$line"
 }
 
+# Screen flow smoke: the THORN_FLOW line must say ok=1 (code 10 otherwise).
+check_flow()
+{
+  local file="$1" line
+  line="$(LC_ALL=C grep -a '^THORN_FLOW ' "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ "$line" != "THORN_FLOW ok=1 "* ]]; then
+    echo "mac-smoke: screen flow failed: ${line:-no THORN_FLOW line}, see $file" >&2
+    return 10
+  fi
+  print -r -- "$line"
+}
+
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -50,13 +66,20 @@ if [[ "${1:-}" == "--check-log" ]]; then
   check_log "${2:?log file}"
   exit $?
 fi
+if [[ "${1:-}" == "--check-flow-log" ]]; then
+  check_flow "${2:?log file}" || exit $?
+  check_log "$2"
+  exit $?
+fi
 
 build=1
 restart=0
+flow=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-build) build=0; shift ;;
     --settings-restart) restart=1; shift ;;
+    --flow) flow=1; shift ;;
     *) break ;;
   esac
 done
@@ -126,6 +149,9 @@ run_once()
     fi
     print -r -- "$settings_line"
   fi
+  if [[ " $* " == *" -thornFlow "* || " $* " == *" -thornExpectFlow "* ]]; then
+    check_flow "$runlog" || return $?
+  fi
   check_log "$runlog" || return $?
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi
 }
@@ -135,6 +161,11 @@ if (( restart )); then
   run_once "${log%.log}-settings-1.log" -thornSettings="$changed" "$@" || exit $?
   run_once "${log%.log}-settings-2.log" -thornExpectSettings="$changed" "$@" || exit $?
   run_once "$log" -thornSettings="$defaults" -thornExpectSettings="$defaults" "$@" || exit $?
+  exit 0
+fi
+if (( flow )); then
+  run_once "${log%.log}-flow-1.log" -thornFlow "$@" || exit $?
+  run_once "$log" -thornExpectFlow "$@" || exit $?
   exit 0
 fi
 run_once "$log" "$@" || exit $?

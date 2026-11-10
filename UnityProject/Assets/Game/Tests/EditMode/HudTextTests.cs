@@ -24,7 +24,11 @@ namespace ThornThrone.Mobile.Tests
     {
         private const string FontPath = "Assets/Game/Art/Fonts/PTSans-Regular SDF.asset";
         private const string SourceData = "Assets/Game/Data/Source";
-        private const string Localization = "Assets/Game/Data/Localization/powerups_ru.json";
+        private static readonly string[] Localizations =
+        {
+            "Assets/Game/Data/Localization/powerups_ru.json",
+            "Assets/Game/Data/Localization/difficulty_ru.json",
+        };
         private readonly List<Object> created = new List<Object>();
 
         [TearDown]
@@ -99,8 +103,9 @@ namespace ThornThrone.Mobile.Tests
             for (char c = 'А'; c <= 'я'; c++) required.Add(c);
             required.Add('Ё');
             required.Add('ё');
-            var json = JObject.Parse(File.ReadAllText(Localization));
-            foreach (var p in json.Properties()) AddText(required, (string)p.Value);
+            foreach (var path in Localizations)
+            foreach (var p in JObject.Parse(File.ReadAllText(path)).Properties())
+                AddText(required, (string)p.Value);
             // String literals of the presentation code (comments stripped first).
             var literal = new Regex("\"(?:[^\"\\\\\\n]|\\\\.)*\"");
             foreach (var path in Directory.GetFiles("Assets/Game/Scripts/Mobile", "*.cs"))

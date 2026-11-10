@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using ThornThrone.App;
 using ThornThrone.Mobile.Platform;
 using ThornThrone.Progression;
 using ThornThrone.Simulation;
@@ -12,8 +13,9 @@ using UnityEngine.Rendering.Universal;
 namespace ThornThrone.Mobile
 {
     /// <summary>
-    /// Entry point of the mobile build: owns the simulation, feeds it touch/keyboard input, draws it and
-    /// drives the UI. All game rules live in ThornThrone.Simulation; this class only connects them to Unity.
+    /// Entry point of the mobile build: owns the app flow (AppFlow creates the run, Mechanics §23), feeds the run
+    /// touch/keyboard input, draws it and drives the UI. All game rules live in ThornThrone.Simulation and
+    /// ThornThrone.App; this class only connects them to Unity.
     /// Runs after the EventSystem (order 0) so that its pointer-over-UI answers are about the current frame
     /// (design: .kiro/specs/touch-controls-contract/design.md §3.10).
     /// </summary>
@@ -23,6 +25,8 @@ namespace ThornThrone.Mobile
         [Tooltip("survivors_*.json from Assets/Game/Data/Source")]
         public TextAsset[] sourceData;
         public TextAsset powerupLocalization;
+        /// <summary>difficulty_ru.json: echelon names and descriptions (Tools/import-unity-data.sh, Mechanics §23 Ф12).</summary>
+        public TextAsset difficultyLocalization;
         /// <summary>UI font: PT Sans SDF baked by FontBaker, assigned by MobileBuilder.CreateScene.</summary>
         public TMP_FontAsset uiFont;
         [Tooltip("survivors_arena_entities.json: named arena points (player spawn, vases, elite rooms, boss)")]
@@ -70,8 +74,15 @@ namespace ThornThrone.Mobile
         /// <summary>Visible half height around the hero in Source units (design decision until observed).</summary>
         private float VisibleHalfHeight = 900;
 
+        /// <summary>Heroes that can be played; Shen and Kez are «в разработке» until their abilities exist.</summary>
+        public static readonly string[] PlayableHeroes = { "dragonus" };
+
         private GameData data;
+        /// <summary>The run of <see cref="AppFlow.Run"/> this view follows; null outside the Run and Results screens.</summary>
         private Run run;
+        private AppFlow flow;
+        private FlowScreens screens;
+        private ulong runCounter;
         private GameUi ui;
         private GameInput input;
         private WorldRenderer world;
@@ -80,6 +91,7 @@ namespace ThornThrone.Mobile
         private HeroView heroView;
         private float heroHeight = 0.7f;
         private Vec2 lastHeroPosition;
+        /// <summary>Menu covers the flow screens Menu, Hero and Difficulty (FlowScreens shows which one).</summary>
         private enum State { Menu, Playing, Paused, ConfirmQuit, Choosing, Results, Settings }
         private State state;
         /// <summary>Screen the settings were opened from: the menu or the pause (Mechanics §20 П10).</summary>
@@ -93,6 +105,7 @@ namespace ThornThrone.Mobile
             data = GameData.Load(category => texts[category], () => arenaEntities ? arenaEntities.text : null,
                 () => arenaNav ? arenaNav.bytes : null);
             var names = powerupLocalization ? JObject.Parse(powerupLocalization.text).ToObject<Dictionary<string, string>>() : null;
+            var difficultyNames = difficultyLocalization ? JObject.Parse(difficultyLocalization.text).ToObject<Dictionary<string, string>>() : null;
             var mode = data.Modes["crownfall_act4"].Raw["m_vCameraOffset"];
             if (mode is JArray offset && offset.Count == 3)
                 cameraOffset = new Vector3((float)offset[0], (float)offset[2], (float)offset[1]) * WorldRenderer.Scale;
@@ -101,27 +114,42 @@ namespace ThornThrone.Mobile
             lifecycle = new AppLifecycle(Suspend, () => AudioListener.pause = false);
             world = new WorldRenderer(instancedMaterial, enemyLooks, heroYawOffset);
             BuildScene();
-            ui = new GameUi(names, uiFont);
-            ui.StartRequested += StartRun;
+            ui = new GameUi(names, uiFont, difficultyNames);
             ui.CardAccepts = input.Controller.CardAccepts;
             ui.ChoiceSelected += i => { if (state == State.Choosing && run.Choose(i)) AfterChoice(); };
             ui.RerollRequested += () => { if (state == State.Choosing && run.Reroll()) ShowChoices(); };
             ui.PauseRequested += () => SetPaused(true);
             ui.ResumeRequested += () => SetPaused(false);
             ui.QuitRunRequested += ShowConfirmQuit;
-            ui.QuitConfirmed += () => { if (state == State.ConfirmQuit) EndRun(); };
+            ui.QuitConfirmed += () => { if (state == State.ConfirmQuit) screens.Abandon(); };
             ui.QuitCancelled += CloseConfirmQuit;
-            ui.MenuRequested += ShowMenu;
             ui.SettingsRequested += OpenSettings;
             ui.SettingsClosed += CloseSettings;
             ui.SettingStepped += StepSetting;
             // П11: smoke runs use the test profile and never touch the player's file.
             bool smokeRun = args.Contains("-thornSmoke");
-            LoadSettings(smokeRun ? ProfileKind.Test : ProfileKind.User);
+            // Ф13: -thornFlow starts from a new test profile (only test.save*; the player's file is not touched).
+            var profile = LoadSettings(smokeRun ? ProfileKind.Test : ProfileKind.User, smokeRun && args.Contains("-thornFlow"));
+            flow = new AppFlow(data, profile, saveProfile, () => (ulong)DateTime.UtcNow.Ticks + ++runCounter, PlayableHeroes);
+            screens = new FlowScreens(flow, ui);
+            screens.ScreenChanged += FollowFlow;
             ShowMenu();
             if (smokeRun && !SmokeSettings(args)) return;
             if (args.Contains("-thornCloseup")) VisibleHalfHeight = 350;
-            if (smokeRun) { smoke = true; StartRun("dragonus"); }
+            if (smokeRun) smoke = true;
+            if (smokeRun && (args.Contains("-thornFlow") || args.Contains("-thornExpectFlow")))
+            {
+                flowSmoke = true;
+                StartCoroutine(FlowSmoke(args.Contains("-thornFlow")));
+                return;
+            }
+            if (smokeRun && !SmokeStart()) return;
+            SmokeOptions(args);
+        }
+
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
+        private void SmokeOptions(string[] args)
+        {
             showSettings = smoke && args.Contains("-thornShowSettings");
             var script = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornInputScript="));
             if (smoke && script != null) inputScript = new InputScript(script.Substring("-thornInputScript=".Length));
@@ -138,7 +166,7 @@ namespace ThornThrone.Mobile
                 eliteSmoke = true;
                 screenshotTime = 9.5f;
             }
-            var drawMode = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornDrawMode="));
+            var drawMode = args.FirstOrDefault(a => a.StartsWith("-thornDrawMode="));
             if (drawMode != null) WorldRenderer.DebugDrawMode = int.Parse(drawMode.Substring("-thornDrawMode=".Length));
         }
 
@@ -146,7 +174,7 @@ namespace ThornThrone.Mobile
         /// Loads the profile and applies its settings before the menu is shown (Mechanics §20). A storage that cannot
         /// be opened gives default settings and failing saves; the game still starts.
         /// </summary>
-        private void LoadSettings(ProfileKind kind)
+        private Profile LoadSettings(ProfileKind kind, bool reset)
         {
             SaveStore store = null;
             Profile profile;
@@ -159,6 +187,12 @@ namespace ThornThrone.Mobile
                 status = loaded.Status;
                 foreach (var error in loaded.Errors) Debug.LogWarning("[Profile] " + error);
                 Debug.Log($"THORN_PROFILE kind={ProfileSchema.KindName(kind)} status={status} preserved={string.Join(";", loaded.PreservedFiles)}");
+                if (reset && kind == ProfileKind.Test)
+                {
+                    profile = Profile.CreateNew(kind);
+                    var saved = store.Save(profile);
+                    Debug.Log($"THORN_PROFILE reset kind=test saved={saved.Status}");
+                }
             }
             catch (Exception e) when (e is System.IO.IOException || e is UnauthorizedAccessException)
             {
@@ -166,13 +200,16 @@ namespace ThornThrone.Mobile
                 profile = Profile.CreateNew(kind);
                 status = LoadStatus.Created;
             }
-            settings = new GameSettings(profile,
-                p => store != null ? store.Save(p) : new SaveResult(SaveStatus.IoError, "Profile storage is unavailable"),
-                new UnitySettingsTargets(input.Controller, ui));
+            // One profile object and one store for settings and results: any successful save writes both (Ф11).
+            saveProfile = p => store != null ? store.Save(p) : new SaveResult(SaveStatus.IoError, "Profile storage is unavailable");
+            settings = new GameSettings(profile, saveProfile, new UnitySettingsTargets(input.Controller, ui));
             settings.ApplyAll();
             for (int i = 0; i < SettingsOptions.Count; i++) ui.SetSettingText((SettingId)i, settings.ValueText((SettingId)i));
             ui.ShowProfileWarning(GameSettings.WarnsAbout(status));
+            return profile;
         }
+
+        private Func<Profile, SaveResult> saveProfile;
 
         /// <summary>
         /// Smoke restart check (design §5): -thornSettings=key=value,… sets values through the same path as the
@@ -269,6 +306,8 @@ namespace ThornThrone.Mobile
         {
             if (!smoke || run == null) return;
             if (state == State.Choosing) { run.Choose(0); AfterChoice(); }
+            // The -thornFlow script drives its own short runs; the 30 s smoke run starts after it.
+            if (flowSmoke) return;
             inputScript?.Update(run, input);
             if (inputScript != null && inputScript.Finished && !inputScript.Ok)
             {
@@ -298,6 +337,138 @@ namespace ThornThrone.Mobile
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(run.Kills > 0 ? 0 : 1);
             smoke = false;
+        }
+
+        // ------------------------------------------------------------------ smoke: screen flow
+
+        private bool flowSmoke;
+        /// <summary>Screens the flow went through during -thornFlow (FollowFlow appends).</summary>
+        private List<string> flowScreens;
+        private string flowFailed;
+
+        private static UnityEngine.UI.Button FindButton(string path)
+        {
+            var root = GameObject.Find("UI");
+            var target = root ? root.transform.Find("Safe area/" + path) : null;
+            return target ? target.GetComponent<UnityEngine.UI.Button>() : null;
+        }
+
+        /// <summary>Presses a button like a tap: only an active, interactable one.</summary>
+        private static bool Press(string path)
+        {
+            var button = FindButton(path);
+            if (!button || !button.gameObject.activeInHierarchy || !button.interactable)
+            {
+                Debug.Log("[Smoke] cannot press " + path);
+                return false;
+            }
+            button.onClick.Invoke();
+            return true;
+        }
+
+        /// <summary>Requirement 18: the smoke run goes menu → Dragonus → echelon 1 through the same buttons and AppFlow.</summary>
+        private bool SmokeStart()
+        {
+            if (Press("Menu/Content/Play") && Press("Hero select/Content/dragonus") && Press("Hero select/Content/Next")
+                && Press("Difficulty/Content/Echelon 1") && Press("Difficulty/Content/Start") && run != null && run == flow.Run)
+                return true;
+            Debug.Log("[Smoke] could not start the run through the screens, flow screen " + flow.Screen);
+            Application.Quit(1);
+            smoke = false;
+            return false;
+        }
+
+        /// <summary>Records the first failed step; true while every step passed.</summary>
+        private bool FlowStep(bool ok, string step)
+        {
+            if (flowFailed == null && !ok) flowFailed = step;
+            return flowFailed == null;
+        }
+
+        private int ResultOperations() => flow.Profile.Journal.Entries.Count(e => e.StartsWith(AppFlow.ResultPrefix, StringComparison.Ordinal));
+
+        /// <summary>
+        /// Requirement 19 (-thornFlow, new test profile): menu → hero → difficulty (only echelon 1 open) → run →
+        /// DebugWin → results (1 result, echelon 2 open, a repeated record changes nothing) → «Сыграть ещё» → pause →
+        /// «Завершить забег» → menu (still 1 result) → hero → difficulty (echelon 2 open), then the usual 30 s smoke run.
+        /// Requirement 20 (-thornExpectFlow): checks the profile the previous run saved, then the smoke run.
+        /// -thornFlowShot=hero|difficulty|results takes the -thornScreenshot picture of that screen.
+        /// </summary>
+        private System.Collections.IEnumerator FlowSmoke(bool full)
+        {
+            var args = Environment.GetCommandLineArgs();
+            var shotArg = args.FirstOrDefault(a => a.StartsWith("-thornFlowShot="));
+            string shotStep = shotArg?.Substring("-thornFlowShot=".Length);
+            var shotPath = args.FirstOrDefault(a => a.StartsWith("-thornScreenshot="))?.Substring("-thornScreenshot=".Length);
+            flowScreens = new List<string> { flow.Screen.ToString() };
+            var profile = flow.Profile;
+            yield return null;
+            if (!full)
+            {
+                int victories = profile.Results.Count(r => r.Victory);
+                FlowStep(victories == 1 && profile.Results.Any(r => r.Victory && r.Difficulty == AppFlow.UnlockId(1)), "saved_victory");
+                FlowStep(flow.IsUnlocked(2) && !flow.IsUnlocked(3), "saved_unlock");
+                FlowStep(ResultOperations() == profile.Results.Count, "saved_journal");
+            }
+            else
+            {
+                FlowStep(flow.Screen == AppScreen.Menu && profile.Results.Count == 0 && flow.HighestUnlocked == 1, "new_profile");
+                FlowStep(Press("Menu/Content/Play") && flow.Screen == AppScreen.Hero, "play");
+                yield return null;
+                if (flowFailed == null && shotStep == "hero") yield return Shot(shotPath);
+                FlowStep(Press("Hero select/Content/dragonus") && Press("Hero select/Content/Next") && flow.Screen == AppScreen.Difficulty, "hero");
+                var second = FindButton("Difficulty/Content/Echelon 2");
+                FlowStep(flow.IsUnlocked(1) && !flow.IsUnlocked(2) && second && !second.interactable
+                         && second.transform.Find("Lock").gameObject.activeSelf, "locked_echelon_2");
+                yield return null;
+                if (flowFailed == null && shotStep == "difficulty") yield return Shot(shotPath);
+                FlowStep(Press("Difficulty/Content/Echelon 1") && Press("Difficulty/Content/Start") && flow.Screen == AppScreen.Run && run == flow.Run, "start");
+                float deadline = Time.unscaledTime + 60;
+                while (flowFailed == null && run != null && (run.Time < 2 || state != State.Playing) && Time.unscaledTime < deadline) yield return null;
+                FlowStep(run != null && run.Time >= 2 && !run.Finished, "run_2s");
+                if (flowFailed == null) run.DebugWin();
+                while (flowFailed == null && flow.Screen == AppScreen.Run && Time.unscaledTime < deadline) yield return null;
+                FlowStep(flow.Screen == AppScreen.Results, "results");
+                FlowStep(profile.Results.Count == 1 && profile.Results[0].Victory && flow.IsUnlocked(2)
+                         && flow.LastOutcome.UnlockedEchelon == 2 && !flow.SaveFailed, "recorded");
+                FlowStep(!flow.Record() && profile.Results.Count == 1 && ResultOperations() == 1, "recorded_once");
+                yield return null;
+                if (flowFailed == null && shotStep == "results") yield return Shot(shotPath);
+                FlowStep(Press("Results/Content/Play again") && flow.Screen == AppScreen.Run && run == flow.Run && !run.Finished, "play_again");
+                while (flowFailed == null && run.Time < 0.5f && Time.unscaledTime < deadline) yield return null;
+                FlowStep(Press("HUD/Pause") && state == State.Paused, "pause");
+                FlowStep(Press("Pause/Content/Quit") && state == State.ConfirmQuit, "quit");
+                FlowStep(Press("Confirm/Content/Confirm quit") && flow.Screen == AppScreen.Menu && run == null, "confirm_quit");
+                FlowStep(profile.Results.Count == 1 && ResultOperations() == 1, "quit_not_recorded");
+                FlowStep(Press("Menu/Content/Play") && Press("Hero select/Content/Next") && flow.Screen == AppScreen.Difficulty, "back_to_difficulty");
+                second = FindButton("Difficulty/Content/Echelon 2");
+                FlowStep(flow.IsUnlocked(2) && second && second.interactable && !second.transform.Find("Lock").gameObject.activeSelf, "unlocked_echelon_2");
+            }
+            string report = $"screens={string.Join(">", flowScreens)} results={profile.Results.Count} unlocked={flow.HighestUnlocked}";
+            if (flowFailed != null)
+            {
+                Debug.Log($"THORN_FLOW ok=0 failed={flowFailed} {report}");
+                Application.Quit(10);
+                smoke = false;
+                yield break;
+            }
+            Debug.Log("THORN_FLOW ok=1 " + report);
+            flowSmoke = false;
+            flowScreens = null;
+            // The usual smoke run, from the difficulty screen (-thornFlow) or from the menu (-thornExpectFlow).
+            if (flow.Screen == AppScreen.Difficulty)
+            {
+                if (!Press("Difficulty/Content/Echelon 1") || !Press("Difficulty/Content/Start")) { Debug.Log("[Smoke] could not start the smoke run"); Application.Quit(1); smoke = false; yield break; }
+            }
+            else if (!SmokeStart()) yield break;
+            SmokeOptions(args);
+        }
+
+        private System.Collections.IEnumerator Shot(string path)
+        {
+            if (path == null) yield break;
+            screenshotTaken = true;
+            yield return CaptureTga(path);
         }
 
         /// <summary>-thornShowSettings: at 2 s the pause and the settings open, the screenshot is taken, the run goes on.</summary>
@@ -421,27 +592,58 @@ namespace ThornThrone.Mobile
 
         // ------------------------------------------------------------------ flow
 
+        /// <summary>Shows the flow's current screen and follows it (start-up).</summary>
         private void ShowMenu()
         {
-            state = State.Menu;
-            input.Reset();
-            run = null;
-            hero.gameObject.SetActive(false);
-            if (bossView) { Destroy(bossView.gameObject); bossView = null; }
-            Screen.sleepTimeout = SleepTimeout.SystemSetting;
-            ui.ShowMenu();
+            screens.Show();
+            FollowFlow();
         }
 
-        private void StartRun(string heroKey)
+        /// <summary>
+        /// The view follows AppFlow after every screen change (FlowScreens.ScreenChanged): a new run is shown, the
+        /// results keep the last run on screen, the menu, hero and difficulty screens drop it.
+        /// </summary>
+        private void FollowFlow()
+        {
+            switch (flow.Screen)
+            {
+                case AppScreen.Run:
+                    if (flow.Run != run) BeginRun();
+                    break;
+                case AppScreen.Results:
+                    state = State.Results;
+                    input.Reset();
+                    Screen.sleepTimeout = SleepTimeout.SystemSetting;
+                    if (flow.SaveFailed) Debug.LogWarning($"[Profile] result not saved: {flow.LastSave.Status} {flow.LastSave.Message}");
+                    break;
+                default:
+                    state = State.Menu;
+                    input.Reset();
+                    run = null;
+                    hero.gameObject.SetActive(false);
+                    DropBossView();
+                    Screen.sleepTimeout = SleepTimeout.SystemSetting;
+                    break;
+            }
+            flowScreens?.Add(flow.Screen.ToString());
+        }
+
+        /// <summary>A run created by AppFlow («Начать», «Сыграть ещё»).</summary>
+        private void BeginRun()
         {
             ui.ShowProfileWarning(false);
-            run = new Run(data, new Rules(), heroKey, null, (ulong)DateTime.UtcNow.Ticks);
+            run = flow.Run;
             reportedDiagnostics = 0;
             state = State.Playing;
             hero.gameObject.SetActive(true);
+            DropBossView();
             input.Reset();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
-            ui.ShowRun();
+        }
+
+        private void DropBossView()
+        {
+            if (bossView) { Destroy(bossView.gameObject); bossView = null; }
         }
 
         private void SetPaused(bool paused)
@@ -471,7 +673,7 @@ namespace ThornThrone.Mobile
         /// <summary>П10: from the menu or the pause; the run stays paused.</summary>
         private void OpenSettings()
         {
-            if (state != State.Menu && state != State.Paused) return;
+            if ((state != State.Menu || flow.Screen != AppScreen.Menu) && state != State.Paused) return;
             settingsFrom = state;
             state = State.Settings;
             input.Reset();
@@ -511,15 +713,6 @@ namespace ThornThrone.Mobile
             state = State.Playing;
         }
 
-        private void EndRun()
-        {
-            if (run == null) return;
-            state = State.Results;
-            input.Reset();
-            Screen.sleepTimeout = SleepTimeout.SystemSetting;
-            ui.ShowResults(run);
-        }
-
         // Phone lifecycle (Mechanics §22): minimising, a call, the notification shade or locking the screen suspend the
         // app once per transition. Events before Start are skipped (the app starts active); smoke ignores them (Р7).
         private AppLifecycle lifecycle;
@@ -534,6 +727,9 @@ namespace ThornThrone.Mobile
         {
             AudioListener.pause = true;
             LoseFocus();
+            // Ф11: a result that could not be saved is written again (one profile, so this also saves the settings).
+            if (screens != null && screens.RetryFailedSave() && flow.SaveFailed)
+                Debug.LogWarning($"[Profile] result retry on suspend failed: {flow.LastSave.Status} {flow.LastSave.Message}");
             if (settings == null || !settings.RetryFailedSave()) return;
             ui.SetSettingsError(settings.SaveFailed);
             if (settings.SaveFailed) Debug.LogWarning($"[Profile] retry on suspend failed: {settings.LastSave.Status} {settings.LastSave.Message}");
@@ -567,7 +763,7 @@ namespace ThornThrone.Mobile
                 inputScript?.CountEvents(run);
                 run.ClearEvents();
                 if (run.Choosing) { state = State.Choosing; ShowChoices(); }
-                if (run.Finished) EndRun();
+                if (run.Finished) screens.Finish();
                 for (; reportedDiagnostics < run.Diagnostics.Messages.Count; reportedDiagnostics++)
                     Debug.Log("[Simulation] " + run.Diagnostics.Messages[reportedDiagnostics]);
             }
@@ -594,12 +790,13 @@ namespace ThornThrone.Mobile
         /// <summary>Android Back per screen (ТЗ §6; BackNavigation, Р11, Р12).</summary>
         private void Back()
         {
-            switch (BackNavigation.For(BackScreenOf(state)))
+            switch (BackNavigation.For(state == State.Menu ? screens.BackScreen : BackScreenOf(state)))
             {
                 case BackAction.Pause: SetPaused(true); break;
                 case BackAction.Resume: SetPaused(false); break;
                 case BackAction.CloseConfirm: CloseConfirmQuit(); break;
-                case BackAction.ToMenu: ShowMenu(); break;
+                case BackAction.ToMenu: if (flow.Screen == AppScreen.Results) screens.ToMenu(); else screens.Back(); break;
+                case BackAction.ToHeroSelect: screens.Back(); break;
                 case BackAction.QuitApp: Application.Quit(); break;
                 case BackAction.CloseSettings: CloseSettings(); break;
             }

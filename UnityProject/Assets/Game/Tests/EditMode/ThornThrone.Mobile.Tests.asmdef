@@ -5,6 +5,7 @@
         "ThornThrone.Mobile",
         "ThornThrone.Simulation",
         "ThornThrone.Progression",
+        "ThornThrone.App",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UnityEngine.UI",

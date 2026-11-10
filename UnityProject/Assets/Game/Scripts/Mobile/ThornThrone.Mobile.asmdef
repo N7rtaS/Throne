@@ -4,6 +4,7 @@
     "references": [
         "ThornThrone.Simulation",
         "ThornThrone.Progression",
+        "ThornThrone.App",
         "Unity.InputSystem",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Core.Runtime",

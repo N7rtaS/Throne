@@ -597,6 +597,24 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(run.Finished && run.Victory, Is.True);
         }
 
+        /// <summary>Smoke hook for the screen flow (Mechanics §23): ends the run as a victory once.</summary>
+        [Test]
+        public void DebugWinFinishesRunWithVictory()
+        {
+            var run = TestData.NewRun();
+            TestData.Simulate(run, 1);
+            run.DebugWin();
+            Assert.That(run.Finished && run.Victory, Is.True);
+            int finished = 0;
+            for (int i = 0; i < run.EventCount; i++) if (run.Events[i].Kind == SimEventKind.RunFinished) finished++;
+            Assert.That(finished, Is.EqualTo(1));
+            run.DebugWin();
+            Assert.That(run.EventCount, Is.EqualTo(1), "a finished run is not finished again");
+            float time = run.Time;
+            run.Update(run.Rules.Step, Vec2.Zero, false);
+            Assert.That(run.Time, Is.EqualTo(time), "a finished run does not advance");
+        }
+
         /// <summary>Values of enemies/imperia in survivors_enemies.json (Mechanics §7).</summary>
         [Test]
         public void ImperiaDefinitionIsReadFromData()

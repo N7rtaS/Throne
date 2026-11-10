@@ -13,5 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="../ThornThrone.Simulation/ThornThrone.Simulation.csproj" />
     <ProjectReference Include="../ThornThrone.Progression/ThornThrone.Progression.csproj" />
+    <ProjectReference Include="../ThornThrone.App/ThornThrone.App.csproj" />
   </ItemGroup>
 </Project>

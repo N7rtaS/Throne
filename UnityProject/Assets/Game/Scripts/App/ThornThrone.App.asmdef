@@ -1,0 +1,19 @@
+{
+    "name": "ThornThrone.App",
+    "rootNamespace": "ThornThrone.App",
+    "references": [
+        "ThornThrone.Simulation",
+        "ThornThrone.Progression"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

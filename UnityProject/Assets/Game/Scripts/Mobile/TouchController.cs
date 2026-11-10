@@ -206,10 +206,13 @@ namespace ThornThrone.Mobile
             DpToPixels(MinTargetDp, dpi) / (canvasScale > 0 ? canvasScale : 1);
     }
 
-    public enum BackScreen { Menu, Playing, Paused, ConfirmQuit, Choosing, Results, Settings }
-    public enum BackAction { None, Pause, Resume, CloseConfirm, ToMenu, QuitApp, CloseSettings }
+    public enum BackScreen { Menu, Playing, Paused, ConfirmQuit, Choosing, Results, Settings, Hero, Difficulty }
+    public enum BackAction { None, Pause, Resume, CloseConfirm, ToMenu, QuitApp, CloseSettings, ToHeroSelect }
 
-    /// <summary>Android Back per screen (design §3.9, Р11, Р12; settings return to where they opened, Mechanics §20 П10).</summary>
+    /// <summary>
+    /// Android Back per screen (design §3.9, Р11, Р12; settings return to where they opened, Mechanics §20 П10;
+    /// hero → menu and difficulty → hero, Mechanics §23 Ф10).
+    /// </summary>
     public static class BackNavigation
     {
         public static BackAction For(BackScreen screen)
@@ -222,6 +225,8 @@ namespace ThornThrone.Mobile
                 case BackScreen.Results: return BackAction.ToMenu;
                 case BackScreen.Menu: return BackAction.QuitApp;
                 case BackScreen.Settings: return BackAction.CloseSettings;
+                case BackScreen.Hero: return BackAction.ToMenu;
+                case BackScreen.Difficulty: return BackAction.ToHeroSelect;
                 default: return BackAction.None;
             }
         }

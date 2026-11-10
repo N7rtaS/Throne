@@ -1,0 +1,5 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+THORN_PROFILE reset kind=test saved=Saved
+THORN_FLOW ok=1 screens=Menu>Hero>Difficulty>Run>Results>Run>Menu>Hero>Difficulty results=1 unlocked=2
+THORN_MOBILE_SMOKE time=30.0 kills=131 level=8 hp=380/620 enemies=61 diagnostics=3
+(Filename: ./Runtime/Export/Debug/Debug.bindings.h Line: 39)

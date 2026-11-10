@@ -56,6 +56,8 @@ namespace ThornThrone.Editor
                 .ToArray();
             if (game.sourceData.Length != 9) throw new InvalidOperationException($"Expected 9 source JSON files, found {game.sourceData.Length}");
             game.powerupLocalization = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Game/Data/Localization/powerups_ru.json");
+            game.difficultyLocalization = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/Game/Data/Localization/difficulty_ru.json");
+            if (!game.difficultyLocalization) throw new InvalidOperationException("difficulty_ru.json missing (run Tools/import-unity-data.sh)");
             game.uiFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontBaker.FontAssetPath);
             if (!game.uiFont) throw new InvalidOperationException(FontBaker.FontAssetPath + " missing (run ThornThrone.Editor.FontBaker.Bake)");
             game.instancedMaterial = InstancedMaterial();
