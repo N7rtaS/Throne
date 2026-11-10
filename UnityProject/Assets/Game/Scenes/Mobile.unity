@@ -275,7 +275,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 440f8f01f57454ce89cd155acf339394, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ThornThrone.Mobile.MobileGame
+  m_EditorClassIdentifier: ThornThrone.Mobile::ThornThrone.Mobile.MobileGame
   sourceData:
   - {fileID: 4900000, guid: 6bbe72a9c5babf4479b1e1ea79682bca, type: 3}
   - {fileID: 4900000, guid: df513b2da65025d489400cb604d51a21, type: 3}

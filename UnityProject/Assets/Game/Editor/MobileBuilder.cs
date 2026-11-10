@@ -30,14 +30,23 @@ namespace ThornThrone.Editor
             CreateScene();
         }
 
+        /// <summary>
+        /// Regenerates Mobile.unity. The existing scene is reopened and its objects are reused with default
+        /// component values: new objects get random local fileIDs, so a fresh scene would differ on every build.
+        /// </summary>
         public static void CreateScene()
         {
-            var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            var camera = new GameObject("Camera", typeof(Camera));
+            var scene = File.Exists(ScenePath)
+                ? EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single)
+                : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var camera = SceneRoot(scene, "Camera");
             camera.tag = "MainCamera";
-            camera.AddComponent<UniversalAdditionalCameraData>();
+            DefaultComponent<Camera>(camera);
+            DefaultComponent<UniversalAdditionalCameraData>(camera);
 
-            var game = new GameObject("Mobile Game").AddComponent<MobileGame>();
+            var game = DefaultComponent<MobileGame>(SceneRoot(scene, "Mobile Game"));
+            foreach (var root in scene.GetRootGameObjects())
+                if (root != camera && root != game.gameObject) UnityEngine.Object.DestroyImmediate(root);
             game.sourceData = AssetDatabase.FindAssets("survivors_ t:TextAsset", new[] { "Assets/Game/Data/Source" })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(AssetDatabase.LoadAssetAtPath<TextAsset>)
@@ -55,6 +64,33 @@ namespace ThornThrone.Editor
             Directory.CreateDirectory(Path.GetDirectoryName(ScenePath));
             if (!EditorSceneManager.SaveScene(scene, ScenePath)) throw new IOException("Cannot save " + ScenePath);
             AssetDatabase.SaveAssets();
+        }
+
+        private static GameObject SceneRoot(UnityEngine.SceneManagement.Scene scene, string name)
+        {
+            var root = scene.GetRootGameObjects().FirstOrDefault(r => r.name == name) ?? new GameObject(name);
+            root.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+            root.transform.localScale = Vector3.one;
+            return root;
+        }
+
+        /// <summary>Existing or new component reset to the values of a freshly added one (keeps its fileID).</summary>
+        private static T DefaultComponent<T>(GameObject owner) where T : Component
+        {
+            if (!owner.TryGetComponent(out T component)) component = owner.AddComponent<T>();
+            var fresh = new GameObject("Defaults") { hideFlags = HideFlags.HideAndDontSave };
+            try
+            {
+                if (!fresh.TryGetComponent(out T defaults)) defaults = fresh.AddComponent<T>();
+                if (!UnityEditorInternal.ComponentUtility.CopyComponent(defaults) ||
+                    !UnityEditorInternal.ComponentUtility.PasteComponentValues(component))
+                    throw new InvalidOperationException("Cannot reset " + typeof(T).Name);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(fresh);
+            }
+            return component;
         }
 
         private const string ConvertedRoot = "Assets/Game/Art/Converted/";

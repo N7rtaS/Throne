@@ -57,7 +57,7 @@
 | `Tools/mac-screenshot.sh out.png [аргументы плеера]` | `out.png` | путь к PNG в выводе |
 | `Tools/build-android.sh` | `Builds/Android/ThornThrone.apk`, `Research/android-build-report.json`, `Research/android-build.log` | `THORN_ANDROID_BUILD_OK` в логе |
 
-Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Сцена `Mobile.unity` генерируется при каждой сборке. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`.
+Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Логи и отчёты последнего прогона в `Research/` (`unity-tests.*`, `mac-build.log`, `mac-smoke.log`, `android-build.log`, `android-build-report.json`) не хранятся в git. Сцена `Mobile.unity` генерируется при каждой сборке детерминированно и хранится в git: при неизменном `MobileBuilder` сборка её не меняет. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`.
 
 ## Переменные окружения
 | Переменная | Умолчание | Где используется |
