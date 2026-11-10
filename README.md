@@ -60,6 +60,8 @@
 
 Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Логи и отчёты последнего прогона в `Research/` (`unity-tests.*`, `mac-build.log`, `mac-smoke.log`, `android-build.log`, `android-build-report.json`) не хранятся в git. Сцена `Mobile.unity` генерируется при каждой сборке детерминированно и хранится в git: при неизменном `MobileBuilder` сборка её не меняет. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`, `-thornInputScript=ФАЙЛ`.
 
+`dotnet test DotNet/ThornThrone.Simulation.Tests` собирает и сборку симуляции, и сборку профиля `DotNet/ThornThrone.Progression` (исходники `UnityProject/Assets/Game/Scripts/Progression`).
+Сохранения профиля лежат в `Application.persistentDataPath/Saves`: `user.save`, резервная копия `user.save.bak`, повреждённые файлы `*.corruptN` (не удаляются автоматически), тестовый профиль `test.save*`. На macOS это `~/Library/Application Support/<компания>/<продукт>/Saves`, на Android — `/storage/emulated/0/Android/data/com.thornthrone.mobile/files/Saves`. Формат и правила восстановления — `Research/FullGame/Mechanics.md` §19.
 Сценарий сенсорного ввода (движение одним пальцем, рывок вторым, переход пальца на кнопку рывка, отмена касания) проигрывается через виртуальный `Touchscreen`:
 ```sh
 Tools/mac-smoke.sh --no-build -thornInputScript=$PWD/Tools/smoke/input-two-fingers.txt

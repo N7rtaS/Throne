@@ -4,6 +4,7 @@
     "references": [
         "ThornThrone.Mobile",
         "ThornThrone.Simulation",
+        "ThornThrone.Progression",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "UnityEngine.UI",

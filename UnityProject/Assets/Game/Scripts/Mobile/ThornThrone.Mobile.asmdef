@@ -3,6 +3,7 @@
     "rootNamespace": "ThornThrone.Mobile",
     "references": [
         "ThornThrone.Simulation",
+        "ThornThrone.Progression",
         "Unity.InputSystem",
         "Unity.RenderPipelines.Universal.Runtime",
         "Unity.RenderPipelines.Core.Runtime",
