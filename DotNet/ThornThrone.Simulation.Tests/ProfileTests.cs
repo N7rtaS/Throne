@@ -49,6 +49,7 @@ namespace ThornThrone.Simulation.Tests
             s.MasterVolume = 0.35f;
             s.MusicVolume = 0f;
             s.EffectsVolume = 0.9f;
+            s.VoiceVolume = 0.4f;
             s.UiScale = 1.15f;
             s.Joystick = JoystickMode.Fixed;
             s.LeftHanded = true;
@@ -64,7 +65,7 @@ namespace ThornThrone.Simulation.Tests
         {
             var profile = Profile.CreateNew(ProfileKind.Test);
             Assert.That(profile.SchemaVersion, Is.EqualTo(ProfileSchema.Current));
-            Assert.That(ProfileSchema.Current, Is.EqualTo(1));
+            Assert.That(ProfileSchema.Current, Is.EqualTo(2));
             Assert.That(profile.RulesVersion, Is.EqualTo("original-6972"));
             Assert.That(profile.Kind, Is.EqualTo(ProfileKind.Test));
             Assert.That(profile.Currency, Is.EqualTo(0));
@@ -78,6 +79,7 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(s.MasterVolume, Is.EqualTo(1f));
             Assert.That(s.MusicVolume, Is.EqualTo(1f));
             Assert.That(s.EffectsVolume, Is.EqualTo(1f));
+            Assert.That(s.VoiceVolume, Is.EqualTo(1f));
             Assert.That(s.UiScale, Is.EqualTo(1f));
             Assert.That(s.Joystick, Is.EqualTo(JoystickMode.Floating));
             Assert.That(s.LeftHanded, Is.False);
@@ -142,6 +144,18 @@ namespace ThornThrone.Simulation.Tests
         }
 
         [Test]
+        public void VoiceVolumeRoundTrips()
+        {
+            var original = Sample();
+            var json = ProfileJson.ToJson(original);
+            Assert.That(json, Does.Contain("\"voiceVolume\""));
+            var copy = ProfileJson.FromJson(json, ProfileKind.User);
+            Assert.That(copy.Settings.VoiceVolume, Is.EqualTo(0.4f));
+            copy.Settings.VoiceVolume = 0f;
+            Assert.That(ProfileJson.FromJson(ProfileJson.ToJson(copy), ProfileKind.User).Settings.VoiceVolume, Is.EqualTo(0f));
+        }
+
+        [Test]
         public void EncodingIsDeterministic()
         {
             var a = Sample();
@@ -185,6 +199,7 @@ namespace ThornThrone.Simulation.Tests
             to.MasterVolume = from.MasterVolume;
             to.MusicVolume = from.MusicVolume;
             to.EffectsVolume = from.EffectsVolume;
+            to.VoiceVolume = from.VoiceVolume;
             to.UiScale = from.UiScale;
             to.Joystick = from.Joystick;
             to.LeftHanded = from.LeftHanded;

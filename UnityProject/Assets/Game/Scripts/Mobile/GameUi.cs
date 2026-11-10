@@ -11,8 +11,10 @@ using UnityEngine.UI;
 namespace ThornThrone.Mobile
 {
     /// <summary>
-    /// uGUI built from code: menu, HUD, level-up cards, pause and results. Reference resolution 1920×1080,
-    /// everything inside the screen safe area. Temporary look; layout and text sizes target a 6" phone.
+    /// uGUI built from code: menu, HUD, level-up cards, pause, settings and results. Reference resolution 1920×1080
+    /// divided by the UI scale, everything inside the screen safe area; screens with a fixed layout sit in a
+    /// 1920×1080 container fitted into the safe area (Mechanics §20 П5). Temporary look; layout and text sizes
+    /// target a 6" phone.
     /// Texts are TextMeshPro with the baked PT Sans SDF font (ТЗ_Мобильная_версия_v2.md §7); the HUD writes a
     /// label only when its value changes and without creating strings (§8).
     /// </summary>
@@ -23,6 +25,10 @@ namespace ThornThrone.Mobile
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
         /// <summary>«Завершить» and «Отмена» of the quit confirmation (ТЗ_Мобильная_версия_v2.md §6).</summary>
         public event Action QuitConfirmed, QuitCancelled;
+        /// <summary>«Настройки» in the menu or the pause, «Готово» on the settings screen (Mechanics §20 П10).</summary>
+        public event Action SettingsRequested, SettingsClosed;
+        /// <summary>««» (−1) or «»» (+1) of a settings row.</summary>
+        public event Action<SettingId, int> SettingStepped;
 
         /// <summary>Card filter by pointer id: a touch held when the cards opened does not pick one.</summary>
         public Func<int, bool> CardAccepts;
@@ -34,16 +40,22 @@ namespace ThornThrone.Mobile
         private readonly Dictionary<string, string> names;
         private readonly RectTransform safe;
         private readonly Canvas canvas;
-        private readonly GameObject menu, hud, choices, pause, confirm, results;
+        private readonly GameObject menu, hud, choices, pause, confirm, results, settings;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
-        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle;
+        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle, settingsError, profileWarning;
+        private readonly TMP_Text[] settingValues = new TMP_Text[SettingsOptions.Count];
+        private readonly CanvasScaler scaler;
+        /// <summary>1920×1080 containers of the screens with a fixed layout (П5).</summary>
+        private readonly List<RectTransform> contents = new List<RectTransform>();
+        private float fit = 1;
+        private bool layoutDirty = true;
         private readonly HudText level, time, kills, boss;
         private readonly CardButton[] cards = new CardButton[3];
         private readonly TMP_Text[] cardTexts = new TMP_Text[3];
         private readonly Button reroll;
         private readonly RectTransform dashButton, pauseButton;
         private Rect lastSafe;
-        private Vector2Int lastScreen;
+        private Vector2 lastScreen;
         private float lastScale, lastDpi;
         private bool leftHanded;
 
@@ -51,6 +63,8 @@ namespace ThornThrone.Mobile
         {
             public RectTransform Rect;
             public Vector2 Position, Size;
+            /// <summary>Inside a fitted container: its screen size includes the container scale.</summary>
+            public bool Fitted;
         }
 
         private readonly List<RectTransform> targets = new List<RectTransform>();
@@ -70,10 +84,10 @@ namespace ThornThrone.Mobile
             var canvasObject = new GameObject("UI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
             canvas = canvasObject.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            var scaler = canvasObject.GetComponent<CanvasScaler>();
+            scaler = canvasObject.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080);
-            scaler.matchWidthOrHeight = 0.5f;
+            scaler.referenceResolution = Reference;
+            scaler.matchWidthOrHeight = Match;
             safe = Rect(canvasObject.transform, "Safe area", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
 
             // HUD
@@ -112,56 +126,142 @@ namespace ThornThrone.Mobile
 
             // Level-up choices
             choices = Panel(safe, "Choices", new Color(0, 0, 0, .7f));
-            choiceTitle = Label(choices.transform, "Title", new Vector2(.5f, 1), new Vector2(-500, -60), new Vector2(1000, 80), 56, TextAnchor.UpperCenter);
+            var choicesContent = Content(choices);
+            choiceTitle = Label(choicesContent, "Title", new Vector2(.5f, 1), new Vector2(-500, -60), new Vector2(1000, 80), 56, TextAnchor.UpperCenter);
             for (int i = 0; i < 3; i++)
             {
                 int index = i;
-                var card = ButtonBase(choices.transform, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, out cardTexts[i]);
+                var card = ButtonBase(choicesContent, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, out cardTexts[i]);
                 cards[i] = card.gameObject.AddComponent<CardButton>();
                 cards[i].targetGraphic = card.GetComponent<Image>();
                 cards[i].Accepts = id => CardAccepts == null || CardAccepts(id);
                 cards[i].Clicked += () => ChoiceSelected?.Invoke(index);
                 cardTexts[i].alignment = TextAlignmentOptions.Top;
             }
-            reroll = Button(choices.transform, "Reroll", new Vector2(.5f, 0), new Vector2(-220, 40), new Vector2(440, 110), "", 38, () => RerollRequested?.Invoke());
+            reroll = Button(choicesContent, "Reroll", new Vector2(.5f, 0), new Vector2(-220, 40), new Vector2(440, 110), "", 38, () => RerollRequested?.Invoke());
             rerollText = reroll.GetComponentInChildren<TMP_Text>();
 
             // Pause
             pause = Panel(safe, "Pause", new Color(0, 0, 0, .75f));
-            Label(pause.transform, "Title", new Vector2(.5f, .5f), new Vector2(-400, 160), new Vector2(800, 100), 72, TextAnchor.MiddleCenter).text = "Пауза";
-            Button(pause.transform, "Resume", new Vector2(.5f, .5f), new Vector2(-260, 0), new Vector2(520, 120), "Продолжить", 44, () => ResumeRequested?.Invoke());
-            Button(pause.transform, "Quit", new Vector2(.5f, .5f), new Vector2(-260, -160), new Vector2(520, 120), "Завершить забег", 44, () => QuitRunRequested?.Invoke());
+            var pauseContent = Content(pause);
+            Label(pauseContent, "Title", new Vector2(.5f, .5f), new Vector2(-400, 300), new Vector2(800, 100), 72, TextAnchor.MiddleCenter).text = "Пауза";
+            Button(pauseContent, "Resume", new Vector2(.5f, .5f), new Vector2(-260, 40), new Vector2(520, 120), "Продолжить", 44, () => ResumeRequested?.Invoke());
+            Button(pauseContent, "Pause settings", new Vector2(.5f, .5f), new Vector2(-260, -110), new Vector2(520, 120), "Настройки", 44, () => SettingsRequested?.Invoke());
+            Button(pauseContent, "Quit", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "Завершить забег", 44, () => QuitRunRequested?.Invoke());
 
             // Quit confirmation: an unfinished run is not saved (ТЗ §9).
             confirm = Panel(safe, "Confirm", new Color(0, 0, 0, .85f));
-            Label(confirm.transform, "Title", new Vector2(.5f, .5f), new Vector2(-500, 260), new Vector2(1000, 100), 64, TextAnchor.MiddleCenter).text = "Завершить забег?";
-            Label(confirm.transform, "Text", new Vector2(.5f, .5f), new Vector2(-600, 130), new Vector2(1200, 80), 40, TextAnchor.MiddleCenter).text = "Прогресс этого забега будет потерян.";
-            Button(confirm.transform, "Confirm quit", new Vector2(.5f, .5f), new Vector2(-560, -120), new Vector2(520, 120), "Завершить", 44, () => QuitConfirmed?.Invoke());
-            Button(confirm.transform, "Cancel quit", new Vector2(.5f, .5f), new Vector2(40, -120), new Vector2(520, 120), "Отмена", 44, () => QuitCancelled?.Invoke());
+            var confirmContent = Content(confirm);
+            Label(confirmContent, "Title", new Vector2(.5f, .5f), new Vector2(-500, 260), new Vector2(1000, 100), 64, TextAnchor.MiddleCenter).text = "Завершить забег?";
+            Label(confirmContent, "Text", new Vector2(.5f, .5f), new Vector2(-600, 130), new Vector2(1200, 80), 40, TextAnchor.MiddleCenter).text = "Прогресс этого забега будет потерян.";
+            Button(confirmContent, "Confirm quit", new Vector2(.5f, .5f), new Vector2(-560, -120), new Vector2(520, 120), "Завершить", 44, () => QuitConfirmed?.Invoke());
+            Button(confirmContent, "Cancel quit", new Vector2(.5f, .5f), new Vector2(40, -120), new Vector2(520, 120), "Отмена", 44, () => QuitCancelled?.Invoke());
 
             // Results
             results = Panel(safe, "Results", new Color(0, 0, 0, .8f));
-            resultText = Label(results.transform, "Text", new Vector2(.5f, .5f), new Vector2(-600, 260), new Vector2(1200, 360), 52, TextAnchor.MiddleCenter);
-            Button(results.transform, "Menu", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "В меню", 44, () => MenuRequested?.Invoke());
+            var resultsContent = Content(results);
+            resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-600, 260), new Vector2(1200, 360), 52, TextAnchor.MiddleCenter);
+            Button(resultsContent, "Menu", new Vector2(.5f, .5f), new Vector2(-260, -260), new Vector2(520, 120), "В меню", 44, () => MenuRequested?.Invoke());
 
             // Menu
             menu = Panel(safe, "Menu", new Color(.03f, .04f, .07f, 1));
-            Label(menu.transform, "Title", new Vector2(.5f, 1), new Vector2(-600, -120), new Vector2(1200, 140), 96, TextAnchor.MiddleCenter).text = "Терновый трон";
-            Label(menu.transform, "Subtitle", new Vector2(.5f, 1), new Vector2(-600, -230), new Vector2(1200, 60), 34, TextAnchor.MiddleCenter).text = "Выберите героя";
+            var menuContent = Content(menu);
+            Label(menuContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -120), new Vector2(1200, 140), 96, TextAnchor.MiddleCenter).text = "Терновый трон";
+            Label(menuContent, "Subtitle", new Vector2(.5f, 1), new Vector2(-600, -230), new Vector2(1200, 60), 34, TextAnchor.MiddleCenter).text = "Выберите героя";
             string[] heroes = { "dragonus", "shen", "kez" };
             string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез\n(в разработке)" };
             for (int i = 0; i < heroes.Length; i++)
             {
                 string key = heroes[i];
-                var b = Button(menu.transform, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 300), titles[i], 52, () => StartRequested?.Invoke(key));
+                var b = Button(menuContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 300), titles[i], 52, () => StartRequested?.Invoke(key));
                 b.interactable = key == "dragonus";
             }
+            Button(menuContent, "Menu settings", new Vector2(.5f, 0), new Vector2(-260, 180), new Vector2(520, 110), "Настройки", 44, () => SettingsRequested?.Invoke());
+            // П12: shown after a reset of a corrupt profile until the first run starts.
+            profileWarning = Label(menuContent, "Profile warning", new Vector2(.5f, 0), new Vector2(-800, 160), new Vector2(1600, 110), 34, TextAnchor.MiddleCenter);
+            profileWarning.text = "Сохранение повреждено. Создан новый профиль, старые файлы сохранены.";
+            profileWarning.color = new Color(1, .82f, .4f);
+            profileWarning.gameObject.SetActive(false);
+
+            // Settings: last, so it covers the menu or the pause it was opened from (П10).
+            settings = Panel(safe, "Settings", new Color(.03f, .04f, .07f, 1));
+            var settingsContent = Content(settings);
+            Label(settingsContent, "Title", new Vector2(.5f, 1), new Vector2(-500, -30), new Vector2(1000, 100), 64, TextAnchor.MiddleCenter).text = "Настройки";
+            for (int i = 0; i < SettingsOptions.Count; i++)
+            {
+                // Left column: picture and controls (6 rows), right column: sound and combat (5 rows).
+                int column = i < 6 ? 0 : 1, row = i < 6 ? i : i - 6;
+                SettingRow(settingsContent, (SettingId)i, new Vector2(column == 0 ? -930 : 30, 290 - row * 120));
+            }
+            settingsError = Label(settingsContent, "Save error", new Vector2(.5f, 0), new Vector2(-600, 230), new Vector2(1200, 60), 34, TextAnchor.MiddleCenter);
+            settingsError.text = "Не удалось сохранить настройки";
+            settingsError.color = new Color(1, .45f, .4f);
+            settingsError.gameObject.SetActive(false);
+            Button(settingsContent, "Settings done", new Vector2(.5f, 0), new Vector2(-260, 40), new Vector2(520, 120), "Готово", 44, () => SettingsClosed?.Invoke());
+            settings.SetActive(false);
             ShowMenu();
+        }
+
+        /// <summary>Caption, «« value »» (П2); the row is 900×110, its bottom-left corner at <paramref name="position"/>.</summary>
+        private void SettingRow(Transform parent, SettingId id, Vector2 position)
+        {
+            var row = Place(parent, "Setting " + SettingsOptions.Key(id), new Vector2(.5f, .5f), position, new Vector2(900, 110));
+            var caption = Label(row, "Caption", Vector2.zero, new Vector2(0, 110), new Vector2(430, 110), 34, TextAnchor.MiddleLeft);
+            caption.text = SettingsOptions.Caption(id);
+            Button(row, "Less", Vector2.zero, new Vector2(440, 0), new Vector2(110, 110), "«", 44, () => SettingStepped?.Invoke(id, -1));
+            var value = Label(row, "Value", Vector2.zero, new Vector2(550, 110), new Vector2(240, 110), 34, TextAnchor.MiddleCenter);
+            settingValues[(int)id] = value;
+            Button(row, "More", Vector2.zero, new Vector2(790, 0), new Vector2(110, 110), "»", 44, () => SettingStepped?.Invoke(id, +1));
         }
 
         // ------------------------------------------------------------------ screens
 
         public void ShowMenu() => Show(menu);
+
+        /// <summary>Settings over the current screen; hiding them shows that screen again (П10).</summary>
+        public void ShowSettings(bool visible) => settings.SetActive(visible);
+
+        public bool SettingsVisible => settings.activeSelf;
+
+        public void SetSettingText(SettingId id, string text) => settingValues[(int)id].text = text;
+
+        public string SettingText(SettingId id) => settingValues[(int)id].text;
+
+        /// <summary>П9: «Не удалось сохранить настройки» above «Готово».</summary>
+        public void SetSettingsError(bool visible) => settingsError.gameObject.SetActive(visible);
+
+        /// <summary>П12: corrupt profile message in the menu.</summary>
+        public void ShowProfileWarning(bool visible) => profileWarning.gameObject.SetActive(visible);
+
+        public bool ProfileWarningVisible => profileWarning.gameObject.activeSelf;
+
+        /// <summary>Canvas reference resolution 1920×1080 / scale (П5); the Canvas scale changes on the next CanvasScaler update.</summary>
+        public void SetUiScale(float scale)
+        {
+            scaler.referenceResolution = Reference / scale;
+            layoutDirty = true;
+        }
+
+        /// <summary>UI scale the Canvas is set to.</summary>
+        public float UiScale => Reference.x / scaler.referenceResolution.x;
+
+        /// <summary>Scale of the fitted screen containers after the last layout.</summary>
+        public float Fit => fit;
+
+        public static readonly Vector2 Reference = new Vector2(1920, 1080);
+        private const float Match = 0.5f;
+
+        /// <summary>CanvasScaler.ScaleWithScreenSize factor for a screen and a UI scale (match 0.5: log average).</summary>
+        public static float CanvasScaleFor(Vector2 screen, float uiScale)
+        {
+            var reference = Reference / uiScale;
+            float w = Mathf.Log(screen.x / reference.x, 2), h = Mathf.Log(screen.y / reference.y, 2);
+            return Mathf.Pow(2, Mathf.Lerp(w, h, Match));
+        }
+
+        /// <summary>П5: a 1920×1080 container shrinks to fit the safe area (in Canvas units) and never grows.</summary>
+        public static float FitScale(Vector2 safeAreaUnits) =>
+            Mathf.Min(1, Mathf.Min(safeAreaUnits.x / Reference.x, safeAreaUnits.y / Reference.y));
         public void ShowRun()
         {
             Show(hud);
@@ -216,6 +316,7 @@ namespace ThornThrone.Mobile
 
         private void Show(GameObject screen)
         {
+            settings.SetActive(false);
             menu.SetActive(screen == menu);
             hud.SetActive(screen == hud);
             results.SetActive(screen == results);
@@ -259,16 +360,14 @@ namespace ThornThrone.Mobile
         /// </summary>
         public void UpdateLayout(TouchController touch)
         {
-            ApplySafeArea();
             bool mirror = touch.Settings.LeftHanded;
-            var screen = new Vector2Int(Screen.width, Screen.height);
-            if (mirror != leftHanded || screen != lastScreen || canvas.scaleFactor != lastScale || Screen.dpi != lastDpi)
+            if (mirror != leftHanded)
             {
-                lastScreen = screen;
-                if (mirror != leftHanded) MirrorDash(mirror);
-                ApplyLayout(Screen.dpi, canvas.scaleFactor);
+                MirrorDash(mirror);
+                layoutDirty = true;
             }
             var area = Screen.safeArea;
+            ApplyScreen(new Vector2(Screen.width, Screen.height), area, Screen.dpi, canvas.scaleFactor);
             touch.Layout = new TouchLayout
             {
                 SafeArea = area,
@@ -288,9 +387,11 @@ namespace ThornThrone.Mobile
             lastDpi = dpi;
             lastScale = canvasScale;
             float min = TouchMetrics.MinTargetCanvasUnits(dpi, canvasScale);
+            float minFitted = TouchMetrics.MinTargetCanvasUnits(dpi, canvasScale * fit);
             foreach (var t in authored)
             {
-                var size = new Vector2(Mathf.Max(t.Size.x, min), Mathf.Max(t.Size.y, min));
+                float side = t.Fitted ? minFitted : min;
+                var size = new Vector2(Mathf.Max(t.Size.x, side), Mathf.Max(t.Size.y, side));
                 t.Rect.sizeDelta = size;
                 t.Rect.anchoredPosition = t.Position - (size - t.Size) / 2;
             }
@@ -309,10 +410,30 @@ namespace ThornThrone.Mobile
             authored[dashTarget] = t;
         }
 
+        /// <summary>
+        /// Safe area anchors, the fit of the screen containers and the 48 dp target sizes for a screen in pixels and a
+        /// Canvas scale factor, when any of them, the UI scale or the mirror changed (П5). Does not allocate.
+        /// </summary>
+        public void ApplyScreen(Vector2 screen, Rect area, float dpi, float canvasScale)
+        {
+            if (screen.x <= 0 || screen.y <= 0 || canvasScale <= 0) return;
+            if (!layoutDirty && area == lastSafe && screen == lastScreen && canvasScale == lastScale && dpi == lastDpi) return;
+            layoutDirty = false;
+            lastSafe = area;
+            lastScreen = screen;
+            safe.anchorMin = new Vector2(area.xMin / screen.x, area.yMin / screen.y);
+            safe.anchorMax = new Vector2(area.xMax / screen.x, area.yMax / screen.y);
+            fit = FitScale(area.size / canvasScale);
+            foreach (var content in contents) content.localScale = new Vector3(fit, fit, 1);
+            ApplyLayout(dpi, canvasScale);
+        }
+
         private int AddTarget(RectTransform rect)
         {
             targets.Add(rect);
-            authored.Add(new Target { Rect = rect, Position = rect.anchoredPosition, Size = rect.sizeDelta });
+            bool fitted = false;
+            foreach (var content in contents) fitted |= rect.IsChildOf(content);
+            authored.Add(new Target { Rect = rect, Position = rect.anchoredPosition, Size = rect.sizeDelta, Fitted = fitted });
             return authored.Count - 1;
         }
 
@@ -353,15 +474,6 @@ namespace ThornThrone.Mobile
         {
             int s = Mathf.FloorToInt(seconds);
             return $"{s / 60:00}:{s % 60:00}";
-        }
-
-        private void ApplySafeArea()
-        {
-            var area = Screen.safeArea;
-            if (area == lastSafe || Screen.width == 0) return;
-            lastSafe = area;
-            safe.anchorMin = new Vector2(area.xMin / Screen.width, area.yMin / Screen.height);
-            safe.anchorMax = new Vector2(area.xMax / Screen.width, area.yMax / Screen.height);
         }
 
         private static readonly Vector3[] corners = new Vector3[4];
@@ -459,6 +571,15 @@ namespace ThornThrone.Mobile
             return rect.gameObject;
         }
 
+        /// <summary>1920×1080 container in the center of a panel, scaled by the fit (П5); the panel background stays full.</summary>
+        private RectTransform Content(GameObject panel)
+        {
+            var rect = Rect(panel.transform, "Content", new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, Vector2.zero);
+            rect.sizeDelta = Reference;
+            contents.Add(rect);
+            return rect;
+        }
+
         private TMP_Text Label(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, int fontSize, TextAnchor alignment)
         {
             var rect = Place(parent, name, anchor, position - new Vector2(0, size.y), size);
@@ -479,6 +600,7 @@ namespace ThornThrone.Mobile
             switch (anchor)
             {
                 case TextAnchor.UpperLeft: return TextAlignmentOptions.TopLeft;
+                case TextAnchor.MiddleLeft: return TextAlignmentOptions.Left;
                 case TextAnchor.UpperCenter: return TextAlignmentOptions.Top;
                 case TextAnchor.MiddleCenter: return TextAlignmentOptions.Center;
                 default: throw new ArgumentOutOfRangeException(nameof(anchor), anchor, null);

@@ -31,7 +31,7 @@ namespace ThornThrone.Progression
         private static readonly string[] ResultFields =
             { "id", "rulesVersion", "hero", "difficulty", "victory", "durationSeconds", "level", "kills", "score", "gold" };
         private static readonly string[] SettingsFields =
-            { "quality", "targetFps", "masterVolume", "musicVolume", "effectsVolume", "uiScale", "joystick", "leftHanded", "vibration", "damageNumbers" };
+            { "quality", "targetFps", "masterVolume", "musicVolume", "effectsVolume", "voiceVolume", "uiScale", "joystick", "leftHanded", "vibration", "damageNumbers" };
 
         public static string ToJson(Profile profile)
         {
@@ -113,6 +113,8 @@ namespace ThornThrone.Progression
             w.WriteValue(s.MusicVolume);
             w.WritePropertyName("effectsVolume");
             w.WriteValue(s.EffectsVolume);
+            w.WritePropertyName("voiceVolume");
+            w.WriteValue(s.VoiceVolume);
             w.WritePropertyName("uiScale");
             w.WriteValue(s.UiScale);
             w.WritePropertyName("joystick");
@@ -252,6 +254,7 @@ namespace ThornThrone.Progression
             settings.MasterVolume = (float)Double(s, "masterVolume", prefix, 0, 1);
             settings.MusicVolume = (float)Double(s, "musicVolume", prefix, 0, 1);
             settings.EffectsVolume = (float)Double(s, "effectsVolume", prefix, 0, 1);
+            settings.VoiceVolume = (float)Double(s, "voiceVolume", prefix, 0, 1);
             settings.UiScale = (float)Double(s, "uiScale", prefix, ProfileSettings.MinUiScale, ProfileSettings.MaxUiScale);
             switch (Str(s, "joystick", prefix))
             {

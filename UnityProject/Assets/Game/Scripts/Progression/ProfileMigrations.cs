@@ -16,8 +16,8 @@ namespace ThornThrone.Progression
     /// </summary>
     public sealed class ProfileMigrations
     {
-        /// <summary>Schema 1 is the first one: no steps yet.</summary>
-        public static readonly ProfileMigrations Default = new ProfileMigrations(ProfileSchema.Current, ProfileSchema.Current);
+        /// <summary>Schema 1 (Task 12) → 2 (Task 13): the voice volume setting.</summary>
+        public static readonly ProfileMigrations Default = new ProfileMigrations(ProfileSchema.Current, 1, new AddVoiceVolume());
 
         public readonly int Current;
         public readonly int MinimumSupported;
@@ -54,6 +54,18 @@ namespace ThornThrone.Progression
                 migrated = true;
             }
             return migrated;
+        }
+    }
+
+    /// <summary>Schema 1 → 2: settings gain voiceVolume = 1, the default (Mechanics §20 П1, Р).</summary>
+    public sealed class AddVoiceVolume : IProfileMigration
+    {
+        public int From => 1;
+
+        public void Apply(JObject profile)
+        {
+            // A schema 1 file without settings stays without them: the strict parse reports the missing field.
+            if (profile["settings"] is JObject settings && settings["voiceVolume"] == null) settings["voiceVolume"] = 1.0;
         }
     }
 }

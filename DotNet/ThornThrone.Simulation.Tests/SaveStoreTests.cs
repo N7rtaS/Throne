@@ -402,6 +402,50 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(fs.Files[Backup], Is.EqualTo(bytes));
         }
 
+        /// <summary>A schema 1 file as Task 12 wrote it: settings without voiceVolume (Mechanics §20 П1).</summary>
+        private static byte[] SchemaOneProfile(Profile profile)
+        {
+            var json = JObject.Parse(Json(profile));
+            json["schemaVersion"] = 1;
+            ((JObject)json["settings"]).Remove("voiceVolume");
+            return SaveFormat.Wrap(json.ToString());
+        }
+
+        [Test]
+        public void SchemaOneProfileMigratesWithVoiceVolume()
+        {
+            var fs = new FakeFileSystem();
+            var original = ProfileTests.Sample();
+            var bytes = SchemaOneProfile(original);
+            fs.Files[Main] = bytes;
+            var store = new SaveStore(fs, ProfileKind.User);
+            var result = store.Load();
+            Assert.That(result.Status, Is.EqualTo(LoadStatus.Migrated));
+            Assert.That(result.Errors, Is.Empty);
+            var s = result.Profile.Settings;
+            Assert.That(result.Profile.SchemaVersion, Is.EqualTo(2));
+            Assert.That(s.VoiceVolume, Is.EqualTo(1f), "П1: a migrated profile gets the default voice volume");
+            Assert.That(s.MasterVolume, Is.EqualTo(0.35f));
+            Assert.That(s.TargetFps, Is.EqualTo(30));
+            Assert.That(s.Joystick, Is.EqualTo(JoystickMode.Fixed));
+            Assert.That(result.Profile.Currency, Is.EqualTo(original.Currency));
+            Assert.That(fs.Files[Main], Is.EqualTo(bytes), "the schema 1 file stays until the next confirmed save");
+            Assert.That(store.Save(result.Profile).Succeeded, Is.True);
+            var saved = JObject.Parse(Json(store.Load().Profile));
+            Assert.That(saved["schemaVersion"].Value<int>(), Is.EqualTo(2));
+            Assert.That(store.Load().Status, Is.EqualTo(LoadStatus.Loaded));
+            Assert.That(fs.Files[Backup], Is.EqualTo(bytes));
+        }
+
+        [Test]
+        public void VoiceVolumeOutOfRangeIsCorrupt()
+        {
+            Assert.That(FieldError(j => j["settings"]["voiceVolume"] = 1.5).Field, Is.EqualTo("settings.voiceVolume"));
+            Assert.That(FieldError(j => j["settings"]["voiceVolume"] = -0.1).Field, Is.EqualTo("settings.voiceVolume"));
+            // Schema 2 without the field is not migrated: a missing field is never a default (Mechanics §19 С2).
+            Assert.That(FieldError(j => ((JObject)j["settings"]).Remove("voiceVolume")).Field, Is.EqualTo("settings.voiceVolume"));
+        }
+
         [Test]
         public void UnsupportedOldSchemaIsTreatedAsCorrupt()
         {

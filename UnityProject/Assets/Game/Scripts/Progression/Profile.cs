@@ -28,7 +28,7 @@ namespace ThornThrone.Progression
     /// <summary>Current profile schema and rules version (Mechanics §19, Р).</summary>
     public static class ProfileSchema
     {
-        public const int Current = 1;
+        public const int Current = 2;
         /// <summary>Phase 1 rules: the original mode of client 6972 (SourceVersions.json).</summary>
         public const string RulesVersion = "original-6972";
 
@@ -45,6 +45,8 @@ namespace ThornThrone.Progression
         public float MasterVolume = 1f;
         public float MusicVolume = 1f;
         public float EffectsVolume = 1f;
+        /// <summary>Voice lines (ТЗ §7), added in schema 2 (Mechanics §20 П1).</summary>
+        public float VoiceVolume = 1f;
         public float UiScale = 1f;
         public JoystickMode Joystick = JoystickMode.Floating;
         public bool LeftHanded;

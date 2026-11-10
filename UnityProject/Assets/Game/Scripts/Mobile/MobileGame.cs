@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using ThornThrone.Mobile.Platform;
+using ThornThrone.Progression;
 using ThornThrone.Simulation;
 using TMPro;
 using UnityEngine;
@@ -78,13 +80,15 @@ namespace ThornThrone.Mobile
         private HeroView heroView;
         private float heroHeight = 0.7f;
         private Vec2 lastHeroPosition;
-        private enum State { Menu, Playing, Paused, ConfirmQuit, Choosing, Results }
+        private enum State { Menu, Playing, Paused, ConfirmQuit, Choosing, Results, Settings }
         private State state;
+        /// <summary>Screen the settings were opened from: the menu or the pause (Mechanics §20 П10).</summary>
+        private State settingsFrom;
+        private GameSettings settings;
 
         private void Start()
         {
-            Application.targetFrameRate = 60;
-            QualitySettings.vSyncCount = 0;
+            var args = Environment.GetCommandLineArgs();
             var texts = sourceData.ToDictionary(t => t.name.Replace("survivors_", ""), t => t.text);
             data = GameData.Load(category => texts[category], () => arenaEntities ? arenaEntities.text : null,
                 () => arenaNav ? arenaNav.bytes : null);
@@ -107,9 +111,17 @@ namespace ThornThrone.Mobile
             ui.QuitConfirmed += () => { if (state == State.ConfirmQuit) EndRun(); };
             ui.QuitCancelled += CloseConfirmQuit;
             ui.MenuRequested += ShowMenu;
+            ui.SettingsRequested += OpenSettings;
+            ui.SettingsClosed += CloseSettings;
+            ui.SettingStepped += StepSetting;
+            // П11: smoke runs use the test profile and never touch the player's file.
+            bool smokeRun = args.Contains("-thornSmoke");
+            LoadSettings(smokeRun ? ProfileKind.Test : ProfileKind.User);
             ShowMenu();
-            if (Environment.GetCommandLineArgs().Contains("-thornCloseup")) VisibleHalfHeight = 350;
-            if (Environment.GetCommandLineArgs().Contains("-thornSmoke")) { smoke = true; StartRun("dragonus"); }
+            if (smokeRun && !SmokeSettings(args)) return;
+            if (args.Contains("-thornCloseup")) VisibleHalfHeight = 350;
+            if (smokeRun) { smoke = true; StartRun("dragonus"); }
+            showSettings = smoke && args.Contains("-thornShowSettings");
             var script = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornInputScript="));
             if (smoke && script != null) inputScript = new InputScript(script.Substring("-thornInputScript=".Length));
             if (smoke && Environment.GetCommandLineArgs().Contains("-thornShowcase")) Showcase();
@@ -129,8 +141,83 @@ namespace ThornThrone.Mobile
             if (drawMode != null) WorldRenderer.DebugDrawMode = int.Parse(drawMode.Substring("-thornDrawMode=".Length));
         }
 
+        /// <summary>
+        /// Loads the profile and applies its settings before the menu is shown (Mechanics §20). A storage that cannot
+        /// be opened gives default settings and failing saves; the game still starts.
+        /// </summary>
+        private void LoadSettings(ProfileKind kind)
+        {
+            SaveStore store = null;
+            Profile profile;
+            LoadStatus status;
+            try
+            {
+                store = ProfileStorage.Open(kind);
+                var loaded = store.Load();
+                profile = loaded.Profile;
+                status = loaded.Status;
+                foreach (var error in loaded.Errors) Debug.LogWarning("[Profile] " + error);
+                Debug.Log($"THORN_PROFILE kind={ProfileSchema.KindName(kind)} status={status} preserved={string.Join(";", loaded.PreservedFiles)}");
+            }
+            catch (Exception e) when (e is System.IO.IOException || e is UnauthorizedAccessException)
+            {
+                Debug.LogWarning("[Profile] storage unavailable: " + e.Message);
+                profile = Profile.CreateNew(kind);
+                status = LoadStatus.Created;
+            }
+            settings = new GameSettings(profile,
+                p => store != null ? store.Save(p) : new SaveResult(SaveStatus.IoError, "Profile storage is unavailable"),
+                new UnitySettingsTargets(input.Controller, ui));
+            settings.ApplyAll();
+            for (int i = 0; i < SettingsOptions.Count; i++) ui.SetSettingText((SettingId)i, settings.ValueText((SettingId)i));
+            ui.ShowProfileWarning(GameSettings.WarnsAbout(status));
+        }
+
+        /// <summary>
+        /// Smoke restart check (design §5): -thornSettings=key=value,… sets values through the same path as the
+        /// buttons; -thornExpectSettings=… compares the loaded profile and the applied engine state. False — the
+        /// player quits with code 9.
+        /// </summary>
+        private bool SmokeSettings(string[] args)
+        {
+            var set = args.FirstOrDefault(a => a.StartsWith("-thornSettings="));
+            if (set != null && !settings.SetList(set.Substring("-thornSettings=".Length), out var error))
+                return FailSettings("set " + error);
+            if (set != null)
+            {
+                if (settings.SaveFailed) return FailSettings("save " + settings.LastSave.Message);
+                Debug.Log("THORN_SETTINGS_SET " + set.Substring("-thornSettings=".Length));
+            }
+            var expect = args.FirstOrDefault(a => a.StartsWith("-thornExpectSettings="));
+            if (expect == null) return true;
+            bool ok = settings.Matches(expect.Substring("-thornExpectSettings=".Length), out var report);
+            var v = settings.Values;
+            string applied = $"applied fps={Application.targetFrameRate} vsync={QualitySettings.vSyncCount} " +
+                             $"joystick={input.Controller.Settings.Joystick} leftHanded={input.Controller.Settings.LeftHanded} " +
+                             $"volume={AudioListener.volume:0.##} uiScale={ui.UiScale:0.##}";
+            ok &= Application.targetFrameRate == v.TargetFps && QualitySettings.vSyncCount == 0
+                  && (input.Controller.Settings.Joystick == JoystickMode.Fixed) == (v.Joystick == ThornThrone.Progression.JoystickMode.Fixed)
+                  && input.Controller.Settings.LeftHanded == v.LeftHanded
+                  && Mathf.Abs(AudioListener.volume - v.MasterVolume) < 1e-4f && Mathf.Abs(ui.UiScale - v.UiScale) < 1e-4f;
+            Debug.Log($"THORN_SETTINGS ok={(ok ? 1 : 0)} {report} {applied}");
+            if (!ok)
+            {
+                Application.Quit(9);
+                return false;
+            }
+            return true;
+        }
+
+        private bool FailSettings(string reason)
+        {
+            Debug.Log("THORN_SETTINGS ok=0 failed=" + reason);
+            Application.Quit(9);
+            return false;
+        }
+
         // Automatic check of a player build: run 30 s of game time without input, log the state, quit.
-        private bool smoke, screenshotTaken, eliteSmoke;
+        private bool smoke, screenshotTaken, eliteSmoke, showSettings, settingsShown;
+        private float settingsShownAt;
         private InputScript inputScript;
         private float screenshotTime = 20;
 
@@ -183,6 +270,7 @@ namespace ThornThrone.Mobile
                 smoke = false;
                 return;
             }
+            if (showSettings && SettingsScreenshot()) return;
             if (eliteSmoke && run.Time >= 5 && run.EliteRooms.Count > 0 && run.EliteRooms[0].State == EliteRoomState.Open)
                 run.Teleport(run.EliteRooms[0].Position);
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
@@ -204,6 +292,33 @@ namespace ThornThrone.Mobile
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(run.Kills > 0 ? 0 : 1);
             smoke = false;
+        }
+
+        /// <summary>-thornShowSettings: at 2 s the pause and the settings open, the screenshot is taken, the run goes on.</summary>
+        private bool SettingsScreenshot()
+        {
+            if (!settingsShown)
+            {
+                if (state != State.Playing || run.Time < 2) return false;
+                SetPaused(true);
+                OpenSettings();
+                settingsShown = true;
+                settingsShownAt = Time.unscaledTime;
+                return true;
+            }
+            if (state != State.Settings) return false;
+            var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
+            if (shot != null && !screenshotTaken && Time.unscaledTime - settingsShownAt >= 1)
+            {
+                screenshotTaken = true;
+                StartCoroutine(CaptureTga(shot.Substring("-thornScreenshot=".Length)));
+            }
+            if (Time.unscaledTime - settingsShownAt >= 2)
+            {
+                CloseSettings();
+                SetPaused(false);
+            }
+            return true;
         }
 
         private void BuildScene()
@@ -313,6 +428,7 @@ namespace ThornThrone.Mobile
 
         private void StartRun(string heroKey)
         {
+            ui.ShowProfileWarning(false);
             run = new Run(data, new Rules(), heroKey, null, (ulong)DateTime.UtcNow.Ticks);
             reportedDiagnostics = 0;
             state = State.Playing;
@@ -344,6 +460,34 @@ namespace ThornThrone.Mobile
             if (state != State.ConfirmQuit) return;
             state = State.Paused;
             ui.ShowConfirmQuit(false);
+        }
+
+        /// <summary>П10: from the menu or the pause; the run stays paused.</summary>
+        private void OpenSettings()
+        {
+            if (state != State.Menu && state != State.Paused) return;
+            settingsFrom = state;
+            state = State.Settings;
+            input.Reset();
+            ui.SetSettingsError(settings.SaveFailed);
+            ui.ShowSettings(true);
+        }
+
+        private void CloseSettings()
+        {
+            if (state != State.Settings) return;
+            state = settingsFrom;
+            input.Reset();
+            ui.ShowSettings(false);
+        }
+
+        /// <summary>П9: applied and saved at once; a failed save keeps the value and shows the error line.</summary>
+        private void StepSetting(SettingId id, int delta)
+        {
+            if (state != State.Settings || !settings.Step(id, delta)) return;
+            ui.SetSettingText(id, settings.ValueText(id));
+            ui.SetSettingsError(settings.SaveFailed);
+            if (settings.SaveFailed) Debug.LogWarning($"[Profile] settings not saved: {settings.LastSave.Status} {settings.LastSave.Message}");
         }
 
         /// <summary>Every shown card set (a new level, the next queued one, a reroll) needs a new touch (Р7).</summary>
@@ -434,6 +578,7 @@ namespace ThornThrone.Mobile
                 case BackAction.CloseConfirm: CloseConfirmQuit(); break;
                 case BackAction.ToMenu: ShowMenu(); break;
                 case BackAction.QuitApp: Application.Quit(); break;
+                case BackAction.CloseSettings: CloseSettings(); break;
             }
         }
 
@@ -446,6 +591,7 @@ namespace ThornThrone.Mobile
                 case State.ConfirmQuit: return BackScreen.ConfirmQuit;
                 case State.Choosing: return BackScreen.Choosing;
                 case State.Results: return BackScreen.Results;
+                case State.Settings: return BackScreen.Settings;
                 default: return BackScreen.Menu;
             }
         }
