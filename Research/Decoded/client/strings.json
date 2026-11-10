@@ -1,0 +1,3069 @@
+{
+ "binaries": {
+  "libclient.dylib": {
+   "strings": 673768
+  },
+  "libserver.dylib": {
+   "strings": 495165
+  }
+ },
+ "classes": [
+  "CDOTA_Survivors_EffectsEntity",
+  "CDOTA_Survivors_UnitEntity",
+  "CDOTA_Survivors_UnitEntity_API",
+  "CDOTA_UI_Survivors_ScenePanel",
+  "CSurvivorsAttackParticleInfo",
+  "CSurvivorsAttributeDefinition",
+  "CSurvivorsAttributeValue",
+  "CSurvivorsDifficultyDefinition",
+  "CSurvivorsDifficultyManager",
+  "CSurvivorsEnemy",
+  "CSurvivorsEnemyAbsorber",
+  "CSurvivorsEnemyDefinition",
+  "CSurvivorsEnemyDefinition_Absorber",
+  "CSurvivorsEnemyDefinition_Golem",
+  "CSurvivorsEnemyDefinition_ImperiaBoss",
+  "CSurvivorsEnemyDefinition_Pillar",
+  "CSurvivorsEnemyDefinition_Resurrector",
+  "CSurvivorsEnemyDefinition_Snotty",
+  "CSurvivorsEnemyEventDefinition",
+  "CSurvivorsEnemyGolem",
+  "CSurvivorsEnemyPillar",
+  "CSurvivorsEnemyResurrector",
+  "CSurvivorsEnemySnapshot",
+  "CSurvivorsEntity",
+  "CSurvivorsGame",
+  "CSurvivorsGameLog",
+  "CSurvivorsGameLogEntry",
+  "CSurvivorsGameLogEntry_EnemyKilled",
+  "CSurvivorsGameLogEntry_GoldEarned",
+  "CSurvivorsGameLogEntry_IncomingDamage",
+  "CSurvivorsGameLogEntry_LevelUp",
+  "CSurvivorsGameLogEntry_OutgoingDamage",
+  "CSurvivorsGameLogEntry_ScepterReceived",
+  "CSurvivorsGameLogEntry_ShardReceived",
+  "CSurvivorsGameLogResults",
+  "CSurvivorsGameModeDefinition",
+  "CSurvivorsGameResults_Enemies",
+  "CSurvivorsGameResults_PowerUp",
+  "CSurvivorsGameSnapshot",
+  "CSurvivorsGridNav",
+  "CSurvivorsHeroDefinition",
+  "CSurvivorsImperiaBoss",
+  "CSurvivorsLevelDefinition",
+  "CSurvivorsLootTable",
+  "CSurvivorsMap",
+  "CSurvivorsMinimap",
+  "CSurvivorsMinimapRenderer",
+  "CSurvivorsModifier",
+  "CSurvivorsPickup",
+  "CSurvivorsPickupDefinition",
+  "CSurvivorsPickupSnapshot",
+  "CSurvivorsPlayer",
+  "CSurvivorsPlayerSnapshot",
+  "CSurvivorsPowerUp",
+  "CSurvivorsPowerUpDamageTickInfo",
+  "CSurvivorsPowerUpDefinition",
+  "CSurvivorsPowerUpDefinition_ArcaneBolt",
+  "CSurvivorsPowerUpDefinition_AreaAttack",
+  "CSurvivorsPowerUpDefinition_AreaAttack_Circle",
+  "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant",
+  "CSurvivorsPowerUpDefinition_AreaAttack_Line",
+  "CSurvivorsPowerUpDefinition_CounterHelix",
+  "CSurvivorsPowerUpDefinition_EchoStrike",
+  "CSurvivorsPowerUpDefinition_Frostbite",
+  "CSurvivorsPowerUpDefinition_InstantAttack",
+  "CSurvivorsPowerUpDefinition_KnifeThrow",
+  "CSurvivorsPowerUpDefinition_LagunaBlade",
+  "CSurvivorsPowerUpDefinition_LandMine",
+  "CSurvivorsPowerUpDefinition_MagicMissile",
+  "CSurvivorsPowerUpDefinition_MortimerKisses",
+  "CSurvivorsPowerUpDefinition_ProjectileAttack",
+  "CSurvivorsPowerUpDefinition_Snotty",
+  "CSurvivorsPowerUpDefinition_Spirits",
+  "CSurvivorsPowerUpDefinition_Stampede",
+  "CSurvivorsPowerUpDefinition_Swashbuckle",
+  "CSurvivorsPowerUpDefinition_Track",
+  "CSurvivorsPowerUpSnapshot",
+  "CSurvivorsPowerUp_ArcaneBolt",
+  "CSurvivorsPowerUp_AreaAttack",
+  "CSurvivorsPowerUp_AreaAttack_Circle",
+  "CSurvivorsPowerUp_AreaAttack_CircleConstant",
+  "CSurvivorsPowerUp_AreaAttack_Line",
+  "CSurvivorsPowerUp_CounterHelix",
+  "CSurvivorsPowerUp_EchoStrike",
+  "CSurvivorsPowerUp_Frostbite",
+  "CSurvivorsPowerUp_InstantAttack",
+  "CSurvivorsPowerUp_KnifeThrow",
+  "CSurvivorsPowerUp_LagunaBlade",
+  "CSurvivorsPowerUp_LandMine",
+  "CSurvivorsPowerUp_MagicMissile",
+  "CSurvivorsPowerUp_MortimerKisses",
+  "CSurvivorsPowerUp_ProjectileAttack",
+  "CSurvivorsPowerUp_Snotty",
+  "CSurvivorsPowerUp_Spirits",
+  "CSurvivorsPowerUp_Stampede",
+  "CSurvivorsPowerUp_Swashbuckle",
+  "CSurvivorsPowerUp_Track",
+  "CSurvivorsProjectile",
+  "CSurvivorsProjectileSimpleCallback",
+  "CSurvivorsResponseFilter",
+  "CSurvivorsSchema",
+  "CSurvivorsSpawner",
+  "CSurvivorsSpawnerDefinition",
+  "CSurvivorsSpawnerDestructibles",
+  "CSurvivorsSpawnerDestructiblesDefinition",
+  "CSurvivorsSpawnerEliteTurret",
+  "CSurvivorsSpawnerEliteTurretDefinition",
+  "CSurvivorsSpawnerGolem",
+  "CSurvivorsSpawnerGolemDefinition",
+  "CSurvivorsSpawnerTower",
+  "CSurvivorsSpawnerTowerDefinition",
+  "CSurvivorsUnit",
+  "CSurvivorsUnit_Snotty",
+  "CSurvivorsUpgradeDefinition",
+  "ISurvivorsGameEventListener",
+  "ISurvivorsPresentation",
+  "ISurvivorsProjectileCallbacks"
+ ],
+ "clientOnlyFields": {
+  "all": [
+   "m_AttributeList",
+   "m_Attributes",
+   "m_Color",
+   "m_HeroPick_HeightOffset",
+   "m_LocalizationStr",
+   "m_OutgoingBonuses",
+   "m_SecondaryColor",
+   "m_SlowInterval",
+   "m_StartMeditationTimer",
+   "m_activityDisabled",
+   "m_angle",
+   "m_aryStarPointThresholds",
+   "m_bAbilityActiveWhileProjectileIsActive",
+   "m_bAbsorbed",
+   "m_bAllowHeroTargets",
+   "m_bAllowPhysicsInDying",
+   "m_bAllowRelaxation",
+   "m_bAnimationFireOnce",
+   "m_bAutomaticallyRespawn",
+   "m_bCanCollide",
+   "m_bClearOldTrailsOnFire",
+   "m_bContractGravestoneComplete",
+   "m_bDeathCausesExplosion",
+   "m_bDestroyOnFallThrough",
+   "m_bDestroyed",
+   "m_bDidSetAttackTarget",
+   "m_bDisableAutoAttack",
+   "m_bDisableHealing",
+   "m_bDisableTrade",
+   "m_bDisplayIfAlreadyOwned",
+   "m_bDoPhysics",
+   "m_bDoRangeCheck",
+   "m_bFirst",
+   "m_bForceProc",
+   "m_bFromWard",
+   "m_bHasBonusRange",
+   "m_bHasIndicator",
+   "m_bHasTriggered",
+   "m_bInheritState",
+   "m_bInheritVisibility",
+   "m_bInvertColors",
+   "m_bInvokedAbilitiesInitialized",
+   "m_bIsActive",
+   "m_bIsAltCastState",
+   "m_bIsDying",
+   "m_bIsDyingWithResurrection",
+   "m_bIsFriendly",
+   "m_bIsGesturing",
+   "m_bIsMiniboss",
+   "m_bIsPlayerWeapon",
+   "m_bIsProjectile",
+   "m_bIsRadiant",
+   "m_bIsResurrecting",
+   "m_bIsSpecialMove",
+   "m_bNegativeHeroAdjective",
+   "m_bNoAttackerPushback",
+   "m_bObtainable",
+   "m_bOnlyGrantIfNotOwned",
+   "m_bPathFlipped",
+   "m_bPlayEndcap",
+   "m_bPlayPostVictoryAnims",
+   "m_bScepterUpgraded",
+   "m_bShard",
+   "m_bShardUpgraded",
+   "m_bSharedWithTeammates",
+   "m_bShouldUpgradeProgressionText",
+   "m_bShowCooldownInTooltips",
+   "m_bShowInitialEarn",
+   "m_bShowOverhead",
+   "m_bShowPathProjection",
+   "m_bShowTrails",
+   "m_bSingleUse",
+   "m_bSpawnPickupsOnDeath",
+   "m_bSpawnRequested",
+   "m_bSpawnedAmbientParticles",
+   "m_bSpawningComplete",
+   "m_bSpellImmunity",
+   "m_bTalentCast",
+   "m_bTargetIsAlly",
+   "m_bTestedGem",
+   "m_bThresholdIsMin",
+   "m_bTryDespawn",
+   "m_bTurnedOff",
+   "m_bUseDefault",
+   "m_bUseEquipped",
+   "m_bUsePeriodAsActionRangeOffset",
+   "m_bVisuallyDestroyed",
+   "m_bWaitingForInvulnerability",
+   "m_blinktoggle",
+   "m_clrRender",
+   "m_eAckPos",
+   "m_eCategory",
+   "m_eEvent",
+   "m_eGemType",
+   "m_eIndicatorShape",
+   "m_eLayer",
+   "m_eLevelFlags",
+   "m_eMode",
+   "m_eQuality",
+   "m_eRequiredOfferRarity",
+   "m_eRole",
+   "m_eRoshanPhase",
+   "m_eScoreMode",
+   "m_eShapeBehavior",
+   "m_eStats",
+   "m_eTarget",
+   "m_eTormentorLocation",
+   "m_enemiesSnapshot",
+   "m_enemyID",
+   "m_fAmplitude",
+   "m_fAttackRangeIncreaseSpeed",
+   "m_fElapsedLingerTime",
+   "m_fElapsedMeditationTime",
+   "m_fHaloScale",
+   "m_fMainEventStatAverage",
+   "m_fMainEventStatStdDev",
+   "m_fPlayoffsStatAverage",
+   "m_fPlayoffsStatStdDev",
+   "m_fRoshanKillTime",
+   "m_fRoshanRespawnDuration",
+   "m_fSpeed",
+   "m_fSpeedPercentage",
+   "m_fStartFrame",
+   "m_fStatAverage",
+   "m_fStatStdDev",
+   "m_flAccel",
+   "m_flAim",
+   "m_flAttackLaunchDistance",
+   "m_flAttenuation0",
+   "m_flAttenuation1",
+   "m_flAttenuation2",
+   "m_flBackgroundOffsetX",
+   "m_flBaseDashCooldown",
+   "m_flBaseDashDuration",
+   "m_flBaseDashSpeed",
+   "m_flBaseHealth",
+   "m_flBasePickupRadius",
+   "m_flBaseSpeed",
+   "m_flBodyRadius",
+   "m_flBrightness",
+   "m_flBrightnessScale",
+   "m_flCollisionHeight",
+   "m_flCurTime",
+   "m_flCurrentExp",
+   "m_flCurrentModelScale",
+   "m_flDeathEffectTimer",
+   "m_flDeathEffect_DissolveColor",
+   "m_flDeathEffect_DissolveEdgeWidth",
+   "m_flDeathEffect_DissolveScale",
+   "m_flDeathMaxScaleFactor",
+   "m_flDefaultScale",
+   "m_flDelay",
+   "m_flDespawnTimer",
+   "m_flDistRemaining",
+   "m_flDuration",
+   "m_flElapsedTime",
+   "m_flExpectedFinalHeal",
+   "m_flExplosionDamage",
+   "m_flExplosionTerrainRadius",
+   "m_flFallDamagePerVelocity",
+   "m_flFalloff",
+   "m_flFireTime",
+   "m_flFollowRange",
+   "m_flFrame",
+   "m_flFriction",
+   "m_flGameTime",
+   "m_flHealthOnCreated",
+   "m_flHealthRegen",
+   "m_flHeartRadius",
+   "m_flHeroWidth",
+   "m_flIdleAnimPlaybackRate",
+   "m_flIdlePlaybackRate",
+   "m_flInertiaInv",
+   "m_flJumpDuration",
+   "m_flKnockbackDuration",
+   "m_flLastChargeUseTime",
+   "m_flLastTerrainObstructionHitTime",
+   "m_flLifetime",
+   "m_flMaxSpeed",
+   "m_flMinimumGameObjectY",
+   "m_flNextShotTimer",
+   "m_flNextTrailCreationTimer",
+   "m_flNotchSize",
+   "m_flPlayerHPRegenerationMultiplier",
+   "m_flPlayerHealth",
+   "m_flPlayerMaxHPMultiplier",
+   "m_flPowerupChance",
+   "m_flPowerupInterval",
+   "m_flRemoveParticleTimeDelay",
+   "m_flRepeatInterval",
+   "m_flRoshanPhaseEndTime",
+   "m_flRoshanPhaseStartTime",
+   "m_flRunPlaybackRate",
+   "m_flRunningDmg",
+   "m_flRunningHealth",
+   "m_flShieldRadius",
+   "m_flSinTurnTimer",
+   "m_flSlowStep",
+   "m_flSlowStepStep",
+   "m_flSpawnDelay",
+   "m_flSpawnIntervalTimer",
+   "m_flSpawnerExpirationTime",
+   "m_flTheta",
+   "m_flTimeUntilNextTrigger",
+   "m_flTouchCooldown",
+   "m_flTouchTimeout",
+   "m_flTrailLingerSeconds",
+   "m_flTreeTimeRemaining",
+   "m_flTriggerCollisionRadiusPadding",
+   "m_flVelocityPerChargeSecond",
+   "m_flXPLevelUpRequirementMultiplier",
+   "m_gameModeID",
+   "m_hAncestralSpirit",
+   "m_hAvatarTexture",
+   "m_hBalloon",
+   "m_hEndEntity",
+   "m_hEnemiesSkewered",
+   "m_hExternalGraph",
+   "m_hIllusion",
+   "m_hLastBumpingHero",
+   "m_hLastHit",
+   "m_hLightingOrigin",
+   "m_hMagnetizeAbility",
+   "m_hMoveToTargets",
+   "m_hNPC",
+   "m_hOtherPortal",
+   "m_hPullThinker",
+   "m_hRecentTarget",
+   "m_hSpawnpoint",
+   "m_hTrap",
+   "m_hWard",
+   "m_heroID",
+   "m_iAccountID",
+   "m_iAttributeDefinitionIndex",
+   "m_iCount",
+   "m_iCurrentMaxRagdollCount",
+   "m_iEntityLevel",
+   "m_iEntityQuality",
+   "m_iGoldBountyMax",
+   "m_iGoldBountyMin",
+   "m_iHasAggressiveStance",
+   "m_iInventoryPosition",
+   "m_iItemDefinitionIndex",
+   "m_iItemID",
+   "m_iLevelsBetweenUpgrades",
+   "m_iMoveSpeed",
+   "m_iPoseParameterAim",
+   "m_iRawValue32",
+   "m_iStartingMaxHealth",
+   "m_iStartingMaxMana",
+   "m_iXPBounty",
+   "m_iXPBountyExtra",
+   "m_id",
+   "m_instances",
+   "m_invokedAbilities",
+   "m_iszSoundAreaType",
+   "m_mapBingoStatsByName",
+   "m_mapCodexEntriesLocalized",
+   "m_mapEnemyDamagedTimers",
+   "m_mapRelationships",
+   "m_messageIDRange",
+   "m_nActiveProjectilesToTrack",
+   "m_nActivityOverride",
+   "m_nArmor",
+   "m_nBadgePoints",
+   "m_nBadgePointsPerUnit",
+   "m_nBaseNumDashes",
+   "m_nBoardCols",
+   "m_nBoardRows",
+   "m_nBonus",
+   "m_nBumpsSinceLastCrash",
+   "m_nCastRangeBuffer",
+   "m_nCompletionScore",
+   "m_nContractComplete",
+   "m_nCreepsHit",
+   "m_nCurInstanceSlot",
+   "m_nCurrentAttackIndex",
+   "m_nCurrentLevel",
+   "m_nCurrentLevelEvent",
+   "m_nCurrentMaxStackCount",
+   "m_nDamage",
+   "m_nDebuffCount",
+   "m_nDuelDamage",
+   "m_nDuelOpponent",
+   "m_nEnemiesKilled",
+   "m_nEnemiesSpawnedCount",
+   "m_nEnemyCollideDamage",
+   "m_nEntityId",
+   "m_nExortInstances",
+   "m_nFXIndexSpirit",
+   "m_nFXIndexSpiritB",
+   "m_nFXIndexTitan",
+   "m_nFXIndexTitanB",
+   "m_nFirstTimeBonusLives",
+   "m_nFxHuskIndex",
+   "m_nFxIndexA",
+   "m_nGesture",
+   "m_nHealthCost",
+   "m_nHeroModelIndex",
+   "m_nHeroPrimarySlotIndex",
+   "m_nHeroSkinOverride",
+   "m_nHunterRank",
+   "m_nInteractsAs",
+   "m_nInteractsExclude",
+   "m_nInteractsWith",
+   "m_nInvulnerabilityDuration",
+   "m_nInvulnerabilityStart",
+   "m_nKillToastOverride",
+   "m_nLastMulticastCount",
+   "m_nLevel",
+   "m_nLifeBreakProjectileHandle",
+   "m_nLives",
+   "m_nMaxCarry",
+   "m_nMaxCratesOnLevel",
+   "m_nMaxJumpDistance",
+   "m_nMaxLeaguePhase",
+   "m_nMaxSquareUpgrades",
+   "m_nMaxUnitsForBadgePoints",
+   "m_nMinLeaguePhase",
+   "m_nMineTypeIndex",
+   "m_nModeSwapExtraAttackCooldown",
+   "m_nModeSwapTicks",
+   "m_nMostRecentMulticastCount",
+   "m_nMultiCastCount",
+   "m_nMulticastStreakCount",
+   "m_nNumAuthoredLevels",
+   "m_nOverflowEnemySpawnCountOverride",
+   "m_nOverrideStyle",
+   "m_nOwnerId",
+   "m_nPathEffectIndexa",
+   "m_nPathEffectIndexb",
+   "m_nQuasInstances",
+   "m_nRenderFX",
+   "m_nRenderMode",
+   "m_nRequiredTabletLevel",
+   "m_nRerollSquareCost",
+   "m_nRerollsRemaining",
+   "m_nResurrectionsRemaining",
+   "m_nReturnDamagePct",
+   "m_nReturnFXIndex",
+   "m_nRollWeight",
+   "m_nRoomIndex",
+   "m_nRotationChance",
+   "m_nRotationSpeedMax",
+   "m_nRotationSpeedMin",
+   "m_nScore",
+   "m_nSentRoshReclaim",
+   "m_nSentRoshRespawn",
+   "m_nSeperationTickCounter",
+   "m_nShotsFired",
+   "m_nShuffleCardCost",
+   "m_nSortTier",
+   "m_nSpecialAbilities",
+   "m_nSplashSize",
+   "m_nTargetsHit",
+   "m_nTimeBonusFastTime",
+   "m_nTimeBonusMaxTime",
+   "m_nTimesBounced",
+   "m_nToBounceFXIndex",
+   "m_nToTargetFXIndex",
+   "m_nTotalResurrections",
+   "m_nTrackingProjectileID",
+   "m_nUnitsPerBadgePoint",
+   "m_nUpgradeSquareCost",
+   "m_nUseSnapshotFromSurfaceGraph",
+   "m_nVictoryDuration",
+   "m_nVisibleTargetCount",
+   "m_nWidth",
+   "m_pGame",
+   "m_pParticleEffect",
+   "m_pPillarEntity",
+   "m_pPlayer",
+   "m_pProjectileCallbackHandler",
+   "m_pRadiateRaysBuffParticle",
+   "m_pSpawner",
+   "m_pSpecialAbilities",
+   "m_pTerrain",
+   "m_pickupID",
+   "m_pickupsSnapshot",
+   "m_playerSnapshot",
+   "m_pszBasicHitSound",
+   "m_pszBasicSwingSound",
+   "m_pszHeroNameVO",
+   "m_queryHandleHalo",
+   "m_sAttackImpactSound",
+   "m_sBackgroundImage",
+   "m_sCreationDate",
+   "m_sDependentOnAbility",
+   "m_sEffectName",
+   "m_sEntityClassName",
+   "m_sHitImpactParticle",
+   "m_sLinkedForbiddenTomeAbility",
+   "m_sLinkedScepterAbility",
+   "m_sLinkedShardAbility",
+   "m_sLocCategory",
+   "m_sLocDifficultyUpgradeText",
+   "m_sLocExplanation",
+   "m_sLocExplanationMouseOver",
+   "m_sLocMetaUpgradesTooltip",
+   "m_sLocNameIndividual",
+   "m_sLocShardAbilityDesc",
+   "m_sLocUnitsPluralizable",
+   "m_sModel",
+   "m_sModelAlternateName",
+   "m_sOpponentName",
+   "m_sOpponentScene",
+   "m_sParentName",
+   "m_sPingOverrideText",
+   "m_sPowerUpName",
+   "m_sRequiredCustomShopName",
+   "m_sRewardClass",
+   "m_sSearchEntity",
+   "m_sSkinNames",
+   "m_sSlotClass",
+   "m_sTerrainBackgroundImage",
+   "m_sTerrainForegroundImage",
+   "m_sTerrainImage",
+   "m_sUnitName",
+   "m_sVulnerableParticle",
+   "m_sWeaponFireSound",
+   "m_sWeaponImage",
+   "m_sWeaponLocDesc",
+   "m_sWeaponLocName",
+   "m_sWeaponSwapSound",
+   "m_snapshotFilter",
+   "m_strDescription",
+   "m_strEffectName",
+   "m_strEventName",
+   "m_strFakeSubAbilityNames",
+   "m_strForbiddenTomeRequiredFacet",
+   "m_strHeroAdjective",
+   "m_strImage",
+   "m_strItemName",
+   "m_strLocRankName",
+   "m_strLootList",
+   "m_strMoveSpiritSwapAbility",
+   "m_strPathName",
+   "m_strPeriodicPointsName",
+   "m_strRewardDescription",
+   "m_strRewardFlavor",
+   "m_strRewardName",
+   "m_strScene",
+   "m_strSubAbilityNames",
+   "m_strTokenLocStringPrefix",
+   "m_strUIEvent",
+   "m_strVideo",
+   "m_szLevelName",
+   "m_szParticle",
+   "m_szSnippet",
+   "m_szUnit",
+   "m_unActionID",
+   "m_unArtilleryParticleID",
+   "m_unCandyPrice",
+   "m_unCandyTypeID",
+   "m_unCount",
+   "m_unEffectIndex",
+   "m_unEmoticonIDEnd",
+   "m_unEmoticonIDStart",
+   "m_unFantasyID",
+   "m_unFlagsToGrant",
+   "m_unGemSlot",
+   "m_unID",
+   "m_unItemDef",
+   "m_unItemType",
+   "m_unLeagueID",
+   "m_unOffsetX",
+   "m_unOffsetY",
+   "m_unOperationCount",
+   "m_unOperationID",
+   "m_unPeriod",
+   "m_unPeriodicPointsToAddToMax",
+   "m_unPeriodicPointsType",
+   "m_unPhysicsBodyID",
+   "m_unPoints",
+   "m_unQualityID",
+   "m_unQuantity",
+   "m_unResultActionID",
+   "m_unRewardOptionID",
+   "m_unRewardOptionMaxCount",
+   "m_unRolls",
+   "m_unShapeID",
+   "m_unSlotID",
+   "m_unSlotsToGrant",
+   "m_unTitle",
+   "m_unUnlockPrerequisiteActionID",
+   "m_vCachedFacingDirection",
+   "m_vCameraShakeScale",
+   "m_vCastPosition",
+   "m_vCasterStartPosition",
+   "m_vCurrentSeparationVelocity",
+   "m_vDeathAnimationDirection",
+   "m_vEnd",
+   "m_vLastPos",
+   "m_vMax",
+   "m_vMin",
+   "m_vOriginalFacing",
+   "m_vPathDir",
+   "m_vPathEnd",
+   "m_vPos",
+   "m_vPullLocation",
+   "m_vRepeatOffset",
+   "m_vSeparationVector",
+   "m_vShotOffset",
+   "m_vSpawnMax",
+   "m_vSpawnMin",
+   "m_vSpawnVelocityMax",
+   "m_vSpawnVelocityMin",
+   "m_vSpawnerOrigin",
+   "m_vSpiritStartPosition",
+   "m_vTargetHorizontalDirection",
+   "m_vecActionDefinitions",
+   "m_vecAdditionalEnemySpawners",
+   "m_vecAdditionalStartingPowerUps",
+   "m_vecAttackParticles",
+   "m_vecCancelOptions",
+   "m_vecChildren",
+   "m_vecCraftableRewards",
+   "m_vecCurrentColor",
+   "m_vecDancers",
+   "m_vecDemonPortalSpawnPositions",
+   "m_vecDrainedHeroes",
+   "m_vecDropTableCrates",
+   "m_vecDropTableHazards",
+   "m_vecDropTablePowerups",
+   "m_vecEndPos",
+   "m_vecExpectedMatchCountsPerPhase",
+   "m_vecGemSlots",
+   "m_vecGems",
+   "m_vecHeroItems",
+   "m_vecHeroStyles",
+   "m_vecHeroes",
+   "m_vecHunterRankRewardLine",
+   "m_vecIntroActions",
+   "m_vecItems",
+   "m_vecLeaguePhases",
+   "m_vecMaterials",
+   "m_vecMinorUpgrades",
+   "m_vecOccupiedPositions",
+   "m_vecOperations",
+   "m_vecOutroActions",
+   "m_vecOverworldTokens",
+   "m_vecPowerUps",
+   "m_vecPrefixes",
+   "m_vecQualities",
+   "m_vecQueuedAttackTimers",
+   "m_vecQueuedDamageTicks",
+   "m_vecQueuedProjectileTimers",
+   "m_vecRepeatingActions",
+   "m_vecScepterTooltipAttributes",
+   "m_vecShapes",
+   "m_vecSlotRewardOptions",
+   "m_vecSmallRewards",
+   "m_vecSnotties",
+   "m_vecSnottyParticles",
+   "m_vecSpawnedTowers",
+   "m_vecSpawnedUnitIDs",
+   "m_vecStats",
+   "m_vecStompedHeroes",
+   "m_vecSuffixes",
+   "m_vecTablets",
+   "m_vecTargetExclusions",
+   "m_vecTradeRecipes",
+   "m_vecTriggers",
+   "m_vecUpgradeIDs",
+   "m_vecValidStatRangesPerPhase",
+   "m_vecWeapons"
+  ],
+  "evidence": "К-кандидат",
+  "m_fl": [
+   "m_flAccel",
+   "m_flAim",
+   "m_flAttackLaunchDistance",
+   "m_flAttenuation0",
+   "m_flAttenuation1",
+   "m_flAttenuation2",
+   "m_flBackgroundOffsetX",
+   "m_flBaseDashCooldown",
+   "m_flBaseDashDuration",
+   "m_flBaseDashSpeed",
+   "m_flBaseHealth",
+   "m_flBasePickupRadius",
+   "m_flBaseSpeed",
+   "m_flBodyRadius",
+   "m_flBrightness",
+   "m_flBrightnessScale",
+   "m_flCollisionHeight",
+   "m_flCurTime",
+   "m_flCurrentExp",
+   "m_flCurrentModelScale",
+   "m_flDeathEffectTimer",
+   "m_flDeathEffect_DissolveColor",
+   "m_flDeathEffect_DissolveEdgeWidth",
+   "m_flDeathEffect_DissolveScale",
+   "m_flDeathMaxScaleFactor",
+   "m_flDefaultScale",
+   "m_flDelay",
+   "m_flDespawnTimer",
+   "m_flDistRemaining",
+   "m_flDuration",
+   "m_flElapsedTime",
+   "m_flExpectedFinalHeal",
+   "m_flExplosionDamage",
+   "m_flExplosionTerrainRadius",
+   "m_flFallDamagePerVelocity",
+   "m_flFalloff",
+   "m_flFireTime",
+   "m_flFollowRange",
+   "m_flFrame",
+   "m_flFriction",
+   "m_flGameTime",
+   "m_flHealthOnCreated",
+   "m_flHealthRegen",
+   "m_flHeartRadius",
+   "m_flHeroWidth",
+   "m_flIdleAnimPlaybackRate",
+   "m_flIdlePlaybackRate",
+   "m_flInertiaInv",
+   "m_flJumpDuration",
+   "m_flKnockbackDuration",
+   "m_flLastChargeUseTime",
+   "m_flLastTerrainObstructionHitTime",
+   "m_flLifetime",
+   "m_flMaxSpeed",
+   "m_flMinimumGameObjectY",
+   "m_flNextShotTimer",
+   "m_flNextTrailCreationTimer",
+   "m_flNotchSize",
+   "m_flPlayerHPRegenerationMultiplier",
+   "m_flPlayerHealth",
+   "m_flPlayerMaxHPMultiplier",
+   "m_flPowerupChance",
+   "m_flPowerupInterval",
+   "m_flRemoveParticleTimeDelay",
+   "m_flRepeatInterval",
+   "m_flRoshanPhaseEndTime",
+   "m_flRoshanPhaseStartTime",
+   "m_flRunPlaybackRate",
+   "m_flRunningDmg",
+   "m_flRunningHealth",
+   "m_flShieldRadius",
+   "m_flSinTurnTimer",
+   "m_flSlowStep",
+   "m_flSlowStepStep",
+   "m_flSpawnDelay",
+   "m_flSpawnIntervalTimer",
+   "m_flSpawnerExpirationTime",
+   "m_flTheta",
+   "m_flTimeUntilNextTrigger",
+   "m_flTouchCooldown",
+   "m_flTouchTimeout",
+   "m_flTrailLingerSeconds",
+   "m_flTreeTimeRemaining",
+   "m_flTriggerCollisionRadiusPadding",
+   "m_flVelocityPerChargeSecond",
+   "m_flXPLevelUpRequirementMultiplier"
+  ],
+  "rule": "m_* string absent from the data within 10 strings of a 'survivors' string or a data field (design.md §3.2). The linker merges equal strings of different modules: membership in the mode is not proven."
+ },
+ "dataFields": {
+  "m_TimeBasedLightingEnvironments": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_activity": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_activityDie": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_activityIdle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_activityMove": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bAbilityActiveWhileProjectileIsAlive": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bCanSpawnWithVelocity": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bCenterRooted": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bDieOnTouch": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bDissolveOnDeath": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bEnableMeteorModifier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bExpireOnWorldCollision": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bHasDeathAnimation": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bHasGlowOutline": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bHasSolidBody": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIgnoreDifficultySpawnMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bInvulnerable": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsDestructible": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsElite": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsGold": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsInnate": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsPassive": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsPersistant": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bIsScepterUpgradeable": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bIsShardUpgradeable": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bModifierParticleUsesOverheadOffset": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bOverrideGlowColor": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bPercentage": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bPlayDeathSound": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bPlayerFacing": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bPlayerFriendly": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bPrimary": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bRandomFacing": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bRandomizeSinTurnTimerOnSpawn": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bResetSpawnIntervalOnKill": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bRewardsTreasure": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bRollable": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bRotates": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bShowHealthBar": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bShowInMinimap": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bUndespawnable": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_bUseFacingDirection": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_bUseHeroModel": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_cEliteGlowColor": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_cOverriddenGlowColor": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_cost": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_eBounceTargeting": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_eMovementBehavior": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_eMovementCapability": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_eOrigin": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_eSeparationLayer": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_eSpawnBehavior": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_eSpawnPositionsLayer": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_eTargeting": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_eType": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flAbsorbRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flAdditionalFirstFloorTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flAnglePerShot": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flAttackCooldown": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flAttackOffsetForward": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flAttackOffsetUp": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flAttackPoint": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBounceMinimumLifetime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundDoTDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundDoTDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundFlamesDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundImpactDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundImpactRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundImpactSpawnDelay": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flBurningGroundImpactStunDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flChance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flChanceToCounter": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flCollisionRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flDeathDuration": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flDelayBetweenCounters": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flDemonPortalDeactivateRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flDemonPortalDeactivateTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flDestroyDistance": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flEliteRoomTriggerChannelTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEliteRoomTriggerRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEndTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyDamageMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyDespawnBuffer": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyDespawnTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyHealthMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyMovementSpeedMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyRadiusVariance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemySpawnCountMuliplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyTouchMovementSlowDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flEnemyTurnRateMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flExistingItemGenerationWeight": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flFirstFloorTimeLimit": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flFixedDirectionSpawnDistanceVariance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flIncrementalEnrageTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flInitialEnrageTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flKnockbackResistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flLaunchDistance": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flLevelUpDelay": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flLevelUpKnockbackDistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flLevelUpKnockbackRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flLifeTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMagicMissileDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMagicMissileProjectileRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMagicMissileProjectileSpeed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMagicMissileProjectileSpeedIncreasePerEnrage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMass": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flMaxDistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMaxHealth": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMaxHealthPerPlayerLevel": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMaxModelScale": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMaxModelScaleVariance": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flMaxSpawnVelocity": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flMinRange": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flMinSeparationDistanceFromEnemies": {
+   "inClient": false,
+   "readBySimulation": false
+  },
+  "m_flMinimumDistanceBetween": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flModelScale": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flModelScaleIncreasePerAbsorb": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMoveAnimPlaybackRate": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flMoveSpeed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMovementSpeedMultiplierPerDeath": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flMovementSpeedPercentDamageMultiplier": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flNewItemGenerationWeight": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flOverrideDespawnRadiusBuffer": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flPassiveItemGenerationWeight": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flPercentHealthAbsorbed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flPerpendicularWallSpacing": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flPlayerPositionHistoryBufferDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flPlayerReviveTimer": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysAngle": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysCastStartDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysDuration": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysInterval": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysProjectileRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadiateRaysSpeed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRange": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRequiredExperienceBase": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRequiredExperienceExponent": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flRotationDist": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flRotationSpeedDeg": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flScepterDamageIncreasePerEnemyKilled": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flScepterExplodeRadius": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flScepterLaunchDistance": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flScepterVacuumDistance": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flScepterVacuumRadius": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flSeperationDistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSeperationVelocityInfluence": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSeperationVelocityInterpolationSpeed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flShardDamageMultiplier": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flSinMovementAngle": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSinMovementPeriodMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSpawnChance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSpawnInterval": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSpawnIntervalOverride": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSpawnMinimumLifetime": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flSpawnOffset": {
+   "inClient": false,
+   "readBySimulation": false
+  },
+  "m_flSpawnOvalRadius": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSpawnPickupOnKillPercent": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flSpeed": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flSplitOnDeathKnockbackDistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flStartTime": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flStatusResistance": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flTouchDamage": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flTurnRate": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flValue": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_flWarmupEffectTime": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_flXPDropChanceMultiplier": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_fullLootTable": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_luckyLootTable": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_nBurningGroundInstancesPerEnrageLevel": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nDOTAHeroID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nDemonPortalsNumToCreate": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nEliteExtraHit": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_nExperienceReward": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nGoldAmount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nHealAmount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nInitialItemSpawns": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nInitialMagnetSpawns": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nLevelUpChoices": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxActiveSlots": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxAmount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxDemonPortalCount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxLevel": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxPassiveSlots": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxSpawnCountPerInterval": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxSpawnCountPerIntervalOverride": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMaxXPPickupsInWorld": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMinAmount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMinigameCurrency": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_nMinimumEnemyCount": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nMinimumEnemyCountOverride": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nModelIndex": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_nNumMagicMissiles": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nNumResurrectionTimes": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nOverflowEnemySpawnCount": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_nSplitOnDeathNumUnits": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_nTreasureVariant": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_pszPlayerHitSoundEvent": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sAbsorbParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sArtilleryParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sAttackIndicatorParticleEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sBurningGroundBurnParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sBurningGroundDoTParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sBurningGroundImpactParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sCollisionIndicatorEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDamageNumbersEffectCriticalStrike": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDamageNumbersEffectEnemy": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDamageNumbersEffectPlayer": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDeathEffectParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDemonPortalsPortalParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDemonPortalsTelegraphParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDifficultyName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sDirectionalHelperParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDisplayName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sDropSoundEvent": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sEliteRoomChannelEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sEliteRoomDirectionalArrowEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sEnemyDisplayName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sEnemyName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sExplosionParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sFreezeParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sGenericStunEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sHealthBarEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sHeroImage": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sHitStatusEffectParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sImage": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sImageThumbnail": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sImpactParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sImperiaAmbientBody": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sImperiaAmbientWings": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sInvulnerableParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sInvulnerableSkinName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLevelName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sLevelUpEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLevelUpKnockbackEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocAbilityDesc": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocAbilityName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocDescription": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocDifficultyDescription": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocDifficultyName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocDisplayName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocHeroName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocScepterAbilityDesc": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sLocTooltip": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sMagicMissileParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sMinimapIconClass": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sMinimapIconSnippet": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sModelName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sModifierParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sOnPickupOverheadEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sParticleEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sPhysicalWeaknessEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sPickupName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sPlayerHitEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sRadiateRaysBuffParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sRadiateRaysRayParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sRemoteMineExplosion": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sRemoteMineParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sResurrectParticleName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sReviveEffect": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sSkinName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sSource": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sSpawnInfoTargetName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sSpawnParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sSpawnerName": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_sStasisTrapExplosion": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sStasisTrapParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sStatsName": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sStunParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_sWarmupEffectParticle": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_scepterUpgradeDefinition": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_unEnemyID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unGameModeID": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_unHeroID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unLevelID": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_unPickupID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unPowerUpID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unRarity": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unSpawnPickupOnKillID": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_unSplitOnDeathEnemyID": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_unStyleIndex": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vCameraOffset": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vCollisionIndicatorColorEnemy": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vCollisionIndicatorColorPlayer": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vEntityBounds": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vFixedFacing": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vMapBounds": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vWarmupEffectColor": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vecAdditionalEnemyEvents": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecAttacks": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecAuthoredUpgradeChoices": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecBaseAttributes": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecBossEvents": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecDemonPortalSpawners": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecEconItems": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecEliteRoomChoices": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecEliteRoomUnlockTimes": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecEvents": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecGlobalUpgradeAttributes": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecInnatePowerUps": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecLootEntries": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecLootEntryCollections": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecLootTable": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecMandatoryEnrageHealthThresholds": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecMetaProgressionTiers": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vecMinorUpgradeChoices": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecModelNames": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vecOverrideImperiaEnrageHealthThresholds": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecPickupChances": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecRecipeItems": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecSeperationLayerData": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecStartingPowerUps": {
+   "inClient": true,
+   "readBySimulation": true
+  },
+  "m_vecTooltipAttributes": {
+   "inClient": true,
+   "readBySimulation": false
+  },
+  "m_vecUpgradeAttributes": {
+   "inClient": true,
+   "readBySimulation": true
+  }
+ },
+ "enums": [
+  "ESurvivorsAreaAttackOrigin",
+  "ESurvivorsAttackTargeting",
+  "ESurvivorsBossAbility",
+  "ESurvivorsBossState",
+  "ESurvivorsDamageNumberType",
+  "ESurvivorsEnemyMovementBehavior",
+  "ESurvivorsEnemyMovementCapability",
+  "ESurvivorsEnemySeparationLayer",
+  "ESurvivorsEnemySpawnBehavior",
+  "ESurvivorsEnemySpawnPositionsLayer",
+  "ESurvivorsUpgradeRarity",
+  "SurvivorsApplyDamageData_t",
+  "SurvivorsAttackIndicatorShape_t",
+  "SurvivorsAttributeType_t",
+  "SurvivorsDifficultyID_t",
+  "SurvivorsEnemyID_t",
+  "SurvivorsGameModeID_t",
+  "SurvivorsHeroID_t",
+  "SurvivorsLevelID_t",
+  "SurvivorsParticleID_t",
+  "SurvivorsPhysicsBodyID_t",
+  "SurvivorsPickupID_t",
+  "SurvivorsPowerUpID_t",
+  "SurvivorsUnitID_t",
+  "SurvivorsUpgradeID_t",
+  "k_eSurvivorsAttribute_ActiveAbilitySlots",
+  "k_eSurvivorsAttribute_AoEIncrease",
+  "k_eSurvivorsAttribute_ArmingTime",
+  "k_eSurvivorsAttribute_Armor",
+  "k_eSurvivorsAttribute_BonusPhysicalDamage",
+  "k_eSurvivorsAttribute_Cooldown",
+  "k_eSurvivorsAttribute_CooldownReductionMultiplier",
+  "k_eSurvivorsAttribute_Count",
+  "k_eSurvivorsAttribute_CriticalStrike_Physical_Chance",
+  "k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier",
+  "k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance",
+  "k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier",
+  "k_eSurvivorsAttribute_Damage",
+  "k_eSurvivorsAttribute_DamageMultiplier",
+  "k_eSurvivorsAttribute_DamageMultiplier_Magical",
+  "k_eSurvivorsAttribute_DamageMultiplier_Physical",
+  "k_eSurvivorsAttribute_DamageReflection",
+  "k_eSurvivorsAttribute_DamageTicks",
+  "k_eSurvivorsAttribute_Damage_Magical",
+  "k_eSurvivorsAttribute_Damage_Physical",
+  "k_eSurvivorsAttribute_DashCooldown",
+  "k_eSurvivorsAttribute_DashDuration",
+  "k_eSurvivorsAttribute_DashSpeed",
+  "k_eSurvivorsAttribute_Directions",
+  "k_eSurvivorsAttribute_Dodge",
+  "k_eSurvivorsAttribute_Duration",
+  "k_eSurvivorsAttribute_DurationEffect",
+  "k_eSurvivorsAttribute_DurationExtension",
+  "k_eSurvivorsAttribute_ExpMultiplier",
+  "k_eSurvivorsAttribute_FreezeDuration",
+  "k_eSurvivorsAttribute_FreezeSplashRadius",
+  "k_eSurvivorsAttribute_FreezeStrength",
+  "k_eSurvivorsAttribute_HPRegen",
+  "k_eSurvivorsAttribute_IncomingDamageAmplification",
+  "k_eSurvivorsAttribute_IncomingDamageAmplificationDuration",
+  "k_eSurvivorsAttribute_InitialTickDelay",
+  "k_eSurvivorsAttribute_Invalid",
+  "k_eSurvivorsAttribute_KnockbackDistance",
+  "k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+  "k_eSurvivorsAttribute_Length",
+  "k_eSurvivorsAttribute_LifeSteal",
+  "k_eSurvivorsAttribute_LifeTime",
+  "k_eSurvivorsAttribute_LimitBreak",
+  "k_eSurvivorsAttribute_Lives",
+  "k_eSurvivorsAttribute_Luck",
+  "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration",
+  "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage",
+  "k_eSurvivorsAttribute_MaxHP",
+  "k_eSurvivorsAttribute_MaxRerolls",
+  "k_eSurvivorsAttribute_ModifierDamagePerTick",
+  "k_eSurvivorsAttribute_MovementSpeed",
+  "k_eSurvivorsAttribute_NumDashes",
+  "k_eSurvivorsAttribute_PickupRadius",
+  "k_eSurvivorsAttribute_ProjectileAttack",
+  "k_eSurvivorsAttribute_ProjectileAttackInterval",
+  "k_eSurvivorsAttribute_ProjectileBounces",
+  "k_eSurvivorsAttribute_ProjectileDamagePercent",
+  "k_eSurvivorsAttribute_ProjectileHitCount",
+  "k_eSurvivorsAttribute_ProjectileHorizontalOffset",
+  "k_eSurvivorsAttribute_ProjectileRadius",
+  "k_eSurvivorsAttribute_ProjectileSpeed",
+  "k_eSurvivorsAttribute_Projectile_BonusMagicDamage",
+  "k_eSurvivorsAttribute_Radius",
+  "k_eSurvivorsAttribute_Range",
+  "k_eSurvivorsAttribute_SlowDuration",
+  "k_eSurvivorsAttribute_SlowStrength",
+  "k_eSurvivorsAttribute_SplashDamagePercentage",
+  "k_eSurvivorsAttribute_StampedeMovementSpeed",
+  "k_eSurvivorsAttribute_StunDuration",
+  "k_eSurvivorsAttribute_TargetCount",
+  "k_eSurvivorsAttribute_TimeBetweenTicks",
+  "k_eSurvivorsAttribute_TriggerTime",
+  "k_eSurvivorsAttribute_VulnerabilityDamagePercent",
+  "k_eSurvivorsAttribute_VulnerabilityDuration",
+  "k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration",
+  "k_eSurvivorsAttribute_Width",
+  "k_eSurvivorsShape_Circle",
+  "k_eSurvivorsShape_Rectangle",
+  "k_eSurvivorsShape_Undefined"
+ ],
+ "survivors": {
+  "libclient.dylib": [
+   "\"k_EMsgClientToGCSurvivorsTelemetry",
+   "#DOTA_SteamVideo_Title_Survivors",
+   "#DOTA_SteamVideo_Title_SurvivorsGame",
+   "#DOTA_SteamVideo_Title_Survivors_BossDesc",
+   "#DOTA_SteamVideo_Title_Survivors_Miniboss_Desc",
+   "#DOTA_SteamVideo_Title_Survivors_WinDesc",
+   "#DOTA_Survivors_Ability",
+   "#DOTA_Survivors_AbilitySynergyTooltip",
+   "#DOTA_Survivors_AcquirePowerup",
+   "#DOTA_Survivors_AttributeMaxUpgradeDetails",
+   "#DOTA_Survivors_AttributeUpgradeDetails",
+   "#DOTA_Survivors_CombinedItem",
+   "#DOTA_Survivors_DifficultyLocked",
+   "#DOTA_Survivors_EnhancePowerup",
+   "#DOTA_Survivors_EquipPowerup",
+   "#DOTA_Survivors_Item",
+   "#DOTA_Survivors_ItemSynergyTooltip",
+   "#DOTA_Survivors_Loss_Title",
+   "#DOTA_Survivors_MaxLevel",
+   "#DOTA_Survivors_NotScored_Title",
+   "#DOTA_Survivors_PlayAgain",
+   "#DOTA_Survivors_PowerupUpgradeDetails",
+   "#DOTA_Survivors_RetryButton",
+   "#DOTA_Survivors_UpgradePowerup",
+   "#DOTA_Survivors_Win_Title",
+   "&dota_gcmessages_common_survivors.proto",
+   "(CMsgClientToGCSurvivorsGameTelemetryData",
+   "*k_EMsgClientToGCSurvivorsTelemetryResponse",
+   "+CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   ".CMsgSurvivorsUserDataH",
+   "0CMsgClientToGCSurvivorsGameTelemetryDataResponse",
+   "10CMsgIDLinkILj1ELj16ELj9011E40CMsgClientToGCSurvivorsGameTelemetryDataE",
+   "14CSurvivorsUnit",
+   "16CSurvivorsEntity",
+   "16CSurvivorsPickup",
+   "16CSurvivorsPlayer",
+   "16CSurvivorsSchema",
+   "17CSurvivorsGameLog",
+   "17CSurvivorsMinimap",
+   "17CSurvivorsPowerUp",
+   "17CSurvivorsSpawner",
+   "18CMsgIDLinkResponseILj1ELj16ELj9011E40CMsgClientToGCSurvivorsGameTelemetryDataLj9012E48CMsgClientToGCSurvivorsGameTelemetryDataResponseE",
+   "18CSurvivorsModifier",
+   "2+.CMsgSurvivorsUserData.AttributeLevelsEntry",
+   "2,.CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   "20CSurvivorsEnemyGolem",
+   "20CSurvivorsProjectile",
+   "21CMsgSurvivorsUserData",
+   "21CSurvivorsEnemyPillar",
+   "21CSurvivorsImperiaBoss",
+   "21CSurvivorsUnit_Snotty",
+   "22CSurvivorsGameLogEntry",
+   "22CSurvivorsSpawnerGolem",
+   "22CSurvivorsSpawnerTower",
+   "22ISurvivorsPresentation",
+   "23CSurvivorsEnemyAbsorber",
+   "23CSurvivorsPowerUp_Track",
+   "24CDOTASurvivorsGameSystem",
+   "24CGameSystemStaticFactoryI24CDOTASurvivorsGameSystemS0_E",
+   "24CSurvivorsPowerUp_Snotty",
+   "24SurvivorsAttributeType_t",
+   "25CSurvivorsEnemyDefinition",
+   "25CSurvivorsMinimapRenderer",
+   "25CSurvivorsPowerUp_Spirits",
+   "26CDOTA_Survivors_UnitEntity",
+   "26CSurvivorsEnemyResurrector",
+   "26CSurvivorsPowerUp_LandMine",
+   "26CSurvivorsPowerUp_Stampede",
+   "27CSurvivorsPowerUpDefinition",
+   "27CSurvivorsPowerUp_Frostbite",
+   "27CSurvivorsSpawnerDefinition",
+   "27ISurvivorsGameEventListener",
+   "28CSurvivorsPowerUp_ArcaneBolt",
+   "28CSurvivorsPowerUp_AreaAttack",
+   "28CSurvivorsPowerUp_EchoStrike",
+   "28CSurvivorsPowerUp_KnifeThrow",
+   "28CSurvivorsSpawnerEliteTurret",
+   "29CDOTA_Survivors_EffectsEntity",
+   "29CDOTA_UI_Survivors_ScenePanel",
+   "29CSurvivorsPowerUp_LagunaBlade",
+   "29CSurvivorsPowerUp_Swashbuckle",
+   "29ISurvivorsProjectileCallbacks",
+   "2;.CMsgClientToGCSurvivorsGameTelemetryDataResponse.EResponse\"",
+   "30CSurvivorsGameLogEntry_LevelUp",
+   "30CSurvivorsPowerUp_CounterHelix",
+   "30CSurvivorsPowerUp_MagicMissile",
+   "30CSurvivorsSpawnerDestructibles",
+   "31CSurvivorsEnemyDefinition_Golem",
+   "31CSurvivorsPowerUp_InstantAttack",
+   "32CSurvivorsEnemyDefinition_Pillar",
+   "32CSurvivorsEnemyDefinition_Snotty",
+   "32CSurvivorsSpawnerGolemDefinition",
+   "32CSurvivorsSpawnerTowerDefinition",
+   "33CSurvivorsGameLogEntry_GoldEarned",
+   "33CSurvivorsPowerUpDefinition_Track",
+   "33CSurvivorsPowerUp_AreaAttack_Line",
+   "34CSurvivorsEnemyDefinition_Absorber",
+   "34CSurvivorsGameLogEntry_EnemyKilled",
+   "34CSurvivorsPowerUpDefinition_Snotty",
+   "34CSurvivorsPowerUp_ProjectileAttack",
+   "34CSurvivorsProjectileSimpleCallback",
+   "35CMsgIDLinkGenericClientToGCResponseILj1ELj9011E40CMsgClientToGCSurvivorsGameTelemetryDataLj9012E48CMsgClientToGCSurvivorsGameTelemetryDataResponseE",
+   "35CSurvivorsPowerUpDefinition_Spirits",
+   "35CSurvivorsPowerUp_AreaAttack_Circle",
+   "36CSurvivorsGameLogEntry_ShardReceived",
+   "36CSurvivorsPowerUpDefinition_LandMine",
+   "36CSurvivorsPowerUpDefinition_Stampede",
+   "37CSurvivorsEnemyDefinition_ImperiaBoss",
+   "37CSurvivorsEnemyDefinition_Resurrector",
+   "37CSurvivorsGameLogEntry_IncomingDamage",
+   "37CSurvivorsGameLogEntry_OutgoingDamage",
+   "37CSurvivorsPowerUpDefinition_Frostbite",
+   "38CSurvivorsGameLogEntry_ScepterReceived",
+   "38CSurvivorsPowerUpDefinition_ArcaneBolt",
+   "38CSurvivorsPowerUpDefinition_AreaAttack",
+   "38CSurvivorsPowerUpDefinition_EchoStrike",
+   "38CSurvivorsPowerUpDefinition_KnifeThrow",
+   "38CSurvivorsSpawnerEliteTurretDefinition",
+   "39CSurvivorsPowerUpDefinition_LagunaBlade",
+   "39CSurvivorsPowerUpDefinition_Swashbuckle",
+   "40CMsgClientToGCSurvivorsGameTelemetryData",
+   "40CSurvivorsPowerUpDefinition_CounterHelix",
+   "40CSurvivorsPowerUpDefinition_MagicMissile",
+   "40CSurvivorsSpawnerDestructiblesDefinition",
+   "41CSurvivorsPowerUpDefinition_InstantAttack",
+   "42CSurvivorsPowerUpDefinition_MortimerKisses",
+   "43CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   "43CSurvivorsPowerUpDefinition_AreaAttack_Line",
+   "43CSurvivorsPowerUp_AreaAttack_CircleConstant",
+   "44CSurvivorsPowerUpDefinition_ProjectileAttack",
+   "45CSurvivorsPowerUpDefinition_AreaAttack_Circle",
+   "47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors",
+   "48CMsgClientToGCSurvivorsGameTelemetryDataResponse",
+   "51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUse",
+   "53CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant",
+   "56CDOTA_DB_Tooltip_BP_Crownfall_Encounter_Survivors_Reward",
+   "57CDOTA_DB_Tooltip_BP_Crownfall_Encounter_Survivors_PowerUp",
+   "79CDOTA_DB_Tooltip_BP_Crownfall_Encounter_Survivors_InvalidMetaProgressionUpgrade",
+   "?15CSurvivorsEnemy",
+   "?32CSurvivorsPowerUp_MortimerKisses",
+   "CDOTASurvivorsGameSystem",
+   "CDOTA_Survivors_EffectsEntity",
+   "CDOTA_Survivors_UnitEntity",
+   "CDOTA_Survivors_UnitEntity_API",
+   "CMsgClientToGCSurvivorsGameTelemetryDataResponse: %s",
+   "CMsgSurvivorsUserData",
+   "CResourceNameTyped<HParticleSystemDefinition> CSurvivorsPowerUp_LandMine::GetExplosionParticle(SurvivorsMineType) const",
+   "CResourceNameTyped<HParticleSystemDefinition> CSurvivorsPowerUp_LandMine::GetMineParticle(SurvivorsMineType) const",
+   "CSurvivorsAttackParticleInfo",
+   "CSurvivorsAttributeDefinition",
+   "CSurvivorsAttributeDefinition::MetaProgressionTierCost_t",
+   "CSurvivorsAttributeDefinition::MetaProgressionTier_t",
+   "CSurvivorsAttributeValue",
+   "CSurvivorsDifficultyDefinition",
+   "CSurvivorsEnemy",
+   "CSurvivorsEnemy *CSurvivorsGame::SpawnEnemy(const CSurvivorsEnemyDefinition *, VectorWS)",
+   "CSurvivorsEnemyAbsorber",
+   "CSurvivorsEnemyDefinition",
+   "CSurvivorsEnemyDefinition::Attack",
+   "CSurvivorsEnemyDefinition::PickupChance",
+   "CSurvivorsEnemyDefinition_Absorber",
+   "CSurvivorsEnemyDefinition_Golem",
+   "CSurvivorsEnemyDefinition_ImperiaBoss",
+   "CSurvivorsEnemyDefinition_Pillar",
+   "CSurvivorsEnemyDefinition_Resurrector",
+   "CSurvivorsEnemyDefinition_Snotty",
+   "CSurvivorsEnemyEventDefinition",
+   "CSurvivorsEnemyGolem",
+   "CSurvivorsEnemyPillar",
+   "CSurvivorsEnemyResurrector",
+   "CSurvivorsEnemySnapshot",
+   "CSurvivorsEntity",
+   "CSurvivorsGame - Finished loading snapshot.",
+   "CSurvivorsGame::CSurvivorsGame(ISurvivorsPresentation &, SurvivorsGameModeID_t)",
+   "CSurvivorsGameModeDefinition",
+   "CSurvivorsGameModeDefinition::SeparationLayerData",
+   "CSurvivorsGameSnapshot",
+   "CSurvivorsHeroDefinition",
+   "CSurvivorsImperiaBoss",
+   "CSurvivorsLevelDefinition",
+   "CSurvivorsLootTable",
+   "CSurvivorsLootTable::CLootEntry",
+   "CSurvivorsLootTable::CLootEntryCollection",
+   "CSurvivorsPickupDefinition",
+   "CSurvivorsPickupSnapshot",
+   "CSurvivorsPlayerSnapshot",
+   "CSurvivorsPowerUp",
+   "CSurvivorsPowerUp::CSurvivorsPowerUp(const CSurvivorsPowerUpDefinition *, CSurvivorsGame *, CSurvivorsPlayer *)",
+   "CSurvivorsPowerUpDamageTickInfo",
+   "CSurvivorsPowerUpDefinition",
+   "CSurvivorsPowerUpDefinition_ArcaneBolt",
+   "CSurvivorsPowerUpDefinition_AreaAttack",
+   "CSurvivorsPowerUpDefinition_AreaAttack_Circle",
+   "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant",
+   "CSurvivorsPowerUpDefinition_AreaAttack_Line",
+   "CSurvivorsPowerUpDefinition_CounterHelix",
+   "CSurvivorsPowerUpDefinition_EchoStrike",
+   "CSurvivorsPowerUpDefinition_Frostbite",
+   "CSurvivorsPowerUpDefinition_InstantAttack",
+   "CSurvivorsPowerUpDefinition_KnifeThrow",
+   "CSurvivorsPowerUpDefinition_LagunaBlade",
+   "CSurvivorsPowerUpDefinition_LandMine",
+   "CSurvivorsPowerUpDefinition_MagicMissile",
+   "CSurvivorsPowerUpDefinition_MortimerKisses",
+   "CSurvivorsPowerUpDefinition_ProjectileAttack",
+   "CSurvivorsPowerUpDefinition_Snotty",
+   "CSurvivorsPowerUpDefinition_Spirits",
+   "CSurvivorsPowerUpDefinition_Stampede",
+   "CSurvivorsPowerUpDefinition_Swashbuckle",
+   "CSurvivorsPowerUpDefinition_Track",
+   "CSurvivorsPowerUpSnapshot",
+   "CSurvivorsPowerUp_ArcaneBolt",
+   "CSurvivorsPowerUp_AreaAttack",
+   "CSurvivorsPowerUp_AreaAttack_Circle",
+   "CSurvivorsPowerUp_AreaAttack_CircleConstant",
+   "CSurvivorsPowerUp_AreaAttack_Line",
+   "CSurvivorsPowerUp_CounterHelix",
+   "CSurvivorsPowerUp_EchoStrike",
+   "CSurvivorsPowerUp_Frostbite",
+   "CSurvivorsPowerUp_InstantAttack",
+   "CSurvivorsPowerUp_KnifeThrow",
+   "CSurvivorsPowerUp_LagunaBlade",
+   "CSurvivorsPowerUp_LandMine",
+   "CSurvivorsPowerUp_MagicMissile",
+   "CSurvivorsPowerUp_MagicMissile::CSurvivorsPowerUp_MagicMissile(const CSurvivorsPowerUpDefinition_MagicMissile *, CSurvivorsGame *, CSurvivorsPlayer *)",
+   "CSurvivorsPowerUp_MortimerKisses",
+   "CSurvivorsPowerUp_ProjectileAttack",
+   "CSurvivorsPowerUp_Snotty",
+   "CSurvivorsPowerUp_Spirits",
+   "CSurvivorsPowerUp_Stampede",
+   "CSurvivorsPowerUp_Swashbuckle",
+   "CSurvivorsPowerUp_Track",
+   "CSurvivorsProjectile::CSurvivorsProjectile(CSurvivorsGame &, SurvivorsUnitID_t, std::unique_ptr<ISurvivorsProjectileCallbacks>, VectorWS, VectorWS, float, float, float, float, int, CUtlVector<SurvivorsUnitID_t> &, KeyValues3)",
+   "CSurvivorsSchema failed to initialize",
+   "CSurvivorsSchema: Couldn't load resource %s",
+   "CSurvivorsSpawner",
+   "CSurvivorsSpawner::CSurvivorsSpawner(CSurvivorsGame &, const CSurvivorsSpawnerDefinition *, float)",
+   "CSurvivorsSpawnerDefinition",
+   "CSurvivorsSpawnerDestructibles",
+   "CSurvivorsSpawnerDestructiblesDefinition",
+   "CSurvivorsSpawnerEliteTurret",
+   "CSurvivorsSpawnerEliteTurretDefinition",
+   "CSurvivorsSpawnerGolem",
+   "CSurvivorsSpawnerGolemDefinition",
+   "CSurvivorsSpawnerTower",
+   "CSurvivorsSpawnerTowerDefinition",
+   "CSurvivorsUnit",
+   "CSurvivorsUnit_Snotty",
+   "CSurvivorsUpgradeDefinition",
+   "CUtlDict::IndexType_t CUtlDict<CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors::DialogueState_t>::Insert(const char *) [T = CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors::DialogueState_t, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsDifficultyDefinition *>::Insert(const char *, const T &) [T = CSurvivorsDifficultyDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsEnemyDefinition *>::Insert(const char *, const T &) [T = CSurvivorsEnemyDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsGameModeDefinition *>::Insert(const char *, const T &) [T = CSurvivorsGameModeDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsHeroDefinition *>::Insert(const char *, const T &) [T = CSurvivorsHeroDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsLevelDefinition *>::Insert(const char *, const T &) [T = CSurvivorsLevelDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsPickupDefinition *>::Insert(const char *, const T &) [T = CSurvivorsPickupDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsPowerUpDefinition *>::Insert(const char *, const T &) [T = CSurvivorsPowerUpDefinition *, L = CDefFastCaselessStringLess]",
+   "CUtlDict::IndexType_t CUtlDict<CSurvivorsSpawnerDefinition *>::Insert(const char *, const T &) [T = CSurvivorsSpawnerDefinition *, L = CDefFastCaselessStringLess]",
+   "CrownfallSurvivorsInvalidMetaProgressionUpgradeTooltip",
+   "CrownfallSurvivorsLightingEnvironment_t",
+   "CrownfallSurvivorsLightingOverride_t",
+   "CrownfallSurvivorsPowerUpTooltip",
+   "CrownfallSurvivorsRewardTooltip",
+   "DOTACrownfallBackgroundLaunchSurvivors",
+   "DOTACrownfallEncounterSurvivorsPopup",
+   "DOTASurvivorsCheatsBossPlaytest",
+   "DOTASurvivorsCheatsBossStage",
+   "DOTASurvivorsCheatsEliteRoom",
+   "DOTASurvivorsCheatsGetEXP",
+   "DOTASurvivorsCheatsGetScepter",
+   "DOTASurvivorsCheatsGetShard",
+   "DOTASurvivorsCheatsGrantItem",
+   "DOTASurvivorsCheatsKillBoss",
+   "DOTASurvivorsCheatsKillPlayer",
+   "DOTASurvivorsCheatsLevelUp",
+   "DOTASurvivorsCheatsLevelUpPowerUp",
+   "DOTASurvivorsCheatsLoseGame",
+   "DOTASurvivorsCheatsShowStats",
+   "DOTASurvivorsCheatsSpawnEvent",
+   "DOTASurvivorsCheatsToggleInvincible",
+   "DOTASurvivorsCheatsWinGame",
+   "DOTASurvivorsChooseDifficulty",
+   "DOTASurvivorsChooseHero",
+   "DOTASurvivorsDebugCreateSnapshot",
+   "DOTASurvivorsDebugLoadSnapshot",
+   "DOTASurvivorsGameMenuDifficultyScreen",
+   "DOTASurvivorsGameMenuHeroScreen",
+   "DOTASurvivorsGameMenuSelectTab",
+   "DOTASurvivorsGoToDifficultySelect",
+   "DOTASurvivorsGoToHeroSelect",
+   "DOTASurvivorsHideInvalidMetaProgressionTooltip",
+   "DOTASurvivorsHidePowerUpTooltip",
+   "DOTASurvivorsHideRewardTooltip",
+   "DOTASurvivorsLeaveGame",
+   "DOTASurvivorsLevelUpPowerUp",
+   "DOTASurvivorsMetaDevGivePoints",
+   "DOTASurvivorsMetaDevGiveSessionAmountOfPoints",
+   "DOTASurvivorsMetaDevResetUpgrades",
+   "DOTASurvivorsMetaDevUnlockDifficulty",
+   "DOTASurvivorsMetaProgressionUpgradeButtonHovered",
+   "DOTASurvivorsMetaUpgradeAttribute",
+   "DOTASurvivorsMinimap",
+   "DOTASurvivorsOnCancel",
+   "DOTASurvivorsRerollLevelUpChoices",
+   "DOTASurvivorsResize",
+   "DOTASurvivorsRestartGame",
+   "DOTASurvivorsScenePanel",
+   "DOTASurvivorsShowInvalidMetaProgressionTooltip",
+   "DOTASurvivorsShowPowerUpTooltip",
+   "DOTASurvivorsShowRewardTooltip",
+   "DOTASurvivorsStopVideo",
+   "DOTASurvivorsTogglePatchNotes",
+   "DOTASurvivorsTogglePaused",
+   "DOTASurvivorsToggleTokenFilter",
+   "DOTASurvivorsTokenFilterSettingsChanged",
+   "DOTASurvivorsUpdatePowerUpCheatsMenu",
+   "Dota Survivors",
+   "DotaSurvivors_global_client",
+   "ERROR: CSurvivorsSchema Reload failed",
+   "ESurvivorsAreaAttackOrigin",
+   "ESurvivorsAttackTargeting",
+   "ESurvivorsBossAbility",
+   "ESurvivorsBossState",
+   "ESurvivorsEnemyMovementBehavior",
+   "ESurvivorsEnemyMovementCapability",
+   "ESurvivorsEnemySeparationLayer",
+   "ESurvivorsEnemySpawnBehavior",
+   "ESurvivorsEnemySpawnPositionsLayer",
+   "ESurvivorsUpgradeRarity",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14RecordGameDataEvE5$_212EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14RecordGameDataEvE5$_213EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15EventTickUpdateEvE5$_145EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors16SendMetaDataToGCEvE5$_163EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors16SendMetaDataToGCEvE5$_164EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors22EventMetaDevGivePointsEvE5$_167EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors25EventMetaDevResetUpgradesEvE5$_166EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors25EventMetaUpgradeAttributeEjE5$_165EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors32EventMetaDevUnlockNextDifficultyEvE5$_169EE",
+   "N5GCSDK17GCClientJobLambdaIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors37EventMetaDevGiveSessionAmountOfPointsEvE5$_168EE",
+   "N6google8protobuf8internal12MapEntryImplI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseNS0_7MessageEijLNS1_14WireFormatLite9FieldTypeE5ELS6_13EEE",
+   "N6google8protobuf8internal8MapEntryI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseijLNS1_14WireFormatLite9FieldTypeE5ELS5_13EEE",
+   "N6google8protobuf8internal8MapFieldI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseijLNS1_14WireFormatLite9FieldTypeE5ELS5_13EEE",
+   "N8panorama8CUIEventILb0EJ24SurvivorsAttributeType_tEEE",
+   "N8panorama8CUIEventILb1EJ24SurvivorsAttributeType_t13OverworldID_t17OverworldNodeID_tEEE",
+   "N8panorama8CUIEventILb1EJP17CSurvivorsPowerUpEEE",
+   "NSt3__110__function6__baseIFbP47CDOTA_DB_Popup_BP_Crownfall_Encounter_SurvivorsEEE",
+   "NSt3__110__function6__baseIFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__baseIFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZ24OnSurvivorsCheatsChangedP10CConVarRefIbE16CSplitScreenSlotRKbS7_E5$_139NS_9allocatorIS8_EEFbP47CDOTA_DB_Popup_BP_Crownfall_Encounter_SurvivorsEEE",
+   "NSt3__110__function6__funcIZN14CSurvivorsGame22SimulateMeteorModifierEfE3$_3NS_9allocatorIS3_EEFvP20CSurvivorsProjectileRS2_EEE",
+   "NSt3__110__function6__funcIZN14CSurvivorsGame22SimulateMeteorModifierEfE3$_4NS_9allocatorIS3_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileRS2_EEE",
+   "NSt3__110__function6__funcIZN14CSurvivorsGame23ComputeEnemySeparationsEvE3$_6NS_9allocatorIS3_EEFviiEEE",
+   "NSt3__110__function6__funcIZN15CSurvivorsEnemy8SimulateEfE4$_27NS_9allocatorIS3_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss18ExecuteRadiateRaysEvE4$_12NS_9allocatorIS3_EEFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss18ExecuteRadiateRaysEvE4$_13NS_9allocatorIS3_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss19ExecuteMagicMissileEvE4$_15NS_9allocatorIS3_EEFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss19ExecuteMagicMissileEvE4$_16NS_9allocatorIS3_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss20ExecuteBurningGroundEvE4$_10NS_9allocatorIS3_EEFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN21CSurvivorsImperiaBoss20ExecuteBurningGroundEvE4$_11NS_9allocatorIS3_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN29CDOTA_UI_Survivors_ScenePanel9SetPausedEbE4$_14NS_9allocatorIS3_EEFvvEEE",
+   "NSt3__110__function6__funcIZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS4_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_2NS_9allocatorISB_EEFvP14CSurvivorsUnitP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS4_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_3NS_9allocatorISB_EEFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS4_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_4NS_9allocatorISB_EEFvP20CSurvivorsProjectileR14CSurvivorsGameEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14LoadHeroScreenEvE5$_203NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14LoadHeroScreenEvE5$_204NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateCooldownsEvE5$_179NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateCooldownsEvE5$_180NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_173NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_174NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_175NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_176NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_177NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_178NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvE5$_181NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvE5$_182NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiE5$_162NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors19UpdateObjectivesLogEvE5$_197NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors19UpdateObjectivesLogEvE5$_198NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors20UpdatePowerUpChoicesEvE5$_189NS_9allocatorIS3_EEFbPN8panorama8CPanel2DEEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_193NS_9allocatorIS5_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_194NS_9allocatorIS5_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_195NS_9allocatorIS5_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_196NS_9allocatorIS5_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors22UpdateDifficultyLevelsEvE5$_160NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors22UpdateDifficultyLevelsEvE5$_161NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors27UpdatePlayerAttributesPanelEvE5$_190NS_9allocatorIS3_EEFPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors27UpdatePlayerAttributesPanelEvE5$_191NS_9allocatorIS3_EEFvPN8panorama8CPanel2DEiEEE",
+   "NSt3__110__function6__funcIZN8panorama22UpdateSnippetPanelListINS2_8CPanel2DEZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiE5$_162EEvPS4_iPKcRKT0_EUliE_NS_9allocatorISD_EEFS7_iEEE",
+   "NSt3__110__function6__funcIZN8panorama22UpdateSnippetPanelListINS2_8CPanel2DEZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvENK5$_181clEPS4_iEUlS7_iE_EEvS7_iPKcRKT0_EUliE_NS_9allocatorISE_EEFS7_iEEE",
+   "NSt3__110__function6__funcIZN8panorama22UpdateSnippetPanelListINS2_8CPanel2DEZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPS4_iEUlS7_iE_EEvS7_iPKcRKT0_EUliE_NS_9allocatorISE_EEFS7_iEEE",
+   "NSt3__110__function6__funcIZN8panorama22UpdateSnippetPanelListINS2_8CPanel2DEZZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPS4_iENKUlS7_iE_clES7_iEUlS7_iE_EEvS7_iPKcRKT0_EUliE_NS_9allocatorISF_EEFS7_iEEE",
+   "NSt3__110__function6__funcIZN8panorama8CPanel2D21IterateChildrenOfTypeI47CDOTA_DB_Popup_BP_Crownfall_Encounter_SurvivorsEEbRKNS_8functionIFbPT_EEEEUlPS3_E_NS_9allocatorISE_EEFbSD_EEE",
+   "NSt3__110__function6__funcIZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvENK5$_181clEPN8panorama8CPanel2DEiEUlS6_iE_NS_9allocatorIS7_EEFvS6_iEEE",
+   "NSt3__110__function6__funcIZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPN8panorama8CPanel2DEiEUlS6_iE_NS_9allocatorIS7_EEFvS6_iEEE",
+   "NSt3__110__function6__funcIZZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPN8panorama8CPanel2DEiENKUlS6_iE_clES6_iEUlS6_iE_NS_9allocatorIS8_EEFvS6_iEEE",
+   "P17CSurvivorsPowerUp",
+   "Survivors EnemyKilled Enemy=%d",
+   "Survivors GoldEarned Amount=%d",
+   "Survivors IncomingDamage Enemy=%d Damage=%f",
+   "Survivors LevelUp PowerUp=%d",
+   "Survivors OutgoingDamage PowerUp=%d Damage=%f",
+   "Survivors ScepterReceived PowerUp=%d",
+   "Survivors ShardReceived PowerUp=%d",
+   "Survivors: Allocating more entity for unit [total = %d]",
+   "SurvivorsAttackIndicatorShape_t",
+   "SurvivorsAttributeType_t",
+   "SurvivorsDifficultyID_t",
+   "SurvivorsEnemyID_t",
+   "SurvivorsEventActionSubmit",
+   "SurvivorsGameModeID_t",
+   "SurvivorsHeroID_%d",
+   "SurvivorsHeroID_t",
+   "SurvivorsHeroSelect",
+   "SurvivorsHero_%d",
+   "SurvivorsLevelID_t",
+   "SurvivorsMinimap",
+   "SurvivorsParticleID_t",
+   "SurvivorsPhysicsBodyID_t",
+   "SurvivorsPickupID_t",
+   "SurvivorsPowerUpID_t",
+   "SurvivorsPowerUp_%d",
+   "SurvivorsSounds",
+   "SurvivorsTelemetryDataSubmit",
+   "SurvivorsUnitID_t",
+   "SurvivorsUpgradeID_t",
+   "T panorama::panel_fatal_cast(panorama::IUIPanelClient *) [T = CDOTA_UI_Survivors_ScenePanel *]",
+   "T panorama::panel_fatal_cast(panorama::IUIPanelClient *) [T = CSurvivorsMinimap *]",
+   "Z24OnSurvivorsCheatsChangedP10CConVarRefIbE16CSplitScreenSlotRKbS4_E5$_139",
+   "ZN14CSurvivorsGame22SimulateMeteorModifierEfE3$_3",
+   "ZN14CSurvivorsGame22SimulateMeteorModifierEfE3$_4",
+   "ZN14CSurvivorsGame23ComputeEnemySeparationsEvE3$_6",
+   "ZN15CSurvivorsEnemy8SimulateEfE4$_27",
+   "ZN21CSurvivorsImperiaBoss18ExecuteRadiateRaysEvE4$_12",
+   "ZN21CSurvivorsImperiaBoss18ExecuteRadiateRaysEvE4$_13",
+   "ZN21CSurvivorsImperiaBoss19ExecuteMagicMissileEvE4$_15",
+   "ZN21CSurvivorsImperiaBoss19ExecuteMagicMissileEvE4$_16",
+   "ZN21CSurvivorsImperiaBoss20ExecuteBurningGroundEvE4$_10",
+   "ZN21CSurvivorsImperiaBoss20ExecuteBurningGroundEvE4$_11",
+   "ZN29CDOTA_UI_Survivors_ScenePanel9SetPausedEbE4$_14",
+   "ZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS1_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_2",
+   "ZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS1_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_3",
+   "ZN34CSurvivorsPowerUp_ProjectileAttack22CreateAttackProjectileER10CUtlVectorI17SurvivorsUnitID_ti25CUtlVectorMemory_GrowableIS1_iLm0EEE25ESurvivorsAttackTargetingbi8VectorWSbE3$_4",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14LoadHeroScreenEvE5$_203",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors14LoadHeroScreenEvE5$_204",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateCooldownsEvE5$_179",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateCooldownsEvE5$_180",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_173",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_174",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_175",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_176",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_177",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors15UpdateInventoryEvE5$_178",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvE5$_181",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvE5$_182",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiE5$_162",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors19UpdateObjectivesLogEvE5$_197",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors19UpdateObjectivesLogEvE5$_198",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors20UpdatePowerUpChoicesEvE5$_189",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21ChooseDialogueVariantEPKcP20CResponseCriteriaSetPKNS_15DialogueState_tEE24CSurvivorsResponseFilter",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_193",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_194",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_195",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors21UpdateGameStatsScreenER24CSurvivorsGameLogResultsE5$_196",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors22UpdateDifficultyLevelsEvE5$_160",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors22UpdateDifficultyLevelsEvE5$_161",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors27UpdatePlayerAttributesPanelEvE5$_190",
+   "ZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors27UpdatePlayerAttributesPanelEvE5$_191",
+   "ZN8panorama22UpdateSnippetPanelListINS_8CPanel2DEZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiE5$_162EEvPS1_iPKcRKT0_EUliE_",
+   "ZN8panorama22UpdateSnippetPanelListINS_8CPanel2DEZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvENK5$_181clEPS1_iEUlS4_iE_EEvS4_iPKcRKT0_EUliE_",
+   "ZN8panorama22UpdateSnippetPanelListINS_8CPanel2DEZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPS1_iEUlS4_iE_EEvS4_iPKcRKT0_EUliE_",
+   "ZN8panorama22UpdateSnippetPanelListINS_8CPanel2DEZZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPS1_iENKUlS4_iE_clES4_iEUlS4_iE_EEvS4_iPKcRKT0_EUliE_",
+   "ZN8panorama8CPanel2D21IterateChildrenOfTypeI47CDOTA_DB_Popup_BP_Crownfall_Encounter_SurvivorsEEbRKNSt3__18functionIFbPT_EEEEUlPS0_E_",
+   "ZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18ShowPowerUpChoicesEvENK5$_181clEPN8panorama8CPanel2DEiEUlS3_iE_",
+   "ZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPN8panorama8CPanel2DEiEUlS3_iE_",
+   "ZZZN47CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors18UpdateMetaUpgradesEiENK5$_162clEPN8panorama8CPanel2DEiENKUlS3_iE_clES3_iEUlS3_iE_",
+   "auto CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors::UpdateDifficultyLevels()::(anonymous class)::operator()(panorama::CPanel2D *, int) const",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<CSurvivorsPickup *, panorama::CPanel2D *>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = CSurvivorsPickup *, T = panorama::CPanel2D *, L = CDefLess<CSurvivorsPickup *>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<ESurvivorsEnemySeparationLayer, CSurvivorsGameModeDefinition::SeparationLayerData>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = ESurvivorsEnemySeparationLayer, T = CSurvivorsGameModeDefinition::SeparationLayerData, L = CDefLess<ESurvivorsEnemySeparationLayer>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<SurvivorsAttributeType_t, float>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = SurvivorsAttributeType_t, T = float, L = CDefLess<SurvivorsAttributeType_t>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<SurvivorsEnemyID_t, CSurvivorsGameResults_Enemies *>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = SurvivorsEnemyID_t, T = CSurvivorsGameResults_Enemies *, L = CDefLess<SurvivorsEnemyID_t>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<SurvivorsHeroID_t, CSurvivorsHeroDefinition *>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = SurvivorsHeroID_t, T = CSurvivorsHeroDefinition *, L = CDefLess<SurvivorsHeroID_t>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<SurvivorsPowerUpID_t, CSurvivorsGameResults_PowerUp *>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = SurvivorsPowerUpID_t, T = CSurvivorsGameResults_PowerUp *, L = CDefLess<SurvivorsPowerUpID_t>, I = int]",
+   "const CUtlOrderedMap::ElemType_t &CUtlOrderedMap<SurvivorsPowerUpID_t, CSurvivorsPowerUpDefinition *>::FindElement(const CUtlOrderedMap::KeyType_t &) const [K = SurvivorsPowerUpID_t, T = CSurvivorsPowerUpDefinition *, L = CDefLess<SurvivorsPowerUpID_t>, I = int]",
+   "crownfall_survivors",
+   "crownfall_survivors_unit",
+   "dota_crownfall_encounter_survivors",
+   "dota_crownfall_survivors_cheats_menu",
+   "dota_gcmessages_common_survivors.proto",
+   "dota_survivors_actual_random_damage_range_percent",
+   "dota_survivors_boss_playtest_level",
+   "dota_survivors_cinematic_volume",
+   "dota_survivors_default_game_mode",
+   "dota_survivors_difficulty_setting",
+   "dota_survivors_disable_dialogue",
+   "dota_survivors_effects",
+   "dota_survivors_enable_powerup_aoe_indicators",
+   "dota_survivors_enemy_turn_rate_override",
+   "dota_survivors_exp_tier2_minimum",
+   "dota_survivors_exp_tier3_minimum",
+   "dota_survivors_fastmode",
+   "dota_survivors_force_dialogue",
+   "dota_survivors_force_first_time",
+   "dota_survivors_force_lightning",
+   "dota_survivors_godmode",
+   "dota_survivors_has_been_created_from_dashboard_before",
+   "dota_survivors_hero",
+   "dota_survivors_hero_select_setting",
+   "dota_survivors_keep_running_game_log",
+   "dota_survivors_lightning_light_intensity",
+   "dota_survivors_max_remaining_cooldown_after_upgrade",
+   "dota_survivors_min_spawn_z",
+   "dota_survivors_msg_game_log",
+   "dota_survivors_pickup_particle_cull_radius",
+   "dota_survivors_player_position_history",
+   "dota_survivors_rain_intensity",
+   "dota_survivors_randomize_damage_numbers",
+   "dota_survivors_shadow_pass_dissolve",
+   "dota_survivors_show_damage_numbers",
+   "dota_survivors_skip_first_time",
+   "dota_survivors_spawner_disabled",
+   "dota_survivors_time_scale",
+   "dota_survivors_token_filter",
+   "dota_survivors_unit_custom_interpolation",
+   "dota_survivors_unit_pool_count",
+   "dota_survivors_use_physics_query_for_units",
+   "dota_survivors_win_transition_duration",
+   "file://{resources}/layout/battle_pass/crownfall/bp_popup_crownfall_encounter_survivors.xml",
+   "file://{resources}/layout/battle_pass/crownfall/survivors_powerup_tooltip.xml",
+   "file://{resources}/layout/battle_pass/crownfall/survivors_tooltip_invalid_metaprogression_upgrade.xml",
+   "file://{resources}/layout/battle_pass/crownfall/survivors_tooltip_reward.xml",
+   "float CSurvivorsGame::GetFirstFloorTimeLimit() const",
+   "game/client/dota/panorama/crownfall/dota_db_popup_bp_crownfall_encounter_survivors.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_enemy.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_game.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_gridnav.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_imperia_boss.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_map.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_player.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_powerup.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_powerup_landmine.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_powerup_magic_missile.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_projectile.cpp",
+   "game/client/dota/panorama/crownfall/survivors/dota_survivors_spawner.cpp",
+   "game/shared/dota/dota_survivors_schema.cpp",
+   "int CSurvivorsPlayer::GetPowerUpLevel(SurvivorsPowerUpID_t)",
+   "k_EMsgClientToGCSurvivorsTelemetry",
+   "k_EMsgClientToGCSurvivorsTelemetryResponse",
+   "k_eSurvivorsAttribute_ActiveAbilitySlots",
+   "k_eSurvivorsAttribute_AoEIncrease",
+   "k_eSurvivorsAttribute_ArmingTime",
+   "k_eSurvivorsAttribute_Armor",
+   "k_eSurvivorsAttribute_BonusPhysicalDamage",
+   "k_eSurvivorsAttribute_Cooldown",
+   "k_eSurvivorsAttribute_CooldownReductionMultiplier",
+   "k_eSurvivorsAttribute_Count",
+   "k_eSurvivorsAttribute_CriticalStrike_Physical_Chance",
+   "k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier",
+   "k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance",
+   "k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier",
+   "k_eSurvivorsAttribute_Damage",
+   "k_eSurvivorsAttribute_DamageMultiplier",
+   "k_eSurvivorsAttribute_DamageMultiplier_Magical",
+   "k_eSurvivorsAttribute_DamageMultiplier_Physical",
+   "k_eSurvivorsAttribute_DamageReflection",
+   "k_eSurvivorsAttribute_DamageTicks",
+   "k_eSurvivorsAttribute_Damage_Magical",
+   "k_eSurvivorsAttribute_Damage_Physical",
+   "k_eSurvivorsAttribute_DashCooldown",
+   "k_eSurvivorsAttribute_DashDuration",
+   "k_eSurvivorsAttribute_DashSpeed",
+   "k_eSurvivorsAttribute_Directions",
+   "k_eSurvivorsAttribute_Dodge",
+   "k_eSurvivorsAttribute_Duration",
+   "k_eSurvivorsAttribute_DurationEffect",
+   "k_eSurvivorsAttribute_DurationExtension",
+   "k_eSurvivorsAttribute_ExpMultiplier",
+   "k_eSurvivorsAttribute_FreezeDuration",
+   "k_eSurvivorsAttribute_FreezeSplashRadius",
+   "k_eSurvivorsAttribute_FreezeStrength",
+   "k_eSurvivorsAttribute_HPRegen",
+   "k_eSurvivorsAttribute_IncomingDamageAmplification",
+   "k_eSurvivorsAttribute_IncomingDamageAmplificationDuration",
+   "k_eSurvivorsAttribute_InitialTickDelay",
+   "k_eSurvivorsAttribute_Invalid",
+   "k_eSurvivorsAttribute_KnockbackDistance",
+   "k_eSurvivorsAttribute_KnockbackDistanceMultiplier",
+   "k_eSurvivorsAttribute_Length",
+   "k_eSurvivorsAttribute_LifeSteal",
+   "k_eSurvivorsAttribute_LifeTime",
+   "k_eSurvivorsAttribute_LimitBreak",
+   "k_eSurvivorsAttribute_Lives",
+   "k_eSurvivorsAttribute_Luck",
+   "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration",
+   "k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage",
+   "k_eSurvivorsAttribute_MaxHP",
+   "k_eSurvivorsAttribute_MaxRerolls",
+   "k_eSurvivorsAttribute_ModifierDamagePerTick",
+   "k_eSurvivorsAttribute_MovementSpeed",
+   "k_eSurvivorsAttribute_NumDashes",
+   "k_eSurvivorsAttribute_PickupRadius",
+   "k_eSurvivorsAttribute_ProjectileAttack",
+   "k_eSurvivorsAttribute_ProjectileAttackInterval",
+   "k_eSurvivorsAttribute_ProjectileBounces",
+   "k_eSurvivorsAttribute_ProjectileDamagePercent",
+   "k_eSurvivorsAttribute_ProjectileHitCount",
+   "k_eSurvivorsAttribute_ProjectileHorizontalOffset",
+   "k_eSurvivorsAttribute_ProjectileRadius",
+   "k_eSurvivorsAttribute_ProjectileSpeed",
+   "k_eSurvivorsAttribute_Projectile_BonusMagicDamage",
+   "k_eSurvivorsAttribute_Radius",
+   "k_eSurvivorsAttribute_Range",
+   "k_eSurvivorsAttribute_SlowDuration",
+   "k_eSurvivorsAttribute_SlowStrength",
+   "k_eSurvivorsAttribute_SplashDamagePercentage",
+   "k_eSurvivorsAttribute_StampedeMovementSpeed",
+   "k_eSurvivorsAttribute_StunDuration",
+   "k_eSurvivorsAttribute_TargetCount",
+   "k_eSurvivorsAttribute_TimeBetweenTicks",
+   "k_eSurvivorsAttribute_TriggerTime",
+   "k_eSurvivorsAttribute_VulnerabilityDamagePercent",
+   "k_eSurvivorsAttribute_VulnerabilityDuration",
+   "k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration",
+   "k_eSurvivorsAttribute_Width",
+   "k_eSurvivorsShape_Circle",
+   "k_eSurvivorsShape_Rectangle",
+   "k_eSurvivorsShape_Undefined",
+   "maps/scenes/crownfall/survivors_arena.gnv",
+   "maps/scenes/crownfall/survivors_arena.vpk",
+   "maps/scenes/crownfall/survivors_arena/world_physics.vmdl",
+   "models/events/crownfall/survivors/skeleton_melee/skeleton_melee.vmdl",
+   "no survivors popup found",
+   "particles/events/crownfall/survivors/meteor.vpcf",
+   "particles/events/crownfall/survivors/meteor_dot.vpcf",
+   "particles/events/crownfall/survivors/rain_screen.vpcf",
+   "particles/events/crownfall/survivors/status/status_effect_generic_hit.vpcf",
+   "particles/events/crownfall/survivors/status/status_effect_player_hit.vpcf",
+   "scripts/events/crownfall/response_rules_survivors.vrr",
+   "scripts/events/crownfall/survivors_attributes.vdata",
+   "scripts/events/crownfall/survivors_difficulty.vdata",
+   "scripts/events/crownfall/survivors_enemies.vdata",
+   "scripts/events/crownfall/survivors_game_modes.vdata",
+   "scripts/events/crownfall/survivors_heroes.vdata",
+   "scripts/events/crownfall/survivors_levels.vdata",
+   "scripts/events/crownfall/survivors_pickups.vdata",
+   "scripts/events/crownfall/survivors_powerups.vdata",
+   "scripts/events/crownfall/survivors_snapshots/",
+   "scripts/events/crownfall/survivors_snapshots/*.*",
+   "scripts/events/crownfall/survivors_spawners.vdata",
+   "soundevents/soundevents_survivors.vsndevts",
+   "survivors",
+   "survivors-start",
+   "survivors.%s.cast",
+   "survivors.%s.hit",
+   "survivors.%s.tick",
+   "survivors.acquire_item",
+   "survivors.acquire_scepter",
+   "survivors.acquire_shard",
+   "survivors.ambient.lightning",
+   "survivors.cheese_pickup",
+   "survivors.cookie_pickup",
+   "survivors.death.%s",
+   "survivors.game_music.active",
+   "survivors.game_music.boss",
+   "survivors.game_music.loss",
+   "survivors.game_music.setup",
+   "survivors.game_music.win",
+   "survivors.gold_pickup",
+   "survivors.imperia.burning_ground",
+   "survivors.imperia.burning_ground.cast",
+   "survivors.imperia.burning_ground.impact",
+   "survivors.imperia.demon_portal.%d",
+   "survivors.imperia.demon_portal.create",
+   "survivors.imperia.demon_portal.remove",
+   "survivors.imperia.enrage",
+   "survivors.imperia.magic_missile",
+   "survivors.imperia.magic_missile.projectile.hit",
+   "survivors.imperia.magic_missile.projectile.shoot",
+   "survivors.imperia.pillar.destroy",
+   "survivors.imperia.radiate_rays.projectile.hit",
+   "survivors.imperia.radiate_rays.projectile.shoot",
+   "survivors.imperia.radiate_rays.start",
+   "survivors.imperia.radiate_rays.teleport",
+   "survivors.kez.innate.crit",
+   "survivors.kez.innate.proc",
+   "survivors.land_mine.armed",
+   "survivors.land_mine.explode",
+   "survivors.levelup",
+   "survivors.magnet_pickup",
+   "survivors.miniboss.ressurect",
+   "survivors.xp_pickup",
+   "survivors_camera",
+   "survivors_data",
+   "survivors_game_mode",
+   "survivors_games_played",
+   "survivors_games_played_as_hero",
+   "survivors_ingame",
+   "survivors_unit",
+   "virtual void CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors::CreateDamageNumber(VectorWS, float, float, ESurvivorsDamageNumberType)",
+   "virtual void CDOTA_DB_Popup_BP_Crownfall_Encounter_Survivors::SpawnEnemyEntity(CSurvivorsEnemy *)",
+   "virtual void CSurvivorsEnemy::OnDeath(bool)",
+   "virtual void CSurvivorsEnemy::Simulate(float)",
+   "virtual void CSurvivorsPowerUp::ApplyDamageAndEffects(const SurvivorsApplyDamageData_t &)",
+   "void CSurvivorsDifficultyManager::Initialize(SurvivorsGameModeID_t, int)",
+   "void CSurvivorsGame::ComputeEnemySeparations()",
+   "void CSurvivorsGame::EnterBossStage()",
+   "void CSurvivorsGame::SimulateLevel(float)",
+   "void CSurvivorsGridNav::LoadMapAndInitialize(SurvivorsGameModeID_t, const CUtlVector<GridNavCellFlags_t> &)",
+   "void CSurvivorsImperiaBoss::ExecuteDemonPortals()",
+   "void CSurvivorsMap::UpdateForGameTime(CSurvivorsGame &, float, float)",
+   "void CSurvivorsPlayer::LevelUpPowerUp(SurvivorsPowerUpID_t, const CSurvivorsUpgradeDefinition &)",
+   "void CSurvivorsPowerUp::ApplyDamage(CSurvivorsUnit *, float, float, const VectorWS &)"
+  ],
+  "libserver.dylib": [
+   "\"k_EMsgClientToGCSurvivorsTelemetry",
+   "&dota_gcmessages_common_survivors.proto",
+   "(CMsgClientToGCSurvivorsGameTelemetryData",
+   "*k_EMsgClientToGCSurvivorsTelemetryResponse",
+   "+CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   ".CMsgSurvivorsUserDataH",
+   "0CMsgClientToGCSurvivorsGameTelemetryDataResponse",
+   "2+.CMsgSurvivorsUserData.AttributeLevelsEntry",
+   "2,.CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   "21CMsgSurvivorsUserData",
+   "2;.CMsgClientToGCSurvivorsGameTelemetryDataResponse.EResponse\"",
+   "40CMsgClientToGCSurvivorsGameTelemetryData",
+   "43CMsgClientToGCSurvivorsPowerUpTelemetryData",
+   "48CMsgClientToGCSurvivorsGameTelemetryDataResponse",
+   "51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUse",
+   "CMsgSurvivorsUserData",
+   "N6google8protobuf8internal12MapEntryImplI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseNS0_7MessageEijLNS1_14WireFormatLite9FieldTypeE5ELS6_13EEE",
+   "N6google8protobuf8internal8MapEntryI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseijLNS1_14WireFormatLite9FieldTypeE5ELS5_13EEE",
+   "N6google8protobuf8internal8MapFieldI51CMsgSurvivorsUserData_AttributeLevelsEntry_DoNotUseijLNS1_14WireFormatLite9FieldTypeE5ELS5_13EEE",
+   "dota_gcmessages_common_survivors.proto",
+   "k_EMsgClientToGCSurvivorsTelemetry",
+   "k_EMsgClientToGCSurvivorsTelemetryResponse",
+   "survivors_data"
+  ]
+ },
+ "unreadFields": [
+  "m_TimeBasedLightingEnvironments",
+  "m_activity",
+  "m_activityDie",
+  "m_activityIdle",
+  "m_activityMove",
+  "m_bAbilityActiveWhileProjectileIsAlive",
+  "m_bCanSpawnWithVelocity",
+  "m_bCenterRooted",
+  "m_bDissolveOnDeath",
+  "m_bExpireOnWorldCollision",
+  "m_bHasDeathAnimation",
+  "m_bHasGlowOutline",
+  "m_bIsScepterUpgradeable",
+  "m_bIsShardUpgradeable",
+  "m_bModifierParticleUsesOverheadOffset",
+  "m_bOverrideGlowColor",
+  "m_bPercentage",
+  "m_bPlayDeathSound",
+  "m_bPlayerFacing",
+  "m_bPrimary",
+  "m_bRandomFacing",
+  "m_bRandomizeSinTurnTimerOnSpawn",
+  "m_bResetSpawnIntervalOnKill",
+  "m_bRotates",
+  "m_bShowHealthBar",
+  "m_bShowInMinimap",
+  "m_bUseFacingDirection",
+  "m_bUseHeroModel",
+  "m_cEliteGlowColor",
+  "m_cOverriddenGlowColor",
+  "m_cost",
+  "m_eBounceTargeting",
+  "m_eOrigin",
+  "m_eSpawnPositionsLayer",
+  "m_flAnglePerShot",
+  "m_flAttackOffsetForward",
+  "m_flAttackOffsetUp",
+  "m_flChanceToCounter",
+  "m_flDeathDuration",
+  "m_flDelayBetweenCounters",
+  "m_flDestroyDistance",
+  "m_flLaunchDistance",
+  "m_flMass",
+  "m_flMaxModelScaleVariance",
+  "m_flMaxSpawnVelocity",
+  "m_flMinRange",
+  "m_flMinSeparationDistanceFromEnemies",
+  "m_flMoveAnimPlaybackRate",
+  "m_flMovementSpeedPercentDamageMultiplier",
+  "m_flOverrideDespawnRadiusBuffer",
+  "m_flRotationDist",
+  "m_flRotationSpeedDeg",
+  "m_flScepterDamageIncreasePerEnemyKilled",
+  "m_flScepterExplodeRadius",
+  "m_flScepterLaunchDistance",
+  "m_flScepterVacuumDistance",
+  "m_flScepterVacuumRadius",
+  "m_flShardDamageMultiplier",
+  "m_flSpawnMinimumLifetime",
+  "m_flSpawnOffset",
+  "m_flSpawnPickupOnKillPercent",
+  "m_flWarmupEffectTime",
+  "m_luckyLootTable",
+  "m_nEliteExtraHit",
+  "m_nMinigameCurrency",
+  "m_nModelIndex",
+  "m_nOverflowEnemySpawnCount",
+  "m_pszPlayerHitSoundEvent",
+  "m_sAbsorbParticleName",
+  "m_sArtilleryParticle",
+  "m_sAttackIndicatorParticleEffect",
+  "m_sBurningGroundBurnParticleName",
+  "m_sBurningGroundDoTParticleName",
+  "m_sBurningGroundImpactParticleName",
+  "m_sCollisionIndicatorEffect",
+  "m_sDamageNumbersEffectCriticalStrike",
+  "m_sDamageNumbersEffectEnemy",
+  "m_sDamageNumbersEffectPlayer",
+  "m_sDeathEffectParticle",
+  "m_sDemonPortalsPortalParticle",
+  "m_sDemonPortalsTelegraphParticle",
+  "m_sDirectionalHelperParticle",
+  "m_sDisplayName",
+  "m_sDropSoundEvent",
+  "m_sEliteRoomChannelEffect",
+  "m_sEliteRoomDirectionalArrowEffect",
+  "m_sEnemyDisplayName",
+  "m_sExplosionParticle",
+  "m_sFreezeParticle",
+  "m_sGenericStunEffect",
+  "m_sHealthBarEffect",
+  "m_sHeroImage",
+  "m_sHitStatusEffectParticle",
+  "m_sImage",
+  "m_sImageThumbnail",
+  "m_sImpactParticle",
+  "m_sImperiaAmbientBody",
+  "m_sImperiaAmbientWings",
+  "m_sInvulnerableParticle",
+  "m_sInvulnerableSkinName",
+  "m_sLevelUpEffect",
+  "m_sLevelUpKnockbackEffect",
+  "m_sLocAbilityDesc",
+  "m_sLocAbilityName",
+  "m_sLocDescription",
+  "m_sLocDifficultyDescription",
+  "m_sLocDifficultyName",
+  "m_sLocDisplayName",
+  "m_sLocHeroName",
+  "m_sLocName",
+  "m_sLocScepterAbilityDesc",
+  "m_sLocTooltip",
+  "m_sMagicMissileParticle",
+  "m_sMinimapIconClass",
+  "m_sMinimapIconSnippet",
+  "m_sModelName",
+  "m_sModifierParticle",
+  "m_sOnPickupOverheadEffect",
+  "m_sParticle",
+  "m_sParticleEffect",
+  "m_sParticleName",
+  "m_sPhysicalWeaknessEffect",
+  "m_sPlayerHitEffect",
+  "m_sRadiateRaysBuffParticle",
+  "m_sRadiateRaysRayParticle",
+  "m_sRemoteMineExplosion",
+  "m_sRemoteMineParticle",
+  "m_sResurrectParticleName",
+  "m_sReviveEffect",
+  "m_sSkinName",
+  "m_sSpawnParticle",
+  "m_sStasisTrapExplosion",
+  "m_sStasisTrapParticle",
+  "m_sStatsName",
+  "m_sStunParticle",
+  "m_sWarmupEffectParticle",
+  "m_scepterUpgradeDefinition",
+  "m_unGameModeID",
+  "m_unLevelID",
+  "m_unSpawnPickupOnKillID",
+  "m_unStyleIndex",
+  "m_vCameraOffset",
+  "m_vCollisionIndicatorColorEnemy",
+  "m_vCollisionIndicatorColorPlayer",
+  "m_vEntityBounds",
+  "m_vFixedFacing",
+  "m_vWarmupEffectColor",
+  "m_vecMetaProgressionTiers",
+  "m_vecModelNames",
+  "m_vecTooltipAttributes"
+ ]
+}

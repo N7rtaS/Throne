@@ -1,0 +1,10 @@
+# Задачи: исследовательский инструмент Dota, только чтение (Task 6)
+- [x] 1. Тесты до кода: `Tools/tests/test_research_client.py` с хелпером фейковой установки (VPK v1, бинарники, `steam.inf`) и проверками из `design.md` §6; убедиться, что они падают (нет модуля). (Т1–Т5)
+- [x] 2. `Guard`: запретная зона (весь Steam, Р2), отказ при проекте в зоне, `check_output`, `open_readonly`, `write_text` (temp + `os.replace`, без записи при равном содержимом), `snapshot` и `--check-readonly`; коды 3 и 4. (Т1, Т5.3)
+- [x] 3. `client_strings()`: строки бинарников, разделы `survivors`, `classes`, `enums`, `dataFields`, `unreadFields`, `clientOnlyFields` по правилам §3. (Т2)
+- [x] 4. `panorama_layouts()`: список из `manifest.tsv`, сверка CRC32 с VPK, Source2Viewer во временный каталог, перенос в `Research/Decoded/panorama/`. (Т1.3, Т3.2, Т3.3)
+- [x] 5. `panorama_localization()`: разбор KV, отбор ключей §3.4, `localization_*.json`, `menu_texts.md`. (Т3.1, Т3.4)
+- [x] 6. `descriptions()`: `Descriptions.md` по ролям, атрибуты, рецепты, плейсхолдеры, ошибки кода 2; `report()` с SHA-256 входов и версиями. (Т4, Т5.2)
+- [x] 7. Тесты зелёные; реальный прогон `python3 Tools/research-client.py --check-readonly` → 0; второй прогон не меняет файлы; `--out` внутри Dota и внутри Steam → 3. (критерии приёмки)
+- [x] 8. `Mechanics.md`: раздел 16 «Ответы из клиента» по §12.3–7, 9, 10 с метками; ссылки из §12; `Tools/README.md`. (Т6)
+- [x] 9. `python3 -m unittest discover -s Tools/tests` и `dotnet test DotNet/ThornThrone.Simulation.Tests` зелёные; отметка в `roadmap.md`; коммит.

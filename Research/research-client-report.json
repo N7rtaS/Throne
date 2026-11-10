@@ -1,0 +1,183 @@
+{
+ "client": {
+  "ClientVersion": "6972",
+  "SourceRevision": "11209448",
+  "VersionDate": "Nov 05 2026",
+  "VersionTime": "11:17:10",
+  "source": "steam.inf"
+ },
+ "inputs": {
+  "dota": [
+   {
+    "bytes": 23321597,
+    "path": "pak01_dir.vpk",
+    "sha256": "eaee44204cdb97c0c7d04be107c38b5bc5e2fcb4425b0e7003c61ffe36d2f5b6"
+   },
+   {
+    "bytes": 97333504,
+    "path": "bin/osx64/libclient.dylib",
+    "sha256": "ed9d42f94638067b45ea7b2408aad1b80145479f6739610dbbc6735b259eb438"
+   },
+   {
+    "bytes": 78604560,
+    "path": "bin/osx64/libserver.dylib",
+    "sha256": "dfeeff3a0ca22e44b0308bc2023d4bae06da19528bd9ab11a0c3eccf99b128ab"
+   }
+  ],
+  "project": [
+   {
+    "bytes": 4018,
+    "path": "Research/Json/survivors_arena_entities.json",
+    "sha256": "70811e6e4ebe25776fc6567b01805b89fa574189689ffc067f732cc3945f542a"
+   },
+   {
+    "bytes": 34849,
+    "path": "Research/Json/survivors_attributes.json",
+    "sha256": "113d3770f86ba86e053563f79aed1793f37e5a1f83d0bf95cb0058f5bec9e637"
+   },
+   {
+    "bytes": 2952,
+    "path": "Research/Json/survivors_difficulty.json",
+    "sha256": "9488608124e0877847f12083f242278c5cc30fccdcf1a54bcf4a735069620c6d"
+   },
+   {
+    "bytes": 52386,
+    "path": "Research/Json/survivors_enemies.json",
+    "sha256": "f30a8a89949cbe0ba268c451113c433b2c5fc92ffc3d4a5dfd5cb4c518940108"
+   },
+   {
+    "bytes": 6544,
+    "path": "Research/Json/survivors_game_modes.json",
+    "sha256": "92788a9659d7575a9c5755dc5d1711361738c31caa823b3d21dd277fd9ec93cf"
+   },
+   {
+    "bytes": 4042,
+    "path": "Research/Json/survivors_heroes.json",
+    "sha256": "a8a2f3a850c8db695e6bafcfeb4f2b42e96f1579365926199162415e2e2946ec"
+   },
+   {
+    "bytes": 12246,
+    "path": "Research/Json/survivors_levels.json",
+    "sha256": "f2f06a862e0b8d8a474c852386c96c1b5a6cb00563c99b847196e234670df338"
+   },
+   {
+    "bytes": 4558,
+    "path": "Research/Json/survivors_pickups.json",
+    "sha256": "0f397a6fd460856228812ec8aec89a35a238d4db8d50cce0f666685e6638778a"
+   },
+   {
+    "bytes": 120735,
+    "path": "Research/Json/survivors_powerups.json",
+    "sha256": "2190f282222ccbb1b5d67f220a91a88b71543a1a508d780407b20d0af772a2ec"
+   },
+   {
+    "bytes": 13326,
+    "path": "Research/Json/survivors_spawners.json",
+    "sha256": "5ff6548c88fdf0b63d11696ebdf531dbddaad4f8805ce92c6c445a4eef038ba3"
+   }
+  ],
+  "simulationSourcesSha256": "02c6e6dc7259e4950fce3119914f8def54292d5ff6d0b9d812b2427c492bb488",
+  "vpkEntries": [
+   {
+    "bytes": 2986,
+    "crc32": "cfad3d52",
+    "path": "panorama/layout/banners/front_page_nest_of_thorns.vxml_c"
+   },
+   {
+    "bytes": 21719,
+    "crc32": "553f1f37",
+    "path": "panorama/layout/battle_pass/crownfall/bp_popup_crownfall_encounter_survivors.vxml_c"
+   },
+   {
+    "bytes": 2998,
+    "crc32": "ad1a2e4b",
+    "path": "panorama/layout/battle_pass/crownfall/survivors_powerup_tooltip.vxml_c"
+   },
+   {
+    "bytes": 1971,
+    "crc32": "feb15e91",
+    "path": "panorama/layout/battle_pass/crownfall/survivors_tooltip_invalid_metaprogression_upgrade.vxml_c"
+   },
+   {
+    "bytes": 2152,
+    "crc32": "bdcdbea6",
+    "path": "panorama/layout/battle_pass/crownfall/survivors_tooltip_reward.vxml_c"
+   },
+   {
+    "bytes": 4987,
+    "crc32": "ff77b68d",
+    "path": "panorama/styles/banners/front_page_nest_of_thorns.vcss_c"
+   },
+   {
+    "bytes": 351327,
+    "crc32": "c68d6bbe",
+    "path": "panorama/styles/battle_pass/crownfall/bp_popup_crownfall_encounter_survivors.vcss_c"
+   },
+   {
+    "bytes": 11456,
+    "crc32": "ff8226af",
+    "path": "panorama/styles/battle_pass/crownfall/survivors_powerup_tooltip.vcss_c"
+   },
+   {
+    "bytes": 5393,
+    "crc32": "dc967826",
+    "path": "panorama/styles/battle_pass/crownfall/survivors_tooltip_invalid_metaprogression_upgrade.vcss_c"
+   },
+   {
+    "bytes": 4775,
+    "crc32": "66f35f02",
+    "path": "panorama/styles/battle_pass/crownfall/survivors_tooltip_reward.vcss_c"
+   },
+   {
+    "bytes": 4044256,
+    "crc32": "f94fc0fb",
+    "path": "resource/localization/dota_english.txt"
+   },
+   {
+    "bytes": 5390859,
+    "crc32": "1d02b93f",
+    "path": "resource/localization/dota_russian.txt"
+   },
+   {
+    "bytes": 15622,
+    "crc32": "725d5e54",
+    "path": "resource/localization/vdata/survivors_attributes/survivors_attributes_english.txt"
+   },
+   {
+    "bytes": 18021,
+    "crc32": "8f4557a5",
+    "path": "resource/localization/vdata/survivors_attributes/survivors_attributes_russian.txt"
+   },
+   {
+    "bytes": 10214,
+    "crc32": "0656d13b",
+    "path": "resource/localization/vdata/survivors_powerups/survivors_powerups_english.txt"
+   },
+   {
+    "bytes": 13171,
+    "crc32": "d6c25cc6",
+    "path": "resource/localization/vdata/survivors_powerups/survivors_powerups_russian.txt"
+   }
+  ]
+ },
+ "outputs": {
+  "Research/Decoded/client/strings.json": {
+   "classes": 117,
+   "clientOnlyFields": 566,
+   "dataFields": 320,
+   "enums": 104,
+   "survivors": {
+    "libclient.dylib": 711,
+    "libserver.dylib": 23
+   },
+   "unreadFields": 150
+  },
+  "Research/Decoded/panorama/layout+styles": 10,
+  "Research/Decoded/panorama/localization_english.json": 144,
+  "Research/Decoded/panorama/localization_russian.json": 144,
+  "Research/Decoded/panorama/menu_texts.md": 5,
+  "Research/FullGame/Descriptions.md": 47
+ },
+ "source2viewer": "20.1.7467+9e2e6c7f67e3c4e5a5f443a60c3a5d841ba8f304",
+ "tool": "Tools/research-client.py"
+}

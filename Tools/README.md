@@ -20,6 +20,13 @@ Tools/import-unity-data.sh           # JSON → UnityProject/Assets/Game/Data/So
 python3 -m unittest discover -s Tools/tests
 ```
 
+Исследование клиента (только чтение):
+```sh
+python3 Tools/research-client.py --check-readonly   # строки клиента, Panorama, описания powerups
+```
+Пишет `Research/Decoded/client/strings.json` (строки `bin/osx64/libclient.dylib` и `libserver.dylib`: всё с `survivors`, классы, перечисления, поля данных с признаками «есть в клиенте» и «читает симуляция», кандидаты полей клиента), `Research/Decoded/panorama/` (разметки и стили режима, декодированные Source2Viewer, отобранные ключи `dota_{english,russian}.txt`, `menu_texts.md`), `Research/FullGame/Descriptions.md` (русские и английские описания 47 powerups) и `Research/research-client-report.json` (входы с SHA-256, версия клиента и Source2Viewer). Повторный запуск на тех же входах не меняет файлы. `--out DIR` задаёт другой корень для выходов.
+Гарантия только чтения: весь каталог Steam (`~/Library/Application Support/Steam` и библиотека Steam, в которой лежит Dota) — запретная зона. Файлы там открываются только на чтение (`"rb"`), выход в зону и запуск внешних программ с путями зоны запрещены. Source2Viewer получает только копии из `NestOfThorns/`, CRC32 которых сверен с `pak01_dir.vpk`. Если проект сам оказался внутри зоны (например, из-за нестандартного `--dota`), инструмент не работает. `--check-readonly` сравнивает размер и время изменения всех файлов установки Dota до и после запуска; запускать при закрытой Dota.
+Коды выхода `research-client.py`: 0 — успех; 1 — нет входа (Dota, Source2Viewer или копия в `NestOfThorns` не совпадает с VPK — запустите `extract-resources.py`); 2 — нарушение данных (не 47 powerups или ключа `m_sLoc*` нет в локализации); 3 — выход или проект в запретной зоне; 4 — файлы установки Dota изменились во время запуска.
 Сборка для Android:
 
 ```sh

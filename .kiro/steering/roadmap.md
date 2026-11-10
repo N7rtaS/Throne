@@ -81,7 +81,7 @@ inclusion: manual
 - `simulation_coverage()` вместо `prototype_coverage()`: разбор `AbilityFactory`, `SupportedHeroAttributes`, обработанных классов врагов, реализованных подборов, поведений спавна. Новое поле `implementation`: none/partial/implemented/verified (verified — есть ссылка в `DotNet/**`). Поле `prototype` сохранить. Ненулевой код, если у обязательной записи нет роли.
 - Демо: magic_missile — implemented, echo_strike — none, absorber — implemented. Сделано: magic_missile и absorber — verified (есть тесты, решение Р1: «не ниже implemented»), echo_strike — none. Тесты аудита: `python3 -m unittest discover -s Tools/tests`.
 
-Task 6: Исследовательский инструмент Dota, только чтение (Spec)
+✅ (2026-11-10, коммит «Добавить исследовательский инструмент клиента Dota только для чтения») Task 6: Исследовательский инструмент Dota, только чтение (Spec)
 - `Tools/research-client.py`: строки из `bin/osx64` (`Survivors`, `CSurvivors*`, `m_fl*`, непрочитанные поля); локализация Panorama и тексты меню через Source2Viewer в `Research/Decoded/panorama/`; ru/en описания всех 47 powerups в `Research/FullGame/Descriptions.md`. Открывать только `"rb"`, запрет выходного пути внутри Dota.
 - Проверка: повторный запуск даёт тот же результат; в Dota нет новых файлов (mtime до/после).
 - Демо: описания 17 способностей; в `Mechanics.md` раздел «Ответы из клиента» по вопросам §12.
