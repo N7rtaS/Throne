@@ -1,0 +1,170 @@
+{
+  "pbtResults": {
+    "1. Написать тест исследования условия ошибки": {
+      "status": "passed",
+      "failingExample": "DashRequestSurvivesFrameWithoutStep (dragonus): Update(Step*0.4f, Zero, true) -> Time unchanged; Update(Step, Zero, false) -> Time +Step, HeroDashed count expected 1 but was 0. SeveralPressesBeforeStepMergeIntoOneDash (kez, NumDashes>1): 2x Update(Step*0.3f, Zero, true), Update(Step, Zero, false) -> Time +Step, HeroDashed count expected 1 but was 0. Root cause: local dashRequest in Run.Update is lost when the while loop runs zero ticks.",
+      "lastRunTimestamp": 1794328530642
+    },
+    "2. Написать тесты сохранения поведения (ДО исправления)": {
+      "status": "passed",
+      "lastRunTimestamp": 1794328633200
+    },
+    "3.2 Убедиться, что тест исследования теперь проходит": {
+      "status": "passed",
+      "lastRunTimestamp": 1794328733067
+    },
+    "3.3 Убедиться, что тесты сохранения по-прежнему проходят": {
+      "status": "passed",
+      "lastRunTimestamp": 1794328773809
+    },
+    "3.5 Добавить тесты свойств на случайных последовательностях кадров в `DashInputTests`": {
+      "status": "passed",
+      "lastRunTimestamp": 1794329037985
+    }
+  },
+  "executionHistory": {
+    "1. Написать тест исследования условия ошибки": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477848
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328485395
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328544940
+      }
+    ],
+    "2. Написать тесты сохранения поведения (ДО исправления)": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477877
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328549066
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328651758
+      }
+    ],
+    "3.1 Внести исправление в `UnityProject/Assets/Game/Scripts/Simulation/Run.cs`": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477895
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328656074
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328708616
+      }
+    ],
+    "3.2 Убедиться, что тест исследования теперь проходит": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477930
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328712622
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328738237
+      }
+    ],
+    "3.3 Убедиться, что тесты сохранения по-прежнему проходят": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477949
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328742173
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328782707
+      }
+    ],
+    "3.4 Добавить тесты сброса запроса в `DashInputTests`": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477966
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328786732
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328882605
+      }
+    ],
+    "3.5 Добавить тесты свойств на случайных последовательностях кадров в `DashInputTests`": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477982
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328886959
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794329055844
+      }
+    ],
+    "4. Checkpoint — убедиться, что всё проходит": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794328477998
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794329060322
+      },
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794329512662
+      }
+    ],
+    "3. Исправить потерю рывка между шагами": [
+      {
+        "executionId": "97f6c2c1-05c9-4644-a386-694465f0ebfb",
+        "chatSessionId": "sess_c083dc80-f7f6-4426-99c9-fca9b6f87923",
+        "timestamp": 1794329055881
+      }
+    ]
+  }
+}

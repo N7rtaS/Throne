@@ -1,0 +1,205 @@
+---
+inclusion: manual
+---
+
+# Дорожная карта «Тернового трона»
+
+Подключается через `#roadmap`. Утверждена владельцем. Порядок — этапы ТЗ §13: 0–1 (без телефона) → 3 → 4 → 5 → 6 → 7 → 8; работа на телефоне — блок G в конце.
+
+## Решения владельца
+- Телефона пока нет: всё, что требует устройства, — в блоке G.
+- Новых наблюдений в клиенте не будет. Неизвестные правила сначала искать в установленной Dota 2 (только чтение): `~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota` (данные, локализация, panorama, строки в `bin/osx64`). Если ответа нет — проектное решение с меткой **Р** в `Mechanics.md`.
+- Агент сам запускает Unity в batchmode (macOS smoke, APK) для проверки задач.
+- Источники: данные проекта, вики Dota 2 (fandom/liquipedia отдавали 403 — пробовать, но не зависеть), установленная игра.
+
+## Общие правила для каждой задачи
+- TDD; после задачи `dotnet test DotNet/ThornThrone.Simulation.Tests` полностью зелёный.
+- Если задача меняет Unity-слой: macOS smoke (`BuildMacSmoke` + `-thornSmoke`), в логе `THORN_MOBILE_SMOKE` с kills > 0, скриншот в `Research/Скриншоты/`.
+- Новое правило → `Mechanics.md` с меткой Д/Н/Р/К; отличие от оригинала → `Differences.md`.
+- Одна задача — один коммит в принятом формате.
+- В конце задачи сказать пользователю, какой режим Kiro выбрать для следующей.
+- В конце задачи отметить её в этом файле: в начале строки заголовка `✅ (ГГГГ-ММ-ДД, <хеш коммита>)`. Если задача сделана частично — `🟡` и одна строка, что осталось.
+
+## Режимы Kiro по задачам
+| Задачи | Режим |
+|---|---|
+| 1 | Quick Spec / обычный чат |
+| 2, 3 | Bug Fix |
+| 4, 14, 15, 20, 32, 38 | Quick Spec |
+| остальные | Spec |
+
+## Известное состояние (ноябрь 2026)
+- Готово: шаг 1/30, пулы, SpatialGrid, навигация, расписание, 4 типа движения, все 4 элитные комнаты (вкл. поглотителя), Империя (ярость, лучи, порталы, метеоры), эшелоны, стартовые сундуки, Arcane Bolt, Magic Missile, ранги, рецепты (правило прототипа), перебросы. 54 теста.
+- Нет: 15 способностей; физ. урон, крит, броня, уязвимость, отражение; статусы кроме оглушения; области/мины/призывы/цепи; Aghanim; жизни; малые улучшения; удача; 17 из 26 пассивок не предлагаются (атрибуты не в `SupportedHeroAttributes`). Мобильный слой: нет интерполяции, legacy `UI.Text` без TMP, ввод только по прямоугольникам, нет сохранений/настроек/пресетов/звука/VFX/выбора сложности, Shen и Kez выключены, сборка только Development без подписи.
+- Дефекты: рывок теряется в кадрах без шага (`Run.Update`); врождённая Kez попадает в глобальные атрибуты (`Build.Recalculate`); `Tools/audit.py` читает файлы прототипа из `Удалить/` (`prototype_coverage`, ~стр. 106); босс читает JSON в горячем цикле (`Run.Boss.cs`: `F(...)`, `Floats(...)`, `Raw[...]`); HUD выделяет память каждый кадр (`GameUi.UpdateHud`).
+- Устаревшие документы: ТЗ §2/§13 (коммиты, число тестов, комната поглотителя), `Differences.md` (22/41 тест), `ContentRegistry.json` (поле `prototype`).
+
+## Архитектура
+- `ThornThrone.Simulation` (есть) и новая `ThornThrone.Progression` (Profile, MetaUpgrades, Unlocks, SaveStore поверх `IFileSystem`) — чистый C#, тестируются dotnet.
+- Unity: asmdef `ThornThrone.Mobile` (+ EditMode-тесты). Слои App, Presentation, Input, UI, Platform. Логика ввода — чистый класс `TouchController`.
+
+## Итоговое состояние по блокам
+- A: дефекты исправлены, реестры правдивы, README сборки, smoke одной командой. Этапы 0–1 без телефона.
+- B: играбельный Dragonus от меню до результата: интерполяция, TMP, управление §6, настройки, пресеты, сохранения, жизненный цикл. Этап 3.
+- C: 3 героя, 17 способностей, 26 предметов, рецепты, Aghanim, статусы. Этап 4.
+- D: все враги/спавнеры/8 сложностей, жизни, счёт, результаты. Этап 5.
+- E: валюта, постоянная прокачка, открытия, рекорды. Этап 6.
+- F: модели, иконки, HUD, звук, VFX, нагрузка на Mac, подписанный релизный APK. Этапы 7–8 без телефона.
+- G: телефон, замеры §11, приёмка §14.
+Ограничения: часть правил останется **Р**; графика упрощена (Б3–Б5); производительность доказывается только в блоке G; публикация, iOS, распространение ресурсов вне объёма.
+
+---
+
+## A. База без устройства (этапы 0–1)
+
+✅ (2026-11-10, коммит с .kiro) Task 1: Обновить steering под новые правила (Quick Spec)
+- Цель: закрепить разрешения владельца.
+- `tech.md`: агент может запускать Unity batchmode (`BuildMacSmoke`, `Tools/build-android.sh`, `Tools/mac-screenshot.sh`), критерий успеха smoke. Убрать «предлагать пользователю запускать самому» для этих команд.
+- `product.md`: раздел «Исследование оригинала» — путь к Dota, только чтение, ничего там не создавать/менять, результаты декодирования только в `Research/`; ссылка на `#roadmap`.
+- Проверка: путь `THORN_DOTA_DIR` совпадает с `Tools/README.md`.
+- Демо: новая сессия знает о smoke и чтении Dota.
+
+✅ (2026-11-10, 1c7a102) Task 2: Рывок не теряется между шагами (Bug Fix)
+- `Run.Update`: флаг `pendingDash` живёт до первого `Tick`; сбрасывается на паузе и при выборе улучшения.
+- Тесты: `DashRequestSurvivesFrameWithoutStep` (Update(0.01,true) затем Update(0.03,false) → рывок), `DashRequestIsDroppedOnPause`.
+- Демо: в smoke рывок на Space срабатывает каждый раз.
+
+Task 3: Врождённая Kez не попадает в глобальные атрибуты (Bug Fix)
+- `Build.Recalculate`: `BaseAttributes` врождённой в `Global` только для пассивного класса без действия; врождённую с активным классом (`_InstantAttack`) создавать через `AbilityFactory` (пока нет — диагностика, не бонусы). Dragonus/Shen без изменений.
+- Тесты: `KezInnateDoesNotLeakRangeIntoGlobals`; `DragonusStartsWithInnateBonuses` проходит.
+
+Task 4: Типизированные параметры Империи (Quick Spec)
+- `ImperiaDef` в `Content/Definitions.cs`, заполняет `GameData` при загрузке (ярость, пороги, ракеты, метеоры, лучи, спавнеры порталов). `Run.Boss.cs` использует поля. Отсутствующие в данных значения — в `Rules` с пометкой Р.
+- Тесты: все `BossTests`; новый `BossStepsDoNotAllocate` (300 шагов боя, без роста аллокаций).
+- Демо: smoke `-thornBoss` как раньше.
+
+Task 5: `audit.py` считает покрытие по новой симуляции (Spec)
+- `simulation_coverage()` вместо `prototype_coverage()`: разбор `AbilityFactory`, `SupportedHeroAttributes`, обработанных классов врагов, реализованных подборов, поведений спавна. Новое поле `implementation`: none/partial/implemented/verified (verified — есть ссылка в `DotNet/**`). Поле `prototype` сохранить. Ненулевой код, если у обязательной записи нет роли.
+- Демо: magic_missile — implemented, echo_strike — none, absorber — implemented.
+
+Task 6: Исследовательский инструмент Dota, только чтение (Spec)
+- `Tools/research-client.py`: строки из `bin/osx64` (`Survivors`, `CSurvivors*`, `m_fl*`, непрочитанные поля); локализация Panorama и тексты меню через Source2Viewer в `Research/Decoded/panorama/`; ru/en описания всех 47 powerups в `Research/FullGame/Descriptions.md`. Открывать только `"rb"`, запрет выходного пути внутри Dota.
+- Проверка: повторный запуск даёт тот же результат; в Dota нет новых файлов (mtime до/после).
+- Демо: описания 17 способностей; в `Mechanics.md` раздел «Ответы из клиента» по вопросам §12.
+
+Task 7: `AssetRegistry.json` (Spec)
+- Граф: определения → vmdl/vpcf/vsnd → vmat → vtex; связь с `manifest.tsv` (CRC32), выходами в `Art/Converted`, Unity GUID из `.meta`, статус (конвертирован/запечён/воссоздан/нет/не используется).
+- Проверка: у каждой обязательной сущности хотя бы одна запись; отчёт о недостающих (сейчас 17).
+
+Task 8: README сборки, Unity-тесты, автоматический smoke (Spec)
+- Корневой `README.md`: версии (Unity, пакеты из lock, Python, Node, Source2Viewer, SDK/NDK/JDK), конвейер, команды, переменные окружения.
+- asmdef `ThornThrone.Mobile` и `ThornThrone.Mobile.Tests` (EditMode, `com.unity.test-framework`).
+- `Tools/mac-smoke.sh` (сборка, запуск `-thornSmoke`, разбор лога, ненулевой код при ошибке/kills=0/исключениях); `Tools/unity-tests.sh` → `Research/unity-tests.xml`.
+- Исправить устаревшие числа в ТЗ §2/§13 и `Differences.md`.
+
+## B. Мобильный вертикальный срез (этап 3)
+
+Task 9: Интерполяция при 60 FPS (Spec)
+- `Run` хранит `PreviousPosition` (герой, враги, снаряды, подборы) и `Alpha = accumulator/Step`; телепорт и переиспользование слота сбрасывают prev. Отрисовка Lerp; зоны/телеграфы без интерполяции.
+- Тесты: `AlphaIsFractionOfStep`, `TeleportResetsPreviousPosition`, `ReusedSlotHasNoInterpolationTrail`.
+
+Task 10: TextMeshPro, кириллический шрифт, HUD без аллокаций (Spec)
+- TMP; свободный кириллический SDF-шрифт (Noto Sans / PT Sans, лицензия в README); `GameUi` на `TMP_Text`; текст только при изменении, `SetText(format, value)`.
+- Тест: EditMode `HudUpdateDoesNotAllocate`.
+
+Task 11: Контракт сенсорного управления, ТЗ §6 (Spec)
+- Чистый `TouchController` (вход: id, phase, position, overUi; выход: Move, DashPressed, джойстик). Привязка пальца к начатому действию, мёртвая зона 10%, длина ≤ 1, плавающий/фиксированный джойстик, леворукий режим, dp через `Screen.dpi` (запасное 160), цели ≥ 48 dp, `EventSystem.IsPointerOverGameObject`, сброс при паузе/фокусе/отмене/повороте, карточки только для новых касаний, «Назад»: подменю → возврат, забег → пауза, выход из забега → подтверждение.
+- EditMode-тесты: два пальца, палец переходит на кнопку рывка, мёртвая зона, зеркало, отмена, удержанный палец не выбирает карточку. Smoke `-thornInputScript`.
+
+Task 12: Сохранения, сборка `ThornThrone.Progression` (Spec)
+- asmdef без движка, исходники в dotnet-тестах. `Profile`: версия схемы и правил, валюта, улучшения, открытия, результаты, настройки, журнал наград. `SaveStore` поверх `IFileSystem`: temp → проверка (контрольная сумма) → атомарная замена → резервная копия; восстановление из резервной, при порче обоих — новый профиль с сохранением повреждённых файлов. Профили `user`/`test`. Unity-обёртка над `persistentDataPath` в Platform.
+- dotnet-тесты с фейковой ФС: порча основного, обоих, прерванная запись, нет места, старая схема, round-trip.
+
+Task 13: Экран настроек (Spec)
+- Качество, 30/60 FPS, громкости (пока без звука), масштаб UI, тип/сторона джойстика, вибрация, цифры урона; применяются сразу, сохраняются.
+- EditMode: изменение сохраняет и меняет `targetFrameRate` и `TouchController`. Smoke: перезапуск сохраняет значение.
+
+Task 14: Пресеты Low/Medium/High (Quick Spec)
+- 3 URP-ассета (Low ≈ 720p, без HDR и теней), уровни `QualitySettings`, переключение в игре, автовыбор по `SystemInfo` + ручной выбор; `Run` не меняется.
+- Демо: скриншоты трёх пресетов.
+
+Task 15: Жизненный цикл (Quick Spec)
+- Идемпотентные pause/focus; в фоне: пауза, сброс ввода, хук отключения звука, сохранение подтверждённого прогресса; возврат на паузу без догоняющей симуляции; предупреждение о потере забега.
+- EditMode на `AppLifecycle`.
+
+Task 16: Порядок экранов (Spec)
+- Автомат App: меню → герой → сложность (эшелоны из профиля, закрытые серые с замком) → забег → результат (запись один раз) → повтор/меню. Создание `Run` перенести из `MobileGame.StartRun` в App.
+- Тесты: `ResultIsRecordedOnce`, `VictoryOnEchelonNUnlocksNPlus1`; EditMode переходов. Smoke `-thornFlow`.
+
+## C. Полный боевой контент (этап 4)
+
+Task 17: Общее ядро боя (Spec)
+- `AbilityBase` (общие Damage/Cooldown), ArcaneBolt и MagicMissile на нём. `DamageInfo` (физ./маг./чистый, крит, источник), `Run.DealDamage`, броня/сопротивления, уязвимость, отражение. Статусы на фиксированных массивах: оглушение (перенести), замедление, заморозка, DoT, ослабление; правила наложения в Mechanics. Статистика урона по источникам.
+- Тесты: формулы по данным, наложение, крит при seed, без аллокаций, старые тесты зелёные.
+
+Task 18: Глобальные атрибуты, пассивки, жизни (Spec)
+- В `SupportedHeroAttributes`: Armor, DamageReflection, крит, AoEIncrease, ActiveAbilitySlots, KnockbackDistanceMultiplier, Projectile_BonusMagicDamage, BonusPhysicalDamage, DurationExtension, Lives, Luck. Жизни: возрождение 2.7 с с неуязвимостью. Удача для `m_luckyLootTable` (клиент или Р).
+- Тесты на каждую пассивку (ранг 1 и максимум), жизни, apex, перенос оставшихся проверок прототипа из 57 (Reaver, Heart, octarine+tome, сохранение дефицита HP).
+
+Task 19: Echo Strike и врождённая Kez, Kez играбелен (Spec)
+- `EchoStrike`, `InstantAttack` (дальность 1500, радиус 180, перезарядка 6, уязвимость, скорость) по данным и `Descriptions.md`; Kez в меню (капсула).
+- Тесты: `KezStartsWithEchoStrikeFromData`, урон/радиус, уязвимость, бот-забег. Smoke `-thornHero=kez`.
+
+Task 20: Врождённая Shen, Shen играбелен (Quick Spec)
+- `MagicDamageWeakensPhysicalDamageResistance` через статусы; Shen в меню. Smoke `-thornHero=shen`.
+
+Task 21: Rot и Counter Helix (Spec) — примитив области вокруг героя; тики по данным, нет тиков на паузе, ранги. Smoke `-thornForce=rot,counter_helix`.
+
+Task 22: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Spec) — общий механизм цепи (из MagicMissile), мгновенный луч, заморозка; тесты по данным.
+
+Task 23: Swashbuckle, Stampede, Annihilation, Track (Spec) — по классу на способность; Track — метка с бонусом при убийстве.
+
+Task 24: Land Mine, Mortimer Kisses (Spec) — пул `GroundObject` (размер и переполнение задокументированы), навесной снаряд с задержкой (`TriggerTime`, `InitialTickDelay`).
+
+Task 25: Spirits, Snotty Bat (Spec) — спутники/союзники; роль `snotty` по данным. После задачи все 17 способностей готовы.
+
+Task 26: Малые улучшения, редкость, правила выбора (Spec)
+- `m_vecMinorUpgradeChoices` после максимума; редкость на карточке; заполненные слоты; запасная награда (A19: `pile_of_coal`/`gold` по клиенту, иначе Р); карточки показывают конкретные изменения.
+
+Task 27: Aghanim (Spec)
+- `scepter` из элитных врагов, `shard` по клиенту; эффекты для каждой способности с `m_bIsScepterUpgradeable`/`m_bIsShardUpgradeable` (Arcane Bolt — удвоение снарядов; Magic Missile — `m_flScepterDamageIncreasePerEnemyKilled`, `m_flShardDamageMultiplier`); экран выбора; без двойного начисления.
+
+Task 28: Все рецепты и матрица «предмет × способность» (Spec)
+- Трезубцы, Daedalus, Khanda и др.; момент объединения по клиенту, иначе Р; уведомление в UI; параметризованный тест матрицы. `audit.py`: все powerups implemented/verified.
+
+## D. Полный сценарий (этап 5)
+
+Task 29: Враги, спавн, модификаторы сложностей (Spec)
+- Поля: `TurnRate` + `EnemyTurnRateMultiplier`, `m_bCanSpawnWithVelocity`/`m_flMaxSpawnVelocity`, `m_nOverflowEnemySpawnCount`, `m_bResetSpawnIntervalOnKill`, `m_flDestroyDistance`, `m_flMinSeparationDistanceFromEnemies`, `m_flOverrideDespawnRadiusBuffer`, `m_flMass`, `m_flAttackOffsetForward`. Убрать ложную диагностику `_Pillar`. Замедление от касания (`sticky_situation`), метеоры (`meteor_mayhem`). Награды элитных комнат. Решения по hellbear/flyer_2/box в реестре.
+- Тесты на поля и модификаторы, по тесту на каждую из 8 сложностей, бот по 8 сложностям без диагностики.
+
+Task 30: Завершение забега, счёт, результаты (Spec)
+- Результат после фиксации не меняется; смерть с жизнями и без; счёт (клиент, иначе Р; +20 за скелета наблюдалось); экран: урон, время владения, DPS по способностям, золото, счёт.
+- Тесты: смерть в волне/комнате/на боссе, одновременная смерть героя и босса.
+
+## E. Прогрессия (этап 6)
+
+Task 31: Валюта и постоянная прокачка (Spec)
+- Золото в профиль один раз; 14 атрибутов `m_vecMetaProgressionTiers`, цены `m_nMinigameCurrency`, применение к стартовым атрибутам; без двойного списания; локальная замена внешних жетонов в `Differences.md`.
+- Тест сверки с видео: профиль из Mechanics §13 → 180 HP у Dragonus, урон Arcane Bolt 8.75.
+
+Task 32: Открытия, рекорды, тестовый профиль (Quick Spec) — результаты по «герой × сложность», локальные рекорды, тестовый профиль со всеми эшелонами; цепочка 1→8; тест не пишет в пользовательский профиль. Smoke `-thornProfile=test`.
+
+Task 33: Экран «Улучшения» и описание героев (Spec) — цена, текущее/следующее значение (значение уровня, не сумма), нехватка валюты; экран героя со стартовой и врождённой способностью.
+
+## F. Оформление и стабилизация (этапы 7–8)
+
+Task 34: Модели Shen/Kez, недостающие враги и подборы (Spec) — `convert-models.py --heroes shen,kez`, `looks.json`, анимации; hellbear, flyer_2, box, tower, подборы, колонны босса; `MobileBuilder` падает при отсутствии облика; обновить `AssetRegistry`.
+
+Task 35: Иконки и полный HUD (Spec) — иконки из panorama; слоты с рангами и Aghanim, валюта, указатели, босс, описание по долгому нажатию; макеты 1280×720, 1920×1080, 2400×1080, 2048×1536 без перекрытий (EditMode-проверка прямоугольников).
+
+Task 36: Звук (Spec) — конвертер vsnd→ogg, импорт по `SoundRegistry`, `AudioManager` с пулом и приоритетами (предупреждения не обрезаются), музыка потоком, громкости, отключение на паузе.
+
+Task 37: Эффекты (Spec) — Particle System/инстансинг: способности, уровень, оглушение, телеграфы (первыми), порталы; пулы; на Low меньше частиц, телеграфы остаются.
+
+Task 38: Визуальная сверка с видео (Quick Spec) — кадры `full.mp4` рядом со скриншотами smoke, статусы Б3.1–Б4 в `Differences.md`; `Research/Сверка/*.png`.
+
+Task 39: Нагрузка и надёжность на Mac (Spec) — `-thornStress` (300 врагов, 1000 снарядов), p50/p95/p99 в файл, 5 забегов подряд с контролем памяти и объектов, пределы пулов задокументированы; `Research/perf-mac.json`.
+
+Task 40: Релизная подписанная сборка (Spec) — `BuildAndroidRelease` без Development; ключ из `THORN_KEYSTORE` и паролей в окружении, вне репозитория; автоувеличение versionCode; SHA-256 и примечания в `Research/releases/`; ключ создаёт пользователь (агент даёт команду `keytool`); без ключа понятная ошибка; `apksigner verify`.
+
+## G. На устройстве
+
+Task 41: Этап 0 на телефоне и замеры (Spec) — установка, `Research/Devices.md`, обновление поверх без потери прогресса, замеры по §11 (прогрев, 3 повтора, 120 с) на двух профилях, ASTC, 48 dp, safe area с вырезом, жестовая навигация, выбор технологии орды.
+
+Task 42: Финальная приёмка §14 (Spec) — таблица §14: победа каждым героем, все сложности, авиарежим, чистая установка; передача по §15.
