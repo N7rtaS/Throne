@@ -183,7 +183,11 @@ namespace ThornThrone.Simulation
         private void StartRays()
         {
             BossCurrentAttack = BossAttack.RadiateRays;
-            if (Data.TryArenaPoint("boss_radiating_rays_teleport", out var center)) Boss.Position = center;
+            if (Data.TryArenaPoint("boss_radiating_rays_teleport", out var center))
+            {
+                Boss.Position = center;
+                Boss.PreviousPosition = center; // instant move, not drawn as movement (Mechanics §17)
+            }
             var d = bossDef.Imperia;
             raysTime = d.RadiateRaysDuration + d.RadiateRaysCastStartDuration;
             raysEmit = d.RadiateRaysCastStartDuration;

@@ -69,6 +69,12 @@ namespace ThornThrone.Simulation
         public bool CanSimulate => !Paused && !Finished && !Choosing;
 
         public Vec2 HeroPosition { get; private set; }
+        /// <summary>Hero position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
+        public Vec2 PreviousHeroPosition { get; private set; }
+        /// <summary>Accumulated but not yet simulated part of a step, [0, 1) (Mechanics §17).</summary>
+        public float Alpha => accumulator / Rules.Step;
+        /// <summary>Render position between the last two steps; presentation only, never used by the rules.</summary>
+        public Vec2 Interpolate(Vec2 previous, Vec2 current) => Vec2.Lerp(previous, current, Alpha);
         public Vec2 Facing { get; private set; } = new Vec2(0, 1);
         public int DashCharges { get; private set; }
         public float DashRecharge { get; private set; }
@@ -161,6 +167,7 @@ namespace ThornThrone.Simulation
                 maxX = Level.MapBounds.X * 0.5f; maxY = Level.MapBounds.Y * 0.5f; minX = -maxX; minY = -maxY;
             }
             if (data.TryArenaPoint("player_spawn", out var spawn)) HeroPosition = spawn;
+            PreviousHeroPosition = HeroPosition;
             heroHistory = new Vec2[Math.Max(1, (int)Math.Round(Mode.PlayerPositionHistoryBufferDuration / Rules.Step)) + 1];
             ResetHeroHistory();
             if (data.Nav != null) Flow = new FlowField(data.Nav);
@@ -218,10 +225,14 @@ namespace ThornThrone.Simulation
 
         // ------------------------------------------------------------------ public control
 
-        /// <summary>Advance real time. Runs whole fixed steps; no catch-up after pause or level-up choice.</summary>
+        /// <summary>
+        /// Advance real time. Runs whole fixed steps; no catch-up after pause or level-up choice.
+        /// Time during a stop is not accumulated, but the part of a step left before the stop is kept so
+        /// <see cref="Alpha"/> does not jump (design decision, Mechanics §17).
+        /// </summary>
         public void Update(float deltaTime, Vec2 move, bool dash)
         {
-            if (!CanSimulate) { accumulator = 0; return; }
+            if (!CanSimulate) return;
             accumulator = Math.Min(accumulator + deltaTime, Rules.Step * 8);
             pendingDash |= dash;
             while (accumulator >= Rules.Step && CanSimulate)
@@ -229,7 +240,36 @@ namespace ThornThrone.Simulation
                 accumulator -= Rules.Step;
                 bool dashNow = pendingDash;
                 pendingDash = false;
-                Tick(move, dashNow);
+                FixedStep(move, dashNow);
+            }
+            // A choice (or the end) opened inside the loop: drop the remaining whole steps, keep the fraction.
+            if (accumulator >= Rules.Step) accumulator -= Rules.Step * (float)Math.Floor(accumulator / Rules.Step);
+        }
+
+        /// <summary>One fixed step with the render snapshot around it (Mechanics §17).</summary>
+        private void FixedStep(Vec2 move, bool dash)
+        {
+            int serial = spawnSerial;
+            PreviousHeroPosition = HeroPosition;
+            for (int i = 0; i < Enemies.Length; i++) if (Enemies[i].Active) Enemies[i].PreviousPosition = Enemies[i].Position;
+            for (int i = 0; i < Projectiles.Length; i++) if (Projectiles[i].Active) Projectiles[i].PreviousPosition = Projectiles[i].Position;
+            for (int i = 0; i < Pickups.Length; i++) if (Pickups[i].Active) Pickups[i].PreviousPosition = Pickups[i].Position;
+            Tick(move, dash);
+            // Entities that appeared during the step (possibly in a reused slot) have no previous position.
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                var e = Enemies[i];
+                if (e.Active && e.SpawnId > serial) e.PreviousPosition = e.Position;
+            }
+            for (int i = 0; i < Projectiles.Length; i++)
+            {
+                var p = Projectiles[i];
+                if (p.Active && p.SpawnId > serial) p.PreviousPosition = p.Position;
+            }
+            for (int i = 0; i < Pickups.Length; i++)
+            {
+                var p = Pickups[i];
+                if (p.Active && p.SpawnId > serial) p.PreviousPosition = p.Position;
             }
         }
 
@@ -386,6 +426,7 @@ namespace ThornThrone.Simulation
             if (Data.TryArenaPoint("player_spawn_boss", out var heroAt) && Data.TryArenaPoint("boss_spawn", out var spawnAt))
             {
                 HeroPosition = heroAt;
+                PreviousHeroPosition = heroAt;
                 ResetHeroHistory();
                 bossAt = spawnAt;
                 NavMask = NavGrid.Walkable | NavGrid.BossRoom;
@@ -496,6 +537,7 @@ namespace ThornThrone.Simulation
                 && Data.Nav.Nearest(position, GroundMask, 32, out var ground))
                 position = ground;
             enemy.Position = position;
+            enemy.PreviousPosition = position;
             enemy.SeparationVelocity = Vec2.Zero;
             enemy.Direction = (HeroPosition - position).Normalized;
             enemy.Age = 0;
@@ -1045,6 +1087,7 @@ namespace ThornThrone.Simulation
             pickup.SpawnId = ++spawnSerial;
             pickup.Def = def;
             pickup.Position = position;
+            pickup.PreviousPosition = position;
             pickup.Value = value;
             ActivePickups++;
             if (def == experienceDef) ActiveExperiencePickups++;
@@ -1146,6 +1189,7 @@ namespace ThornThrone.Simulation
         {
             if (Data.Nav != null && !Data.Nav.Allows(position, Rules.HeroRadius, NavMask)) return false;
             HeroPosition = position;
+            PreviousHeroPosition = position;
             ResetHeroHistory();
             return true;
         }

@@ -353,12 +353,14 @@ namespace ThornThrone.Mobile
             SmokeCheck();
             if (run == null) return;
             UpdateBossView();
-            hero.position = WorldRenderer.ToWorld(run.HeroPosition, heroHeight);
+            // Drawn between the last two fixed steps (Mechanics §17); the HUD and the elite arrow use the step state.
+            var heroAt = run.Interpolate(run.PreviousHeroPosition, run.HeroPosition);
+            hero.position = WorldRenderer.ToWorld(heroAt, heroHeight);
             if (run.Facing.LengthSquared > 0)
                 hero.rotation = Quaternion.LookRotation(new Vector3(run.Facing.X, 0, run.Facing.Y)) * Quaternion.Euler(0, heroView ? heroYawOffset : 0, 0);
-            if (heroView) heroView.SetMoving(Vec2.DistanceSquared(run.HeroPosition, lastHeroPosition) > 1e-4f);
-            lastHeroPosition = run.HeroPosition;
-            UpdateCamera();
+            if (heroView) heroView.SetMoving(Vec2.DistanceSquared(heroAt, lastHeroPosition) > 1e-4f);
+            lastHeroPosition = heroAt;
+            UpdateCamera(heroAt);
             world.Draw(run);
             if (state != State.Results)
             {
@@ -382,11 +384,12 @@ namespace ThornThrone.Mobile
             bossView.gameObject.SetActive(visible);
             if (!visible) return;
             var b = run.Boss;
-            bossView.transform.position = WorldRenderer.ToWorld(b.Position);
+            var bossAt = run.Interpolate(b.PreviousPosition, b.Position);
+            bossView.transform.position = WorldRenderer.ToWorld(bossAt);
             var toHero = run.HeroPosition - b.Position;
             if (toHero.LengthSquared > 1) bossView.transform.rotation = Quaternion.LookRotation(new Vector3(toHero.X, 0, toHero.Y)) * Quaternion.Euler(0, heroYawOffset, 0);
-            bossView.SetMoving(Vec2.DistanceSquared(b.Position, lastBossPosition) > 1e-4f);
-            lastBossPosition = b.Position;
+            bossView.SetMoving(Vec2.DistanceSquared(bossAt, lastBossPosition) > 1e-4f);
+            lastBossPosition = bossAt;
         }
 
         private void UpdateEliteArrow()
@@ -414,9 +417,9 @@ namespace ThornThrone.Mobile
             ui.UpdateEliteArrow(!onScreen, center + dir * Mathf.Min(tx, ty), dir);
         }
 
-        private void UpdateCamera()
+        private void UpdateCamera(Vec2 heroAt)
         {
-            var target = WorldRenderer.ToWorld(run.HeroPosition, 0.7f);
+            var target = WorldRenderer.ToWorld(heroAt, 0.7f);
             view.transform.position = target + cameraOffset;
             view.transform.LookAt(target);
             view.fieldOfView = 2 * Mathf.Atan(VisibleHalfHeight * WorldRenderer.Scale / cameraOffset.magnitude) * Mathf.Rad2Deg;

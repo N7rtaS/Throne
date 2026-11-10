@@ -33,6 +33,8 @@ namespace ThornThrone.Simulation
 
         public static float Dot(Vec2 a, Vec2 b) => a.X * b.X + a.Y * b.Y;
         public static float DistanceSquared(Vec2 a, Vec2 b) => (a - b).LengthSquared;
+        /// <summary>Linear blend: <paramref name="a"/> at t = 0, <paramref name="b"/> at t = 1.</summary>
+        public static Vec2 Lerp(Vec2 a, Vec2 b, float t) => new Vec2(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t);
         public static Vec2 FromAngle(float radians) => new Vec2((float)Math.Cos(radians), (float)Math.Sin(radians));
 
         /// <summary>Limits the length of the vector to <paramref name="max"/>.</summary>

@@ -246,9 +246,11 @@ namespace ThornThrone.Mobile
                 if (!e.Active) continue;
                 if (e.Def.IsBoss && HideBoss) continue;
                 if (e.Def.ModelScale < 0.01f) continue; // boss room pillars: drawn by the arena (m_flModelScale 0.001)
-                if (e.Shielded) shield.Add(Matrix4x4.TRS(ToWorld(e.Position, 0.04f), Quaternion.identity, Vector3.one * Mathf.Max(0.8f, e.Radius * 2.5f * Scale)));
+                // Positions between the last two steps (Mechanics §17); rotation, rings and hazards use the step state.
+                var at = run.Interpolate(e.PreviousPosition, e.Position);
+                if (e.Shielded) shield.Add(Matrix4x4.TRS(ToWorld(at, 0.04f), Quaternion.identity, Vector3.one * Mathf.Max(0.8f, e.Radius * 2.5f * Scale)));
                 // Stand-in for generic_stunned.vpcf: a yellow ring; the enemy plays its idle clip.
-                if (e.Stunned) stun.Add(Matrix4x4.TRS(ToWorld(e.Position, 0.05f), Quaternion.identity, Vector3.one * Mathf.Max(0.6f, e.Radius * 2f * Scale)));
+                if (e.Stunned) stun.Add(Matrix4x4.TRS(ToWorld(at, 0.05f), Quaternion.identity, Vector3.one * Mathf.Max(0.6f, e.Radius * 2f * Scale)));
                 var look = LookOf(e);
                 if (look != null)
                 {
@@ -256,7 +258,7 @@ namespace ThornThrone.Mobile
                     bool moving = e.Def.Movement != MovementBehavior.Stationary && !e.Stunned;
                     var clip = moving ? v.run : v.idle;
                     float phase = (e.SpawnId * 0.618034f) % 1f * Mathf.Max(0.01f, clip.Length);
-                    look.Add(Matrix4x4.TRS(ToWorld(e.Position), Facing(run, e), Vector3.one * (HeroView.ModelScale * e.Def.ModelScale * e.Scale)),
+                    look.Add(Matrix4x4.TRS(ToWorld(at), Facing(run, e), Vector3.one * (HeroView.ModelScale * e.Def.ModelScale * e.Scale)),
                         EnemyVisual.Frame(clip, e.Age + phase));
                     continue;
                 }
@@ -264,13 +266,13 @@ namespace ThornThrone.Mobile
                 Kind kind = e.Def.IsBoss ? boss : e.Def.PlayerFriendly || e.Def.IsDestructible ? friendly
                     : e.Def.IsElite ? elite : e.Def.SeparationLayer == "LARGE" ? large : small;
                 float height = Mathf.Max(diameter, 0.5f) * 1.6f;
-                kind.Add(Matrix4x4.TRS(ToWorld(e.Position, height * 0.5f), Quaternion.identity, new Vector3(diameter, height * 0.5f, diameter)));
+                kind.Add(Matrix4x4.TRS(ToWorld(at, height * 0.5f), Quaternion.identity, new Vector3(diameter, height * 0.5f, diameter)));
             }
             foreach (var p in run.Projectiles)
             {
                 if (!p.Active) continue;
                 float d = Mathf.Max(0.2f, p.Radius * 2 * Scale);
-                (p.Hostile ? hostileBolt : p.Source?.Ability is MagicMissile ? missile : bolt).Add(Matrix4x4.TRS(ToWorld(p.Position, 0.8f), Quaternion.identity, Vector3.one * d));
+                (p.Hostile ? hostileBolt : p.Source?.Ability is MagicMissile ? missile : bolt).Add(Matrix4x4.TRS(ToWorld(run.Interpolate(p.PreviousPosition, p.Position), 0.8f), Quaternion.identity, Vector3.one * d));
             }
             float trigger = run.Mode.EliteRoomTriggerRadius * Scale;
             foreach (var room in run.EliteRooms)
@@ -305,7 +307,7 @@ namespace ThornThrone.Mobile
             {
                 if (!p.Active) continue;
                 Kind kind = p.Def.HealAmount > 0 ? heal : (p.Def.GoldAmount > 0 || p.Def.RewardsTreasure) ? gold : experience;
-                kind.Add(Matrix4x4.TRS(ToWorld(p.Position, 0.2f), Quaternion.Euler(45, 45, 0), Vector3.one * 0.25f));
+                kind.Add(Matrix4x4.TRS(ToWorld(run.Interpolate(p.PreviousPosition, p.Position), 0.2f), Quaternion.Euler(45, 45, 0), Vector3.one * 0.25f));
             }
             Shader.SetGlobalFloat("_ThornVatDebug", DebugDrawMode == 8 ? 1 : 0);
             if (DebugDrawMode > 0 && Time.frameCount % 30 == 0)

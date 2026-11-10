@@ -10,6 +10,8 @@ namespace ThornThrone.Simulation
         public bool Active;
         public EnemyDef Def;
         public Vec2 Position, Direction, SeparationVelocity;
+        /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
+        public Vec2 PreviousPosition;
         public float Health, MaxHealth, Speed, TouchDamage, Radius, SeparationDistance, KnockbackScale;
         public float Age, OutOfRangeTime;
         /// <summary>Spawn event that owns this enemy (for its minimum count), or -1.</summary>
@@ -44,6 +46,8 @@ namespace ThornThrone.Simulation
         /// <summary>Hostile shot that turns towards the hero (Imperia's Magic Missile).</summary>
         public bool Homing;
         public Vec2 Position, Velocity;
+        /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
+        public Vec2 PreviousPosition;
         public float Speed, Radius, Damage, Knockback, Life;
         public int RemainingHits;
         public Enemy Target;
@@ -75,6 +79,8 @@ namespace ThornThrone.Simulation
         public bool Active, Attracted;
         public PickupDef Def;
         public Vec2 Position;
+        /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
+        public Vec2 PreviousPosition;
         /// <summary>Experience for experience pickups.</summary>
         public int Value;
     }
