@@ -12,6 +12,14 @@ python3 Tools/audit.py               # реестры → Research/FullGame/
 Tools/import-unity-data.sh           # JSON → UnityProject/Assets/Game/Data/Source
 ```
 
+`audit.py` пишет `ContentRegistry.json`, `SoundRegistry.json` и `SourceVersions.json`. В `ContentRegistry.json` у каждой записи есть поле `implementation` (`none`, `partial`, `implemented`, `verified`). Уровень считается по исходникам симуляции (`UnityProject/Assets/Game/Scripts/Simulation`): `AbilityFactory`, `Run.SupportedHeroAttributes`, `Run.ReportUnsupportedEnemy`, `Run.Drop`, `Run.SpawnPosition`, `Run.ReportUnsupportedRules`. `verified` означает, что у записи уровня `implemented` ключ встречается в тестах `DotNet/**` (список в поле `tests`). Правила описаны в `.kiro/specs/audit-simulation-coverage/design.md` §3. Поле `prototype` хранит прежнее покрытие прототипа и больше не пересчитывается. Другой каталог вывода задаётся через `--out DIR`.
+
+Коды выхода `audit.py`: 0 — успех; 1 — у обязательной записи нет роли (файлы не пишутся); 2 — в исходниках симуляции не найдена ожидаемая конструкция (в сообщении указано, какая). Тесты аудита:
+
+```sh
+python3 -m unittest discover -s Tools/tests
+```
+
 Сборка для Android:
 
 ```sh

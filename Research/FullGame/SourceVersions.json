@@ -8,6 +8,7 @@
  "dotaPak01DirSha256": "eaee44204cdb97c0c7d04be107c38b5bc5e2fcb4425b0e7003c61ffe36d2f5b6",
  "unity": "6000.6.7f1",
  "unityPackages": {
+  "com.unity.cloud.gltfast": "6.19.0",
   "com.unity.nuget.newtonsoft-json": "3.2.2",
   "com.unity.ide.rider": "3.0.40",
   "com.unity.ide.visualstudio": "2.0.28",
@@ -26,6 +27,7 @@
   "Research/Json/soundevents_crownfall.json": "ca31633b4981e1d00737e0981c2ef7ffee1725851cb282e43dcd437611ae744a",
   "Research/Json/soundevents_survivors.json": "544821d91d6a6eb2791488c3a447ef097b4c2e4073cdba4dc6b5268553a4ff5c",
   "Research/Json/summary.json": "67e7bdc26a6bab1848a07ddcb5f2eafc0c4757b1e23c85a424320b688a69085e",
+  "Research/Json/survivors_arena_entities.json": "70811e6e4ebe25776fc6567b01805b89fa574189689ffc067f732cc3945f542a",
   "Research/Json/survivors_attributes.json": "113d3770f86ba86e053563f79aed1793f37e5a1f83d0bf95cb0058f5bec9e637",
   "Research/Json/survivors_difficulty.json": "9488608124e0877847f12083f242278c5cc30fccdcf1a54bcf4a735069620c6d",
   "Research/Json/survivors_enemies.json": "f30a8a89949cbe0ba268c451113c433b2c5fc92ffc3d4a5dfd5cb4c518940108",

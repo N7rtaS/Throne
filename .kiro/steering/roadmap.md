@@ -77,9 +77,9 @@ inclusion: manual
 - Тесты: все `BossTests`; новый `BossStepsDoNotAllocate` (300 шагов боя, без роста аллокаций).
 - Демо: smoke `-thornBoss` как раньше.
 
-Task 5: `audit.py` считает покрытие по новой симуляции (Spec)
+✅ (2026-11-10, коммит «Считать покрытие реестра по симуляции вместо прототипа») Task 5: `audit.py` считает покрытие по новой симуляции (Spec)
 - `simulation_coverage()` вместо `prototype_coverage()`: разбор `AbilityFactory`, `SupportedHeroAttributes`, обработанных классов врагов, реализованных подборов, поведений спавна. Новое поле `implementation`: none/partial/implemented/verified (verified — есть ссылка в `DotNet/**`). Поле `prototype` сохранить. Ненулевой код, если у обязательной записи нет роли.
-- Демо: magic_missile — implemented, echo_strike — none, absorber — implemented.
+- Демо: magic_missile — implemented, echo_strike — none, absorber — implemented. Сделано: magic_missile и absorber — verified (есть тесты, решение Р1: «не ниже implemented»), echo_strike — none. Тесты аудита: `python3 -m unittest discover -s Tools/tests`.
 
 Task 6: Исследовательский инструмент Dota, только чтение (Spec)
 - `Tools/research-client.py`: строки из `bin/osx64` (`Survivors`, `CSurvivors*`, `m_fl*`, непрочитанные поля); локализация Panorama и тексты меню через Source2Viewer в `Research/Decoded/panorama/`; ru/en описания всех 47 powerups в `Research/FullGame/Descriptions.md`. Открывать только `"rb"`, запрет выходного пути внутри Dota.
