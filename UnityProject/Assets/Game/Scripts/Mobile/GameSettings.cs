@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using ThornThrone.Progression;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using SavedJoystick = ThornThrone.Progression.JoystickMode;
 
 namespace ThornThrone.Mobile
@@ -33,8 +34,8 @@ namespace ThornThrone.Mobile
         void SetUiScale(float scale);
         /// <summary>AudioListener.volume (П6).</summary>
         void SetMasterVolume(float volume);
-        /// <summary>Does nothing until Task 14 (П3).</summary>
-        void SetQuality(QualityPreset preset);
+        /// <summary>Switches the QualitySettings level and render scale; returns the applied preset, never Auto (Mechanics §21).</summary>
+        QualityPreset SetQuality(QualityPreset preset);
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ namespace ThornThrone.Mobile
 
         private static readonly string[] captions =
         {
-            "Качество (в разработке)", "Частота кадров", "Масштаб интерфейса", "Джойстик", "Сторона джойстика", "Вибрация",
+            "Качество", "Частота кадров", "Масштаб интерфейса", "Джойстик", "Сторона джойстика", "Вибрация",
             "Общая громкость", "Музыка", "Эффекты", "Реплики", "Цифры урона",
         };
 
@@ -127,6 +128,8 @@ namespace ThornThrone.Mobile
         /// <summary>Result of the last save; null before the first change.</summary>
         public SaveResult LastSave { get; private set; }
         public bool SaveFailed => LastSave != null && !LastSave.Succeeded;
+        /// <summary>Preset in use: the stored one, or the automatic choice for Auto; Auto before the first apply.</summary>
+        public QualityPreset AppliedQuality { get; private set; }
 
         /// <summary>П12: a reset after corruption is shown in the menu; a restore from backup is only logged.</summary>
         public static bool WarnsAbout(LoadStatus status) => status == LoadStatus.ResetAfterCorruption;
@@ -275,7 +278,10 @@ namespace ThornThrone.Mobile
             var s = Values;
             switch (id)
             {
-                case SettingId.Quality: return SettingsOptions.QualityText(s.Quality);
+                case SettingId.Quality:
+                    return s.Quality == QualityPreset.Auto && AppliedQuality != QualityPreset.Auto
+                        ? "Авто (" + SettingsOptions.QualityText(AppliedQuality) + ")"
+                        : SettingsOptions.QualityText(s.Quality);
                 case SettingId.TargetFps: return s.TargetFps + " FPS";
                 case SettingId.UiScale: return SettingsOptions.Percent(s.UiScale);
                 case SettingId.Joystick: return s.Joystick == SavedJoystick.Fixed ? "Фиксированный" : "Плавающий";
@@ -297,7 +303,7 @@ namespace ThornThrone.Mobile
             var s = Values;
             switch (id)
             {
-                case SettingId.Quality: targets.SetQuality(s.Quality); break;
+                case SettingId.Quality: AppliedQuality = targets.SetQuality(s.Quality); break;
                 case SettingId.TargetFps: targets.SetFrameRate(s.TargetFps); break;
                 case SettingId.UiScale: targets.SetUiScale(s.UiScale); break;
                 case SettingId.Joystick:
@@ -429,9 +435,21 @@ namespace ThornThrone.Mobile
 
         public void SetMasterVolume(float volume) => AudioListener.volume = volume;
 
-        /// <summary>П3: presets come with Task 14; the choice is only stored.</summary>
-        public void SetQuality(QualityPreset preset)
+        /// <summary>
+        /// Mechanics §21: QualitySettings level of the resolved preset with its expensive changes, then the render
+        /// scale by screen lines. Changing the level takes the level's vSyncCount; П4 keeps it 0.
+        /// </summary>
+        public QualityPreset SetQuality(QualityPreset preset)
         {
+            var applied = QualityPresets.Resolve(preset, DeviceInfo.Current());
+            QualitySettings.SetQualityLevel(QualityPresets.Level(applied), true);
+            QualitySettings.vSyncCount = 0;
+            var pipeline = QualitySettings.renderPipeline as UniversalRenderPipelineAsset;
+            if (pipeline) pipeline.renderScale = QualityPresets.RenderScale(applied, Screen.height);
+            Debug.Log($"THORN_QUALITY setting={preset} level={QualitySettings.names[QualitySettings.GetQualityLevel()]} " +
+                      $"renderScale={(pipeline ? pipeline.renderScale : 1):0.##} hdr={(pipeline && pipeline.supportsHDR ? 1 : 0)} " +
+                      $"msaa={(pipeline ? pipeline.msaaSampleCount : 1)} mainShadows={(pipeline && pipeline.supportsMainLightShadows ? 1 : 0)}");
+            return applied;
         }
     }
 }

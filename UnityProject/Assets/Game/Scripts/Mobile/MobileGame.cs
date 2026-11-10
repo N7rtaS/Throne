@@ -194,8 +194,10 @@ namespace ThornThrone.Mobile
             var v = settings.Values;
             string applied = $"applied fps={Application.targetFrameRate} vsync={QualitySettings.vSyncCount} " +
                              $"joystick={input.Controller.Settings.Joystick} leftHanded={input.Controller.Settings.LeftHanded} " +
-                             $"volume={AudioListener.volume:0.##} uiScale={ui.UiScale:0.##}";
+                             $"volume={AudioListener.volume:0.##} uiScale={ui.UiScale:0.##} " +
+                             $"quality={QualitySettings.names[QualitySettings.GetQualityLevel()]} renderScale={RenderScale():0.##}";
             ok &= Application.targetFrameRate == v.TargetFps && QualitySettings.vSyncCount == 0
+                  && QualitySettings.GetQualityLevel() == QualityPresets.Level(settings.AppliedQuality)
                   && (input.Controller.Settings.Joystick == JoystickMode.Fixed) == (v.Joystick == ThornThrone.Progression.JoystickMode.Fixed)
                   && input.Controller.Settings.LeftHanded == v.LeftHanded
                   && Mathf.Abs(AudioListener.volume - v.MasterVolume) < 1e-4f && Mathf.Abs(ui.UiScale - v.UiScale) < 1e-4f;
@@ -207,6 +209,9 @@ namespace ThornThrone.Mobile
             }
             return true;
         }
+
+        private static float RenderScale() =>
+            QualitySettings.renderPipeline is UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset urp ? urp.renderScale : 1;
 
         private bool FailSettings(string reason)
         {

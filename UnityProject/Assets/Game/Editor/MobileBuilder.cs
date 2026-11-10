@@ -325,6 +325,7 @@ namespace ThornThrone.Editor
                 !EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android))
                 throw new InvalidOperationException("Cannot switch to Android (is Android Build Support installed?)");
             ConfigureAndroid();
+            QualityPresetBuilder.Configure();
             CreateScene();
             EditorUserBuildSettings.buildAppBundle = false;
             Directory.CreateDirectory(Path.GetDirectoryName(ApkPath));
@@ -348,6 +349,7 @@ namespace ThornThrone.Editor
         /// <summary>macOS player of the mobile scene for automatic smoke runs (-thornSmoke) on the development Mac.</summary>
         public static void BuildMacSmoke()
         {
+            QualityPresetBuilder.Configure();
             CreateScene();
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {

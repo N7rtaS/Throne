@@ -20,8 +20,8 @@ namespace ThornThrone.Mobile.Tests
     public sealed class GameSettingsTests
     {
         private string root;
-        private int frameRate, vSync;
-        private float volume;
+        private int frameRate, vSync, quality;
+        private float volume, renderScale;
 
         [SetUp]
         public void SetUp()
@@ -30,12 +30,20 @@ namespace ThornThrone.Mobile.Tests
             frameRate = Application.targetFrameRate;
             vSync = QualitySettings.vSyncCount;
             volume = AudioListener.volume;
+            quality = QualitySettings.GetQualityLevel();
+            renderScale = Pipeline(quality) ? Pipeline(quality).renderScale : 0;
         }
+
+        private static UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset Pipeline(int level) =>
+            QualitySettings.GetRenderPipelineAssetAt(level) as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
 
         [TearDown]
         public void TearDown()
         {
             Application.targetFrameRate = frameRate;
+            // The level first: vSyncCount belongs to the current level.
+            QualitySettings.SetQualityLevel(quality, false);
+            if (Pipeline(quality)) Pipeline(quality).renderScale = renderScale;
             QualitySettings.vSyncCount = vSync;
             AudioListener.volume = volume;
             if (Directory.Exists(root)) Directory.Delete(root, true);
@@ -56,7 +64,7 @@ namespace ThornThrone.Mobile.Tests
             public void SetTouch(JoystickMode mode, bool leftHanded) { Mode = mode; Left = leftHanded; Calls++; }
             public void SetUiScale(float scale) { Scale = scale; Calls++; }
             public void SetMasterVolume(float v) { Volume = v; Calls++; }
-            public void SetQuality(QualityPreset preset) { Quality = preset; Calls++; }
+            public QualityPreset SetQuality(QualityPreset preset) { Quality = preset; Calls++; return preset == QualityPreset.Auto ? QualityPreset.Medium : preset; }
         }
 
         /// <summary>Disk storage whose writes fail while <see cref="Broken"/> is set (no space, read-only).</summary>
@@ -391,8 +399,9 @@ namespace ThornThrone.Mobile.Tests
         {
             var ui = new GameUi(null, Font());
             var settings = Open(Store(), new FakeTargets());
+            settings.ApplyAll();
             for (int i = 0; i < SettingsOptions.Count; i++) ui.SetSettingText((SettingId)i, settings.ValueText((SettingId)i));
-            Assert.That(ui.SettingText(SettingId.Quality), Is.EqualTo("Авто"));
+            Assert.That(ui.SettingText(SettingId.Quality), Is.EqualTo("Авто (Среднее)"), "FakeTargets picks Medium for Auto");
             Assert.That(ui.SettingText(SettingId.Joystick), Is.EqualTo("Плавающий"));
             Assert.That(ui.SettingText(SettingId.VoiceVolume), Is.EqualTo("100%"));
             var steps = new List<(SettingId, int)>();
@@ -402,7 +411,7 @@ namespace ThornThrone.Mobile.Tests
             row.Find("Less").GetComponent<Button>().onClick.Invoke();
             Assert.That(steps, Is.EqualTo(new[] { (SettingId.TargetFps, 1), (SettingId.TargetFps, -1) }));
             var caption = GameObject.Find("UI").transform.Find("Safe area/Settings/Content/Setting quality/Caption").GetComponent<TMP_Text>();
-            Assert.That(caption.text, Is.EqualTo("Качество (в разработке)"), "П3");
+            Assert.That(caption.text, Is.EqualTo("Качество"), "Mechanics §21");
         }
     }
 }
