@@ -20,6 +20,13 @@ Tools/import-unity-data.sh           # JSON → UnityProject/Assets/Game/Data/So
 python3 -m unittest discover -s Tools/tests
 ```
 
+Реестр ресурсов (после `convert-models.py` и запекания в редакторе):
+```sh
+python3 Tools/asset-registry.py      # → Research/FullGame/AssetRegistry.json, таблица моделей в stdout
+```
+Читает только файлы проекта: `NestOfThorns/` с `manifest.tsv` и картой `survivors_arena.vpk`, `ContentRegistry.json`, `SoundRegistry.json`, `SourceVersions.json`, `Research/extract-report.json`, `Research/Json/survivors_*.json`, `UnityProject/Assets/Game/Art/Converted/**` с `.meta` и `Tools/asset-registry-overrides.json`. Dota и Steam не открываются, внешние программы не запускаются. На каждую строку манифеста и каждый файл карты пишется запись: CRC32, размер, ссылки RERL (`references`), сущности, из которых ресурс достижим (`usedBy`), выходы Unity (путь, GUID, импортёр, инструмент, стадия, сжатие текстур по платформам, справочные треугольники glb), статус (`converted`, `baked`, `recreated`, `none`, `unused`) и `verification`. Раздел `models` — справочный вид героев и врагов в треугольниках, бюджеты не проверяются. `summary.missingRequired` — обязательные сущности без единой записи, `unresolved` — ссылки на ресурсы вне манифеста, `orphanOutputs` — выходы без источника. Статус `recreated`, причину `unused` и ссылку на проверку (`verified`) задаёт `asset-registry-overrides.json`: `{"<источник>": {"status": "recreated", "unity": "Assets/…", "verified": "Research/…"}}`. Правила — `.kiro/specs/asset-registry/design.md`. `--out DIR` — другой каталог вывода, `--root DIR` — другой корень проекта. Повторный запуск на тех же входах не меняет файл.
+Коды выхода `asset-registry.py`: 0 — успех; 1 — нарушение входов (нет файла из манифеста, CRC32 не совпадает, у выхода нет `.meta` или GUID, неверное переопределение); файл при этом не пишется.
+
 Исследование клиента (только чтение):
 ```sh
 python3 Tools/research-client.py --check-readonly   # строки клиента, Panorama, описания powerups
