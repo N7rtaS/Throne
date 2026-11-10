@@ -16,9 +16,10 @@ namespace ThornThrone.Simulation
     /// <summary>
     /// The hero's build: owned powerups, slots, level-up choices, recipes and the resulting attributes.
     /// One rule for every hero and powerup:
-    ///   hero attribute  = hero base + innate (base + first minor global) + passive first-minor global × rank
-    ///                     + authored global upgrades of owned abilities;
+    ///   hero attribute  = hero base + innate without its own class (base + first minor global)
+    ///                     + passive first-minor global × rank + authored global upgrades of owned abilities;
     ///   ability stat    = ability local + hero attribute of the same type.
+    /// An innate with its own class is the hero's ability: its attributes stay in its Local only.
     /// </summary>
     public sealed class Build
     {
@@ -182,8 +183,12 @@ namespace ThornThrone.Simulation
                 owned.Local.Add(def.BaseAttributes);
                 if (def.IsInnate)
                 {
-                    Global.Add(def.BaseAttributes);
-                    if (def.Minor.Length > 0) Global.Add(def.Minor[0].Global);
+                    // An innate with its own class is the hero's ability: its attributes stay local (Mechanics §3, Р).
+                    if (!def.IsInnateAbility)
+                    {
+                        Global.Add(def.BaseAttributes);
+                        if (def.Minor.Length > 0) Global.Add(def.Minor[0].Global);
+                    }
                 }
                 else if (def.IsPassive)
                 {

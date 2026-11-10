@@ -149,8 +149,17 @@ namespace ThornThrone.Simulation
         public UpgradeChoice[] Authored, Minor;
         public int[] RecipeItems;
         public bool IsRecipe => RecipeItems != null && RecipeItems.Length > 0;
+        /// <summary>The _class of a definition without its own behaviour (a plain attribute set).</summary>
+        public const string PlainClass = "CSurvivorsPowerUpDefinition";
+        /// <summary>The definition has its own behaviour class.</summary>
+        public bool HasOwnClass => Class != PlainClass;
         /// <summary>An active ability: has its own behaviour class.</summary>
-        public bool IsActive => !IsPassive && !IsInnate && !IsGold && Class != "CSurvivorsPowerUpDefinition";
+        public bool IsActive => !IsPassive && !IsInnate && !IsGold && HasOwnClass;
+        /// <summary>
+        /// An innate with its own class is the hero's ability: its attributes are the parameters
+        /// of its attack, not bonuses to the hero (Mechanics §3, Р).
+        /// </summary>
+        public bool IsInnateAbility => IsInnate && HasOwnClass;
     }
 
     public sealed class PickupDef

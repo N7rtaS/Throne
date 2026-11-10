@@ -1,0 +1,161 @@
+{
+  "pbtResults": {
+    "1. Написать тесты исследования условия ошибки": {
+      "status": "passed",
+      "failingExample": "Kez, seed 1, step 0: Global[MovementSpeed] = 300 вместо 280; Global[TargetCount] = 1, Global[Radius] = 180, Global[VulnerabilityDamagePercent] = 2, Global[VulnerabilityDuration] = 5.5, Global[VulnerabilityStunOnHitDuration] = 1 вместо 0; Global[Range]/Global[Cooldown] тоже утекают (Stat(echo_strike, Range) = 1500 вместо 0); Diagnostics.Has(\"ability:CSurvivorsPowerUpDefinition_InstantAttack\") = false.",
+      "lastRunTimestamp": 1794331082470
+    },
+    "2. Написать тесты сохранения поведения (ДО исправления)": {
+      "status": "passed",
+      "lastRunTimestamp": 1794331223895
+    },
+    "3.2 Убедиться, что тесты исследования теперь проходят": {
+      "status": "passed",
+      "lastRunTimestamp": 1794331334962
+    },
+    "3.3 Убедиться, что тесты сохранения по-прежнему проходят": {
+      "status": "passed",
+      "lastRunTimestamp": 1794331375147
+    }
+  },
+  "executionHistory": {
+    "1. Написать тесты исследования условия ошибки": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996604
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331000773
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331101849
+      }
+    ],
+    "2. Написать тесты сохранения поведения (ДО исправления)": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996633
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331107256
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331246296
+      }
+    ],
+    "3.1 Внести исправление в `Definitions.cs`, `Build.cs` и `Run.cs`": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996669
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331250651
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331311391
+      }
+    ],
+    "3.2 Убедиться, что тесты исследования теперь проходят": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996686
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331315729
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331344458
+      }
+    ],
+    "3.3 Убедиться, что тесты сохранения по-прежнему проходят": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996703
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331348285
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331388327
+      }
+    ],
+    "4. Записать правило врождённой в `Research/FullGame/Mechanics.md` §3": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996720
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331392586
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331442446
+      }
+    ],
+    "5. Checkpoint — убедиться, что всё проходит": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996738
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331446381
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331487180
+      }
+    ],
+    "6. Отметить Task 3 в `.kiro/steering/roadmap.md` и закоммитить": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794330996754
+      },
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331491400
+      }
+    ],
+    "3. Исправить утечку атрибутов врождённой Kez в глобальные": [
+      {
+        "executionId": "9ecceef0-0fb3-4329-b301-58bcf7e31527",
+        "chatSessionId": "sess_905eea28-8312-48cf-8447-55c67800ed70",
+        "timestamp": 1794331388357
+      }
+    ]
+  }
+}

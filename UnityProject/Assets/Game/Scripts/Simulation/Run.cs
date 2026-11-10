@@ -1171,7 +1171,7 @@ namespace ThornThrone.Simulation
         {
             foreach (var owned in Build.Owned)
             {
-                if (owned.Ability != null || !owned.Def.IsActive) continue;
+                if (owned.Ability != null || !(owned.Def.IsActive || owned.Def.IsInnateAbility)) continue;
                 owned.Ability = AbilityFactory.Create(owned);
                 if (owned.Ability == null)
                     Diagnostics.Report("ability:" + owned.Def.Class, $"Ability {owned.Def.Class} ({owned.Def.Key}) is not implemented");

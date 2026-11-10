@@ -64,7 +64,7 @@ inclusion: manual
 - Тесты: `DashRequestSurvivesFrameWithoutStep` (Update(0.01,true) затем Update(0.03,false) → рывок), `DashRequestIsDroppedOnPause`.
 - Демо: в smoke рывок на Space срабатывает каждый раз.
 
-Task 3: Врождённая Kez не попадает в глобальные атрибуты (Bug Fix)
+✅ (2026-11-10, коммит «Не добавлять атрибуты врождённой Kez к атрибутам героя») Task 3: Врождённая Kez не попадает в глобальные атрибуты (Bug Fix)
 - `Build.Recalculate`: `BaseAttributes` врождённой в `Global` только для пассивного класса без действия; врождённую с активным классом (`_InstantAttack`) создавать через `AbilityFactory` (пока нет — диагностика, не бонусы). Dragonus/Shen без изменений.
 - Тесты: `KezInnateDoesNotLeakRangeIntoGlobals`; `DragonusStartsWithInnateBonuses` проходит.
 
