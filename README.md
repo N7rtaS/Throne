@@ -58,7 +58,13 @@
 | `Tools/mac-screenshot.sh out.png [аргументы плеера]` | `out.png` | путь к PNG в выводе |
 | `Tools/build-android.sh` | `Builds/Android/ThornThrone.apk`, `Research/android-build-report.json`, `Research/android-build.log` | `THORN_ANDROID_BUILD_OK` в логе |
 
-Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Логи и отчёты последнего прогона в `Research/` (`unity-tests.*`, `mac-build.log`, `mac-smoke.log`, `android-build.log`, `android-build-report.json`) не хранятся в git. Сцена `Mobile.unity` генерируется при каждой сборке детерминированно и хранится в git: при неизменном `MobileBuilder` сборка её не меняет. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`.
+Коды выхода `mac-smoke.sh` и `unity-tests.sh` — в `Tools/README.md`. Batchmode-методы: `ThornThrone.Editor.MobileBuilder.BuildMacSmoke`, `ThornThrone.Editor.MobileBuilder.BuildAndroid`. Логи и отчёты последнего прогона в `Research/` (`unity-tests.*`, `mac-build.log`, `mac-smoke.log`, `android-build.log`, `android-build-report.json`) не хранятся в git. Сцена `Mobile.unity` генерируется при каждой сборке детерминированно и хранится в git: при неизменном `MobileBuilder` сборка её не меняет. Аргументы плеера smoke: `-thornBoss`, `-thornElite`, `-thornShowcase`, `-thornCloseup`, `-thornInputScript=ФАЙЛ`.
+
+Сценарий сенсорного ввода (движение одним пальцем, рывок вторым, переход пальца на кнопку рывка, отмена касания) проигрывается через виртуальный `Touchscreen`:
+```sh
+Tools/mac-smoke.sh --no-build -thornInputScript=$PWD/Tools/smoke/input-two-fingers.txt
+```
+Успех — строка `THORN_INPUT_SCRIPT ok=1 …` перед `THORN_MOBILE_SMOKE`; без неё или при `ok=0` — код 8. Формат файла описан в его заголовке.
 
 ## Шрифты
 - Интерфейс использует TextMeshPro (входит в uGUI 2.6.0) и шрифт **PT Sans Regular** © 2010 ParaType Ltd., лицензия SIL Open Font License 1.1. Файлы: `UnityProject/Assets/Game/Art/Fonts/PTSans-Regular.ttf` и текст лицензии `UnityProject/Assets/Game/Art/Fonts/OFL.txt`. Источник: репозиторий Google Fonts, `https://raw.githubusercontent.com/google/fonts/main/ofl/ptsans/PT_Sans-Web-Regular.ttf` и `.../ofl/ptsans/OFL.txt`.

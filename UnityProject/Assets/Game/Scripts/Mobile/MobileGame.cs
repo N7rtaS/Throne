@@ -12,7 +12,10 @@ namespace ThornThrone.Mobile
     /// <summary>
     /// Entry point of the mobile build: owns the simulation, feeds it touch/keyboard input, draws it and
     /// drives the UI. All game rules live in ThornThrone.Simulation; this class only connects them to Unity.
+    /// Runs after the EventSystem (order 0) so that its pointer-over-UI answers are about the current frame
+    /// (design: .kiro/specs/touch-controls-contract/design.md §3.10).
     /// </summary>
+    [DefaultExecutionOrder(100)]
     public sealed class MobileGame : MonoBehaviour
     {
         [Tooltip("survivors_*.json from Assets/Game/Data/Source")]
@@ -75,7 +78,7 @@ namespace ThornThrone.Mobile
         private HeroView heroView;
         private float heroHeight = 0.7f;
         private Vec2 lastHeroPosition;
-        private enum State { Menu, Playing, Paused, Choosing, Results }
+        private enum State { Menu, Playing, Paused, ConfirmQuit, Choosing, Results }
         private State state;
 
         private void Start()
@@ -95,15 +98,20 @@ namespace ThornThrone.Mobile
             BuildScene();
             ui = new GameUi(names, uiFont);
             ui.StartRequested += StartRun;
+            ui.CardAccepts = input.Controller.CardAccepts;
             ui.ChoiceSelected += i => { if (state == State.Choosing && run.Choose(i)) AfterChoice(); };
-            ui.RerollRequested += () => { if (state == State.Choosing && run.Reroll()) ui.ShowChoices(run); };
+            ui.RerollRequested += () => { if (state == State.Choosing && run.Reroll()) ShowChoices(); };
             ui.PauseRequested += () => SetPaused(true);
             ui.ResumeRequested += () => SetPaused(false);
-            ui.QuitRunRequested += EndRun;
+            ui.QuitRunRequested += ShowConfirmQuit;
+            ui.QuitConfirmed += () => { if (state == State.ConfirmQuit) EndRun(); };
+            ui.QuitCancelled += CloseConfirmQuit;
             ui.MenuRequested += ShowMenu;
             ShowMenu();
             if (Environment.GetCommandLineArgs().Contains("-thornCloseup")) VisibleHalfHeight = 350;
             if (Environment.GetCommandLineArgs().Contains("-thornSmoke")) { smoke = true; StartRun("dragonus"); }
+            var script = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornInputScript="));
+            if (smoke && script != null) inputScript = new InputScript(script.Substring("-thornInputScript=".Length));
             if (smoke && Environment.GetCommandLineArgs().Contains("-thornShowcase")) Showcase();
             if (smoke && Environment.GetCommandLineArgs().Contains("-thornBoss"))
             {
@@ -123,6 +131,7 @@ namespace ThornThrone.Mobile
 
         // Automatic check of a player build: run 30 s of game time without input, log the state, quit.
         private bool smoke, screenshotTaken, eliteSmoke;
+        private InputScript inputScript;
         private float screenshotTime = 20;
 
         /// <summary>Visual check: every enemy with a baked look in rings around the hero, no hero attacks.</summary>
@@ -167,6 +176,13 @@ namespace ThornThrone.Mobile
         {
             if (!smoke || run == null) return;
             if (state == State.Choosing) { run.Choose(0); AfterChoice(); }
+            inputScript?.Update(run, input);
+            if (inputScript != null && inputScript.Finished && !inputScript.Ok)
+            {
+                Application.Quit(8);
+                smoke = false;
+                return;
+            }
             if (eliteSmoke && run.Time >= 5 && run.EliteRooms.Count > 0 && run.EliteRooms[0].State == EliteRoomState.Open)
                 run.Teleport(run.EliteRooms[0].Position);
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
@@ -176,6 +192,13 @@ namespace ThornThrone.Mobile
                 StartCoroutine(CaptureTga(shot.Substring("-thornScreenshot=".Length)));
             }
             if (run.Time < 30 && !run.Finished) return;
+            if (inputScript != null && !inputScript.Finished)
+            {
+                Debug.Log("THORN_INPUT_SCRIPT ok=0 failed=not_finished_in_30s");
+                Application.Quit(8);
+                smoke = false;
+                return;
+            }
             foreach (var room in run.EliteRooms) Debug.Log($"THORN_ELITE {room.Index} {room.Spawner.Key} {room.State} at {room.Position}");
             Debug.Log($"THORN_MOBILE_SMOKE time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
@@ -280,6 +303,7 @@ namespace ThornThrone.Mobile
         private void ShowMenu()
         {
             state = State.Menu;
+            input.Reset();
             run = null;
             hero.gameObject.SetActive(false);
             if (bossView) { Destroy(bossView.gameObject); bossView = null; }
@@ -300,16 +324,39 @@ namespace ThornThrone.Mobile
 
         private void SetPaused(bool paused)
         {
-            if (run == null || (state != State.Playing && state != State.Paused)) return;
+            if (run == null || (state != State.Playing && state != State.Paused && state != State.ConfirmQuit)) return;
             state = paused ? State.Paused : State.Playing;
             run.Paused = paused;
             input.Reset();
             ui.ShowPause(paused);
         }
 
+        private void ShowConfirmQuit()
+        {
+            if (state != State.Paused) return;
+            state = State.ConfirmQuit;
+            input.Reset();
+            ui.ShowConfirmQuit(true);
+        }
+
+        private void CloseConfirmQuit()
+        {
+            if (state != State.ConfirmQuit) return;
+            state = State.Paused;
+            ui.ShowConfirmQuit(false);
+        }
+
+        /// <summary>Every shown card set (a new level, the next queued one, a reroll) needs a new touch (Р7).</summary>
+        private void ShowChoices()
+        {
+            input.Reset();
+            input.Controller.OpenCards();
+            ui.ShowChoices(run);
+        }
+
         private void AfterChoice()
         {
-            if (run.Choosing) { ui.ShowChoices(run); return; }
+            if (run.Choosing) { ShowChoices(); return; }
             ui.HideChoices();
             state = State.Playing;
         }
@@ -318,13 +365,22 @@ namespace ThornThrone.Mobile
         {
             if (run == null) return;
             state = State.Results;
+            input.Reset();
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
             ui.ShowResults(run);
         }
 
         // Phone lifecycle: minimising, a call or locking the screen pauses the run.
-        private void OnApplicationPause(bool paused) { if (paused && state == State.Playing && !smoke) SetPaused(true); }
-        private void OnApplicationFocus(bool focused) { if (!focused && state == State.Playing && !smoke) SetPaused(true); }
+        // Held touches are dropped as well: the system may never report their end (ТЗ §6 «нет залипания движения»).
+        private void OnApplicationPause(bool paused) { if (paused && !smoke) LoseFocus(); }
+        private void OnApplicationFocus(bool focused) { if (!focused && !smoke) LoseFocus(); }
+
+        private void LoseFocus()
+        {
+            if (input == null) return;
+            input.Reset();
+            if (state == State.Playing) SetPaused(true);
+        }
 
         // ------------------------------------------------------------------ frame
 
@@ -333,21 +389,17 @@ namespace ThornThrone.Mobile
         private void Update()
         {
             input.Update(state == State.Playing);
-            if (input.BackPressed)
-            {
-                if (state == State.Playing) SetPaused(true);
-                else if (state == State.Paused) SetPaused(false);
-                else if (state == State.Results) ShowMenu();
-                else if (state == State.Menu) Application.Quit();
-            }
+            ui.UpdateLayout(input.Controller);
+            if (input.BackPressed) Back();
             if (run == null) return;
 
             if (state == State.Playing)
             {
                 run.Update(Time.unscaledDeltaTime, ScreenToPlane(input.Move), input.DashPressed);
                 world.Consume(run);
+                inputScript?.CountEvents(run);
                 run.ClearEvents();
-                if (run.Choosing) { state = State.Choosing; ui.ShowChoices(run); }
+                if (run.Choosing) { state = State.Choosing; ShowChoices(); }
                 if (run.Finished) EndRun();
                 for (; reportedDiagnostics < run.Diagnostics.Messages.Count; reportedDiagnostics++)
                     Debug.Log("[Simulation] " + run.Diagnostics.Messages[reportedDiagnostics]);
@@ -369,6 +421,32 @@ namespace ThornThrone.Mobile
             {
                 ui.UpdateHud(run, input);
                 UpdateEliteArrow();
+            }
+        }
+
+        /// <summary>Android Back per screen (ТЗ §6; BackNavigation, Р11, Р12).</summary>
+        private void Back()
+        {
+            switch (BackNavigation.For(BackScreenOf(state)))
+            {
+                case BackAction.Pause: SetPaused(true); break;
+                case BackAction.Resume: SetPaused(false); break;
+                case BackAction.CloseConfirm: CloseConfirmQuit(); break;
+                case BackAction.ToMenu: ShowMenu(); break;
+                case BackAction.QuitApp: Application.Quit(); break;
+            }
+        }
+
+        private static BackScreen BackScreenOf(State s)
+        {
+            switch (s)
+            {
+                case State.Playing: return BackScreen.Playing;
+                case State.Paused: return BackScreen.Paused;
+                case State.ConfirmQuit: return BackScreen.ConfirmQuit;
+                case State.Choosing: return BackScreen.Choosing;
+                case State.Results: return BackScreen.Results;
+                default: return BackScreen.Menu;
             }
         }
 

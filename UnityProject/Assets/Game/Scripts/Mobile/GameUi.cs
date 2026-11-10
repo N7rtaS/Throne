@@ -21,19 +21,41 @@ namespace ThornThrone.Mobile
         public event Action<string> StartRequested;
         public event Action<int> ChoiceSelected;
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
+        /// <summary>«Завершить» and «Отмена» of the quit confirmation (ТЗ_Мобильная_версия_v2.md §6).</summary>
+        public event Action QuitConfirmed, QuitCancelled;
+
+        /// <summary>Card filter by pointer id: a touch held when the cards opened does not pick one.</summary>
+        public Func<int, bool> CardAccepts;
+
+        /// <summary>Interactive targets kept at 48 dp or more by <see cref="ApplyLayout"/>; the pause button first.</summary>
+        public IReadOnlyList<RectTransform> Targets => targets;
 
         private readonly TMP_FontAsset font;
         private readonly Dictionary<string, string> names;
         private readonly RectTransform safe;
-        private readonly GameObject menu, hud, choices, pause, results;
+        private readonly Canvas canvas;
+        private readonly GameObject menu, hud, choices, pause, confirm, results;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
         private readonly TMP_Text bossText, resultText, rerollText, choiceTitle;
         private readonly HudText level, time, kills, boss;
-        private readonly Button[] cards = new Button[3];
+        private readonly CardButton[] cards = new CardButton[3];
         private readonly TMP_Text[] cardTexts = new TMP_Text[3];
         private readonly Button reroll;
         private readonly RectTransform dashButton, pauseButton;
         private Rect lastSafe;
+        private Vector2Int lastScreen;
+        private float lastScale, lastDpi;
+        private bool leftHanded;
+
+        private struct Target
+        {
+            public RectTransform Rect;
+            public Vector2 Position, Size;
+        }
+
+        private readonly List<RectTransform> targets = new List<RectTransform>();
+        private readonly List<Target> authored = new List<Target>();
+        private int dashTarget;
 
         /// <param name="localization">Power-up texts by localization key, or null.</param>
         /// <param name="uiFont">UI font; null takes the TMP Settings default font.</param>
@@ -46,7 +68,7 @@ namespace ThornThrone.Mobile
                 new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
 
             var canvasObject = new GameObject("UI", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-            var canvas = canvasObject.GetComponent<Canvas>();
+            canvas = canvasObject.GetComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             var scaler = canvasObject.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
@@ -74,11 +96,15 @@ namespace ThornThrone.Mobile
             pauseButton = Button(hud.transform, "Pause", new Vector2(1, 1), new Vector2(-150, -150), new Vector2(120, 120), "II", 56, () => PauseRequested?.Invoke()).GetComponent<RectTransform>();
             // The 56 px line (72 px in PT Sans) exactly fills the 72 px caption box; Truncate would hide it.
             pauseButton.GetComponentInChildren<TMP_Text>().overflowMode = TextOverflowModes.Overflow;
-            dashButton = Rect(hud.transform, "Dash", new Vector2(1, 0), new Vector2(1, 0), new Vector2(-300, 60), new Vector2(-60, 300));
+            // Bottom right of the safe area, bottom left in the left-handed mode (MirrorDash).
+            dashButton = Place(hud.transform, "Dash", new Vector2(1, 0), DashPosition, new Vector2(240, 240));
             var dashBack = dashButton.gameObject.AddComponent<Image>();
             dashBack.color = new Color(1, 1, 1, .18f);
             dashFill = Bar(dashButton, "Charge", new Vector2(0, 0), new Vector2(0, 16), new Vector2(240, 16), new Color(.4f, .8f, 1f));
-            Label(dashButton, "Label", Vector2.zero, new Vector2(0, 240), new Vector2(240, 240), 40, TextAnchor.MiddleCenter).text = "Рывок";
+            var dashLabel = Label(dashButton, "Label", Vector2.zero, new Vector2(0, 240), new Vector2(240, 240), 40, TextAnchor.MiddleCenter);
+            dashLabel.text = "Рывок";
+            Stretch(dashLabel.rectTransform, 0);
+            dashTarget = AddTarget(dashButton);
             joystickBase = Circle(hud.transform, "Joystick", 260, new Color(1, 1, 1, .15f));
             joystickKnob = Circle(hud.transform, "Knob", 110, new Color(1, 1, 1, .35f));
             eliteArrow = Circle(hud.transform, "Elite room arrow", 70, new Color(0, .55f, 1f, .95f));
@@ -90,8 +116,11 @@ namespace ThornThrone.Mobile
             for (int i = 0; i < 3; i++)
             {
                 int index = i;
-                cards[i] = Button(choices.transform, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, () => ChoiceSelected?.Invoke(index));
-                cardTexts[i] = cards[i].GetComponentInChildren<TMP_Text>();
+                var card = ButtonBase(choices.transform, "Card " + i, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -330), new Vector2(520, 620), "", 34, out cardTexts[i]);
+                cards[i] = card.gameObject.AddComponent<CardButton>();
+                cards[i].targetGraphic = card.GetComponent<Image>();
+                cards[i].Accepts = id => CardAccepts == null || CardAccepts(id);
+                cards[i].Clicked += () => ChoiceSelected?.Invoke(index);
                 cardTexts[i].alignment = TextAlignmentOptions.Top;
             }
             reroll = Button(choices.transform, "Reroll", new Vector2(.5f, 0), new Vector2(-220, 40), new Vector2(440, 110), "", 38, () => RerollRequested?.Invoke());
@@ -102,6 +131,13 @@ namespace ThornThrone.Mobile
             Label(pause.transform, "Title", new Vector2(.5f, .5f), new Vector2(-400, 160), new Vector2(800, 100), 72, TextAnchor.MiddleCenter).text = "Пауза";
             Button(pause.transform, "Resume", new Vector2(.5f, .5f), new Vector2(-260, 0), new Vector2(520, 120), "Продолжить", 44, () => ResumeRequested?.Invoke());
             Button(pause.transform, "Quit", new Vector2(.5f, .5f), new Vector2(-260, -160), new Vector2(520, 120), "Завершить забег", 44, () => QuitRunRequested?.Invoke());
+
+            // Quit confirmation: an unfinished run is not saved (ТЗ §9).
+            confirm = Panel(safe, "Confirm", new Color(0, 0, 0, .85f));
+            Label(confirm.transform, "Title", new Vector2(.5f, .5f), new Vector2(-500, 260), new Vector2(1000, 100), 64, TextAnchor.MiddleCenter).text = "Завершить забег?";
+            Label(confirm.transform, "Text", new Vector2(.5f, .5f), new Vector2(-600, 130), new Vector2(1200, 80), 40, TextAnchor.MiddleCenter).text = "Прогресс этого забега будет потерян.";
+            Button(confirm.transform, "Confirm quit", new Vector2(.5f, .5f), new Vector2(-560, -120), new Vector2(520, 120), "Завершить", 44, () => QuitConfirmed?.Invoke());
+            Button(confirm.transform, "Cancel quit", new Vector2(.5f, .5f), new Vector2(40, -120), new Vector2(520, 120), "Отмена", 44, () => QuitCancelled?.Invoke());
 
             // Results
             results = Panel(safe, "Results", new Color(0, 0, 0, .8f));
@@ -139,6 +175,15 @@ namespace ThornThrone.Mobile
         public void ShowPause(bool visible)
         {
             pause.SetActive(visible);
+            confirm.SetActive(false);
+            hud.SetActive(true);
+        }
+
+        /// <summary>Quit confirmation over the pause; hiding it shows the pause again.</summary>
+        public void ShowConfirmQuit(bool visible)
+        {
+            confirm.SetActive(visible);
+            pause.SetActive(!visible);
             hud.SetActive(true);
         }
 
@@ -176,13 +221,15 @@ namespace ThornThrone.Mobile
             results.SetActive(screen == results);
             choices.SetActive(false);
             pause.SetActive(false);
+            confirm.SetActive(false);
         }
 
         // ------------------------------------------------------------------ per frame
 
         public void UpdateHud(Run run, GameInput input)
         {
-            ApplySafeArea();
+            var touch = input.Controller;
+            UpdateLayout(touch);
             healthFill.fillAmount = run.MaxHealth > 0 ? run.Health / run.MaxHealth : 0;
             experienceFill.fillAmount = Mathf.Clamp01(run.Experience / run.RequiredExperience);
             int maxDashes = Mathf.Max(1, (int)run.Build.Global[Attr.NumDashes]);
@@ -196,19 +243,78 @@ namespace ThornThrone.Mobile
             if (bossText.gameObject.activeSelf != bossVisible) bossText.gameObject.SetActive(bossVisible);
             if (bossVisible) boss.Set(Mathf.CeilToInt(run.Boss.Health));
 
-            joystickBase.gameObject.SetActive(input.JoystickActive);
-            joystickKnob.gameObject.SetActive(input.JoystickActive);
-            if (input.JoystickActive)
+            bool joystick = touch.JoystickActive;
+            if (joystickBase.gameObject.activeSelf != joystick) joystickBase.gameObject.SetActive(joystick);
+            if (joystickKnob.gameObject.activeSelf != joystick) joystickKnob.gameObject.SetActive(joystick);
+            if (joystick)
             {
-                joystickBase.rectTransform.position = input.JoystickOrigin;
-                joystickKnob.rectTransform.position = input.JoystickOrigin + Vector2.ClampMagnitude(input.JoystickPosition - input.JoystickOrigin, input.JoystickRadius);
+                joystickBase.rectTransform.position = touch.JoystickOrigin;
+                joystickKnob.rectTransform.position = touch.JoystickOrigin + Vector2.ClampMagnitude(touch.JoystickPosition - touch.JoystickOrigin, touch.Layout.JoystickRadius);
             }
-            input.DashArea = ScreenRect(dashButton);
-            input.Blocked = blocked;
-            blocked[0] = ScreenRect(pauseButton);
         }
 
-        private readonly Rect[] blocked = new Rect[1];
+        /// <summary>
+        /// Safe area, left-handed mirror and target sizes when the screen, the Canvas scale or the setting changed;
+        /// then the touch layout in screen pixels (design §3.7, §3.8). Does not allocate.
+        /// </summary>
+        public void UpdateLayout(TouchController touch)
+        {
+            ApplySafeArea();
+            bool mirror = touch.Settings.LeftHanded;
+            var screen = new Vector2Int(Screen.width, Screen.height);
+            if (mirror != leftHanded || screen != lastScreen || canvas.scaleFactor != lastScale || Screen.dpi != lastDpi)
+            {
+                lastScreen = screen;
+                if (mirror != leftHanded) MirrorDash(mirror);
+                ApplyLayout(Screen.dpi, canvas.scaleFactor);
+            }
+            var area = Screen.safeArea;
+            touch.Layout = new TouchLayout
+            {
+                SafeArea = area,
+                DashButton = ScreenRect(dashButton),
+                // Р8: the 0.11 screen height of the earlier build, at least 48 dp.
+                JoystickRadius = Mathf.Max(0.11f * Screen.height, TouchMetrics.DpToPixels(TouchMetrics.MinTargetDp, Screen.dpi)),
+                FixedCenter = TouchLayout.FixedCenterFor(area, mirror),
+            };
+        }
+
+        /// <summary>
+        /// Grows every interactive target to at least 48 dp in screen pixels (ТЗ §6: through the Canvas scale, dp
+        /// are not Canvas units), keeping its center; targets already larger keep their authored size.
+        /// </summary>
+        public void ApplyLayout(float dpi, float canvasScale)
+        {
+            lastDpi = dpi;
+            lastScale = canvasScale;
+            float min = TouchMetrics.MinTargetCanvasUnits(dpi, canvasScale);
+            foreach (var t in authored)
+            {
+                var size = new Vector2(Mathf.Max(t.Size.x, min), Mathf.Max(t.Size.y, min));
+                t.Rect.sizeDelta = size;
+                t.Rect.anchoredPosition = t.Position - (size - t.Size) / 2;
+            }
+        }
+
+        private static readonly Vector2 DashPosition = new Vector2(-300, 60);
+
+        /// <summary>Р10: only the dash button moves to the other corner; pause and HUD stay.</summary>
+        private void MirrorDash(bool left)
+        {
+            leftHanded = left;
+            var anchor = left ? Vector2.zero : new Vector2(1, 0);
+            dashButton.anchorMin = dashButton.anchorMax = anchor;
+            var t = authored[dashTarget];
+            t.Position = left ? new Vector2(-DashPosition.x - t.Size.x, DashPosition.y) : DashPosition;
+            authored[dashTarget] = t;
+        }
+
+        private int AddTarget(RectTransform rect)
+        {
+            targets.Add(rect);
+            authored.Add(new Target { Rect = rect, Position = rect.anchoredPosition, Size = rect.sizeDelta });
+            return authored.Count - 1;
+        }
 
         /// <summary>Widest HUD number the label buffers are sized for (kills, level, boss HP).</summary>
         private const int WidestValue = 9999999;
@@ -406,19 +512,31 @@ namespace ThornThrone.Mobile
 
         private Button Button(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, string caption, int fontSize, Action onClick)
         {
+            var rect = ButtonBase(parent, name, anchor, position, size, caption, fontSize, out _);
+            var button = rect.gameObject.AddComponent<Button>();
+            button.onClick.AddListener(() => onClick());
+            return button;
+        }
+
+        /// <summary>Background and caption of a button, registered as an interactive target.</summary>
+        private RectTransform ButtonBase(Transform parent, string name, Vector2 anchor, Vector2 position, Vector2 size, string caption, int fontSize, out TMP_Text label)
+        {
             var rect = Place(parent, name, anchor, position, size);
             var image = rect.gameObject.AddComponent<Image>();
             image.color = new Color(.16f, .2f, .28f, .95f);
-            var button = rect.gameObject.AddComponent<Button>();
-            button.onClick.AddListener(() => onClick());
-            var label = Label(rect, "Text", Vector2.zero, Vector2.zero, size, fontSize, TextAnchor.MiddleCenter);
-            var labelRect = label.rectTransform;
-            labelRect.anchorMin = Vector2.zero;
-            labelRect.anchorMax = Vector2.one;
-            labelRect.offsetMin = new Vector2(24, 24);
-            labelRect.offsetMax = new Vector2(-24, -24);
+            label = Label(rect, "Text", Vector2.zero, Vector2.zero, size, fontSize, TextAnchor.MiddleCenter);
+            Stretch(label.rectTransform, 24);
             label.text = caption;
-            return button;
+            AddTarget(rect);
+            return rect;
+        }
+
+        private static void Stretch(RectTransform rect, float margin)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(margin, margin);
+            rect.offsetMax = new Vector2(-margin, -margin);
         }
 
         private static Sprite white, circle;

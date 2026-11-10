@@ -1,72 +1,82 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+using UnityTouchPhase = UnityEngine.InputSystem.TouchPhase;
 
 namespace ThornThrone.Mobile
 {
     /// <summary>
-    /// Floating joystick in the left half of the screen, dash on a touch in the dash area (bottom right).
-    /// Keyboard (WASD / arrows, Space, Esc) works in the editor through the same output.
-    /// Output is in screen space: x right, y up, length ≤ 1.
+    /// Unity adapter of <see cref="TouchController"/>: feeds it the Input System touches (EnhancedTouch) or the
+    /// mouse, asks the event system whether a new touch is over the UI, resets it on rotation and outside the
+    /// gameplay. Keyboard (WASD / arrows, Space, Esc) works in the editor through the same output
+    /// (design: .kiro/specs/touch-controls-contract/design.md §3.10). Output is in screen space: x right, y up,
+    /// length ≤ 1.
     /// </summary>
     public sealed class GameInput
     {
+        public TouchController Controller { get; } = new TouchController();
         public Vector2 Move { get; private set; }
         public bool DashPressed { get; private set; }
+        /// <summary>Android Back (Escape in the Input System).</summary>
         public bool BackPressed { get; private set; }
-        public bool JoystickActive => joystickFinger >= 0;
-        public Vector2 JoystickOrigin { get; private set; }
-        public Vector2 JoystickPosition { get; private set; }
 
-        /// <summary>Screen rect of the dash button (pixels), set by the UI.</summary>
-        public Rect DashArea;
-        /// <summary>Screen rects where touches belong to the UI and never start the joystick.</summary>
-        public Rect[] Blocked = new Rect[0];
-
-        private int joystickFinger = -1;
-        private const float DeadZone = 0.1f;
-
-        public float JoystickRadius => Screen.height * 0.11f;
+        private int screenWidth, screenHeight;
+        private ScreenOrientation orientation;
 
         public GameInput()
         {
             EnhancedTouchSupport.Enable();
         }
 
+        /// <summary>Drops every held touch until it is lifted (pause, focus loss, choice, start and end of a run).</summary>
         public void Reset()
         {
-            joystickFinger = -1;
+            Controller.Reset();
             Move = Vector2.zero;
+            DashPressed = false;
         }
 
+        /// <summary>Call after the EventSystem update of the frame (MobileGame runs late, DefaultExecutionOrder).</summary>
         public void Update(bool gameplay)
         {
-            DashPressed = false;
-            Vector2 move = Vector2.zero;
-            if (!gameplay) Reset();
+            Controller.BeginFrame();
+            if (Screen.width != screenWidth || Screen.height != screenHeight || Screen.orientation != orientation)
+            {
+                screenWidth = Screen.width;
+                screenHeight = Screen.height;
+                orientation = Screen.orientation;
+                Controller.Reset();
+            }
 
+            var events = EventSystem.current;
+            bool touched = false;
             foreach (var touch in Touch.activeTouches)
             {
-                Vector2 p = touch.screenPosition;
-                int finger = touch.finger.index;
-                if (touch.began && gameplay)
-                {
-                    if (DashArea.Contains(p)) { DashPressed = true; continue; }
-                    if (joystickFinger < 0 && p.x < Screen.width * 0.5f && !IsBlocked(p))
-                    {
-                        joystickFinger = finger;
-                        JoystickOrigin = p;
-                    }
-                }
-                if (finger != joystickFinger) continue;
-                if (touch.ended) { joystickFinger = -1; continue; }
-                JoystickPosition = p;
-                Vector2 offset = (p - JoystickOrigin) / JoystickRadius;
-                if (offset.magnitude > DeadZone) move = Vector2.ClampMagnitude(offset, 1);
+                touched = true;
+                var phase = Phase(touch.phase);
+                if (phase == null) continue;
+                bool overUi = phase == TouchPhaseKind.Began && events != null && events.IsPointerOverGameObject(touch.touchId);
+                Controller.Process(touch.touchId, phase.Value, touch.screenPosition, overUi);
             }
-            if (joystickFinger >= 0 && !IsFingerActive(joystickFinger)) joystickFinger = -1;
+            // The macOS trackpad does not create touches; the mouse is read only when there are none.
+            var mouse = Mouse.current;
+            if (!touched && mouse != null)
+            {
+                var button = mouse.leftButton;
+                Vector2 p = mouse.position.ReadValue();
+                if (button.wasPressedThisFrame)
+                    Controller.Process(TouchController.MouseId, TouchPhaseKind.Began, p, events != null && events.IsPointerOverGameObject());
+                else if (button.wasReleasedThisFrame) Controller.Process(TouchController.MouseId, TouchPhaseKind.Ended, p, false);
+                else if (button.isPressed) Controller.Process(TouchController.MouseId, TouchPhaseKind.Moved, p, false);
+            }
+            // Outside the gameplay every touch is dropped as it begins: one held through a pause or a choice does
+            // not start moving the hero afterwards (Р6).
+            if (!gameplay) Controller.Reset();
 
+            Vector2 move = Controller.Move;
+            bool dash = Controller.DashPressed;
             var keyboard = Keyboard.current;
             BackPressed = keyboard != null && keyboard.escapeKey.wasPressedThisFrame; // Android back maps to Escape
             if (keyboard != null && gameplay)
@@ -75,21 +85,23 @@ namespace ThornThrone.Mobile
                     (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed ? 1 : 0) - (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed ? 1 : 0),
                     (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed ? 1 : 0) - (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed ? 1 : 0));
                 if (k != Vector2.zero) move = Vector2.ClampMagnitude(k, 1);
-                if (keyboard.spaceKey.wasPressedThisFrame) DashPressed = true;
+                if (keyboard.spaceKey.wasPressedThisFrame) dash = true;
             }
             Move = gameplay ? move : Vector2.zero;
+            DashPressed = gameplay && dash;
         }
 
-        private bool IsBlocked(Vector2 p)
+        private static TouchPhaseKind? Phase(UnityTouchPhase phase)
         {
-            foreach (var r in Blocked) if (r.Contains(p)) return true;
-            return false;
-        }
-
-        private static bool IsFingerActive(int index)
-        {
-            foreach (var touch in Touch.activeTouches) if (touch.finger.index == index) return true;
-            return false;
+            switch (phase)
+            {
+                case UnityTouchPhase.Began: return TouchPhaseKind.Began;
+                case UnityTouchPhase.Moved: return TouchPhaseKind.Moved;
+                case UnityTouchPhase.Stationary: return TouchPhaseKind.Stationary;
+                case UnityTouchPhase.Ended: return TouchPhaseKind.Ended;
+                case UnityTouchPhase.Canceled: return TouchPhaseKind.Canceled;
+                default: return null;
+            }
         }
     }
 }

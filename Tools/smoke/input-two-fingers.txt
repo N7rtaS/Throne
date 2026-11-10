@@ -1,0 +1,13 @@
+# Smoke input scenario for -thornInputScript (design: .kiro/specs/touch-controls-contract/design.md §3.11).
+# time_s  command  arguments; time is Run.Time, positions are shares of the safe area (0..1) or "dash".
+# Touches go through a virtual Input System Touchscreen; events are processed one frame later.
+0.3  down   1  0.20 0.30     # joystick finger
+0.4  move   1  0.30 0.30     # full stick to the right
+1.0  down   2  dash          # second finger dashes while the first one moves
+1.1  up     2
+1.5  move   1  dash          # joystick finger slides onto the dash button: no new dash
+2.0  expect joystick true
+2.0  cancel 1                # system cancel releases the joystick
+2.5  expect dashes 1
+2.5  expect moved true
+2.5  expect joystick false

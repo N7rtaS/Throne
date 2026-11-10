@@ -5,7 +5,8 @@
 # Usage: Tools/mac-smoke.sh [--no-build] [extra player args, e.g. -thornBoss -thornElite]
 #        Tools/mac-smoke.sh --check-log FILE   (only the log check, step 4)
 # Exit codes: 0 ok, 2 build failed or player missing, 3 player timed out, 4 no THORN_MOBILE_SMOKE line,
-#             5 kills=0, 6 unhandled exception in the log, 7 player exit code is not 0.
+#             5 kills=0, 6 unhandled exception in the log, 7 player exit code is not 0,
+#             8 -thornInputScript=FILE given and no THORN_INPUT_SCRIPT ok=1 line (design: .kiro/specs/touch-controls-contract).
 set -euo pipefail
 root="${0:A:h:h}"
 unity="${THORN_UNITY:-/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity}"
@@ -85,5 +86,13 @@ fi
 rc=0
 wait $pid || rc=$?
 
+if [[ " $* " == *" -thornInputScript="* ]]; then
+  script_line="$(LC_ALL=C grep -a '^THORN_INPUT_SCRIPT ' "$log" | tail -n 1 || true)"
+  if [[ "$script_line" != *" ok=1 "* ]]; then
+    echo "mac-smoke: input script failed: ${script_line:-no THORN_INPUT_SCRIPT line}, see $log" >&2
+    exit 8
+  fi
+  print -r -- "$script_line"
+fi
 check_log "$log" || exit $?
 if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $log" >&2; exit 7; fi
