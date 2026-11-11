@@ -218,39 +218,54 @@ namespace ThornThrone.Simulation.Tests
         [Test]
         public void ChoicesAreDistinctValidAndImplemented()
         {
+            // Rank-ups run out after 44 picks (Arcane Bolt ranks 2-9 and four new abilities ranks 1-9 in five slots),
+            // then level-ups offer minor upgrades only and never fall back (Mechanics §33).
             var run = TestData.NewRun();
-            int rounds = 0;
-            for (; rounds < 200; rounds++)
+            int rankUps = 0, minorRounds = 0;
+            for (int round = 0; round < 200; round++)
             {
                 run.Build.GenerateChoices(run.Rng);
-                if (run.Build.ChoicesAreFallback) break;
+                Assert.That(run.Build.ChoicesAreFallback, Is.False, $"round {round}");
                 var choices = run.Build.Choices.ToList();
                 Assert.That(choices.Count, Is.InRange(1, 3));
                 Assert.That(choices.Distinct().Count(), Is.EqualTo(choices.Count));
-                foreach (var c in choices)
+                bool allMinor = true;
+                for (int i = 0; i < choices.Count; i++)
                 {
+                    var c = choices[i];
                     Assert.That(c.IsActive, Is.True, "level-ups only offer skills");
-                    Assert.That(run.Build.CanUpgrade(c), Is.True, c.Key);
+                    Assert.That(run.Build.CanOffer(c, out var kind), Is.True, c.Key);
+                    Assert.That(run.Build.Offers[i].Kind, Is.EqualTo(kind), c.Key);
                     Assert.That(Run.IsImplemented(c), Is.True, c.Key);
+                    allMinor &= kind == OfferKind.Minor;
                 }
+                if (rankUps == 44)
+                {
+                    Assert.That(allMinor, Is.True, $"round {round}: only minor upgrades once rank-ups are exhausted");
+                    minorRounds++;
+                }
+                if (run.Build.Offers[0].Kind != OfferKind.Minor) rankUps++;
                 Assert.That(run.Build.Choose(choices[0]), Is.True);
             }
-            Assert.That(rounds, Is.EqualTo(44), "implemented skills: Arcane Bolt ranks 2-9, Magic Missile, Echo Strike, Rot and Counter Helix ranks 1-9");
-            TestContext.WriteLine($"{rounds} upgrades until the pool is exhausted");
+            Assert.That(rankUps, Is.EqualTo(44), "Arcane Bolt ranks 2-9 and four abilities ranks 1-9");
+            Assert.That(minorRounds, Is.GreaterThan(100));
         }
 
         [Test]
         public void FallbackWhenNothingIsLeft()
         {
+            // Treasure runs out of passive items; level-ups keep minor upgrades (Mechanics §33).
             var run = TestData.NewRun();
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 400; i++)
             {
-                run.Build.GenerateChoices(run.Rng);
+                run.Build.GenerateChoices(run.Rng, items: true);
                 if (run.Build.ChoicesAreFallback) break;
                 run.Build.Choose(run.Build.Choices[0]);
             }
             Assert.That(run.Build.ChoicesAreFallback, Is.True);
             Assert.That(run.Build.Choices, Is.Empty);
+            run.Build.GenerateChoices(run.Rng);
+            Assert.That(run.Build.ChoicesAreFallback, Is.False);
         }
 
         [Test]

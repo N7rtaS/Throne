@@ -10,6 +10,8 @@ namespace ThornThrone.Simulation
         public int Rank;
         /// <summary>Attributes of the powerup itself: base plus applied authored upgrades.</summary>
         public readonly AttributeSet Local = new AttributeSet();
+        /// <summary>How many times each m_vecMinorUpgradeChoices variant was taken (client m_vecMinorUpgrades, К; Mechanics §33 Р3).</summary>
+        public int[] MinorCounts;
         public IAbility Ability;
         /// <summary>Damage statistics of this ability; kept in <see cref="Run.DamageStats"/> after a recipe consumes it.</summary>
         public DamageStatEntry Stats;
@@ -36,10 +38,14 @@ namespace ThornThrone.Simulation
         // Pre-sized above the 47 powerups: list growth inside a step is an allocation.
         private readonly List<PowerUpDef> candidates = new List<PowerUpDef>(64);
         private readonly List<float> weights = new List<float>(64);
+        private readonly List<OfferKind> kinds = new List<OfferKind>(64);
 
         public readonly List<OwnedPowerUp> Owned = new List<OwnedPowerUp>();
         public readonly AttributeSet Global = new AttributeSet();
         public readonly List<PowerUpDef> Choices = new List<PowerUpDef>(8);
+        /// <summary>Cards of <see cref="Choices"/> in the same order; the first <see cref="OfferCount"/> are valid.</summary>
+        public readonly ChoiceOffer[] Offers = new ChoiceOffer[8];
+        public int OfferCount => Choices.Count;
         public int RerollsLeft { get; private set; }
         /// <summary>True when the last generated choice list was empty and the fallback reward applies.</summary>
         public bool ChoicesAreFallback { get; private set; }
@@ -54,6 +60,7 @@ namespace ThornThrone.Simulation
             this.mode = mode;
             this.hero = hero;
             this.implemented = implemented;
+            for (int i = 0; i < Offers.Length; i++) Offers[i] = new ChoiceOffer();
             foreach (int id in hero.InnatePowerUps) Acquire(data.PowerUpsById[id]);
             foreach (int id in hero.StartingPowerUps) Acquire(data.PowerUpsById[id]);
             Recalculate();
@@ -90,8 +97,42 @@ namespace ThornThrone.Simulation
         }
 
         /// <summary>
-        /// Up to m_nLevelUpChoices different options, weighted: new 0.7, already owned 0.35,
-        /// Level-ups offer active skills only; treasure offers passive items only.
+        /// The powerup can be on a card: a new powerup or the next rank (<see cref="CanUpgrade"/>), or a minor upgrade
+        /// of an active ability at m_nMaxLevel. A passive item at maximum is not offered (owner's decision В1, Mechanics §33 Р1, Р4).
+        /// </summary>
+        public bool CanOffer(PowerUpDef def, out OfferKind kind)
+        {
+            kind = Find(def) == null ? OfferKind.New : OfferKind.Rank;
+            if (CanUpgrade(def)) return true;
+            kind = OfferKind.Minor;
+            return CanUpgradeMinor(def);
+        }
+
+        private bool CanUpgradeMinor(PowerUpDef def)
+        {
+            if (!def.IsActive || !def.Rollable || def.IsRecipe || def.Minor.Length == 0 || !implemented(def)) return false;
+            var owned = Find(def);
+            return owned != null && owned.Rank >= def.MaxLevel;
+        }
+
+        /// <summary>
+        /// Weight of the powerup in a choice list, 0 when it is not offered: new m_flNewItemWeight, owned (a rank or a
+        /// minor upgrade) m_flExistingItemWeight, passive × m_flPassiveItemWeight. Level-ups offer active skills only,
+        /// treasure passive items only (Mechanics §12.3, §25, §33 Р1). Rarity does not change it (Р6).
+        /// </summary>
+        public float OfferWeight(PowerUpDef def, bool items) => OfferWeight(def, items, out _);
+
+        private float OfferWeight(PowerUpDef def, bool items, out OfferKind kind)
+        {
+            if (!CanOffer(def, out kind) || (items ? !def.IsPassive : !def.IsActive)) return 0;
+            float weight = kind == OfferKind.New ? mode.NewItemWeight : mode.ExistingItemWeight;
+            if (def.IsPassive) weight *= mode.PassiveItemWeight;
+            return weight > 0 ? weight : 0;
+        }
+
+        /// <summary>
+        /// Up to m_nLevelUpChoices different options by weight (<see cref="OfferWeight(PowerUpDef, bool)"/>); fewer when
+        /// fewer are left. A minor upgrade rolls its variant right after its card is drawn (Mechanics §33 Р2).
         /// </summary>
         public void GenerateChoices(Rng rng, bool items = false)
         {
@@ -99,28 +140,93 @@ namespace ThornThrone.Simulation
             Choices.Clear();
             candidates.Clear();
             weights.Clear();
+            kinds.Clear();
             foreach (var def in data.PowerUps.Values)
             {
-                if (!CanUpgrade(def) || (items ? !def.IsPassive : !def.IsActive)) continue;
-                float weight = Find(def) != null ? mode.ExistingItemWeight : mode.NewItemWeight;
-                if (def.IsPassive) weight *= mode.PassiveItemWeight;
+                float weight = OfferWeight(def, items, out var kind);
                 if (weight <= 0) continue;
                 candidates.Add(def);
                 weights.Add(weight);
+                kinds.Add(kind);
             }
-            while (Choices.Count < mode.LevelUpChoices && candidates.Count > 0)
+            while (Choices.Count < mode.LevelUpChoices && Choices.Count < Offers.Length && candidates.Count > 0)
             {
                 float total = 0;
                 for (int i = 0; i < weights.Count; i++) total += weights[i];
                 float roll = rng.NextFloat() * total;
                 int pick = 0;
                 while (pick < weights.Count - 1 && roll >= weights[pick]) { roll -= weights[pick]; pick++; }
-                Choices.Add(candidates[pick]);
+                var def = candidates[pick];
+                var kind = kinds[pick];
+                int variant = kind == OfferKind.Minor ? rng.Next(def.Minor.Length) : -1;
+                Describe(Offers[Choices.Count], def, kind, variant);
+                Choices.Add(def);
                 candidates.RemoveAt(pick);
                 weights.RemoveAt(pick);
+                kinds.RemoveAt(pick);
             }
             ChoicesAreFallback = Choices.Count == 0;
         }
+
+        /// <summary>Fills a card: kind, ranks, rarity and the summed attributes before and after (Mechanics §33 Р7, Р10–Р11).</summary>
+        private void Describe(ChoiceOffer offer, PowerUpDef def, OfferKind kind, int variant)
+        {
+            var owned = Find(def);
+            int rank = owned?.Rank ?? 0;
+            var rarity = kind == OfferKind.Minor ? def.Minor[variant].Rarity : UpgradeRarity.Common;
+            offer.Reset(def, kind, rank, kind == OfferKind.Minor ? rank : rank + 1, variant, rarity);
+            if (kind == OfferKind.Minor)
+            {
+                AddChanges(offer, owned, def.Minor[variant].Local, MinorDamageAttribute(def));
+                AddChanges(offer, null, def.Minor[variant].Global, -1);
+            }
+            else if (def.IsPassive)
+            {
+                // The next rank of §25 Р1–Р2: authored record «rank» when the item has them, else the first minor.
+                if (def.Authored.Length > 0) { if (rank < def.Authored.Length) AddChanges(offer, null, def.Authored[rank].Global, -1); }
+                else if (def.Minor.Length > 0) AddChanges(offer, null, def.Minor[0].Global, -1);
+            }
+            else if (owned != null)
+            {
+                int index = rank - rules.AuthoredUpgradeOffset;
+                if (index >= 0 && index < def.Authored.Length)
+                {
+                    AddChanges(offer, owned, def.Authored[index].Local, -1);
+                    AddChanges(offer, null, def.Authored[index].Global, -1);
+                }
+            }
+        }
+
+        /// <summary>Own attributes when <paramref name="owned"/> is set, else hero attributes.</summary>
+        private void AddChanges(ChoiceOffer offer, OwnedPowerUp owned, AttributeValue[] values, int damage)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                int id = Remap(values[i].Id, damage);
+                float current = owned != null ? Stat(owned, id) : Global[id];
+                if (!offer.Add(id, owned == null, current, values[i].Value))
+                    data.Diagnostics.Report("build:offer-changes", "A choice card changes more attributes than it can show");
+            }
+        }
+
+        /// <summary>
+        /// Damage attribute of the ability's base (Damage_Physical or Damage_Magical, one of them), else −1. A minor
+        /// upgrade's damage of the other type goes to this one (owner's decision В2, variant А; Mechanics §33 Р5, Differences).
+        /// </summary>
+        private static int MinorDamageAttribute(PowerUpDef def)
+        {
+            bool physical = false, magical = false;
+            foreach (var a in def.BaseAttributes)
+            {
+                if (a.Id == Attr.Damage_Physical) physical = true;
+                else if (a.Id == Attr.Damage_Magical) magical = true;
+            }
+            if (physical == magical) return -1;
+            return physical ? Attr.Damage_Physical : Attr.Damage_Magical;
+        }
+
+        private static int Remap(int attribute, int damage) =>
+            damage >= 0 && (attribute == Attr.Damage_Physical || attribute == Attr.Damage_Magical) ? damage : attribute;
 
         public bool Reroll(Rng rng)
         {
@@ -130,8 +236,27 @@ namespace ThornThrone.Simulation
             return true;
         }
 
-        /// <summary>Takes a choice from the current list.</summary>
-        public bool Choose(PowerUpDef def) => Choices.Contains(def) && Upgrade(def);
+        /// <summary>Takes a choice from the current list: its rank or its rolled minor variant.</summary>
+        public bool Choose(PowerUpDef def)
+        {
+            int at = Choices.IndexOf(def);
+            if (at < 0) return false;
+            var offer = Offers[at];
+            return offer.Kind == OfferKind.Minor ? UpgradeMinor(def, offer.MinorIndex) : Upgrade(def);
+        }
+
+        /// <summary>
+        /// Adds minor variant <paramref name="index"/> to an active ability at m_nMaxLevel; the rank stays, repeats add up
+        /// without a limit (Mechanics §33 Р3). Also for tests and debug tools.
+        /// </summary>
+        public bool UpgradeMinor(PowerUpDef def, int index)
+        {
+            if (!CanUpgradeMinor(def) || index < 0 || index >= def.Minor.Length) return false;
+            Find(def).MinorCounts[index]++;
+            Recalculate();
+            Choices.Clear();
+            return true;
+        }
 
         /// <summary>Adds or ranks up a powerup without a choice list (tests, debug tools).</summary>
         public bool Upgrade(PowerUpDef def)
@@ -148,7 +273,7 @@ namespace ThornThrone.Simulation
 
         private void Acquire(PowerUpDef def)
         {
-            Owned.Add(new OwnedPowerUp { Def = def, Rank = 1 });
+            Owned.Add(new OwnedPowerUp { Def = def, Rank = 1, MinorCounts = new int[def.Minor.Length] });
         }
 
         /// <summary>
@@ -214,6 +339,16 @@ namespace ThornThrone.Simulation
                     {
                         owned.Local.Add(def.Authored[u].Local);
                         Global.Add(def.Authored[u].Global);
+                    }
+                    // Minor upgrades after the maximum (Mechanics §33 Р3, Р5).
+                    int damage = MinorDamageAttribute(def);
+                    for (int m = 0; m < owned.MinorCounts.Length; m++)
+                    {
+                        int times = owned.MinorCounts[m];
+                        if (times == 0) continue;
+                        var local = def.Minor[m].Local;
+                        for (int k = 0; k < local.Length; k++) owned.Local.Add(Remap(local[k].Id, damage), local[k].Value * times);
+                        Global.Add(def.Minor[m].Global, times);
                     }
                 }
             }

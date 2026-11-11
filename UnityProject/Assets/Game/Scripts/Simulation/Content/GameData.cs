@@ -167,15 +167,28 @@ namespace ThornThrone.Simulation
             return kept.Count == items.Length ? items : kept.ToArray();
         }
 
-        private static UpgradeChoice[] Choices(JObject o, string name)
+        private UpgradeChoice[] Choices(string key, JObject o, string name)
         {
             if (!(o[name] is JArray items)) return new UpgradeChoice[0];
             return items.Select(i => new UpgradeChoice
             {
-                Rarity = (string)i["m_unRarity"],
+                Rarity = Rarity(key, i),
                 Local = Attributes(i["m_vecUpgradeAttributes"]),
                 Global = Attributes(i["m_vecGlobalUpgradeAttributes"]),
             }).ToArray();
+        }
+
+        /// <summary>
+        /// RARITY_COMMON, or no field (authored records have none), is common; anything else is reported and
+        /// counts as common, because the other client values are not recovered (Mechanics §33 Р6–Р7).
+        /// </summary>
+        private UpgradeRarity Rarity(string key, JToken choice)
+        {
+            string value = (string)choice["m_unRarity"];
+            if (value == null || value == "RARITY_COMMON") return UpgradeRarity.Common;
+            Diagnostics.Report($"data:unknown-rarity:{key}:{value}",
+                $"Powerup {key} has an unknown upgrade rarity {value}; counted as common");
+            return UpgradeRarity.Common;
         }
 
         private static LevelEventDef[] Events(JObject o, string name)
@@ -271,14 +284,14 @@ namespace ThornThrone.Simulation
             EconItems = Ints(v, "m_vecEconItems"),
         };
 
-        private static PowerUpDef ReadPowerUp(string key, JObject v) => new PowerUpDef
+        private PowerUpDef ReadPowerUp(string key, JObject v) => new PowerUpDef
         {
             Key = key, Raw = v, Class = S(v, "_class"), Source = S(v, "m_sSource"), Targeting = S(v, "m_eTargeting"),
             Id = I(v, "m_unPowerUpID"), MaxLevel = I(v, "m_nMaxLevel", 1),
             IsPassive = B(v, "m_bIsPassive"), IsInnate = B(v, "m_bIsInnate"), IsGold = B(v, "m_bIsGold"),
             Rollable = B(v, "m_bRollable", true),
             BaseAttributes = Attributes(v["m_vecBaseAttributes"]),
-            Authored = Choices(v, "m_vecAuthoredUpgradeChoices"), Minor = Choices(v, "m_vecMinorUpgradeChoices"),
+            Authored = Choices(key, v, "m_vecAuthoredUpgradeChoices"), Minor = Choices(key, v, "m_vecMinorUpgradeChoices"),
             RecipeItems = Ints(v, "m_vecRecipeItems"),
         };
 

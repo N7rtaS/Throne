@@ -14,9 +14,15 @@ namespace ThornThrone.Simulation
 
     public enum MovementBehavior { Unknown, Tracking, Linear, LinearSinWave, Stationary }
 
+    /// <summary>
+    /// m_unRarity of an upgrade choice (client enum ESurvivorsUpgradeRarity, values not recovered, К). The data has
+    /// only RARITY_COMMON; authored records have no rarity field and count as common (Mechanics §33 Р7).
+    /// </summary>
+    public enum UpgradeRarity { Common }
+
     public sealed class UpgradeChoice
     {
-        public string Rarity;
+        public UpgradeRarity Rarity;
         /// <summary>Applied to the powerup itself (m_vecUpgradeAttributes).</summary>
         public AttributeValue[] Local;
         /// <summary>Applied to the hero (m_vecGlobalUpgradeAttributes).</summary>

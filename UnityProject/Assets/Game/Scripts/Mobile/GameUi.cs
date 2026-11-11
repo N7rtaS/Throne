@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ThornThrone.App;
 using ThornThrone.Simulation;
 using TMPro;
@@ -429,8 +428,8 @@ namespace ThornThrone.Mobile
                 cards[i].gameObject.SetActive(visible);
                 if (!visible) continue;
                 cardTexts[i].text = run.ChoicesAreFallback
-                    ? $"Восстановление\n\n+{run.Rules.FallbackHeal:0} здоровья\n\nВсе улучшения получены"
-                    : Describe(run, run.Choices[i]);
+                    ? ChoiceText.Fallback(GoldName(run), run.FallbackGold)
+                    : CardText(run, run.Build.Offers[i]);
             }
             reroll.gameObject.SetActive(!run.ChoicesAreFallback);
             reroll.interactable = run.Build.RerollsLeft > 0;
@@ -616,54 +615,11 @@ namespace ThornThrone.Mobile
 
         // ------------------------------------------------------------------ card text
 
-        private static readonly Dictionary<string, string> attributeNames = new Dictionary<string, string>
-        {
-            { "MaxHP", "здоровье" }, { "HPRegen", "восстановление здоровья в секунду" },
-            { "MovementSpeed", "скорость передвижения" }, { "PickupRadius", "радиус подбора" },
-            { "ExpMultiplier", "% опыта" }, { "Damage_Magical", "магический урон" },
-            { "DamageMultiplier_Magical", "% магического урона" }, { "CooldownReductionMultiplier", "% сокращения перезарядки" },
-            { "TargetCount", "снаряды в залпе" }, { "ProjectileHitCount", "пробитие" }, { "Range", "дальность" },
-            { "ProjectileSpeed", "скорость снаряда" }, { "KnockbackDistance", "отталкивание" },
-            { "ProjectileBounces", "отскоки" }, { "StunDuration", "с оглушения" }, { "Radius", "радиус" },
-        };
+        private string CardText(Run run, ChoiceOffer offer) =>
+            ChoiceText.Format(offer, Name(offer.Def), Text(offer.Def, "LocAbilityDesc"), run.Data.AttributeDefinitions);
 
-        private static readonly HashSet<string> percentAttributes = new HashSet<string>
-            { "ExpMultiplier", "DamageMultiplier_Magical", "CooldownReductionMultiplier" };
-
-        private string Describe(Run run, PowerUpDef def)
-        {
-            var owned = run.Build.Find(def);
-            int rank = owned?.Rank ?? 0;
-            var sb = new StringBuilder();
-            sb.Append(Name(def)).Append("\n\n");
-            sb.Append(rank == 0 ? "Новое" : $"Уровень {rank} » {rank + 1}").Append(" / ").Append(def.MaxLevel).Append("\n\n");
-            if (def.IsPassive)
-            {
-                if (def.Minor.Length > 0) Lines(sb, def.Minor[0].Global);
-            }
-            else if (rank == 0) sb.Append(Text(def, "LocAbilityDesc"));
-            else
-            {
-                int index = rank - run.Rules.AuthoredUpgradeOffset;
-                if (index >= 0 && index < def.Authored.Length)
-                {
-                    Lines(sb, def.Authored[index].Local);
-                    Lines(sb, def.Authored[index].Global);
-                }
-            }
-            return sb.ToString();
-        }
-
-        private static void Lines(StringBuilder sb, AttributeValue[] values)
-        {
-            foreach (var a in values)
-            {
-                string key = Attr.Name(a.Id);
-                string label = attributeNames.TryGetValue(key, out var n) ? n : key;
-                if (percentAttributes.Contains(key)) sb.Append($"+{a.Value * 100:0.#}{label}\n");
-                else sb.Append($"{a.Value:+0.##;-0.##} {label}\n");
-            }
-        }
+        private string GoldName(Run run) =>
+            run.Data.PowerUps.TryGetValue(run.Rules.FallbackPowerUp, out var gold) ? Name(gold) : run.Rules.FallbackPowerUp;
 
         private string Name(PowerUpDef def) => Text(def, "LocAbilityName") ?? def.Key;
 

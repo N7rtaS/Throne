@@ -39,8 +39,12 @@ namespace ThornThrone.Simulation
         /// <summary>Hero is immune to contact damage while dashing (prototype behaviour).</summary>
         public bool DashGrantsInvulnerability = true;
 
-        /// <summary>Reward when no upgrade is available: heal (prototype behaviour, Differences A19).</summary>
-        public float FallbackHeal = 30;
+        /// <summary>
+        /// Reward when no upgrade is available: the powerup «gold» (m_bIsGold, the name is in the client code), worth
+        /// m_nGoldAmount of the pickup «gold_bag» (owner's decision В3, Mechanics §33 Р8–Р9, Differences A19).
+        /// </summary>
+        public string FallbackPowerUp = "gold";
+        public string FallbackGoldPickup = "gold_bag";
 
         /// <summary>Collision radius when m_flCollisionRadius is absent, by separation layer.</summary>
         public Dictionary<string, float> DefaultCollisionRadius = new Dictionary<string, float>

@@ -302,7 +302,7 @@ namespace ThornThrone.Simulation
             if (!Choosing || Finished) return false;
             if (Build.ChoicesAreFallback)
             {
-                Heal(Rules.FallbackHeal);
+                GrantFallbackReward();
             }
             else
             {
