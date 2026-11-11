@@ -64,6 +64,15 @@ namespace ThornThrone.Simulation
             Events[EventCount++] = new SimEvent { Kind = kind, Slot = shot.Slot, Position = position, Value = value, SpawnId = shot.SpawnId };
         }
 
+        /// <summary>Event about a ground object: its slot and SpawnId, Value the powerup ID of its source (Mechanics §31).</summary>
+        private void Emit(SimEventKind kind, GroundObject obj, Vec2 position)
+        {
+            if (EventCount == Events.Length) return;
+            Events[EventCount++] = new SimEvent
+            {
+                Kind = kind, Slot = obj.Slot, Position = position, Value = obj.Source?.Def.Id ?? 0, SpawnId = obj.SpawnId,
+            };
+        }
         private void Emit(SimEventKind kind, Pickup pickup, Vec2 position, float value)
         {
             if (EventCount == Events.Length) return;

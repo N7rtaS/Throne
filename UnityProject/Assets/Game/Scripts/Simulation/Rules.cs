@@ -96,6 +96,11 @@ namespace ThornThrone.Simulation
 
         /// <summary>Hard pool limits; reaching them is reported and never stops the run.</summary>
         public int MaxEnemies = 1024, MaxProjectiles = 1024, MaxPickups = 1024;
+        /// <summary>
+        /// Ground objects of abilities (mines, lava globs and puddles), one pool per run. The data needs at most ≈200
+        /// (Land Mine at the 0.1 s cooldown floor × 20 s); a full pool skips new objects and keeps the old ones (Mechanics §31 Р1, Р2).
+        /// </summary>
+        public int MaxGroundObjects = 256;
     }
 
     /// <summary>Things the simulation met but does not implement yet. Reported once per key.</summary>

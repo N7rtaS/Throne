@@ -25,6 +25,15 @@ namespace ThornThrone.Simulation
     {
         void AfterHit(Run run, Projectile shot, Enemy hit);
     }
+    /// <summary>
+    /// An ability that leaves objects on the ground (<see cref="GroundObject"/>). The run calls it once per step for
+    /// each of its live objects, also while the hero is down (Mechanics §31 Р3).
+    /// </summary>
+    public interface IGroundObjectAbility
+    {
+        /// <summary>Advances the object by <paramref name="dt"/>; returns false when it is over and its slot is freed.</summary>
+        bool UpdateObject(Run run, GroundObject obj, float dt);
+    }
 
     /// <summary>Maps original powerup classes (_class) to implementations.</summary>
     public static class AbilityFactory
@@ -45,6 +54,8 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_Swashbuckle", (owned, run) => new Swashbuckle(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_Stampede", (owned, run) => new Stampede(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_Track", (owned, run) => new Track(owned) },
+                { "CSurvivorsPowerUpDefinition_LandMine", (owned, run) => new LandMine(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_MortimerKisses", (owned, run) => new MortimerKisses(owned, run) },
             };
 
         /// <summary>

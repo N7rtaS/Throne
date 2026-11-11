@@ -177,6 +177,19 @@ namespace ThornThrone.Mobile.Tests
         }
 
         [Test]
+        public void GlobPointFollowsArcFromOriginToTarget()
+        {
+            var origin = new Vec2(100, -200);
+            var target = new Vec2(900, 400);
+            Assert.That(Vector3.Distance(WorldRenderer.GlobPoint(origin, target, 0), WorldRenderer.ToWorld(origin)), Is.LessThan(1e-4f), "starts at the hero");
+            Assert.That(Vector3.Distance(WorldRenderer.GlobPoint(origin, target, 1), WorldRenderer.ToWorld(target)), Is.LessThan(1e-4f), "lands on the target point");
+            var middle = WorldRenderer.GlobPoint(origin, target, 0.5f);
+            Assert.That(Vector3.Distance(new Vector3(middle.x, 0, middle.z), WorldRenderer.ToWorld(new Vec2(500, 100))), Is.LessThan(1e-4f), "halfway on the ground");
+            Assert.That(middle.y, Is.EqualTo(WorldRenderer.GlobArcHeight).Within(1e-4f), "peak halfway");
+            Assert.That(WorldRenderer.GlobPoint(origin, target, 0.25f).y, Is.EqualTo(0.75f * WorldRenderer.GlobArcHeight).Within(1e-4f), "parabola");
+            Assert.That(Vector3.Distance(WorldRenderer.GlobPoint(origin, target, 1.5f), WorldRenderer.ToWorld(target)), Is.LessThan(1e-4f), "clamped after landing");
+        }
+        [Test]
         public void BurstMatrixCoversTheStruckCircle()
         {
             var m = WorldRenderer.BurstMatrix(new Vec2(100, -200), 360);

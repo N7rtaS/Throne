@@ -173,7 +173,7 @@ inclusion: manual
 
 ✅ (2026-11-12) Task 23: Swashbuckle, Stampede, Annihilation, Track (Spec) — по классу на способность; Track — метка с бонусом при убийстве.
 
-Task 24: Land Mine, Mortimer Kisses (Spec) — пул `GroundObject` (размер и переполнение задокументированы), навесной снаряд с задержкой (`TriggerTime`, `InitialTickDelay`).
+✅ (2026-11-12) Task 24: Land Mine, Mortimer Kisses (Spec) — пул `GroundObject` (размер и переполнение задокументированы), навесной снаряд с задержкой (`TriggerTime`, `InitialTickDelay`).
 
 Task 25: Spirits, Snotty Bat (Spec) — спутники/союзники; роль `snotty` по данным. После задачи все 17 способностей готовы.
 

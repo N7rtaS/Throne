@@ -22,7 +22,12 @@ namespace ThornThrone.Simulation
         public int Capacity => targets.Length;
 
         /// <summary>Copies up to <paramref name="wanted"/> random targetable enemies within range; returns their number.</summary>
-        public int Collect(Run run, Vec2 center, float range, int wanted)
+        public int Collect(Run run, Vec2 center, float range, int wanted) => Collect(run, center, 0, range, wanted);
+        /// <summary>
+        /// Same, for enemies whose distance from the centre is within [<paramref name="minRange"/>, <paramref name="range"/>]
+        /// (Mortimer Kisses' m_flMinRange, Mechanics §31 Р12).
+        /// </summary>
+        public int Collect(Run run, Vec2 center, float minRange, float range, int wanted)
         {
             int candidates = 0;
             using (var near = run.Grid.Query(center, range))
@@ -30,7 +35,9 @@ namespace ThornThrone.Simulation
                 for (int i = 0; i < near.Count && candidates < targets.Length; i++)
                 {
                     var e = run.Enemies[near[i]];
-                    if (!e.Targetable || Vec2.DistanceSquared(e.Position, center) > range * range) continue;
+                    if (!e.Targetable) continue;
+                    float d = Vec2.DistanceSquared(e.Position, center);
+                    if (d > range * range || d < minRange * minRange) continue;
                     targets[candidates] = e;
                     ids[candidates] = e.SpawnId;
                     candidates++;

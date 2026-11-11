@@ -102,6 +102,42 @@ namespace ThornThrone.Simulation
         public int Value;
     }
 
+    /// <summary>Stage of a <see cref="GroundObject"/>: a mine arms, waits and counts down; a glob flies and burns (Mechanics §31).</summary>
+    public enum GroundPhase { Arming, Armed, Triggered, Falling, Burning }
+    /// <summary>
+    /// Pooled object left on the ground by an ability (Land Mine's mine, Mortimer Kisses' glob and puddle). It does not
+    /// move, so it has no previous position: presentation draws a flying glob from <see cref="Origin"/>,
+    /// <see cref="Position"/>, <see cref="Age"/> and <see cref="FlightTime"/>. The source ability updates it every
+    /// step (<see cref="IGroundObjectAbility"/>); its numbers are snapshotted when it is created (Mechanics §31 Р1–Р3).
+    /// </summary>
+    public sealed class GroundObject
+    {
+        public int Slot, SpawnId;
+        public bool Active;
+        public OwnedPowerUp Source;
+        public GroundPhase Phase;
+        /// <summary>Where the mine lies or the glob lands.</summary>
+        public Vec2 Position;
+        /// <summary>Where the glob was launched from (the hero at launch); equals <see cref="Position"/> for a mine.</summary>
+        public Vec2 Origin;
+        /// <summary>Radius of the mine or puddle.</summary>
+        public float Radius;
+        /// <summary>Seconds since creation (advanced in the steps after the creation step).</summary>
+        public float Age;
+        /// <summary>Seconds until the next event of the phase (countdown, landing, next tick).</summary>
+        public float Timer;
+        public float FlightTime, Life, ArmTime, Interval;
+        public int TicksLeft;
+        /// <summary><see cref="Run.Time"/> of the step that created it: not advanced in that step.</summary>
+        public float Born;
+        /// <summary>Type and delivery of <see cref="Damage"/>, snapshotted at creation.</summary>
+        public float Damage;
+        public DamageType DamageType;
+        public DamageFlags DamageFlags;
+        public DamageStatEntry DamageSource;
+        /// <summary>Hit on an enemy, snapshotted at creation.</summary>
+        public DamageInfo Hit => new DamageInfo(Damage, DamageType, DamageFlags, DamageSource);
+    }
     public enum SimEventKind
     {
         EnemySpawned, EnemyDied, EnemyDespawned, EnemyDamaged,
@@ -113,6 +149,10 @@ namespace ThornThrone.Simulation
         AbilityStrike,
         /// <summary>An ability hit a circle (Counter Helix): Position is its centre, Extent.X its radius (Mechanics §28 Р8).</summary>
         AbilityBurst,
+        /// <summary>A ground object appeared (Mechanics §31): Slot, SpawnId, Position (mine or landing point), Value the powerup ID.</summary>
+        GroundObjectSpawned,
+        /// <summary>A ground object ended: Slot, SpawnId, Position, Value the powerup ID.</summary>
+        GroundObjectEnded,
     }
 
     /// <summary>
@@ -127,7 +167,7 @@ namespace ThornThrone.Simulation
         public int Slot;
         public Vec2 Position;
         public float Value;
-        /// <summary>SpawnId of the enemy, projectile or pickup; 0 for events that are not about a pooled entity.</summary>
+        /// <summary>SpawnId of the enemy, projectile, pickup or ground object; 0 for events that are not about a pooled entity.</summary>
         public int SpawnId;
         /// <summary>Definition of the enemy at the time of the event (enemy events only).</summary>
         public EnemyDef EnemyDef;

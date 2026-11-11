@@ -1,0 +1,11 @@
+# Задачи: Land Mine, Mortimer Kisses (Task 24)
+- [x] 1. Тесты пула `GroundObjectPoolTests` (Т1), затем `GroundObject`, `GroundPhase`, события, `Rules.MaxGroundObjects`, `Run.Ground.cs`, перегрузка `Emit`, 2 строки в `Run.cs` (Т1.1–1.5, Т4.1).
+- [x] 2. Тесты `RandomTargets` с минимальной дальностью, перегрузка `Collect`; `AnnihilationTests` зелёные (Т3.2).
+- [x] 3. Тесты `LandMineTests` (ранги, установка, взвод, отсчёт, взрыв, истечение), затем `Abilities/LandMine.cs`, id атрибутов, строка в фабрике (Т2, Т4.2).
+- [x] 4. Тесты `MortimerKissesTests` (ранги, кольцо, залп, полёт, лужа, тики, seed), затем `Abilities/MortimerKisses.cs`, строка в фабрике (Т3, Т4.2).
+- [x] 5. Общие тесты: пауза, выбор, упавший герой, выделения памяти, бот-забег на 5 seed (Т1.5, Т4.3, Т4.4, Т4.5).
+- [x] 6. `Tools/tests/test_audit.py`: новые классы implemented; `python3 -m unittest discover -s Tools/tests` (Т4.5).
+- [x] 7. Представление: отрисовка мин, шаров и луж в `WorldRenderer`, `GlobPoint`, EditMode-тест; `Tools/unity-tests.sh` (Т4.6).
+- [x] 8. Mechanics §31 (Р1–Р18), Differences Б16, состояние в Mechanics/реестрах при необходимости.
+- [x] 9. Полный `dotnet test`, smoke `Tools/mac-smoke.sh -thornForce=land_mine,mortimer_kisses` и обычный smoke (Т4.7).
+- [x] 10. Roadmap, коммит.

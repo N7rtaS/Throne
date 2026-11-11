@@ -192,6 +192,7 @@ namespace ThornThrone.Simulation
             Enemies = Create(Rules.MaxEnemies, i => new Enemy(Rules.MaxDotsPerEnemy) { Slot = i }, out freeEnemies, out freeEnemyCount);
             Projectiles = Create(Rules.MaxProjectiles, i => new Projectile { Slot = i }, out freeProjectiles, out freeProjectileCount);
             Pickups = Create(Rules.MaxPickups, i => new Pickup { Slot = i }, out freePickups, out freePickupCount);
+            GroundObjects = Create(Rules.MaxGroundObjects, i => new GroundObject { Slot = i }, out freeGroundObjects, out freeGroundObjectCount);
             grid = new SpatialGrid(minX - 2500, minY - 2500, maxX + 2500, maxY + 2500, 256, Rules.MaxEnemies);
 
             var events = new List<SpawnEvent>();
@@ -333,6 +334,7 @@ namespace ThornThrone.Simulation
             RebuildGrid();
             if (!Downed) for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
             UpdateProjectiles(dt);
+            UpdateGroundObjects(dt); // Mechanics §31 Р3
             if (!Downed) UpdatePickups(dt);
             if (PendingItems > 0 && !Choosing) OpenChoices();
             if (PendingLevels > 0 && !Choosing)

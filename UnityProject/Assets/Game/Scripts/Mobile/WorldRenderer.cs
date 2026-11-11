@@ -38,7 +38,7 @@ namespace ThornThrone.Mobile
         }
 
         private readonly Kind small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill,
-            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst;
+            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava;
         private readonly Kind[] all;
 
         /// <summary>Instances of one baked model: matrices and VAT frame per instance, drawn per submesh.</summary>
@@ -196,6 +196,20 @@ namespace ThornThrone.Mobile
         public static Matrix4x4 BurstMatrix(Vec2 center, float radius) =>
             Matrix4x4.TRS(ToWorld(center, 0.018f), Quaternion.identity, Vector3.one * (radius * Scale));
 
+        /// <summary>Peak height of a lava glob's arc, Unity units (display only, Mechanics §31 Р14).</summary>
+        public const float GlobArcHeight = 2.5f;
+        /// <summary>Radius of a mine's disc, Source units (display only).</summary>
+        public const float MineDrawRadius = 40;
+        /// <summary>
+        /// Point of a lava glob on its arc: straight from <paramref name="origin"/> to <paramref name="target"/> on the
+        /// ground, raised by a parabola that peaks at <see cref="GlobArcHeight"/> halfway; <paramref name="progress"/> is
+        /// clamped to [0, 1].
+        /// </summary>
+        public static Vector3 GlobPoint(Vec2 origin, Vec2 target, float progress)
+        {
+            float t = Mathf.Clamp01(progress);
+            return ToWorld(Vec2.Lerp(origin, target, t), 4 * GlobArcHeight * t * (1 - t));
+        }
         /// <summary>
         /// Radius of the hero's Rot circle, 0 without Rot (stand-in for pudge_rot.vpcf until Task 37, Mechanics §28 Р9).
         /// </summary>
@@ -253,10 +267,15 @@ namespace ThornThrone.Mobile
             vulnerable = Make(ring, template, new Color(.75f, .3f, 1f));     // stand-in for kez_vulnerable_marker.vpcf
             rot = Additive(Make(disc, template, new Color(.1f, .3f, .04f)));  // stand-in for pudge_rot.vpcf (Task 37)
             burst = Additive(Make(disc, template, new Color(.5f, .25f, .1f))); // stand-in for axe_counter_helix.vpcf
+            // Stand-ins for techies_land_mine.vpcf, snapfire_lizard_blobs_arced.vpcf and snapfire_ground_aoe.vpcf (Task 37).
+            mine = Make(disc, template, new Color(.45f, .05f, .05f));
+            mineLit = Make(disc, template, new Color(1f, .15f, .1f));
+            glob = Make(sphere, template, new Color(1f, .5f, .1f));
+            lava = Additive(Make(disc, template, new Color(.45f, .2f, .02f)));
             experience = Make(cube, template, new Color(.35f, 1f, .55f));
             gold = Make(cube, template, new Color(1f, .82f, .2f));
             heal = Make(cube, template, new Color(1f, .4f, .45f));
-            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst };
+            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava };
         }
 
         /// <summary>
@@ -379,6 +398,27 @@ namespace ThornThrone.Mobile
                 if (!p.Active) continue;
                 float d = Mathf.Max(0.2f, p.Radius * 2 * Scale);
                 (p.Hostile ? hostileBolt : p.Source?.Ability is MagicMissile ? missile : bolt).Add(Matrix4x4.TRS(ToWorld(run.Interpolate(p.PreviousPosition, p.Position), 0.8f), Quaternion.identity, Vector3.one * d));
+            }
+            // Ground objects (Mechanics §31): nothing is kept per slot between frames, so no SpawnId check is needed.
+            foreach (var g in run.GroundObjects)
+            {
+                if (!g.Active) continue;
+                switch (g.Phase)
+                {
+                    case GroundPhase.Arming:
+                    case GroundPhase.Armed:
+                    case GroundPhase.Triggered:
+                        (g.Phase == GroundPhase.Triggered ? mineLit : mine).Add(Matrix4x4.TRS(ToWorld(g.Position, 0.03f), Quaternion.identity, Vector3.one * (MineDrawRadius * Scale)));
+                        break;
+                    case GroundPhase.Falling:
+                        // Age advances from the step after the launch; Alpha moves the glob between steps (§17).
+                        float progress = (g.Age + run.Alpha * run.Rules.Step) / Mathf.Max(1e-4f, g.FlightTime);
+                        glob.Add(Matrix4x4.TRS(GlobPoint(g.Origin, g.Position, progress), Quaternion.identity, Vector3.one * 0.4f));
+                        break;
+                    case GroundPhase.Burning:
+                        lava.Add(Matrix4x4.TRS(ToWorld(g.Position, 0.014f), Quaternion.identity, Vector3.one * (g.Radius * Scale)));
+                        break;
+                }
             }
             float trigger = run.Mode.EliteRoomTriggerRadius * Scale;
             foreach (var room in run.EliteRooms)

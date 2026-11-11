@@ -46,12 +46,12 @@
   "powerups": {
    "role:service:not-rollable": 1,
    "prototype:none": 37,
-   "implementation:none": 7,
+   "implementation:none": 5,
    "unreachable": 2,
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 31,
+   "implementation:verified": 33,
    "reachable": 45,
    "implementation:implemented": 9,
    "role:recipe": 9,
@@ -100,9 +100,9 @@
    "reachable": 59,
    "role:attribute": 51,
    "prototype:none": 50,
-   "implementation:none": 8,
+   "implementation:none": 7,
    "unreachable": 6,
-   "implementation:verified": 28,
+   "implementation:verified": 29,
    "implementation:implemented": 15
   }
  },
@@ -514,6 +514,8 @@
     "DashInputTests.cs:DashRequestIsDroppedWhenUpgradeChoiceOpens",
     "DashInputTests.cs:DashRequestSurvivesFrameWithoutStep",
     "DashInputTests.cs:PropertyHero",
+    "GroundObjectPoolTests.cs:BotRunsWithBoth",
+    "GroundObjectPoolTests.cs:StepsDoNotAllocateAfterWarmUpWithBoth",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce",
     "LuckTests.cs:HeroesStartWithLuckFromData",
@@ -666,13 +668,18 @@
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
     "EchoStrikeTests.cs:StepsDoNotAllocateAfterWarmUpWithKez",
     "FrostbiteTests.cs:FrostbiteIsImplementedAndUsesItsDataAtRankOne",
+    "GroundObjectPoolTests.cs:Both",
+    "GroundObjectPoolTests.cs:MineRun",
+    "GroundObjectPoolTests.cs:PoolSizeComesFromRules",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KezInnateTests.cs:InnateArena",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:KezKeepsHeroBaseAttributes",
     "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
     "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
     "LuckTests.cs:HeroesStartWithLuckFromData",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "ProfileTests.cs:Sample",
     "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
@@ -1034,6 +1041,7 @@
    "missingResources": [],
    "tests": [
     "EchoStrikeTests.cs:BloodstoneWidensBothSides",
+    "LandMineTests.cs:BloodstoneWidensTheMine",
     "PassiveItemTests.cs:BloodstoneWidensMagicMissileImpact",
     "RotTests.cs:BloodstoneWidensTheCircle"
    ],
@@ -2237,8 +2245,25 @@
    "nameInClientBinary": false,
    "source": "techies",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "GroundObjectPoolTests.cs:FullPoolSkipsNewObjectsAndReportsOnce",
+    "GroundObjectPoolTests.cs:MineRun",
+    "GroundObjectPoolTests.cs:ObjectWithoutItsAbilityEnds",
+    "LandMineTests.cs:ArmedMineCountsDownFromTheFirstTouch",
+    "LandMineTests.cs:Base",
+    "LandMineTests.cs:BloodstoneWidensTheMine",
+    "LandMineTests.cs:EnemyDoesNotTriggerTheMineWhileItArms",
+    "LandMineTests.cs:EnemyThatLeftDuringTheCountdownIsNotHit",
+    "LandMineTests.cs:ExplosionHitsEveryEnemyTouchingTheMineOnce",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
+    "LandMineTests.cs:MineInCountdownExplodesEvenIfItsLifeTimeEnds",
+    "LandMineTests.cs:MineOf",
+    "LandMineTests.cs:MinesArePlacedUnderTheHeroEveryCooldownWithoutEnemies",
+    "LandMineTests.cs:MinesAtOneSpotExplodeIndependently",
+    "LandMineTests.cs:RanksUseAuthoredRecords",
+    "LandMineTests.cs:UntriggeredMineVanishesAfterItsLifeTime"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/knife_throw": {
@@ -2442,10 +2467,23 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "MortimerKissesTests.cs:Base",
+    "MortimerKissesTests.cs:DragonusInnateAddsAGlob",
+    "MortimerKissesTests.cs:EnemyThatLeavesThePuddleMissesTheNextTicks",
+    "MortimerKissesTests.cs:GlobDoesNotFollowItsTarget",
+    "MortimerKissesTests.cs:GlobFliesToTheTargetAndBurnsWhereItLands",
+    "MortimerKissesTests.cs:MortarOf",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
+    "MortimerKissesTests.cs:NextVolleyFollowsTheCooldown",
+    "MortimerKissesTests.cs:RandomTargetsSkipEnemiesCloserThanTheMinimumRange",
+    "MortimerKissesTests.cs:RanksUseAuthoredRecords",
+    "MortimerKissesTests.cs:TargetDependsOnTheSeedOnly",
+    "MortimerKissesTests.cs:VolleyNeedsAnEnemyBetweenMinimumRangeAndRange",
+    "MortimerKissesTests.cs:VolleyOfTwoGlobsIsLaunchedInterval",
     "StatusTests.cs:DotOverflowReplacesShortestAndReports",
     "StatusTests.cs:StatusTicksDoNotAllocate"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/snotty_bat": {
@@ -2839,6 +2877,7 @@
     "EchoStrikeTests.cs:Standing",
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
+    "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
     "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
     "LivesTests.cs:Attacker",
     "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
@@ -4391,6 +4430,7 @@
     "EchoStrikeTests.cs:Standing",
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
+    "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
     "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
     "LivesTests.cs:Attacker",
     "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
@@ -5841,6 +5881,7 @@
     "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
@@ -5915,6 +5956,7 @@
    "tests": [
     "KezInnateTests.cs:InnateDealsNoDamage",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
@@ -6128,6 +6170,8 @@
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
@@ -6221,6 +6265,7 @@
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
     "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
@@ -6717,6 +6762,7 @@
    "tests": [
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
@@ -6751,6 +6797,7 @@
    "missingResources": [],
    "tests": [
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
@@ -6819,6 +6866,8 @@
    "tests": [
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:MarkSpreadsWithinRadiusOfTheTarget",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
    ],
@@ -6881,8 +6930,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "LandMineTests.cs:ArmSteps",
+    "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileHitCount": {
@@ -7184,7 +7236,8 @@
    "tests": [
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
-    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne"
+    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -7611,7 +7664,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce"
+    "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -7691,6 +7745,7 @@
     "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
@@ -7721,6 +7776,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
     "LivesTests.cs:BossKilledWhileDownedIsVictory",
     "LivesTests.cs:LivesRun",
     "LivesTests.cs:ReviveTimerComesFromData"

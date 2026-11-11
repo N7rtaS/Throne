@@ -99,6 +99,10 @@ namespace ThornThrone.Simulation
         public static readonly int StampedeMovementSpeed = Id("StampedeMovementSpeed");
         public static readonly int IncomingDamageAmplification = Id("IncomingDamageAmplification");
         public static readonly int IncomingDamageAmplificationDuration = Id("IncomingDamageAmplificationDuration");
+        // Land Mine (Mechanics §31).
+        public static readonly int LifeTime = Id("LifeTime");
+        public static readonly int ArmingTime = Id("ArmingTime");
+        public static readonly int TriggerTime = Id("TriggerTime");
     }
 
     /// <summary>Additive attribute totals.</summary>
