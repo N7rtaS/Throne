@@ -138,6 +138,48 @@ namespace ThornThrone.Simulation
         /// <summary>Hit on an enemy, snapshotted at creation.</summary>
         public DamageInfo Hit => new DamageInfo(Damage, DamageType, DamageFlags, DamageSource);
     }
+    /// <summary>
+    /// Pooled companion of an ability that flies around the hero (a Spirits spirit, the Snotty Bat), Mechanics §32
+    /// Р1–Р3. Unlike a <see cref="GroundObject"/> it moves, so it keeps <see cref="PreviousPosition"/> for render
+    /// interpolation. It is not an enemy: no target, obstacle or separation. The source ability updates it every step
+    /// (<see cref="ICompanionAbility"/>); its numbers are snapshotted when it is created.
+    /// </summary>
+    public sealed class Companion
+    {
+        public int Slot, SpawnId;
+        public bool Active;
+        public OwnedPowerUp Source;
+        /// <summary>Enemy definition used as the body (the bat: snotty); null for a spirit.</summary>
+        public EnemyDef Body;
+        public Vec2 Position;
+        /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
+        public Vec2 PreviousPosition;
+        /// <summary>Unit direction of the last movement (model rotation).</summary>
+        public Vec2 Direction;
+        /// <summary>Angle around the hero in radians (a spirit's place on its circle, the bat's orbit point).</summary>
+        public double Angle;
+        /// <summary>Distance from the hero of the circle or orbit.</summary>
+        public float Distance;
+        /// <summary>Seconds since creation (advanced in the steps after the creation step).</summary>
+        public float Age;
+        /// <summary>Seconds of life (a spirit's Duration); infinity for the bat.</summary>
+        public float Life;
+        public float Timer;
+        /// <summary><see cref="Run.Time"/> of the step that created it: not advanced in that step.</summary>
+        public float Born;
+        /// <summary>Radius of the companion's area (a spirit's explosion).</summary>
+        public float Radius;
+        /// <summary>Type and delivery of <see cref="Damage"/>, snapshotted at creation.</summary>
+        public float Damage;
+        public DamageType DamageType;
+        public DamageFlags DamageFlags;
+        public DamageStatEntry DamageSource;
+        /// <summary>Hit on an enemy, snapshotted at creation.</summary>
+        public DamageInfo Hit => new DamageInfo(Damage, DamageType, DamageFlags, DamageSource);
+        /// <summary>Per enemy slot: SpawnId of the enemy this companion has hit there (one touch per enemy, §32 Р8); cleared on creation.</summary>
+        public readonly int[] HitMarks;
+        public Companion(int maxEnemies) { HitMarks = new int[maxEnemies]; }
+    }
     public enum SimEventKind
     {
         EnemySpawned, EnemyDied, EnemyDespawned, EnemyDamaged,
@@ -153,6 +195,10 @@ namespace ThornThrone.Simulation
         GroundObjectSpawned,
         /// <summary>A ground object ended: Slot, SpawnId, Position, Value the powerup ID.</summary>
         GroundObjectEnded,
+        /// <summary>A companion appeared (Mechanics §32 Р18): Slot, SpawnId, Position, Value the powerup ID.</summary>
+        CompanionSpawned,
+        /// <summary>A companion ended: Slot, SpawnId, Position, Value the powerup ID.</summary>
+        CompanionEnded,
     }
 
     /// <summary>
@@ -167,7 +213,7 @@ namespace ThornThrone.Simulation
         public int Slot;
         public Vec2 Position;
         public float Value;
-        /// <summary>SpawnId of the enemy, projectile, pickup or ground object; 0 for events that are not about a pooled entity.</summary>
+        /// <summary>SpawnId of the enemy, projectile, pickup, ground object or companion; 0 for events that are not about a pooled entity.</summary>
         public int SpawnId;
         /// <summary>Definition of the enemy at the time of the event (enemy events only).</summary>
         public EnemyDef EnemyDef;

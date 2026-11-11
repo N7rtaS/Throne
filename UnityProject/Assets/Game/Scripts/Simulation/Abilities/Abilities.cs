@@ -35,6 +35,16 @@ namespace ThornThrone.Simulation
         bool UpdateObject(Run run, GroundObject obj, float dt);
     }
 
+    /// <summary>
+    /// An ability with companions that fly around the hero (<see cref="Companion"/>). The run calls it once per step
+    /// for each of its live companions, also while the hero is down (Mechanics §32 Р3); the ability decides what a
+    /// companion does then.
+    /// </summary>
+    public interface ICompanionAbility
+    {
+        /// <summary>Advances the companion by <paramref name="dt"/>; returns false when it is over and its slot is freed.</summary>
+        bool UpdateCompanion(Run run, Companion companion, float dt);
+    }
     /// <summary>Maps original powerup classes (_class) to implementations.</summary>
     public static class AbilityFactory
     {
@@ -56,6 +66,8 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_Track", (owned, run) => new Track(owned) },
                 { "CSurvivorsPowerUpDefinition_LandMine", (owned, run) => new LandMine(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_MortimerKisses", (owned, run) => new MortimerKisses(owned, run) },
+                { "CSurvivorsPowerUpDefinition_Spirits", (owned, run) => new Spirits(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_Snotty", (owned, run) => new SnottyBat(owned, run) },
             };
 
         /// <summary>

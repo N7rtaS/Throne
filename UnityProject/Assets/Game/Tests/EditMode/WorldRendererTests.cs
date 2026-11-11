@@ -190,6 +190,25 @@ namespace ThornThrone.Mobile.Tests
             Assert.That(Vector3.Distance(WorldRenderer.GlobPoint(origin, target, 1.5f), WorldRenderer.ToWorld(target)), Is.LessThan(1e-4f), "clamped after landing");
         }
         [Test]
+        public void CompanionPointIsInterpolated()
+        {
+            var run = new Run(LoadSourceData(), new Rules(), "kez", null, 7) { DebugNoSpawns = true, DebugInvulnerable = true };
+            Assert.That(run.ForceUpgrade("spirits"), Is.True);
+            Assert.That(run.ForceUpgrade("snotty_bat"), Is.True);
+            run.Update(run.Rules.Step * 1.5f, Vec2.Zero, false); // step 1 creates both, half a step is left
+            run.Update(run.Rules.Step, Vec2.Zero, false);        // step 2 moves them, half a step is left
+            Assert.That(run.Alpha, Is.EqualTo(0.5f).Within(1e-3f));
+            var spirit = run.Companions.Single(c => c.Active && c.Body == null);
+            var bat = run.Companions.Single(c => c.Active && c.Body != null);
+            Assert.That(bat.Body.Key, Is.EqualTo("snotty"));
+            Assert.That(spirit.Position, Is.Not.EqualTo(spirit.PreviousPosition), "the spirit turned in the last step");
+            Assert.That(bat.Position, Is.Not.EqualTo(bat.PreviousPosition), "the bat flew in the last step");
+            var middle = WorldRenderer.ToWorld(Vec2.Lerp(spirit.PreviousPosition, spirit.Position, 0.5f), WorldRenderer.SpiritHeight);
+            Assert.That(Vector3.Distance(WorldRenderer.CompanionPoint(run, spirit), middle), Is.LessThan(1e-4f), "spirit halfway, floating");
+            var ground = WorldRenderer.ToWorld(Vec2.Lerp(bat.PreviousPosition, bat.Position, 0.5f));
+            Assert.That(Vector3.Distance(WorldRenderer.CompanionPoint(run, bat), ground), Is.LessThan(1e-4f), "the bat's model on its ground point");
+        }
+        [Test]
         public void BurstMatrixCoversTheStruckCircle()
         {
             var m = WorldRenderer.BurstMatrix(new Vec2(100, -200), 360);

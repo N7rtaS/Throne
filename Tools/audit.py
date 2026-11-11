@@ -522,9 +522,11 @@ def powerup_role(value):
     return "unknown"
 
 
-def enemy_role(key, value, split_targets):
+def enemy_role(key, value, split_targets, summoned=()):
     if value["_class"].endswith("ImperiaBoss"):
         return "final-boss"
+    if key in summoned:  # shares its class suffix with a powerup that summons it (Mechanics §32 Р19)
+        return "summon"
     if value.get("m_bPlayerFriendly"):
         return "friendly"
     if value.get("m_bIsDestructible"):
@@ -605,7 +607,11 @@ def implementation_levels(defs, registry, coverage, targets):
         powerup(key)
     for key, value in defs["enemies"].items():
         entry = registry[f"enemies/{key}"]
-        if value.get("m_eMovementBehavior") not in coverage.movements:
+        summoners = [r for r in entry["referencedBy"] if r.startswith("powerups/")]
+        if entry["role"] == "summon" and summoners:
+            # A summoned unit is the body of its powerup: the powerup's level (Mechanics §32 Р19).
+            level = _min_level([levels[r] for r in summoners])
+        elif value.get("m_eMovementBehavior") not in coverage.movements:
             level = "none"
         elif coverage.enemy_handled.evaluate(key, value):
             level = "implemented"
@@ -739,11 +745,13 @@ def build_registry(types, defs, loc, native, coverage, tests, binary=None, targe
     bosses = {f"enemies/{k}" for k, v in defs["enemies"].items() if v["_class"].endswith("ImperiaBoss")}
     for boss in bosses:
         registry[boss]["notes"].append("spawned by the mode after m_flFirstFloorTimeLimit (no spawner in data)")
+    summoned = set()
     for pkey, pvalue in defs["powerups"].items():
         suffix = pvalue["_class"].partition("Definition")[2]
         for ekey, evalue in defs["enemies"].items():
             if suffix and evalue["_class"].endswith(suffix):
                 ref(f"powerups/{pkey}", "enemies", ekey, "summoned by the powerup (shared class)")
+                summoned.add(ekey)
     queue = [f"game_modes/{k}" for k in defs["game_modes"]] + sorted(rollable) + sorted(meta) + sorted(bosses)
     while queue:
         node = queue.pop()
@@ -767,7 +775,7 @@ def build_registry(types, defs, loc, native, coverage, tests, binary=None, targe
             entry["name"] = loc.get(v.get("m_sLocAbilityName", "").lstrip("#"))
             entry["source"] = v.get("m_sSource")
         elif c == "enemies":
-            entry["role"] = enemy_role(k, v, split_targets)
+            entry["role"] = enemy_role(k, v, split_targets, summoned)
             entry["name"] = loc.get(v.get("m_sDisplayName", "").lstrip("#")) or v.get("m_sDisplayName")
             entry["movement"] = v.get("m_eMovementBehavior")
         elif c == "spawners":

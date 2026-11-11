@@ -46,12 +46,12 @@
   "powerups": {
    "role:service:not-rollable": 1,
    "prototype:none": 37,
-   "implementation:none": 5,
+   "implementation:none": 3,
    "unreachable": 2,
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 33,
+   "implementation:verified": 35,
    "reachable": 45,
    "implementation:implemented": 9,
    "role:recipe": 9,
@@ -61,37 +61,37 @@
   "enemies": {
    "role:horde": 28,
    "prototype:partial": 24,
-   "implementation:implemented": 30,
+   "implementation:implemented": 29,
    "reachable": 38,
-   "implementation:verified": 12,
+   "implementation:verified": 14,
    "role:split-spawn": 1,
    "unreachable": 5,
    "prototype:none": 19,
    "role:elite": 8,
    "role:destructible": 3,
    "role:final-boss": 1,
-   "role:friendly": 2,
-   "implementation:none": 1
+   "role:friendly": 1,
+   "role:summon": 1
   },
   "spawners": {
    "role:spawner": 39,
    "prototype:none": 26,
-   "implementation:implemented": 35,
+   "implementation:implemented": 34,
    "unreachable": 7,
    "reachable": 36,
+   "implementation:verified": 9,
    "prototype:partial": 17,
-   "implementation:verified": 8,
    "role:elite-room": 4
   },
   "pickups": {
    "role:pickup": 11,
    "prototype:partial": 1,
-   "implementation:verified": 5,
+   "implementation:verified": 6,
    "reachable": 7,
    "prototype:none": 10,
-   "implementation:implemented": 4,
    "unreachable": 4,
-   "implementation:none": 2
+   "implementation:none": 2,
+   "implementation:implemented": 3
   },
   "attributes": {
    "role:meta-progression": 14,
@@ -100,9 +100,9 @@
    "reachable": 59,
    "role:attribute": 51,
    "prototype:none": 50,
-   "implementation:none": 7,
+   "implementation:none": 5,
    "unreachable": 6,
-   "implementation:verified": 29,
+   "implementation:verified": 31,
    "implementation:implemented": 15
   }
  },
@@ -537,6 +537,8 @@
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
     "SimulationTests.cs:NewRun",
+    "SpiritsSnottyBatTests.cs:BotRunsWithBoth",
+    "SpiritsSnottyBatTests.cs:StepsDoNotAllocateAfterWarmUpWithBoth",
     "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp",
     "SwashStampedeTrackTests.cs:BotRunsWithAllFour",
     "SwashStampedeTrackTests.cs:StepsDoNotAllocateAfterWarmUpWithAllFour",
@@ -658,6 +660,8 @@
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "ChainBeamFreezeTests.cs:Arena",
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "CompanionPoolTests.cs:PoolSizeComesFromRules",
+    "CompanionPoolTests.cs:SpiritRun",
     "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
     "DashInputTests.cs:DashInFrameWithStepGoesOnlyToFirstStep",
     "DashInputTests.cs:PendingDashIsConsumedEvenIfDashCannotStart",
@@ -684,6 +688,10 @@
     "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsSnottyBatTests.cs:Both",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
@@ -2413,8 +2421,28 @@
    "nameInClientBinary": true,
    "source": "wisp",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "CompanionPoolTests.cs:CompanionWithoutItsAbilityEnds",
+    "CompanionPoolTests.cs:FullPoolSkipsNewCompanionsAndReportsOnce",
+    "CompanionPoolTests.cs:SpiritRun",
+    "SpiritsTests.cs:Base",
+    "SpiritsTests.cs:DragonusSummonsOneMoreSpirit",
+    "SpiritsTests.cs:DurationExtensionExtendsTheSpiritsLife",
+    "SpiritsTests.cs:EachSpiritHitsAnEnemyOnceInItsLife",
+    "SpiritsTests.cs:ExplosionUsesAoEIncreaseButTheCircleDoesNot",
+    "SpiritsTests.cs:RanksUseAuthoredRecords",
+    "SpiritsTests.cs:SpiritExplodesAtTheEndOfItsLifeOnEveryEnemyInItsRadiusOnce",
+    "SpiritsTests.cs:SpiritKeepsItsNumbersFromTheSummon",
+    "SpiritsTests.cs:SpiritsAreNotProjectiles",
+    "SpiritsTests.cs:SpiritsAreSummonedAtOnceAndEveryCooldownWithoutEnemies",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsTests.cs:SpiritsMoveWithTheHero",
+    "SpiritsTests.cs:SpiritsOf",
+    "SpiritsTests.cs:SpiritsStartOnTheCircleAndTurnSixDegreesPerStep",
+    "SpiritsTests.cs:SummonsOverlap",
+    "SpiritsTests.cs:TwoSpiritsHitTheSameEnemyIndependently"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/mortimer_kisses": {
@@ -2531,9 +2559,22 @@
    "source": "snotty",
    "missingResources": [],
    "tests": [
+    "SnottyBatTests.cs:Base",
+    "SnottyBatTests.cs:BatIsNotAnEnemy",
+    "SnottyBatTests.cs:BatOf",
+    "SnottyBatTests.cs:BatStrikesEnemiesInItsCircleAndSlowsThem",
+    "SnottyBatTests.cs:BatWaitsForAnEnemyInItsCircle",
+    "SnottyBatTests.cs:Bats",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
+    "SnottyBatTests.cs:DurationExtensionLengthensTheSlow",
+    "SnottyBatTests.cs:OnOrbit",
+    "SnottyBatTests.cs:OneBatAppearsAtTheHeroInTheFirstStepAndStays",
+    "SnottyBatTests.cs:RanksUseAuthoredRecords",
+    "SnottyBatTests.cs:RecreatedHandlerKeepsTheSameBat",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
     "StatusTests.cs:SlowReducesOwnSpeedBySlowStrength"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/vengeful_spirit_innate": {
@@ -2899,6 +2940,8 @@
     "SimulationTests.cs:GroundSpawnOverPitMovesToFloor",
     "SimulationTests.cs:MovementCapabilityFromData",
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
     "StatusTests.cs:Zombie",
@@ -3673,8 +3716,10 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/tower": {
@@ -4040,7 +4085,7 @@
    "class": "CSurvivorsEnemyDefinition_Snotty",
    "nativeRuntimeClass": null,
    "nativeDefinitionClassFound": true,
-   "role": "friendly",
+   "role": "summon",
    "name": "Snotty",
    "references": [],
    "referencedBy": [
@@ -4057,8 +4102,11 @@
    "nameInClientBinary": true,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "SnottyBatTests.cs:OneBatAppearsAtTheHeroInTheFirstStepAndStays",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/vase": {
@@ -4169,8 +4217,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "STATIC_IN_MAP",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/tower": {
@@ -4452,6 +4502,8 @@
     "SimulationTests.cs:GroundSpawnOverPitMovesToFloor",
     "SimulationTests.cs:MovementCapabilityFromData",
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
     "StatusTests.cs:Zombie",
@@ -5381,7 +5433,9 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect"
    ],
    "implementation": "verified",
    "required": true
@@ -5410,8 +5464,10 @@
    ],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/shard": {
@@ -5507,6 +5563,7 @@
    "tests": [
     "LuckTests.cs:Kill",
     "LuckTests.cs:LuckyLootIsReadFromMode",
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
     "TrackTests.cs:Kill"
    ],
    "implementation": "verified",
@@ -5840,7 +5897,8 @@
    "missingResources": [],
    "tests": [
     "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
-    "DamageTests.cs:FlatBonusesFollowDamageType"
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "SpiritsTests.cs:SpiritKeepsItsNumbersFromTheSummon"
    ],
    "implementation": "partial",
    "required": true
@@ -5882,6 +5940,7 @@
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
     "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
@@ -5957,7 +6016,8 @@
     "KezInnateTests.cs:InnateDealsNoDamage",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
-    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6173,6 +6233,8 @@
     "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
@@ -6266,6 +6328,7 @@
     "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
     "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
@@ -6387,7 +6450,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
    ],
    "implementation": "partial",
    "required": true
@@ -6421,7 +6485,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:KezKeepsHeroBaseAttributes"
+    "KezInnateTests.cs:KezKeepsHeroBaseAttributes",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
    "required": true
@@ -6515,7 +6580,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "EchoStrikeTests.cs:RankNineUsesAuthoredRecords"
+    "EchoStrikeTests.cs:RankNineUsesAuthoredRecords",
+    "SpiritsTests.cs:ExplosionUsesAoEIncreaseButTheCircleDoesNot"
    ],
    "implementation": "partial",
    "required": true
@@ -6869,6 +6935,8 @@
     "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
@@ -7078,6 +7146,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
@@ -7109,6 +7178,10 @@
    "missingResources": [],
    "tests": [
     "ShenInnateTests.cs:DurationExtensionLengthensWeakening",
+    "SnottyBatTests.cs:DurationExtensionLengthensTheSlow",
+    "SpiritsTests.cs:DurationExtensionExtendsTheSpiritsLife",
+    "SpiritsTests.cs:SpiritKeepsItsNumbersFromTheSummon",
+    "SpiritsTests.cs:SummonsOverlap",
     "StampedeTests.cs:DurationExtensionLengthensTheCharge"
    ],
    "implementation": "verified",
@@ -7394,7 +7467,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "DamageTests.cs:FlatBonusesFollowDamageType"
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "SpiritsTests.cs:SpiritsAreNotProjectiles"
    ],
    "implementation": "verified",
    "required": true
@@ -7748,6 +7822,7 @@
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
+    "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",
     "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
@@ -7779,7 +7854,8 @@
     "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
     "LivesTests.cs:BossKilledWhileDownedIsVictory",
     "LivesTests.cs:LivesRun",
-    "LivesTests.cs:ReviveTimerComesFromData"
+    "LivesTests.cs:ReviveTimerComesFromData",
+    "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect"
    ],
    "implementation": "partial",
    "required": true
@@ -7808,8 +7884,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_SlowDuration": {
@@ -7836,8 +7914,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   }
  }

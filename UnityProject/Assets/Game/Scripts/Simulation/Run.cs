@@ -193,6 +193,7 @@ namespace ThornThrone.Simulation
             Projectiles = Create(Rules.MaxProjectiles, i => new Projectile { Slot = i }, out freeProjectiles, out freeProjectileCount);
             Pickups = Create(Rules.MaxPickups, i => new Pickup { Slot = i }, out freePickups, out freePickupCount);
             GroundObjects = Create(Rules.MaxGroundObjects, i => new GroundObject { Slot = i }, out freeGroundObjects, out freeGroundObjectCount);
+            Companions = Create(Rules.MaxCompanions, i => new Companion(Rules.MaxEnemies) { Slot = i }, out freeCompanions, out freeCompanionCount);
             grid = new SpatialGrid(minX - 2500, minY - 2500, maxX + 2500, maxY + 2500, 256, Rules.MaxEnemies);
 
             var events = new List<SpawnEvent>();
@@ -270,7 +271,9 @@ namespace ThornThrone.Simulation
             for (int i = 0; i < Enemies.Length; i++) if (Enemies[i].Active) Enemies[i].PreviousPosition = Enemies[i].Position;
             for (int i = 0; i < Projectiles.Length; i++) if (Projectiles[i].Active) Projectiles[i].PreviousPosition = Projectiles[i].Position;
             for (int i = 0; i < Pickups.Length; i++) if (Pickups[i].Active) Pickups[i].PreviousPosition = Pickups[i].Position;
+            SnapshotCompanions();
             Tick(move, dash);
+            ResetNewCompanions(serial);
             // Entities that appeared during the step (possibly in a reused slot) have no previous position.
             for (int i = 0; i < Enemies.Length; i++)
             {
@@ -335,6 +338,7 @@ namespace ThornThrone.Simulation
             if (!Downed) for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
             UpdateProjectiles(dt);
             UpdateGroundObjects(dt); // Mechanics §31 Р3
+            UpdateCompanions(dt); // Mechanics §32 Р3
             if (!Downed) UpdatePickups(dt);
             if (PendingItems > 0 && !Choosing) OpenChoices();
             if (PendingLevels > 0 && !Choosing)

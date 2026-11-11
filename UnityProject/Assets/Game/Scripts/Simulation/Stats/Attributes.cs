@@ -103,6 +103,9 @@ namespace ThornThrone.Simulation
         public static readonly int LifeTime = Id("LifeTime");
         public static readonly int ArmingTime = Id("ArmingTime");
         public static readonly int TriggerTime = Id("TriggerTime");
+        // Snotty Bat (Mechanics §32).
+        public static readonly int SlowStrength = Id("SlowStrength");
+        public static readonly int SlowDuration = Id("SlowDuration");
     }
 
     /// <summary>Additive attribute totals.</summary>

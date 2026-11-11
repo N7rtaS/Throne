@@ -101,6 +101,12 @@ namespace ThornThrone.Simulation
         /// (Land Mine at the 0.1 s cooldown floor × 20 s); a full pool skips new objects and keeps the old ones (Mechanics §31 Р1, Р2).
         /// </summary>
         public int MaxGroundObjects = 256;
+        /// <summary>
+        /// Companions of abilities (Spirits' spirits, Snotty Bat), one pool per run. The data needs at most ≈26
+        /// (Spirits at rank 9 for Dragonus with cooldown reductions and permanent TargetCount); a full pool skips new
+        /// companions and keeps the old ones (Mechanics §32 Р1, Р2).
+        /// </summary>
+        public int MaxCompanions = 32;
     }
 
     /// <summary>Things the simulation met but does not implement yet. Reported once per key.</summary>

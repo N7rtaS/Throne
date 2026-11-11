@@ -73,6 +73,16 @@ namespace ThornThrone.Simulation
                 Kind = kind, Slot = obj.Slot, Position = position, Value = obj.Source?.Def.Id ?? 0, SpawnId = obj.SpawnId,
             };
         }
+        /// <summary>Event about a companion: its slot and SpawnId, Value the powerup ID of its source (Mechanics §32 Р18).</summary>
+        private void Emit(SimEventKind kind, Companion companion, Vec2 position)
+        {
+            if (EventCount == Events.Length) return;
+            Events[EventCount++] = new SimEvent
+            {
+                Kind = kind, Slot = companion.Slot, Position = position, Value = companion.Source?.Def.Id ?? 0,
+                SpawnId = companion.SpawnId,
+            };
+        }
         private void Emit(SimEventKind kind, Pickup pickup, Vec2 position, float value)
         {
             if (EventCount == Events.Length) return;

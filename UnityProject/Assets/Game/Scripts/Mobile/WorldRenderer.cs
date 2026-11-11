@@ -38,7 +38,7 @@ namespace ThornThrone.Mobile
         }
 
         private readonly Kind small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill,
-            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava;
+            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava, spirit, batBall;
         private readonly Kind[] all;
 
         /// <summary>Instances of one baked model: matrices and VAT frame per instance, drawn per submesh.</summary>
@@ -210,6 +210,14 @@ namespace ThornThrone.Mobile
             float t = Mathf.Clamp01(progress);
             return ToWorld(Vec2.Lerp(origin, target, t), 4 * GlobArcHeight * t * (1 - t));
         }
+        /// <summary>Height of a spirit's sphere above the ground, metres (display only, Mechanics §32).</summary>
+        public const float SpiritHeight = 0.8f;
+        /// <summary>
+        /// World point of a companion between the last two steps (Mechanics §17): a spirit floats at
+        /// <see cref="SpiritHeight"/>, the bat's model stands on the ground point (its flight height is in the model).
+        /// </summary>
+        public static Vector3 CompanionPoint(Run run, Companion c) =>
+            ToWorld(run.Interpolate(c.PreviousPosition, c.Position), c.Body == null ? SpiritHeight : 0);
         /// <summary>
         /// Radius of the hero's Rot circle, 0 without Rot (stand-in for pudge_rot.vpcf until Task 37, Mechanics §28 Р9).
         /// </summary>
@@ -272,10 +280,13 @@ namespace ThornThrone.Mobile
             mineLit = Make(disc, template, new Color(1f, .15f, .1f));
             glob = Make(sphere, template, new Color(1f, .5f, .1f));
             lava = Additive(Make(disc, template, new Color(.45f, .2f, .02f)));
+            // Stand-ins for wisp_guardian.vpcf and for the bat without a baked model (Task 37).
+            spirit = Make(sphere, template, new Color(.8f, .93f, 1f));
+            batBall = Make(sphere, template, new Color(.35f, .85f, .2f));
             experience = Make(cube, template, new Color(.35f, 1f, .55f));
             gold = Make(cube, template, new Color(1f, .82f, .2f));
             heal = Make(cube, template, new Color(1f, .4f, .45f));
-            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava };
+            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst, mine, mineLit, glob, lava, spirit, batBall };
         }
 
         /// <summary>
@@ -419,6 +430,25 @@ namespace ThornThrone.Mobile
                         lava.Add(Matrix4x4.TRS(ToWorld(g.Position, 0.014f), Quaternion.identity, Vector3.one * (g.Radius * Scale)));
                         break;
                 }
+            }
+            // Companions (Mechanics §32): nothing is kept per slot between frames, so no SpawnId check is needed.
+            foreach (var c in run.Companions)
+            {
+                if (!c.Active) continue;
+                var point = CompanionPoint(run, c);
+                if (c.Body == null)
+                {
+                    spirit.Add(Matrix4x4.TRS(point, Quaternion.identity, Vector3.one * (2 * Spirits.SpiritRadius * Scale)));
+                    continue;
+                }
+                var look = LookOf(c.Body, c.SpawnId);
+                if (look != null)
+                {
+                    look.Add(Matrix4x4.TRS(point, Facing(run, c.Body, c.Position, c.Direction), Vector3.one * (HeroView.ModelScale * c.Body.ModelScale)),
+                        EnemyVisual.Frame(look.Visual.run, c.Age));
+                    continue;
+                }
+                batBall.Add(Matrix4x4.TRS(point + Vector3.up * SpiritHeight, Quaternion.identity, Vector3.one * 0.6f));
             }
             float trigger = run.Mode.EliteRoomTriggerRadius * Scale;
             foreach (var room in run.EliteRooms)
