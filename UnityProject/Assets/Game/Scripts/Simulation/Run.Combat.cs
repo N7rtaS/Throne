@@ -45,6 +45,7 @@ namespace ThornThrone.Simulation
                 amount *= multiplier;
                 if (info.Type == DamageType.Physical && status.WeakenTime > 0) amount *= 1 + status.WeakenStrength;
                 if (status.AmplifyTime > 0) amount *= 1 + status.AmplifyStrength;
+                amount *= ProjectileAmplification.Factor(status, info); // Frostbite (Mechanics §29 Р24)
             }
 
             float before = Math.Max(0, target.Health);

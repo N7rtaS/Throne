@@ -86,6 +86,13 @@ namespace ThornThrone.Simulation
         // Shen's innate (Mechanics §27).
         public static readonly int MagicDamageWeakensPhysicalDamageResistance_Percentage = Id("MagicDamageWeakensPhysicalDamageResistance_Percentage");
         public static readonly int MagicDamageWeakensPhysicalDamageResistance_Duration = Id("MagicDamageWeakensPhysicalDamageResistance_Duration");
+        // Knife Throw, Chain Frost, Laguna Blade, Frostbite (Mechanics §29).
+        public static readonly int FreezeSplashRadius = Id("FreezeSplashRadius");
+        public static readonly int FreezeDuration = Id("FreezeDuration");
+        public static readonly int FreezeStrength = Id("FreezeStrength");
+        public static readonly int ModifierDamagePerTick = Id("ModifierDamagePerTick");
+        public static readonly int ProjectileDamagePercent = Id("ProjectileDamagePercent");
+        public static readonly int ProjectileHorizontalOffset = Id("ProjectileHorizontalOffset");
     }
 
     /// <summary>Additive attribute totals.</summary>

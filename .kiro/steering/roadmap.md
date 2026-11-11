@@ -169,7 +169,7 @@ inclusion: manual
 
 ✅ (2026-11-12) Task 21: Rot и Counter Helix (Spec) — примитив области вокруг героя; тики по данным, нет тиков на паузе, ранги. Smoke `-thornForce=rot,counter_helix`.
 
-Task 22: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Spec) — общий механизм цепи (из MagicMissile), мгновенный луч, заморозка; тесты по данным.
+✅ (2026-11-12) Task 22: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Spec) — общий механизм цепи (из MagicMissile), мгновенный луч, заморозка; тесты по данным. Smoke `-thornForce=knife_throw,chain_frost,laguna_blade,frostbite`.
 
 Task 23: Swashbuckle, Stampede, Annihilation, Track (Spec) — по классу на способность; Track — метка с бонусом при убийстве.
 

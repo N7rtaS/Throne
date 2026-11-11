@@ -235,7 +235,7 @@ namespace ThornThrone.Simulation.Tests
                     Assert.That(build.CanUpgrade(innate.Def), Is.False, at + ": CanUpgrade(innate)");
                     Assert.That(innate.Rank, Is.EqualTo(1), at + ": innate rank");
                     Assert.That(build.Owned.Count(o => !o.Def.IsInnate && !o.Def.IsGold && o.Def.IsActive),
-                        Is.LessThanOrEqualTo(run.Mode.MaxActiveSlots), at + ": active slots");
+                        Is.LessThanOrEqualTo(build.MaxActiveSlots), at + ": active slots (Apex adds one, Mechanics §25 Р6)");
                     Assert.That(build.Owned.Count(o => !o.Def.IsInnate && !o.Def.IsGold && o.Def.IsPassive),
                         Is.LessThanOrEqualTo(run.Mode.MaxPassiveSlots), at + ": passive slots");
                     build.GenerateChoices(rng, items: step % 2 == 1);

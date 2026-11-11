@@ -38,20 +38,20 @@
   "heroes": {
    "role:hero": 3,
    "prototype:partial": 1,
-   "implementation:verified": 1,
+   "implementation:verified": 2,
    "reachable": 3,
    "prototype:none": 2,
-   "implementation:partial": 2
+   "implementation:partial": 1
   },
   "powerups": {
    "role:service:not-rollable": 1,
    "prototype:none": 37,
-   "implementation:none": 34,
+   "implementation:none": 11,
    "unreachable": 2,
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 5,
+   "implementation:verified": 28,
    "reachable": 45,
    "implementation:implemented": 8,
    "role:recipe": 9,
@@ -61,9 +61,9 @@
   "enemies": {
    "role:horde": 28,
    "prototype:partial": 24,
-   "implementation:implemented": 32,
+   "implementation:implemented": 30,
    "reachable": 38,
-   "implementation:verified": 10,
+   "implementation:verified": 12,
    "role:split-spawn": 1,
    "unreachable": 5,
    "prototype:none": 19,
@@ -76,34 +76,34 @@
   "spawners": {
    "role:spawner": 39,
    "prototype:none": 26,
-   "implementation:implemented": 37,
+   "implementation:implemented": 35,
    "unreachable": 7,
    "reachable": 36,
    "prototype:partial": 17,
-   "implementation:verified": 6,
+   "implementation:verified": 8,
    "role:elite-room": 4
   },
   "pickups": {
    "role:pickup": 11,
    "prototype:partial": 1,
-   "implementation:implemented": 7,
+   "implementation:verified": 5,
    "reachable": 7,
    "prototype:none": 10,
+   "implementation:implemented": 4,
    "unreachable": 4,
-   "implementation:none": 2,
-   "implementation:verified": 2
+   "implementation:none": 2
   },
   "attributes": {
    "role:meta-progression": 14,
    "prototype:partial": 15,
-   "implementation:partial": 9,
+   "implementation:partial": 14,
    "reachable": 59,
    "role:attribute": 51,
    "prototype:none": 50,
-   "implementation:none": 46,
+   "implementation:none": 13,
    "unreachable": 6,
-   "implementation:verified": 6,
-   "implementation:implemented": 4
+   "implementation:verified": 23,
+   "implementation:implemented": 15
   }
  },
  "attributesUsedWithoutDefinition": [
@@ -174,6 +174,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "PassiveItemTests.cs:ApexAllowsSixthActiveAbility",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:MovementCapabilityFromData"
    ],
@@ -496,6 +497,16 @@
     "AppFlowTests.cs:StartCreatesRunOnStackedEchelon",
     "AppFlowTests.cs:StartRun",
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
+    "ChainBeamFreezeTests.cs:AllFourAreOfferedOnLevelUp",
+    "ChainBeamFreezeTests.cs:BotRunsWithAllFour",
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
+    "ChainBeamFreezeTests.cs:StepsDoNotAllocateAfterWarmUpWithAllFour",
+    "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
+    "CounterHelixTests.cs:CircleTargetsSkipsAnEnemyWhoseSlotWasTaken",
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "CounterHelixTests.cs:DamageToTheHeroDoesNotTriggerTheStrike",
+    "CounterHelixTests.cs:StepsDoNotAllocateAfterWarmUpWithRotAndCounterHelix",
+    "DamageTests.cs:Quiet",
     "DashInputTests.cs:DashInFrameWithStepGoesOnlyToFirstStep",
     "DashInputTests.cs:DashPressedWhileStoppedIsIgnored",
     "DashInputTests.cs:DashRequestIsDroppedOnPause",
@@ -503,6 +514,10 @@
     "DashInputTests.cs:DashRequestSurvivesFrameWithoutStep",
     "DashInputTests.cs:PropertyHero",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
+    "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce",
+    "LuckTests.cs:HeroesStartWithLuckFromData",
+    "PassiveItemTests.cs:ApexAllowsSixthActiveAbility",
+    "PassiveItemTests.cs:Quiet",
     "ProfileTests.cs:Sample",
     "RenderInterpolationTests.cs:AlphaIsFractionOfStep",
     "RenderInterpolationTests.cs:BossSpawnTeleportResetsPreviousPosition",
@@ -513,6 +528,9 @@
     "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
     "RenderInterpolationTests.cs:StopKeepsAlpha",
     "RenderInterpolationTests.cs:TeleportResetsPreviousPosition",
+    "RotTests.cs:Arena",
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
     "SimulationTests.cs:NewRun"
@@ -561,12 +579,27 @@
    "missingResources": [],
    "tests": [
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
+    "DamageTests.cs:AbilityDamageTypeComesFromData",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KezInnateTests.cs:PlainInnatesStillAddToGlobals",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "LuckTests.cs:HeroesStartWithLuckFromData",
     "MagicMissileTests.cs:Arena",
     "MagicMissileTests.cs:RanksApplyAuthoredUpgrades",
     "MagicMissileTests.cs:ShenStartsWithMagicMissileFromData",
+    "PassiveItemTests.cs:Shen",
+    "ShenInnateTests.cs:BotRunsWithShen",
+    "ShenInnateTests.cs:DurationExtensionLengthensWeakening",
+    "ShenInnateTests.cs:KillingMagicalHitDoesNotWeakenTheSlot",
+    "ShenInnateTests.cs:MagicMissileWeakensItsTarget",
+    "ShenInnateTests.cs:MagicalHitWeakensTheTargetForTheDataDuration",
+    "ShenInnateTests.cs:NextMagicalHitRefreshesAndWeakeningExpires",
+    "ShenInnateTests.cs:PauseStopsTheWeakeningTimer",
+    "ShenInnateTests.cs:PeriodicMagicalDamageWeakens",
+    "ShenInnateTests.cs:PhysicalAndPureHitsDoNotWeaken",
+    "ShenInnateTests.cs:PhysicalHitAfterMagicalHitDealsThirtyPercentMore",
+    "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData",
+    "ShenInnateTests.cs:StepsDoNotAllocateAfterWarmUpWithShen",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData"
    ],
@@ -614,19 +647,31 @@
    "missingResources": [],
    "tests": [
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
+    "ChainBeamFreezeTests.cs:Arena",
+    "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
     "DashInputTests.cs:DashInFrameWithStepGoesOnlyToFirstStep",
     "DashInputTests.cs:PendingDashIsConsumedEvenIfDashCannotStart",
     "DashInputTests.cs:PropertyHero",
     "DashInputTests.cs:SeveralPressesBeforeStepMergeIntoOneDash",
+    "EchoStrikeTests.cs:Arena",
+    "EchoStrikeTests.cs:BotRunsWithKez",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "EchoStrikeTests.cs:StepsDoNotAllocateAfterWarmUpWithKez",
+    "FrostbiteTests.cs:FrostbiteIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
+    "KezInnateTests.cs:InnateArena",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
-    "KezInnateTests.cs:KezInnateIsReportedAsUnimplementedAbility",
     "KezInnateTests.cs:KezKeepsHeroBaseAttributes",
+    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
+    "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
+    "LuckTests.cs:HeroesStartWithLuckFromData",
     "ProfileTests.cs:Sample",
+    "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData"
    ],
-   "implementation": "partial",
+   "implementation": "verified",
    "required": true
   },
   "powerups/pile_of_coal": {
@@ -651,7 +696,9 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "PassiveItemTests.cs:EveryPassiveAndRecipeIsImplemented"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -745,8 +792,12 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:HeroArmorReducesIncomingDamage",
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
+    "PassiveItemTests.cs:BladeMailFromItemReducesAndReflectsDamage"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/kaya": {
@@ -812,8 +863,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:PhysicalCritUsesCrystalysMultiplier",
+    "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/reaver": {
@@ -842,8 +896,12 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:HealthDeficitIsKeptWhenMaxHealthGrows",
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing",
+    "PassiveItemTests.cs:ReaverRaisesMaxHealthAndKeepsDeficit"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/ring_of_tarrasque": {
@@ -872,8 +930,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:HealthDeficitIsKeptWhenMaxHealthGrows",
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/tome_of_knowledge": {
@@ -900,8 +961,10 @@
    "nameInClientBinary": true,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/octarine_core": {
@@ -928,8 +991,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/bloodstone": {
@@ -956,8 +1021,12 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "EchoStrikeTests.cs:BloodstoneWidensBothSides",
+    "PassiveItemTests.cs:BloodstoneWidensMagicMissileImpact",
+    "RotTests.cs:BloodstoneWidensTheCircle"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/world_chasm_artifact": {
@@ -1012,8 +1081,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "PassiveItemTests.cs:ApexAllowsSixthActiveAbility"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/echo_stone": {
@@ -1040,8 +1111,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/sange": {
@@ -1072,8 +1145,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "PassiveItemTests.cs:BoltPush"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/sange_and_yasha": {
@@ -1107,7 +1182,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/kaya_and_sange": {
@@ -1141,7 +1216,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/yasha_and_kaya": {
@@ -1208,8 +1283,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/phylactery": {
@@ -1238,8 +1315,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "PassiveItemTests.cs:PhylacteryAddsToArcaneBoltDamage"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/demon_edge": {
@@ -1268,8 +1348,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "PassiveItemTests.cs:DemonEdgeAddsToPhysicalDamageFormula"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/daedalus": {
@@ -1303,7 +1386,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/khanda": {
@@ -1336,8 +1419,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:ProjectileCritAppliesToMagicProjectile"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/sny_trident": {
@@ -1371,7 +1456,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/kns_trident": {
@@ -1405,7 +1490,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/ynk_trident": {
@@ -1439,7 +1524,7 @@
    "source": null,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/timeless_relic": {
@@ -1466,8 +1551,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "KezInnateTests.cs:MarkParametersComeFromData",
+    "PassiveItemTests.cs:TimelessRelicExtendsMagicMissileStun"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/magic_missile": {
@@ -1522,11 +1610,17 @@
    "source": "vengefulspirit",
    "missingResources": [],
    "tests": [
+    "DamageTests.cs:AbilityDamageTypeComesFromData",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "MagicMissileTests.cs:Arena",
     "MagicMissileTests.cs:Missile",
     "MagicMissileTests.cs:RanksApplyAuthoredUpgrades",
-    "MagicMissileTests.cs:ShenStartsWithMagicMissileFromData"
+    "MagicMissileTests.cs:ShenStartsWithMagicMissileFromData",
+    "PassiveItemTests.cs:BloodstoneWidensMagicMissileImpact",
+    "PassiveItemTests.cs:TimelessRelicExtendsMagicMissileStun",
+    "ShenInnateTests.cs:BotRunsWithShen",
+    "ShenInnateTests.cs:MagicMissileWeakensItsTarget",
+    "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData"
    ],
    "implementation": "verified",
    "required": true
@@ -1580,6 +1674,16 @@
    "source": "skywrath_mage",
    "missingResources": [],
    "tests": [
+    "DamageTests.cs:AbilityDamageTypeComesFromData",
+    "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
+    "DamageTests.cs:DamageStatsCountDealtHealthBySource",
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "FrostbiteTests.cs:ArcaneBoltHitsAFrostbittenEnemyHarder",
+    "GridQueryTests.cs:PiercingSetup",
+    "PassiveItemTests.cs:BoltPush",
+    "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley",
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "PassiveItemTests.cs:PhylacteryAddsToArcaneBoltDamage",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
     "SimulationTests.cs:Shoot"
@@ -1633,9 +1737,22 @@
    "source": "kez",
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals"
+    "EchoStrikeTests.cs:Arena",
+    "EchoStrikeTests.cs:BotRunsWithKez",
+    "EchoStrikeTests.cs:Echo",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "EchoStrikeTests.cs:LaterTicksHitTheSameAreaAfterTheHeroLeaves",
+    "EchoStrikeTests.cs:RankNineUsesAuthoredRecords",
+    "EchoStrikeTests.cs:Upgrade",
+    "KezInnateTests.cs:AnnihilationIsNotImplementedYet",
+    "KezInnateTests.cs:EchoStrikeOnMarkedEnemyCritsAndStuns",
+    "KezInnateTests.cs:InnateArena",
+    "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports",
+    "StatusTests.cs:PeriodicDamageDoesNotCritOrConsumeVulnerability",
+    "StatusTests.cs:StatusTicksDoNotAllocate"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/swashbuckle": {
@@ -1681,7 +1798,9 @@
    "nameInClientBinary": false,
    "source": "pangolier",
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -1766,8 +1885,16 @@
    "nameInClientBinary": true,
    "source": "axe",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "CounterHelixTests.cs:Arena",
+    "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "CounterHelixTests.cs:DamageToTheHeroDoesNotTriggerTheStrike",
+    "CounterHelixTests.cs:Helix",
+    "CounterHelixTests.cs:StepsDoNotAllocateAfterWarmUpWithRotAndCounterHelix",
+    "CounterHelixTests.cs:StrikeDamagesTheCircleAndPushesAwayFromTheHero"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/rot": {
@@ -1810,8 +1937,24 @@
    "nameInClientBinary": false,
    "source": "pudge",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
+    "CounterHelixTests.cs:StepsDoNotAllocateAfterWarmUpWithRotAndCounterHelix",
+    "RotTests.cs:BloodstoneWidensTheCircle",
+    "RotTests.cs:EnemiesKeepTheirOwnCooldowns",
+    "RotTests.cs:EnemyCircleTouchingTheEdgeIsHit",
+    "RotTests.cs:EnemyIsHitInTheStepItEnters",
+    "RotTests.cs:LeavingTheCircleDoesNotResetTheCooldown",
+    "RotTests.cs:PauseAndChoiceStopTheCooldownClock",
+    "RotTests.cs:RanksUseAuthoredRecords",
+    "RotTests.cs:RotDoesNotPushEnemiesOrEmitAreaEvents",
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "RotTests.cs:RotOf",
+    "RotTests.cs:StandingEnemyIsHitOncePerCooldown",
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports",
+    "StatusTests.cs:StatusTicksDoNotAllocate"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/annihilation": {
@@ -1854,7 +1997,9 @@
    "nameInClientBinary": false,
    "source": "skreeauk",
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "KezInnateTests.cs:AnnihilationIsNotImplementedYet"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -1909,8 +2054,15 @@
    "nameInClientBinary": false,
    "source": "lich",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
+    "ChainFrostTests.cs:Arena",
+    "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "ChainFrostTests.cs:Frost",
+    "ChainFrostTests.cs:RanksUseAuthoredRecords",
+    "StatusTests.cs:SlowAndFreezeTakeStrongest"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/frostbite": {
@@ -1963,8 +2115,24 @@
    "nameInClientBinary": true,
    "source": "crystal_maiden",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
+    "ChainBeamFreezeTests.cs:PauseAndChoiceStopVolleysAndStatuses",
+    "ChainBeamFreezeTests.cs:StrongestTargetsOrderByHealthThenDistanceThenSlot",
+    "FrostbiteTests.cs:ArcaneBoltHitsAFrostbittenEnemyHarder",
+    "FrostbiteTests.cs:Arena",
+    "FrostbiteTests.cs:Bite",
+    "FrostbiteTests.cs:FrostbiteIsImplementedAndUsesItsDataAtRankOne",
+    "FrostbiteTests.cs:PeriodicDamageIsThreeTicksOfFour",
+    "FrostbiteTests.cs:ProjectileHitsOnAFrostbittenEnemyDealAQuarterMore",
+    "FrostbiteTests.cs:RanksUseAuthoredRecords",
+    "StatusTests.cs:DotFromSameSourceRefreshes",
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports",
+    "StatusTests.cs:DotTicksEveryIntervalForDuration",
+    "StatusTests.cs:FreezeStrengthOneStopsMovementButNotAttacks",
+    "StatusTests.cs:StatusTicksDoNotAllocate"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/laguna_blade": {
@@ -2004,8 +2172,14 @@
    "nameInClientBinary": false,
    "source": "lina",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
+    "LagunaBladeTests.cs:Arena",
+    "LagunaBladeTests.cs:Blade",
+    "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
+    "LagunaBladeTests.cs:RanksUseAuthoredRecords"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/land_mine": {
@@ -2102,8 +2276,16 @@
    "nameInClientBinary": false,
    "source": "bakeet",
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
+    "ChainBeamFreezeTests.cs:PauseAndChoiceStopVolleysAndStatuses",
+    "KnifeThrowTests.cs:Arena",
+    "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce",
+    "KnifeThrowTests.cs:Knife",
+    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
+    "KnifeThrowTests.cs:RanksUseAuthoredRecords"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/track": {
@@ -2148,7 +2330,9 @@
    "nameInClientBinary": true,
    "source": "bounty_hunter",
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "DamageTests.cs:AmplificationAppliesToPhysicalAndMagical"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -2244,7 +2428,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports",
+    "StatusTests.cs:StatusTicksDoNotAllocate"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -2292,7 +2479,9 @@
    "nameInClientBinary": false,
    "source": "snotty",
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "StatusTests.cs:SlowReducesOwnSpeedBySlowStrength"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -2324,7 +2513,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "DamageTests.cs:WeakenAmplifiesOnlyPhysicalDamage",
+    "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData",
+    "ShenInnateTests.cs:static"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -2406,10 +2599,15 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
-    "KezInnateTests.cs:KezInnateIsReportedAsUnimplementedAbility"
+    "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "KezInnateTests.cs:AnnihilationIsNotImplementedYet",
+    "KezInnateTests.cs:Base",
+    "KezInnateTests.cs:InnateArena",
+    "KezInnateTests.cs:InnateDealsNoDamage",
+    "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "enemies/skeleton_intro": {
@@ -2619,10 +2817,27 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
+    "ChainBeamFreezeTests.cs:Standing",
+    "DamageTests.cs:ContactStep",
+    "DamageTests.cs:DamageStatsCountDealtHealthBySource",
+    "DamageTests.cs:Dummy",
+    "DamageTests.cs:NoReflectionWhileDashingOrInvulnerable",
+    "EchoStrikeTests.cs:Standing",
+    "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
+    "GridQueryTests.cs:PiercingSetup",
+    "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
+    "LivesTests.cs:Attacker",
+    "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
+    "LuckTests.cs:Kill",
     "MagicMissileTests.cs:ImpactDamagesAndStunsNearbyButNotFarEnemies",
     "MagicMissileTests.cs:MissileBouncesToAnotherEnemy",
     "MagicMissileTests.cs:StunnedEnemyStandsStill",
+    "PassiveItemTests.cs:BladeMailFromItemReducesAndReflectsDamage",
+    "PassiveItemTests.cs:Hurt",
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "PassiveItemTests.cs:Standing",
     "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
+    "ShenInnateTests.cs:KillingMagicalHitDoesNotWeakenTheSlot",
     "SimulationTests.cs:AbsorberGrowsByEatingHorde",
     "SimulationTests.cs:Arena",
     "SimulationTests.cs:ContactDamageRespectsInterval",
@@ -2630,7 +2845,10 @@
     "SimulationTests.cs:GroundEnemyWalksAroundPit",
     "SimulationTests.cs:GroundSpawnOverPitMovesToFloor",
     "SimulationTests.cs:MovementCapabilityFromData",
-    "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot"
+    "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
+    "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
+    "StatusTests.cs:StatusTicksDoNotAllocate",
+    "StatusTests.cs:Zombie"
    ],
    "implementation": "verified",
    "required": true
@@ -2938,8 +3156,11 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DamageTests.cs:ReflectionHitsMeleeAttacker",
+    "StatusTests.cs:FreezeStrengthOneStopsMovementButNotAttacks"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/hulk": {
@@ -3093,8 +3314,10 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DamageTests.cs:NoReflectionFromEnemyProjectiles"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/resurrector": {
@@ -3127,6 +3350,8 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
+    "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
+    "LagunaBladeTests.cs:ExtraHitsStopWhenTheEliteDies",
     "SimulationTests.cs:ResurrectorReturnsTwiceFaster"
    ],
    "implementation": "verified",
@@ -3590,9 +3815,12 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
+    "DamageTests.cs:BossThresholdClampIsNotCounted",
+    "FrostbiteTests.cs:ImperiaIsNotFrozenButTakesThePeriodicDamage",
     "MagicMissileTests.cs:StatusResistanceScalesStun",
     "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
-    "SimulationTests.cs:MissingImperiaFieldFailsLoading"
+    "SimulationTests.cs:MissingImperiaFieldFailsLoading",
+    "StatusTests.cs:ControlDurationScalesWithStatusResistance"
    ],
    "implementation": "verified",
    "required": true
@@ -3678,7 +3906,8 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
-    "MagicMissileTests.cs:StatusResistanceScalesStun"
+    "MagicMissileTests.cs:StatusResistanceScalesStun",
+    "StatusTests.cs:ControlDurationScalesWithStatusResistance"
    ],
    "implementation": "verified",
    "required": true
@@ -4135,10 +4364,27 @@
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
    "tests": [
+    "ChainBeamFreezeTests.cs:Standing",
+    "DamageTests.cs:ContactStep",
+    "DamageTests.cs:DamageStatsCountDealtHealthBySource",
+    "DamageTests.cs:Dummy",
+    "DamageTests.cs:NoReflectionWhileDashingOrInvulnerable",
+    "EchoStrikeTests.cs:Standing",
+    "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
+    "GridQueryTests.cs:PiercingSetup",
+    "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
+    "LivesTests.cs:Attacker",
+    "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
+    "LuckTests.cs:Kill",
     "MagicMissileTests.cs:ImpactDamagesAndStunsNearbyButNotFarEnemies",
     "MagicMissileTests.cs:MissileBouncesToAnotherEnemy",
     "MagicMissileTests.cs:StunnedEnemyStandsStill",
+    "PassiveItemTests.cs:BladeMailFromItemReducesAndReflectsDamage",
+    "PassiveItemTests.cs:Hurt",
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "PassiveItemTests.cs:Standing",
     "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
+    "ShenInnateTests.cs:KillingMagicalHitDoesNotWeakenTheSlot",
     "SimulationTests.cs:AbsorberGrowsByEatingHorde",
     "SimulationTests.cs:Arena",
     "SimulationTests.cs:ContactDamageRespectsInterval",
@@ -4146,7 +4392,10 @@
     "SimulationTests.cs:GroundEnemyWalksAroundPit",
     "SimulationTests.cs:GroundSpawnOverPitMovesToFloor",
     "SimulationTests.cs:MovementCapabilityFromData",
-    "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot"
+    "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
+    "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
+    "StatusTests.cs:StatusTicksDoNotAllocate",
+    "StatusTests.cs:Zombie"
    ],
    "implementation": "verified",
    "required": true
@@ -4483,8 +4732,11 @@
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DamageTests.cs:ReflectionHitsMeleeAttacker",
+    "StatusTests.cs:FreezeStrengthOneStopsMovementButNotAttacks"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/skeleton_archer_normal": {
@@ -4623,8 +4875,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DamageTests.cs:NoReflectionFromEnemyProjectiles"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/catapult_swarm": {
@@ -5064,8 +5318,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/cheese": {
@@ -5186,8 +5442,11 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "LuckTests.cs:Kill",
+    "LuckTests.cs:LuckyLootIsReadFromMode"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/gold_bag": {
@@ -5219,8 +5478,11 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "LuckTests.cs:Kill",
+    "LuckTests.cs:LuckyLootIsReadFromMode"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/treasure": {
@@ -5429,7 +5691,9 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing"
+   ],
    "implementation": "partial",
    "required": true
   },
@@ -5510,8 +5774,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
+    "DamageTests.cs:FlatBonusesFollowDamageType"
+   ],
+   "implementation": "partial",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Damage_Physical": {
@@ -5546,8 +5813,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_DamageMultiplier_Physical": {
@@ -5574,8 +5844,10 @@
    ],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:DamageMultiplierMatchesVideoProfile"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Damage_Magical": {
@@ -5613,7 +5885,9 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged"
+    "KezInnateTests.cs:InnateDealsNoDamage",
+    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -5648,6 +5922,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -5678,8 +5953,20 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:CritRateMatchesChanceAcrossSeeds",
+    "DamageTests.cs:CritSequenceIsReproducibleForSeed",
+    "DamageTests.cs:DamageEventCarriesTypeAndCrit",
+    "DamageTests.cs:DealDamageDoesNotAllocate",
+    "DamageTests.cs:HigherCritMultiplierWins",
+    "DamageTests.cs:MagicalHitDoesNotRollPhysicalCrit",
+    "DamageTests.cs:PhysicalCritUsesCrystalysMultiplier",
+    "DamageTests.cs:PureDamageIgnoresModifiers",
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
+    "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades",
+    "StatusTests.cs:PeriodicDamageDoesNotCritOrConsumeVulnerability"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_CriticalStrike_Physical_DamageMultiplier": {
@@ -5707,8 +5994,20 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:CritRateMatchesChanceAcrossSeeds",
+    "DamageTests.cs:CritSequenceIsReproducibleForSeed",
+    "DamageTests.cs:DamageEventCarriesTypeAndCrit",
+    "DamageTests.cs:DealDamageDoesNotAllocate",
+    "DamageTests.cs:HigherCritMultiplierWins",
+    "DamageTests.cs:MagicalHitDoesNotRollPhysicalCrit",
+    "DamageTests.cs:PhysicalCritUsesCrystalysMultiplier",
+    "DamageTests.cs:PureDamageIgnoresModifiers",
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
+    "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades",
+    "StatusTests.cs:PeriodicDamageDoesNotCritOrConsumeVulnerability"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_MovementSpeed": {
@@ -5746,6 +6045,8 @@
    "missingResources": [],
    "tests": [
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
+    "KezInnateTests.cs:KezRunsAtThreeHundred",
+    "KezInnateTests.cs:ReferenceGlobal",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "partial",
@@ -5793,7 +6094,10 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged"
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -5835,7 +6139,9 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+   ],
    "implementation": "partial",
    "required": true
   },
@@ -5873,8 +6179,13 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "ChainFrostTests.cs:RanksUseAuthoredRecords",
+    "FrostbiteTests.cs:FrostbiteIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
-    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged"
+    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
+    "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
    "required": true
@@ -5903,8 +6214,13 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:HeroArmorIsCapped",
+    "DamageTests.cs:HeroArmorReducesIncomingDamage",
+    "DamageTests.cs:NoReflectionFromEnemyProjectiles",
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage"
+   ],
+   "implementation": "partial",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_DamageReflection": {
@@ -5931,8 +6247,13 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:NoReflectionFromEnemyProjectiles",
+    "DamageTests.cs:NoReflectionWhileDashingOrInvulnerable",
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
+    "DamageTests.cs:ReflectionHitsMeleeAttacker"
+   ],
+   "implementation": "partial",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Dodge": {
@@ -5984,7 +6305,9 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+   ],
    "implementation": "partial",
    "required": true
   },
@@ -6110,8 +6433,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "EchoStrikeTests.cs:RankNineUsesAuthoredRecords"
+   ],
+   "implementation": "partial",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_KnockbackDistance": {
@@ -6143,8 +6468,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_FreezeDuration": {
@@ -6174,7 +6502,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_FreezeStrength": {
@@ -6204,7 +6532,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_VulnerabilityDuration": {
@@ -6232,7 +6560,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_VulnerabilityDamagePercent": {
@@ -6260,7 +6588,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_VulnerabilityStunOnHitDuration": {
@@ -6288,7 +6616,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_MaxRerolls": {
@@ -6348,8 +6676,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_TimeBetweenTicks": {
@@ -6379,8 +6710,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ModifierDamagePerTick": {
@@ -6408,7 +6741,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Radius": {
@@ -6443,8 +6776,12 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
+    "KezInnateTests.cs:MarkSpreadsWithinRadiusOfTheTarget",
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Length": {
@@ -6472,8 +6809,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ArmingTime": {
@@ -6557,7 +6896,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_SplashDamagePercentage": {
@@ -6670,8 +7009,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "ShenInnateTests.cs:DurationExtensionLengthensWeakening"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_StampedeMovementSpeed": {
@@ -6727,7 +7068,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_KnockbackDistanceMultiplier": {
@@ -6760,7 +7101,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileSpeed": {
@@ -6792,7 +7133,9 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged"
+    "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6822,8 +7165,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_FreezeSplashRadius": {
@@ -6851,7 +7196,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_Chance": {
@@ -6878,8 +7223,13 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:DealDamageDoesNotAllocate",
+    "DamageTests.cs:HigherCritMultiplierWins",
+    "DamageTests.cs:ProjectileCritAppliesToMagicProjectile",
+    "DamageTests.cs:PureDamageIgnoresModifiers"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_CriticalStrike_Projectile_DamageMultiplier": {
@@ -6906,8 +7256,13 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:DealDamageDoesNotAllocate",
+    "DamageTests.cs:HigherCritMultiplierWins",
+    "DamageTests.cs:ProjectileCritAppliesToMagicProjectile",
+    "DamageTests.cs:PureDamageIgnoresModifiers"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Projectile_BonusMagicDamage": {
@@ -6935,8 +7290,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:FlatBonusesFollowDamageType"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Percentage": {
@@ -6964,7 +7321,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_MagicDamageWeakensPhysicalDamageResistance_Duration": {
@@ -6992,7 +7349,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_LimitBreak": {
@@ -7048,8 +7405,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "DamageTests.cs:FlatBonusesFollowDamageType",
+    "PassiveItemTests.cs:DemonEdgeAddsToPhysicalDamageFormula"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_IncomingDamageAmplification": {
@@ -7133,7 +7493,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileAttack": {
@@ -7167,7 +7527,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileAttackInterval": {
@@ -7196,8 +7556,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Luck": {
@@ -7226,8 +7588,11 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "LuckTests.cs:HeroesStartWithLuckFromData",
+    "LuckTests.cs:LuckRun"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_TargetCount": {
@@ -7267,6 +7632,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses"
@@ -7296,8 +7662,12 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "LivesTests.cs:BossKilledWhileDownedIsVictory",
+    "LivesTests.cs:LivesRun",
+    "LivesTests.cs:ReviveTimerComesFromData"
+   ],
+   "implementation": "partial",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_SlowStrength": {

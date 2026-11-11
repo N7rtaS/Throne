@@ -84,6 +84,18 @@ namespace ThornThrone.Simulation
         public DamageInfo Hit(Run run) =>
             new DamageInfo(Damage(run), DamageType, IsProjectileAttack ? DamageFlags.Projectile : DamageFlags.None, owned.Stats);
 
+        /// <summary>
+        /// A number of the definition outside its attributes (m_flSpawnMinimumLifetime, m_nEliteExtraHit…). A missing
+        /// field is not silently zero: the run reports «ability:&lt;key&gt;:&lt;field&gt;» and 0 is used.
+        /// </summary>
+        protected float DataField(Run run, string field)
+        {
+            var token = owned.Def.Raw?[field];
+            if (token != null) return (float)token;
+            run.Diagnostics.Report($"ability:{owned.Def.Key}:{field}", $"Ability {owned.Def.Key} has no {field}; 0 is used");
+            return 0;
+        }
+
         /// <summary>Loads the hit snapshot into a fired projectile.</summary>
         protected void Arm(Run run, Projectile shot)
         {

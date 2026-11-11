@@ -24,6 +24,9 @@ namespace ThornThrone.Simulation
         /// <summary>Extra physical and magical damage taken (IncomingDamageAmplification*).</summary>
         public float AmplifyStrength { get; private set; }
         public float AmplifyTime { get; private set; }
+        /// <summary>Extra damage taken from projectile hits (Frostbite, ProjectileDamagePercent), Mechanics §29 Р24.</summary>
+        public float ProjectileAmplifyStrength { get; private set; }
+        public float ProjectileAmplifyTime { get; private set; }
         /// <summary>Next physical hit is critical with this multiplier and stuns (Vulnerability*).</summary>
         public float VulnerableMultiplier { get; private set; }
         public float VulnerableStun { get; private set; }
@@ -64,6 +67,7 @@ namespace ThornThrone.Simulation
             Stun = 0;
             SlowStrength = SlowTime = FreezeStrength = FreezeTime = 0;
             WeakenStrength = WeakenTime = AmplifyStrength = AmplifyTime = 0;
+            ProjectileAmplifyStrength = ProjectileAmplifyTime = 0;
             VulnerableMultiplier = VulnerableStun = VulnerableTime = 0;
             for (int i = 0; i < dotSource.Length; i++) ClearDot(i);
             DotCount = 0;
@@ -114,6 +118,14 @@ namespace ThornThrone.Simulation
             if (strength <= 0 || time <= 0) return;
             AmplifyStrength = Math.Max(AmplifyTime > 0 ? AmplifyStrength : 0, strength);
             AmplifyTime = Math.Max(AmplifyTime, time);
+        }
+
+        /// <summary>Larger strength and larger time, like <see cref="ApplyAmplify"/> (Mechanics §29 Р24).</summary>
+        public void ApplyProjectileAmplify(float strength, float time)
+        {
+            if (strength <= 0 || time <= 0) return;
+            ProjectileAmplifyStrength = Math.Max(ProjectileAmplifyTime > 0 ? ProjectileAmplifyStrength : 0, strength);
+            ProjectileAmplifyTime = Math.Max(ProjectileAmplifyTime, time);
         }
 
         /// <summary>One mark: larger multiplier, longer time, longer stun (Р13).</summary>
@@ -180,6 +192,7 @@ namespace ThornThrone.Simulation
             if (FreezeTime > 0 && (FreezeTime -= dt) <= Epsilon) FreezeStrength = FreezeTime = 0;
             if (WeakenTime > 0 && (WeakenTime -= dt) <= Epsilon) WeakenStrength = WeakenTime = 0;
             if (AmplifyTime > 0 && (AmplifyTime -= dt) <= Epsilon) AmplifyStrength = AmplifyTime = 0;
+            if (ProjectileAmplifyTime > 0 && (ProjectileAmplifyTime -= dt) <= Epsilon) ProjectileAmplifyStrength = ProjectileAmplifyTime = 0;
             if (VulnerableTime > 0 && (VulnerableTime -= dt) <= Epsilon) VulnerableMultiplier = VulnerableStun = VulnerableTime = 0;
             if (DotCount == 0) return;
             for (int i = 0; i < dotSource.Length; i++)

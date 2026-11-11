@@ -233,6 +233,7 @@ namespace ThornThrone.Simulation
 
         private void ReportUnsupportedRules()
         {
+            Diagnostics.Include(Data.Diagnostics);
             if (Difficulty.EnableMeteorModifier) Diagnostics.Report("difficulty:meteor", "Meteor modifier is not implemented");
             if (Difficulty.EnemyTouchMovementSlowDuration > 0) Diagnostics.Report("difficulty:slow", "Touch movement slow is not implemented");
         }
@@ -873,6 +874,7 @@ namespace ThornThrone.Simulation
             shot.Bounces = 0;
             shot.Stun = 0;
             shot.ArmTime = 0;
+            shot.FreezeRadius = shot.FreezeStrength = shot.FreezeTime = 0;
             shot.DamageType = DamageType.Pure;
             shot.DamageFlags = DamageFlags.None;
             shot.DamageSource = source?.Stats ?? DamageStats.Other;

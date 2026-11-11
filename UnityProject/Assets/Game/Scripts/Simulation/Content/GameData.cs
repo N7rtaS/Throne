@@ -26,6 +26,8 @@ namespace ThornThrone.Simulation
         public readonly Dictionary<string, PickupDef> Pickups = new Dictionary<string, PickupDef>();
         public readonly Dictionary<int, PickupDef> PickupsById = new Dictionary<int, PickupDef>();
         public readonly Dictionary<string, JObject> AttributeDefinitions = new Dictionary<string, JObject>();
+        /// <summary>Problems of the data found while loading; every run reports them too.</summary>
+        public readonly Diagnostics Diagnostics = new Diagnostics();
 
         /// <summary>
         /// Named points of the arena entity lump (survivors_arena_entities.json, Tools/arena-entities.py), Source units:
@@ -82,7 +84,7 @@ namespace ThornThrone.Simulation
                 case "heroes": Heroes[key] = ReadHero(key, v); break;
                 case "levels": Levels[key] = ReadLevel(key, v); break;
                 case "pickups": var p = ReadPickup(key, v); Pickups[key] = p; PickupsById[p.Id] = p; break;
-                case "powerups": var u = ReadPowerUp(key, v); PowerUps[key] = u; PowerUpsById[u.Id] = u; break;
+                case "powerups": var u = ReadPowerUp(key, v); u.BaseAttributes = Distinct(key, u.BaseAttributes); PowerUps[key] = u; PowerUpsById[u.Id] = u; break;
                 case "spawners": Spawners[key] = ReadSpawner(key, v); break;
             }
         }
@@ -144,6 +146,25 @@ namespace ThornThrone.Simulation
         {
             if (!(token is JArray items)) return new AttributeValue[0];
             return items.Select(i => new AttributeValue(Attr.Id((string)i["m_eType"]), (float)i["m_flValue"])).ToArray();
+        }
+
+        /// <summary>
+        /// An attribute listed twice in m_vecBaseAttributes of one powerup (knife_throw: ProjectileAttackInterval 0.15
+        /// twice) counts once; the repeat is reported (owner's decision, Mechanics §29 Р12).
+        /// </summary>
+        private AttributeValue[] Distinct(string key, AttributeValue[] items)
+        {
+            var kept = new List<AttributeValue>(items.Length);
+            foreach (var item in items)
+            {
+                bool repeated = false;
+                foreach (var k in kept) if (k.Id == item.Id) { repeated = true; break; }
+                if (!repeated) { kept.Add(item); continue; }
+                string name = Attr.Name(item.Id);
+                Diagnostics.Report($"data:duplicate-attribute:{key}:{name}",
+                    $"Powerup {key} lists {name} more than once in m_vecBaseAttributes; counted once");
+            }
+            return kept.Count == items.Length ? items : kept.ToArray();
         }
 
         private static UpgradeChoice[] Choices(JObject o, string name)

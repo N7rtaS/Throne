@@ -102,13 +102,22 @@ namespace ThornThrone.Simulation
     public sealed class Diagnostics
     {
         private readonly HashSet<string> seen = new HashSet<string>();
+        private readonly List<string> keys = new List<string>();
         public readonly List<string> Messages = new List<string>();
 
         public void Report(string key, string message)
         {
-            if (seen.Add(key)) Messages.Add(message);
+            if (!seen.Add(key)) return;
+            keys.Add(key);
+            Messages.Add(message);
         }
 
         public bool Has(string key) => seen.Contains(key);
+
+        /// <summary>Reports everything of <paramref name="other"/> (data load diagnostics into a run).</summary>
+        public void Include(Diagnostics other)
+        {
+            for (int i = 0; i < other.keys.Count; i++) Report(other.keys[i], other.Messages[i]);
+        }
     }
 }

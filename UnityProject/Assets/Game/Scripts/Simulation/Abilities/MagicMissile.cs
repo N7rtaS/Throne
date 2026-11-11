@@ -7,7 +7,8 @@ namespace ThornThrone.Simulation
     /// Range, fires TargetCount missiles at the closest targets (m_eTargeting CLOSEST_TARGET). A missile homes on
     /// its target; the impact damages and stuns every enemy within Radius of the hit enemy for StunDuration.
     /// Then it bounces ProjectileBounces times to a random enemy within Range of the impact that it has not hit
-    /// yet (m_eBounceTargeting RANDOM_TARGET_AT_RANGE) and cannot hit for m_flBounceMinimumLifetime after a bounce.
+    /// yet (m_eBounceTargeting RANDOM_TARGET_AT_RANGE, <see cref="ChainBounce"/>) and cannot hit for
+    /// m_flBounceMinimumLifetime after a bounce.
     /// Damage and stun are snapshotted at launch. Area damage on impact and bounce selection are interpretations
     /// of the data and the description (Mechanics §15).
     /// </summary>
@@ -75,17 +76,7 @@ namespace ThornThrone.Simulation
                 if (run.Finished) return false;
                 if (e.Active && e.SpawnId == areaIds[i]) run.Stun(e, shot.Stun);
             }
-            if (shot.Bounces <= 0) return false;
-            var next = run.RandomTarget(impact, Stat(run, Attr.Range), shot);
-            if (next == null) return false;
-            shot.Bounces--;
-            shot.Position = impact;
-            shot.Target = next;
-            shot.TargetSpawnId = next.SpawnId;
-            shot.Velocity = (next.Position - impact).Normalized * shot.Speed;
-            shot.Life = LegLife(run, shot.Speed);
-            shot.ArmTime = bounceDelay;
-            return true;
+            return ChainBounce.Next(run, shot, impact, Stat(run, Attr.Range), LegLife(run, shot.Speed), bounceDelay);
         }
     }
 }

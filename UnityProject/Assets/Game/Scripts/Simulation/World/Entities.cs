@@ -68,8 +68,13 @@ namespace ThornThrone.Simulation
         public int Bounces;
         /// <summary>Stun seconds applied on impact.</summary>
         public float Stun;
-        /// <summary>Seconds after a bounce during which the shot cannot hit (m_flBounceMinimumLifetime).</summary>
+        /// <summary>
+        /// Seconds during which the shot cannot hit: after a bounce (m_flBounceMinimumLifetime) or after launch
+        /// (m_flSpawnMinimumLifetime).
+        /// </summary>
         public float ArmTime;
+        /// <summary>Freeze around the impact (Chain Frost), snapshotted at launch: radius, strength and seconds.</summary>
+        public float FreezeRadius, FreezeStrength, FreezeTime;
         public readonly int[] HitSpawnIds = new int[MaxHits];
         public int HitCount;
 

@@ -38,16 +38,22 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_InstantAttack", (owned, run) => new InstantAttack(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", (owned, run) => new Rot(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_CounterHelix", (owned, run) => new CounterHelix(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_KnifeThrow", (owned, run) => new KnifeThrow(owned) },
+                { "CSurvivorsPowerUpDefinition_ProjectileAttack", (owned, run) => new ChainFrost(owned, run) },
+                { "CSurvivorsPowerUpDefinition_LagunaBlade", (owned, run) => new LagunaBlade(owned, run) },
+                { "CSurvivorsPowerUpDefinition_Frostbite", (owned, run) => new Frostbite(owned) },
             };
 
         /// <summary>
         /// Handlers that implement only some definitions of their class (InstantAttack: one targeting mode so far,
-        /// Mechanics §26 Р15). A class without an entry supports every definition.
+        /// Mechanics §26 Р15; ProjectileAttack: Chain Frost's targeting, §29 Р6). A class without an entry supports
+        /// every definition.
         /// </summary>
         private static readonly Dictionary<string, Func<PowerUpDef, bool>> supports =
             new Dictionary<string, Func<PowerUpDef, bool>>
             {
                 { "CSurvivorsPowerUpDefinition_InstantAttack", InstantAttack.Supports },
+                { "CSurvivorsPowerUpDefinition_ProjectileAttack", ChainFrost.Supports },
             };
 
         public static bool Has(string powerUpClass) => powerUpClass != null && factories.ContainsKey(powerUpClass);

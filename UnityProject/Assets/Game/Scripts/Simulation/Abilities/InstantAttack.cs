@@ -17,8 +17,7 @@ namespace ThornThrone.Simulation
 
         private const int MaxTargets = 64;
 
-        private readonly Enemy[] targets = new Enemy[MaxTargets];
-        private readonly int[] targetIds = new int[MaxTargets];
+        private readonly StrongestTargets targets = new StrongestTargets(MaxTargets);
         // Enemies of one attack, copied out of the grid queries: damage can kill and recycle slots (split units).
         private readonly Enemy[] area;
         private readonly int[] areaIds;
@@ -41,7 +40,7 @@ namespace ThornThrone.Simulation
         {
             cooldown -= dt;
             if (cooldown > 0) return;
-            int count = Strongest(run, run.HeroPosition, Stat(run, Attr.Range), TargetCount(run));
+            int count = targets.Collect(run, run.HeroPosition, Stat(run, Attr.Range), TargetCount(run));
             if (count == 0) return;
             cooldown = Cooldown(run);
             int affected = Surround(run, count, MarkRadius(run));
@@ -65,55 +64,15 @@ namespace ThornThrone.Simulation
             }
         }
 
-        /// <summary>Writes up to <paramref name="wanted"/> different strongest targetable enemies within range into <see cref="targets"/>.</summary>
-        private int Strongest(Run run, Vec2 center, float range, int wanted)
-        {
-            using var near = run.Grid.Query(center, range);
-            int count = 0;
-            while (count < wanted)
-            {
-                Enemy best = null;
-                float bestDistance = 0;
-                for (int i = 0; i < near.Count; i++)
-                {
-                    var e = run.Enemies[near[i]];
-                    if (!e.Targetable || Chosen(e, count)) continue;
-                    float d = Vec2.DistanceSquared(e.Position, center);
-                    if (d > range * range) continue;
-                    if (best != null && !Stronger(e, d, best, bestDistance)) continue;
-                    best = e;
-                    bestDistance = d;
-                }
-                if (best == null) break;
-                targets[count] = best;
-                targetIds[count] = best.SpawnId;
-                count++;
-            }
-            return count;
-        }
-
-        private static bool Stronger(Enemy e, float distance, Enemy best, float bestDistance)
-        {
-            if (e.Health != best.Health) return e.Health > best.Health;
-            if (distance != bestDistance) return distance < bestDistance;
-            return e.Slot < best.Slot;
-        }
-
-        private bool Chosen(Enemy e, int count)
-        {
-            for (int i = 0; i < count; i++) if (targets[i] == e) return true;
-            return false;
-        }
-
         /// <summary>The targets and every targetable enemy within radius of each, once each, into <see cref="area"/>.</summary>
         private int Surround(Run run, int count, float radius)
         {
             int affected = 0;
             for (int t = 0; t < count; t++)
             {
-                var target = targets[t];
-                targets[t] = null;
-                affected = Add(target, targetIds[t], affected);
+                var target = targets.Live(t);
+                if (target == null) continue;
+                affected = Add(target, target.SpawnId, affected);
                 if (radius <= 0) continue;
                 using var near = run.Grid.Query(target.Position, radius);
                 for (int i = 0; i < near.Count; i++)

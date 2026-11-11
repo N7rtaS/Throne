@@ -1,0 +1,12 @@
+# Задачи: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Task 22)
+- [x] 1. Тесты до кода: `KnifeThrowTests` (реестр, ранги 1/2/3/9, направление без наведения, пробитие, отталкивание, залп, бросок без врагов, смещение). _Т3, Т7.1_
+- [x] 2. Тесты `ChainFrostTests` (реестр, ранги, самый сильный, задержка после выпуска, урон только цели, оглушение, заморозка круга и край, цепь без повторов на seed 1–5, конец цепи). _Т1, Т2, Т4_
+- [x] 3. Тесты `LagunaBladeTests` (реестр, ранги, мгновенный удар, враг на линии не задет, событие с длиной и шириной, 3 удара по элитному, разные цели). _Т5_
+- [x] 4. Тесты `FrostbiteTests` (реестр, ранги, DoT 3 × 4, заморозка, ×1.25 к снарядам, без усиления Rot и тиков, Империя, повтор). _Т6_
+- [x] 5. Общие тесты: пауза и выбор, `StepsDoNotAllocateAfterWarmUp` со всеми четырьмя, бот-забег на 5 seed; запуск — новые тесты падают по нужной причине. _Т7.3, Т7.4_
+- [x] 6. `Abilities/StrongestTargets.cs`, перевод `InstantAttack`; `Abilities/ChainBounce.cs`, перевод `MagicMissile`; `KezInnateTests` и `MagicMissileTests` зелёные. _Т1, Т2_
+- [x] 7. Новые id в `Stats/Attributes.cs`; `EnemyStatus` + `Status/ProjectileAmplification.cs` + строка в `Run.DealDamage`. _Т6.4_
+- [x] 8. `Abilities/KnifeThrow.cs`, `ChainFrost.cs`, `LagunaBlade.cs`, `Frostbite.cs`, строки и `supports` в `AbilityFactory`; решение по дубликату `ProjectileAttackInterval` (Р12). _Т3–Т6, Т7.1_
+- [x] 9. `dotnet test DotNet/ThornThrone.Simulation.Tests` полностью зелёный.
+- [x] 10. `Tools/tests/test_audit.py` (классы фабрики), `python3 -m unittest discover -s Tools/tests`, `python3 Tools/audit.py`. _Т7.5_
+- [x] 11. Mechanics §29 (Р1–Р26), Differences Б14 (отображение: шар снаряда, прямоугольник луча, заморозка не видна), отметка в roadmap, коммит. _Т7.6 проверяет проверяющий smoke `-thornForce=knife_throw,chain_frost,laguna_blade,frostbite`_

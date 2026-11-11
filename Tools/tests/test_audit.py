@@ -46,12 +46,16 @@ class SimulationCoverageTests(unittest.TestCase):
         self.assertEqual(self.coverage.ability_classes,
                          {"CSurvivorsPowerUpDefinition_ArcaneBolt", "CSurvivorsPowerUpDefinition_MagicMissile",
                           "CSurvivorsPowerUpDefinition_EchoStrike", "CSurvivorsPowerUpDefinition_InstantAttack",
-                          "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", "CSurvivorsPowerUpDefinition_CounterHelix"})
+                          "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", "CSurvivorsPowerUpDefinition_CounterHelix",
+                          "CSurvivorsPowerUpDefinition_KnifeThrow", "CSurvivorsPowerUpDefinition_ProjectileAttack",
+                          "CSurvivorsPowerUpDefinition_LagunaBlade", "CSurvivorsPowerUpDefinition_Frostbite"})
 
     def test_instant_attack_supports_only_strongest_target(self):
         # Mechanics §26 Р15: Annihilation shares the class but not the targeting (Task 23).
+        # Mechanics §29 Р6: Chain Frost, the only ProjectileAttack definition, is STRONGEST_TARGET_IN_RANGE.
         self.assertEqual(self.coverage.ability_targeting,
-                         {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE"}})
+                         {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE"},
+                          "CSurvivorsPowerUpDefinition_ProjectileAttack": {"STRONGEST_TARGET_IN_RANGE"}})
 
     def test_supported_hero_attributes_has_thirty_four_entries(self):
         # 20 before Task 18 plus 14 attributes of passive items (Mechanics §25).
