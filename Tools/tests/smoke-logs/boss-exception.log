@@ -1,0 +1,6 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+THORN_PROFILE kind=test status=Loaded preserved=
+NullReferenceException: Object reference not set to an instance of an object
+  at ThornThrone.Mobile.MobileGame.UpdateBossView () [0x00000] in <00000000000000000000000000000000>:0 
+THORN_BOSS ok=1 spawned=1 attacks=6 bossHp=30000/30000 time=9.2
+THORN_MOBILE_SMOKE time=9.2 kills=0 level=1 hp=0/80 enemies=19 diagnostics=1

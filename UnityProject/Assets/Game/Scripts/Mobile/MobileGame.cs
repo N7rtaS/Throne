@@ -160,6 +160,7 @@ namespace ThornThrone.Mobile
                 foreach (var owned in run.Build.Owned) owned.Ability = null;
                 run.SpawnBossNow();
                 screenshotTime = 7;
+                bossSmoke = true;
             }
             if (smoke && Environment.GetCommandLineArgs().Contains("-thornElite"))
             {
@@ -261,11 +262,22 @@ namespace ThornThrone.Mobile
 
         // Automatic check of a player build: run 30 s of game time without input, log the state, quit.
         private bool smoke, screenshotTaken, eliteSmoke, showSettings, settingsShown;
+        /// <summary>-thornBoss: the hero has no abilities, so the smoke checks Imperia's attacks instead of kills.</summary>
+        private bool bossSmoke;
+        private int bossAttacks;
         private float settingsShownAt;
         private InputScript inputScript;
         private float screenshotTime = 20;
         /// <summary>-thornHudAlloc: allocations of the HUD after warm-up, logged as THORN_HUD_ALLOC at the end.</summary>
         private HudAllocMeter hudMeter;
+
+        /// <summary>-thornBoss: Imperia's attacks (missiles, burning ground, portals, rays) of this frame.</summary>
+        private void CountBossAttacks()
+        {
+            if (run.Boss == null) return;
+            for (int i = 0; i < run.EventCount; i++)
+                if (run.Events[i].Kind == SimEventKind.EnemyAttacked && run.Events[i].Slot == run.Boss.Slot) bossAttacks++;
+        }
 
         /// <summary>Visual check: every enemy with a baked look in rings around the hero, no hero attacks.</summary>
         private void Showcase()
@@ -343,9 +355,18 @@ namespace ThornThrone.Mobile
                 hudMeter.Dispose();
                 hudMeter = null;
             }
+            bool bossOk = false;
+            if (bossSmoke)
+            {
+                // design: .kiro/specs/thorn-boss-smoke-fix/design.md — Imperia spawned and attacked; code 12 otherwise.
+                bool spawned = run.BossSpawned && run.Boss != null;
+                bossOk = spawned && bossAttacks > 0;
+                Debug.Log($"THORN_BOSS ok={(bossOk ? 1 : 0)} spawned={(spawned ? 1 : 0)} attacks={bossAttacks} " +
+                          $"bossHp={(spawned ? run.Boss.Health : 0):0}/{(spawned ? run.Boss.MaxHealth : 0):0} time={run.Time:0.0}");
+            }
             Debug.Log($"THORN_MOBILE_SMOKE time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
-            Application.Quit(run.Kills > 0 ? 0 : 1);
+            Application.Quit(bossSmoke ? (bossOk ? 0 : 12) : run.Kills > 0 ? 0 : 1);
             smoke = false;
         }
 
@@ -771,6 +792,7 @@ namespace ThornThrone.Mobile
                 run.Update(delta, ScreenToPlane(input.Move), input.DashPressed);
                 world.Consume(run);
                 inputScript?.CountEvents(run);
+                if (bossSmoke) CountBossAttacks();
                 run.ClearEvents();
                 if (run.Choosing) { state = State.Choosing; ShowChoices(); }
                 if (run.Finished) screens.Finish();

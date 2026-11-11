@@ -6,6 +6,9 @@
 #        Tools/mac-smoke.sh --check-log FILE        (only the log check, step 4)
 #        Tools/mac-smoke.sh --check-flow-log FILE   (THORN_FLOW ok=1, then the log check)
 #        Tools/mac-smoke.sh --check-hud-alloc-log FILE (THORN_HUD_ALLOC with zero bytes, then the log check)
+#        Tools/mac-smoke.sh --check-boss-log FILE   (THORN_BOSS spawned=1 attacks>0, then the log check without kills)
+# -thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): the hero has no abilities, so kills are not
+#   required; Imperia must spawn and attack (THORN_BOSS line), the rest of the log check is the same.
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
 #   run 2 expects them after the restart (-thornExpectSettings), run 3 restores the defaults of the test profile.
 # --flow (design: .kiro/specs/screen-flow/design.md §4): run 1 walks the screens on a new test profile (-thornFlow,
@@ -21,7 +24,8 @@
 #             8 -thornInputScript=FILE given and no THORN_INPUT_SCRIPT ok=1 line (design: .kiro/specs/touch-controls-contract),
 #             9 -thornSettings / -thornExpectSettings given and no THORN_SETTINGS_SET / THORN_SETTINGS ok=1 line,
 #             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line,
-#             11 --hud-alloc and no THORN_HUD_ALLOC line, or it reports allocations or a measurement that saw nothing.
+#             11 --hud-alloc and no THORN_HUD_ALLOC line, or it reports allocations or a measurement that saw nothing,
+#             12 -thornBoss given and no THORN_BOSS line with spawned=1 and attacks above zero.
 set -euo pipefail
 root="${0:A:h:h}"
 unity="${THORN_UNITY:-/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity}"
@@ -29,10 +33,11 @@ log="${THORN_SMOKE_LOG:-$root/Research/mac-smoke.log}"
 timeout="${THORN_SMOKE_TIMEOUT:-180}"
 app="$root/Builds/MacSmoke/ThornThrone.app"
 
-# Step 4: checks a player log; prints the smoke line on success.
+# Step 4: checks a player log; prints the smoke line on success. A second argument "no-kills" skips the kills check
+# (-thornBoss, where the hero has no abilities).
 check_log()
 {
-  local file="$1" line kills
+  local file="$1" mode="${2:-}" line kills
   if [[ ! -f "$file" ]]; then echo "mac-smoke: log not found: $file" >&2; return 4; fi
   line="$(LC_ALL=C grep -a '^THORN_MOBILE_SMOKE ' "$file" | tail -n 1 || true)"
   if [[ -z "$line" ]]; then echo "mac-smoke: no THORN_MOBILE_SMOKE line in $file" >&2; return 4; fi
@@ -44,6 +49,7 @@ check_log()
     print -r -- "$errors" | head -n 10 >&2
     return 6
   fi
+  if [[ "$mode" == no-kills ]]; then print -r -- "$line"; return 0; fi
   kills="$(print -r -- "$line" | sed -nE 's/.* kills=([0-9]+).*/\1/p')"
   if [[ -z "$kills" || "$kills" == 0 ]]; then echo "mac-smoke: no kills: $line" >&2; return 5; fi
   print -r -- "$line"
@@ -87,6 +93,26 @@ check_hud_alloc()
   print -r -- "$line"
 }
 
+# Boss smoke: Imperia spawned and attacked at least once (code 12 otherwise); the fields are parsed, ok= is not trusted.
+check_boss()
+{
+  local file="$1" line
+  line="$(LC_ALL=C grep -a '^THORN_BOSS ' "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ -z "$line" ]]; then echo "mac-smoke: no THORN_BOSS line in ${file}" >&2; return 12; fi
+  local pair key value spawned="" attacks=""
+  for pair in ${(z)line}; do
+    key="${pair%%=*}"; value="${pair#*=}"
+    case "$key" in
+      spawned) spawned="$value" ;;
+      attacks) attacks="$value" ;;
+    esac
+  done
+  if [[ "$spawned" != 1 || ! "$attacks" =~ '^[1-9][0-9]*$' ]]; then
+    echo "mac-smoke: Imperia did not spawn or attack: $line" >&2
+    return 12
+  fi
+  print -r -- "$line"
+}
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -103,6 +129,11 @@ fi
 if [[ "${1:-}" == "--check-flow-log" ]]; then
   check_flow "${2:?log file}" || exit $?
   check_log "$2"
+  exit $?
+fi
+if [[ "${1:-}" == "--check-boss-log" ]]; then
+  check_boss "${2:?log file}" || exit $?
+  check_log "$2" no-kills
   exit $?
 fi
 if [[ "${1:-}" == "--check-hud-alloc-log" ]]; then
@@ -201,7 +232,12 @@ run_once()
   if [[ " $* " == *" -thornHudAlloc "* ]]; then
     check_hud_alloc "$runlog" || return $?
   fi
-  check_log "$runlog" || return $?
+  if [[ " $* " == *" -thornBoss "* ]]; then
+    check_boss "$runlog" || return $?
+    check_log "$runlog" no-kills || return $?
+  else
+    check_log "$runlog" || return $?
+  fi
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi
 }
 if (( restart )); then

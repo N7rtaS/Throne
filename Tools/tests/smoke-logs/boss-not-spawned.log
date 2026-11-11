@@ -1,0 +1,4 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+THORN_PROFILE kind=test status=Loaded preserved=
+THORN_BOSS ok=1 spawned=0 attacks=3 bossHp=0/0 time=30.0
+THORN_MOBILE_SMOKE time=30.0 kills=0 level=1 hp=80/80 enemies=19 diagnostics=1

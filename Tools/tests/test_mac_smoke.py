@@ -89,5 +89,33 @@ class MacSmokeHudAllocCheckTests(unittest.TestCase):
 
     def test_absent_log_exits_eleven(self):
         self.assertEqual(check_hud_alloc("absent.log").returncode, 11)
+def check_boss(name):
+    return subprocess.run(["zsh", SCRIPT, "--check-boss-log", os.path.join(LOGS, name)],
+                          capture_output=True, text=True, timeout=30)
+class MacSmokeBossCheckTests(unittest.TestCase):
+    """-thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): Imperia spawned and attacked, kills not required."""
+    def test_boss_spawned_and_attacked_exits_zero_without_kills(self):
+        result = check_boss("boss-ok.log")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_BOSS ok=1 spawned=1 attacks=6", result.stdout)
+        self.assertIn("THORN_MOBILE_SMOKE time=9.2 kills=0", result.stdout)
+    def test_boss_without_attacks_exits_twelve(self):
+        result = check_boss("boss-no-attacks.log")
+        self.assertEqual(result.returncode, 12)
+        self.assertIn("attacks=0", result.stderr)
+    def test_boss_not_spawned_exits_twelve_even_with_ok(self):
+        self.assertEqual(check_boss("boss-not-spawned.log").returncode, 12)
+    def test_log_without_boss_line_exits_twelve(self):
+        self.assertEqual(check_boss("boss-no-line.log").returncode, 12)
+    def test_boss_log_with_exception_exits_six(self):
+        result = check_boss("boss-exception.log")
+        self.assertEqual(result.returncode, 6)
+        self.assertIn("NullReferenceException", result.stderr)
+    def test_boss_log_without_smoke_line_exits_four(self):
+        self.assertEqual(check_boss("boss-no-smoke-line.log").returncode, 4)
+    def test_absent_boss_log_exits_twelve(self):
+        self.assertEqual(check_boss("absent.log").returncode, 12)
+    def test_usual_check_still_requires_kills_on_boss_log(self):
+        self.assertEqual(check("boss-ok.log").returncode, 5)
 if __name__ == "__main__":
     unittest.main()
