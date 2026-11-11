@@ -156,7 +156,7 @@ inclusion: manual
 - `AbilityBase` (общие Damage/Cooldown), ArcaneBolt и MagicMissile на нём. `DamageInfo` (физ./маг./чистый, крит, источник), `Run.DealDamage`, броня/сопротивления, уязвимость, отражение. Статусы на фиксированных массивах: оглушение (перенести), замедление, заморозка, DoT, ослабление; правила наложения в Mechanics. Статистика урона по источникам.
 - Тесты: формулы по данным, наложение, крит при seed, без аллокаций, старые тесты зелёные.
 
-Task 18: Глобальные атрибуты, пассивки, жизни (Spec)
+✅ (2026-11-11) Task 18: Глобальные атрибуты, пассивки, жизни (Spec)
 - В `SupportedHeroAttributes`: Armor, DamageReflection, крит, AoEIncrease, ActiveAbilitySlots, KnockbackDistanceMultiplier, Projectile_BonusMagicDamage, BonusPhysicalDamage, DurationExtension, Lives, Luck. Жизни: возрождение 2.7 с с неуязвимостью. Удача для `m_luckyLootTable` (клиент или Р).
 - Тесты на каждую пассивку (ранг 1 и максимум), жизни, apex, перенос оставшихся проверок прототипа из 57 (Reaver, Heart, octarine+tome, сохранение дефицита HP).
 

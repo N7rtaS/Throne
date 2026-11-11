@@ -47,7 +47,7 @@ namespace ThornThrone.Simulation
             shot.Velocity = (target.Position - run.HeroPosition).Normalized * speed;
             shot.Radius = Stat(run, Attr.ProjectileRadius);
             Arm(run, shot);
-            shot.Knockback = Stat(run, Attr.KnockbackDistance);
+            shot.Knockback = KnockbackDistance(run);
             shot.RemainingHits = 1 + (int)Stat(run, Attr.ProjectileHitCount);
             shot.Life = Math.Max(3, Stat(run, Attr.Range) / Math.Max(1, speed) + 1);
             shot.Target = target;

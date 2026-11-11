@@ -125,6 +125,11 @@ namespace ThornThrone.Simulation
             Attr.Damage_Magical, Attr.DamageMultiplier_Magical, Attr.CooldownReductionMultiplier,
             Attr.TargetCount, Attr.ProjectileHitCount, Attr.Range, Attr.ProjectileSpeed,
             Attr.ProjectileRadius, Attr.KnockbackDistance, Attr.ProjectileAttackInterval,
+            // Passive items (Mechanics §24, §25).
+            Attr.Armor, Attr.DamageReflection, Attr.CriticalStrike_Physical_Chance, Attr.CriticalStrike_Physical_DamageMultiplier,
+            Attr.CriticalStrike_Projectile_Chance, Attr.CriticalStrike_Projectile_DamageMultiplier, Attr.AoEIncrease,
+            Attr.ActiveAbilitySlots, Attr.KnockbackDistanceMultiplier, Attr.Projectile_BonusMagicDamage,
+            Attr.BonusPhysicalDamage, Attr.DurationExtension, Attr.Lives, Attr.Luck,
         };
 
         /// <summary>An upgrade is offered only if it does something in this build of the simulation.</summary>
@@ -132,10 +137,16 @@ namespace ThornThrone.Simulation
         {
             if (def.IsActive) return AbilityFactory.Has(def.Class);
             if (!def.IsPassive) return false;
-            foreach (var choice in def.Minor)
+            if (!GlobalsSupported(def.Minor) || !GlobalsSupported(def.Authored)) return false;
+            return def.Minor.Length > 0 || def.Authored.Length > 0;
+        }
+
+        private static bool GlobalsSupported(UpgradeChoice[] choices)
+        {
+            foreach (var choice in choices)
                 foreach (var a in choice.Global)
                     if (!SupportedHeroAttributes.Contains(a.Id)) return false;
-            return def.Minor.Length > 0;
+            return true;
         }
 
         public Run(GameData data, Rules rules, string heroKey, string difficultyKey = null, ulong seed = 1, string modeKey = "crownfall_act4")
@@ -304,6 +315,7 @@ namespace ThornThrone.Simulation
         {
             float dt = Rules.Step;
             Time += dt;
+            if (Downed) { UpdateRevive(dt); move = Vec2.Zero; dash = false; } // Mechanics §25 Р8
             UpdateHero(dt, move, dash);
             UpdateSpawning();
             UpdateEliteRooms(dt);
@@ -314,9 +326,9 @@ namespace ThornThrone.Simulation
             UpdateStatuses(dt);
             if (Finished) return;
             RebuildGrid();
-            for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
+            if (!Downed) for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
             UpdateProjectiles(dt);
-            UpdatePickups(dt);
+            if (!Downed) UpdatePickups(dt);
             if (PendingItems > 0 && !Choosing) OpenChoices();
             if (PendingLevels > 0 && !Choosing)
             {
@@ -965,7 +977,7 @@ namespace ThornThrone.Simulation
         /// <summary>
         /// Rewards: every m_vecPickupChances entry rolls independently; m_vecLootTable gives one pickup chosen by
         /// weight; each m_fullLootTable collection rolls its chance and drops Min..Max of every entry
-        /// (interpretations, Mechanics §9).
+        /// (interpretations, Mechanics §9); then the luck roll (Mechanics §25 Р11).
         /// </summary>
         private void DropRewards(EnemyDef def, Vec2 position)
         {
@@ -988,7 +1000,16 @@ namespace ThornThrone.Simulation
                     break;
                 }
             }
-            foreach (var collection in def.FullLoot)
+            DropCollections(def.FullLoot, position);
+            // Luck: one roll per kill of an enemy with rewards, success drops m_luckyLootTable (Mechanics §25 Р11, Р12).
+            float luck = Build.Global[Attr.Luck];
+            bool rewards = def.PickupChances.Length + def.LootTable.Length + def.FullLoot.Length > 0;
+            if (rewards && luck > 0 && Rng.Chance(Math.Min(1, luck))) DropCollections(Mode.LuckyLoot, position);
+        }
+
+        private void DropCollections(LootCollectionDef[] collections, Vec2 position)
+        {
+            foreach (var collection in collections)
             {
                 if (!Rng.Chance(collection.Chance)) continue;
                 foreach (var entry in collection.Entries)
@@ -1177,7 +1198,7 @@ namespace ThornThrone.Simulation
             float maximum = Math.Max(1, Build.Global[Attr.MaxHP]);
             float gain = Math.Max(0, maximum - MaxHealth);
             MaxHealth = maximum;
-            Health = Math.Min(MaxHealth, Health + gain);
+            if (!Downed) Health = Math.Min(MaxHealth, Health + gain);
         }
 
         private void CreateAbilities()
@@ -1204,7 +1225,7 @@ namespace ThornThrone.Simulation
 
         private void Heal(float amount)
         {
-            if (!Finished && amount > 0) Health = Math.Min(MaxHealth, Health + amount);
+            if (!Finished && !Downed && amount > 0) Health = Math.Min(MaxHealth, Health + amount);
         }
 
         private void Finish(bool victory)

@@ -69,6 +69,11 @@ namespace ThornThrone.Simulation
         public static readonly int CriticalStrike_Projectile_DamageMultiplier = Id("CriticalStrike_Projectile_DamageMultiplier");
         public static readonly int Armor = Id("Armor");
         public static readonly int DamageReflection = Id("DamageReflection");
+        // Global attributes of passive items (Mechanics §25).
+        public static readonly int AoEIncrease = Id("AoEIncrease");
+        public static readonly int ActiveAbilitySlots = Id("ActiveAbilitySlots");
+        public static readonly int KnockbackDistanceMultiplier = Id("KnockbackDistanceMultiplier");
+        public static readonly int DurationExtension = Id("DurationExtension");
     }
 
     /// <summary>Additive attribute totals.</summary>

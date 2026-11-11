@@ -171,6 +171,19 @@ namespace ThornThrone.Simulation
             }).ToArray();
         }
 
+        /// <summary>m_vecLootEntryCollections of a loot table (enemy m_fullLootTable, mode m_luckyLootTable).</summary>
+        private static LootCollectionDef[] LootCollections(JToken table) =>
+            table?["m_vecLootEntryCollections"] is JArray collections
+                ? collections.Cast<JObject>().Select(c => new LootCollectionDef
+                {
+                    Chance = F(c, "m_flChance", 1),
+                    Entries = (c["m_vecLootEntries"] as JArray ?? new JArray()).Cast<JObject>().Select(e => new LootEntryDef
+                    {
+                        PickupId = I(e, "m_unPickupID"), MinAmount = I(e, "m_nMinAmount"), MaxAmount = I(e, "m_nMaxAmount"),
+                    }).ToArray(),
+                }).ToArray()
+                : new LootCollectionDef[0];
+
         private static ModeDef ReadMode(string key, JObject v)
         {
             var mode = new ModeDef
@@ -199,6 +212,7 @@ namespace ThornThrone.Simulation
                 EliteRoomChoices = v["m_vecEliteRoomChoices"]?.Select(x => (string)x).ToArray() ?? new string[0],
                 EliteRoomTriggerChannelTime = F(v, "m_flEliteRoomTriggerChannelTime"),
                 EliteRoomTriggerRadius = F(v, "m_flEliteRoomTriggerRadius"),
+                LuckyLoot = LootCollections(v["m_luckyLootTable"]),
             };
             if (v["m_vecSeperationLayerData"] is JArray layers)
                 foreach (JObject layer in layers)
@@ -312,16 +326,7 @@ namespace ThornThrone.Simulation
                 }).ToArray()
                 : new PickupChanceDef[0];
             var chances = Chances("m_vecPickupChances");
-            var fullLoot = v["m_fullLootTable"]?["m_vecLootEntryCollections"] is JArray collections
-                ? collections.Cast<JObject>().Select(c => new LootCollectionDef
-                {
-                    Chance = F(c, "m_flChance", 1),
-                    Entries = (c["m_vecLootEntries"] as JArray ?? new JArray()).Cast<JObject>().Select(e => new LootEntryDef
-                    {
-                        PickupId = I(e, "m_unPickupID"), MinAmount = I(e, "m_nMinAmount"), MaxAmount = I(e, "m_nMaxAmount"),
-                    }).ToArray(),
-                }).ToArray()
-                : new LootCollectionDef[0];
+            var fullLoot = LootCollections(v["m_fullLootTable"]);
             var attacks = v["m_vecAttacks"] is JArray attackItems
                 ? attackItems.Cast<JObject>().Select(a => new EnemyAttackDef
                 {

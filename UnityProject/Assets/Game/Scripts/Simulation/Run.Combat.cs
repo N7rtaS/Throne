@@ -113,15 +113,16 @@ namespace ThornThrone.Simulation
         /// <summary>
         /// Damage to the hero × (1 − min(Armor, MaxHeroArmor)) (Р5). An attacker that touched or hit in melee takes
         /// pure damage «damage before armor × DamageReflection» back (Р6); projectiles and zones pass no attacker.
+        /// A downed hero takes nothing; a lethal hit is not reflected (Mechanics §25 Р8).
         /// </summary>
         private void DamageHero(float amount, Enemy attacker = null)
         {
-            if (amount <= 0 || Finished || DebugInvulnerable) return;
+            if (amount <= 0 || Finished || DebugInvulnerable || Downed) return;
             float armor = Math.Min(Build.Global[Attr.Armor], Rules.MaxHeroArmor);
             float taken = amount * (1 - armor);
             Health = Math.Max(0, Health - taken);
             Emit(SimEventKind.HeroDamaged, -1, HeroPosition, taken);
-            if (Health <= 0) { Finish(false); return; }
+            if (Health <= 0) { HeroDown(); return; } // a life or defeat (Mechanics §25 Р8)
             float reflection = Build.Global[Attr.DamageReflection];
             if (attacker != null && reflection > 0)
                 DealDamage(attacker, new DamageInfo(amount * reflection, DamageType.Pure, DamageFlags.Reflected, DamageStats.Reflection));

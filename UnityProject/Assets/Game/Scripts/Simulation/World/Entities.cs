@@ -103,6 +103,7 @@ namespace ThornThrone.Simulation
         ProjectileFired, ProjectileEnded,
         PickupSpawned, PickupCollected,
         HeroDamaged, HeroDashed, HeroTeleported, LevelUp, EnemyResurrected, EnemyStunned, EnemyAttacked, EliteRoomOpened, EliteRoomStarted, EliteRoomCompleted, ChoicesReady, BossSpawned, RunFinished,
+        HeroDowned, HeroRevived,
     }
 
     /// <summary>

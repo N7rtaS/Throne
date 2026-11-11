@@ -37,6 +37,23 @@ namespace ThornThrone.Simulation
 
         public float Stat(Run run, int attribute) => run.Build.Stat(owned, attribute);
 
+        /// <summary>Area radius × (1 + AoEIncrease); not for projectile, pickup or level-up radii (Mechanics §25 Р3).</summary>
+        public float Area(Run run, int attribute) => Stat(run, attribute) * (1 + Stat(run, Attr.AoEIncrease));
+
+        /// <summary>Knockback × (1 + KnockbackDistanceMultiplier); the level-up knockback is not affected (Mechanics §25 Р4).</summary>
+        public float KnockbackDistance(Run run) =>
+            Stat(run, Attr.KnockbackDistance) * (1 + Stat(run, Attr.KnockbackDistanceMultiplier));
+
+        /// <summary>
+        /// Duration of a status the ability puts on an enemy plus the hero's DurationExtension seconds, when the
+        /// own duration is above 0; status resistance applies later (Mechanics §25 Р5).
+        /// </summary>
+        public float EffectDuration(Run run, int attribute)
+        {
+            float duration = Stat(run, attribute);
+            return duration > 0 ? duration + run.Build.Global[Attr.DurationExtension] : duration;
+        }
+
         /// <summary>
         /// (Damage_&lt;type&gt; + flat bonus) × (1 + DamageMultiplier + DamageMultiplier_&lt;type&gt;).
         /// Flat bonus: BonusPhysicalDamage for physical, Projectile_BonusMagicDamage for magic projectile attacks.

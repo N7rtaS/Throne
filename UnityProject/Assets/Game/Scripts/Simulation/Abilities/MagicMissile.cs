@@ -26,8 +26,8 @@ namespace ThornThrone.Simulation
         }
 
         public int Bounces(Run run) => Math.Max(0, (int)Stat(run, Attr.ProjectileBounces));
-        public float StunDuration(Run run) => Stat(run, Attr.StunDuration);
-        public float ImpactRadius(Run run) => Stat(run, Attr.Radius);
+        public float StunDuration(Run run) => EffectDuration(run, Attr.StunDuration);
+        public float ImpactRadius(Run run) => Area(run, Attr.Radius);
 
         public override void Tick(Run run, float dt)
         {

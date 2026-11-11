@@ -46,10 +46,13 @@ class SimulationCoverageTests(unittest.TestCase):
         self.assertEqual(self.coverage.ability_classes,
                          {"CSurvivorsPowerUpDefinition_ArcaneBolt", "CSurvivorsPowerUpDefinition_MagicMissile"})
 
-    def test_supported_hero_attributes_has_twenty_entries(self):
-        self.assertEqual(len(self.coverage.hero_attributes), 20)
+    def test_supported_hero_attributes_has_thirty_four_entries(self):
+        # 20 before Task 18 plus 14 attributes of passive items (Mechanics §25).
+        self.assertEqual(len(self.coverage.hero_attributes), 34)
         self.assertIn("MaxHP", self.coverage.hero_attributes)
-        self.assertNotIn("Luck", self.coverage.hero_attributes)
+        self.assertIn("Luck", self.coverage.hero_attributes)
+        self.assertIn("Lives", self.coverage.hero_attributes)
+        self.assertNotIn("DurationEffect", self.coverage.hero_attributes)
 
     def test_used_attributes_exclude_attr_members(self):
         self.assertIn("ProjectileBounces", self.coverage.used_attributes)
@@ -113,7 +116,9 @@ class ImplementationTests(unittest.TestCase):
     def test_powerups(self):
         self.assertEqual(level("powerups/kez_innate"), "none")
         self.assertTrue(at_least("powerups/yasha", "implemented"))
-        self.assertEqual(level("powerups/blade_mail"), "none")
+        self.assertTrue(at_least("powerups/blade_mail", "implemented"))
+        self.assertTrue(at_least("powerups/crystalys", "implemented"))
+        self.assertTrue(at_least("powerups/ynk_trident", "implemented"))
         self.assertTrue(at_least("powerups/yasha_and_kaya", "implemented"))
         self.assertTrue(at_least("powerups/skywrath_mage_innate", "implemented"))
         self.assertEqual(level("powerups/gold"), "none")

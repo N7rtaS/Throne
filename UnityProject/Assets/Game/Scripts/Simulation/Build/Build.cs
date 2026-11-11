@@ -19,7 +19,8 @@ namespace ThornThrone.Simulation
     /// The hero's build: owned powerups, slots, level-up choices, recipes and the resulting attributes.
     /// One rule for every hero and powerup:
     ///   hero attribute  = hero base + innate without its own class (base + first minor global)
-    ///                     + passive first-minor global × rank + authored global upgrades of owned abilities;
+    ///                     + passive first-minor global × rank (authored globals 0..rank−1 if the item has them)
+    ///                     + authored global upgrades of owned abilities;
     ///   ability stat    = ability local + hero attribute of the same type.
     /// An innate with its own class is the hero's ability: its attributes stay in its Local only.
     /// </summary>
@@ -43,6 +44,8 @@ namespace ThornThrone.Simulation
         /// <summary>True when the last generated choice list was empty and the fallback reward applies.</summary>
         public bool ChoicesAreFallback { get; private set; }
         public int Version { get; private set; }
+        /// <summary>m_nMaxActiveSlots plus ActiveAbilitySlots (Apex), Mechanics §25 Р6.</summary>
+        public int MaxActiveSlots => mode.MaxActiveSlots + (int)Global[Attr.ActiveAbilitySlots];
 
         public Build(GameData data, Rules rules, ModeDef mode, HeroDef hero, Func<PowerUpDef, bool> implemented)
         {
@@ -83,7 +86,7 @@ namespace ThornThrone.Simulation
             if (!(def.IsActive || def.IsPassive) || !implemented(def)) return false;
             var owned = Find(def);
             if (owned != null) return owned.Rank < def.MaxLevel;
-            return def.IsPassive ? CountSlots(true) < mode.MaxPassiveSlots : CountSlots(false) < mode.MaxActiveSlots;
+            return def.IsPassive ? CountSlots(true) < mode.MaxPassiveSlots : CountSlots(false) < MaxActiveSlots;
         }
 
         /// <summary>
@@ -194,7 +197,10 @@ namespace ThornThrone.Simulation
                 }
                 else if (def.IsPassive)
                 {
-                    if (def.Minor.Length > 0) Global.Add(def.Minor[0].Global, owned.Rank);
+                    // Authored records 0..rank−1 when the item has them (Crystalys), else first minor × rank (Mechanics §25 Р1, Р2).
+                    if (def.Authored.Length > 0)
+                        for (int u = 0; u < owned.Rank && u < def.Authored.Length; u++) Global.Add(def.Authored[u].Global);
+                    else if (def.Minor.Length > 0) Global.Add(def.Minor[0].Global, owned.Rank);
                 }
                 else
                 {

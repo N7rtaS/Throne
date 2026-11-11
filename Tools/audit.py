@@ -556,7 +556,8 @@ def implementation_levels(defs, registry, coverage, targets):
     by_id = {v["m_unPowerUpID"]: k for k, v in defs["powerups"].items() if "m_unPowerUpID" in v}
 
     def passive(value):
-        choices = value.get("m_vecMinorUpgradeChoices") or []
+        # Minor and authored upgrades both give hero attributes (Mechanics §25 Р1).
+        choices = (value.get("m_vecMinorUpgradeChoices") or []) + (value.get("m_vecAuthoredUpgradeChoices") or [])
         return bool(choices) and all(name in supported for c in choices
                                      for name in _attribute_names(c.get("m_vecGlobalUpgradeAttributes")))
 

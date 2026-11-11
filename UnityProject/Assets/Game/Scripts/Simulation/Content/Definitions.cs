@@ -35,6 +35,8 @@ namespace ThornThrone.Simulation
         public float SeparationVelocityInfluence, SeparationInterpolationSpeed;
         public Dictionary<string, float> SeparationDistance = new Dictionary<string, float>();
         public float PlayerReviveTimer;
+        /// <summary>m_luckyLootTable: dropped on a successful luck roll after an enemy's own rewards (Mechanics §25 Р11).</summary>
+        public LootCollectionDef[] LuckyLoot = new LootCollectionDef[0];
         /// <summary>m_flPlayerPositionHistoryBufferDuration: enemies chase the hero's position this long ago.</summary>
         public float PlayerPositionHistoryBufferDuration;
         public float RequiredExperienceBase, RequiredExperienceExponent;

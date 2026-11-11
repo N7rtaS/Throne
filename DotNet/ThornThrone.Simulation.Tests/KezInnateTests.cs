@@ -35,6 +35,7 @@ namespace ThornThrone.Simulation.Tests
         /// <summary>
         /// Reference hero attributes: hero base + innates without their own class (base + first minor global)
         /// + optionally innates with their own class the same way + passive first-minor global × rank
+        /// (authored globals 0..rank−1 for passives that have them)
         /// + authored globals of actives below Rank − AuthoredUpgradeOffset.
         /// </summary>
         private static float[] ReferenceGlobal(Run run, bool includeInnateAbility)
@@ -52,7 +53,10 @@ namespace ThornThrone.Simulation.Tests
                 }
                 else if (def.IsPassive)
                 {
-                    if (def.Minor.Length > 0) Add(result, def.Minor[0].Global, owned.Rank);
+                    // Mechanics §25 Р1: authored records 0..rank−1 replace the minor upgrade (Crystalys).
+                    if (def.Authored.Length > 0)
+                        for (int u = 0; u < owned.Rank && u < def.Authored.Length; u++) Add(result, def.Authored[u].Global, 1);
+                    else if (def.Minor.Length > 0) Add(result, def.Minor[0].Global, owned.Rank);
                 }
                 else
                 {
