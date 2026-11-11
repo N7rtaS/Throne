@@ -29,7 +29,7 @@
 Полное ТЗ можно подключить вручную в чате через `#tz`.
 
 ## Дорожная карта
-План работ по задачам 1–42 и режим Kiro для каждой — `.kiro/steering/roadmap.md`, подключается в чате через `#roadmap`.
+План работ по задачам 1–45 и режим Kiro для каждой — `.kiro/steering/roadmap.md`, подключается в чате через `#roadmap`.
 
 ## Исследование оригинала
 - Установленная Dota 2: `~/Library/Application Support/Steam/steamapps/common/dota 2 beta/game/dota` (или `THORN_DOTA_DIR`).
