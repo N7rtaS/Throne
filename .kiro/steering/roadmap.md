@@ -164,7 +164,7 @@ inclusion: manual
 - `EchoStrike`, `InstantAttack` (дальность 1500, радиус 180, перезарядка 6, уязвимость, скорость) по данным и `Descriptions.md`; Kez в меню (капсула).
 - Тесты: `KezStartsWithEchoStrikeFromData`, урон/радиус, уязвимость, бот-забег. Smoke `-thornHero=kez`.
 
-Task 20: Врождённая Shen, Shen играбелен (Quick Spec)
+✅ (2026-11-11) Task 20: Врождённая Shen, Shen играбелен (Quick Spec)
 - `MagicDamageWeakensPhysicalDamageResistance` через статусы; Shen в меню. Smoke `-thornHero=shen`.
 
 Task 21: Rot и Counter Helix (Spec) — примитив области вокруг героя; тики по данным, нет тиков на паузе, ранги. Smoke `-thornForce=rot,counter_helix`.

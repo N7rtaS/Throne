@@ -83,6 +83,9 @@ namespace ThornThrone.Simulation
         public static readonly int VulnerabilityDamagePercent = Id("VulnerabilityDamagePercent");
         public static readonly int VulnerabilityDuration = Id("VulnerabilityDuration");
         public static readonly int VulnerabilityStunOnHitDuration = Id("VulnerabilityStunOnHitDuration");
+        // Shen's innate (Mechanics §27).
+        public static readonly int MagicDamageWeakensPhysicalDamageResistance_Percentage = Id("MagicDamageWeakensPhysicalDamageResistance_Percentage");
+        public static readonly int MagicDamageWeakensPhysicalDamageResistance_Duration = Id("MagicDamageWeakensPhysicalDamageResistance_Duration");
     }
 
     /// <summary>Additive attribute totals.</summary>

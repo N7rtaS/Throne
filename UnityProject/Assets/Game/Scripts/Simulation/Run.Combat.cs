@@ -59,6 +59,7 @@ namespace ThornThrone.Simulation
             Emit(SimEventKind.EnemyDamaged, target, target.Position, amount, info.Type, critical);
             if (target.Health > 0)
             {
+                MagicWeakening.Apply(this, target, info); // Shen's innate (Mechanics §27)
                 if (vulnerableStun > 0) Stun(target, vulnerableStun);
                 return dealt;
             }

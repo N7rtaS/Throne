@@ -91,9 +91,10 @@ namespace ThornThrone.Mobile.Tests
         }
 
         [Test]
-        public void KezIsPlayableAndDrawnAsCapsule()
+        public void ShenAndKezArePlayableAndDrawnAsCapsules()
         {
-            Assert.That(MobileGame.PlayableHeroes, Is.EqualTo(new[] { "dragonus", "kez" }), "Shen stays «в разработке» until Task 20");
+            Assert.That(MobileGame.PlayableHeroes, Is.EqualTo(new[] { "dragonus", "shen", "kez" }), "Shen is playable since Task 20");
+            Assert.That(MobileGame.UsesHeroModel("shen", true), Is.False, "no Shen model until Task 34");
             Assert.That(MobileGame.UsesHeroModel("dragonus", true), Is.True);
             Assert.That(MobileGame.UsesHeroModel("kez", true), Is.False, "no Kez model until Task 34");
             Assert.That(MobileGame.UsesHeroModel("dragonus", false), Is.False, "no model loaded");

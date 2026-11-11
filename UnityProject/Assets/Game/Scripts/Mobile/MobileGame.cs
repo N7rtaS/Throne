@@ -74,8 +74,8 @@ namespace ThornThrone.Mobile
         /// <summary>Visible half height around the hero in Source units (design decision until observed).</summary>
         private float VisibleHalfHeight = 900;
 
-        /// <summary>Heroes that can be played; Shen is «в разработке» until its abilities exist (Task 20).</summary>
-        public static readonly string[] PlayableHeroes = { "dragonus", "kez" };
+        /// <summary>Heroes that can be played (Shen since Task 20, Kez since Task 19).</summary>
+        public static readonly string[] PlayableHeroes = { "dragonus", "shen", "kez" };
 
         /// <summary>The hero the converted model (heroBody) belongs to; other heroes are a capsule until Task 34 (Differences).</summary>
         public const string ModelHero = "dragonus";
