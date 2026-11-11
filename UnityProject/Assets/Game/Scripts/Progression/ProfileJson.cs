@@ -255,7 +255,7 @@ namespace ThornThrone.Progression
             settings.MusicVolume = (float)Double(s, "musicVolume", prefix, 0, 1);
             settings.EffectsVolume = (float)Double(s, "effectsVolume", prefix, 0, 1);
             settings.VoiceVolume = (float)Double(s, "voiceVolume", prefix, 0, 1);
-            settings.UiScale = (float)Double(s, "uiScale", prefix, ProfileSettings.MinUiScale, ProfileSettings.MaxUiScale);
+            settings.UiScale = Float(s, "uiScale", prefix, ProfileSettings.MinUiScale, ProfileSettings.MaxUiScale);
             switch (Str(s, "joystick", prefix))
             {
                 case "floating": settings.Joystick = JoystickMode.Floating; break;
@@ -308,6 +308,17 @@ namespace ThornThrone.Progression
             if (IsInteger(token, out long integer)) value = integer;
             else if (token.Type == JTokenType.Float) value = token.Value<double>();
             else throw Bad(prefix + name, $"{prefix}{name} is not a number");
+            if (!(value >= min && value <= max)) throw Bad(prefix + name, $"{prefix}{name} is outside [{min}, {max}]");
+            return value;
+        }
+
+        /// <summary>
+        /// A float setting checked against float bounds after the conversion: 1.3f is written as "1.3", which as a
+        /// double is above (double)1.3f, so a double check would reject the bound itself (Mechanics §20 П5).
+        /// </summary>
+        private static float Float(JObject obj, string name, string prefix, float min, float max)
+        {
+            float value = (float)Double(obj, name, prefix, double.MinValue, double.MaxValue);
             if (!(value >= min && value <= max)) throw Bad(prefix + name, $"{prefix}{name} is outside [{min}, {max}]");
             return value;
         }

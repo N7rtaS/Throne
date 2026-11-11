@@ -147,10 +147,11 @@ namespace ThornThrone.Mobile
             SmokeOptions(args);
         }
 
-        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
         private void SmokeOptions(string[] args)
         {
             showSettings = smoke && args.Contains("-thornShowSettings");
+            pauseShot = smoke && args.Contains("-thornPauseShot");
             if (smoke && args.Contains("-thornHudAlloc")) hudMeter = new HudAllocMeter();
             var script = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornInputScript="));
             if (smoke && script != null) inputScript = new InputScript(script.Substring("-thornInputScript=".Length));
@@ -261,7 +262,7 @@ namespace ThornThrone.Mobile
         }
 
         // Automatic check of a player build: run 30 s of game time without input, log the state, quit.
-        private bool smoke, screenshotTaken, eliteSmoke, showSettings, settingsShown;
+        private bool smoke, screenshotTaken, eliteSmoke, showSettings, settingsShown, pauseShot;
         /// <summary>-thornBoss: the hero has no abilities, so the smoke checks Imperia's attacks instead of kills.</summary>
         private bool bossSmoke;
         private int bossAttacks;
@@ -330,7 +331,7 @@ namespace ThornThrone.Mobile
                 smoke = false;
                 return;
             }
-            if (showSettings && SettingsScreenshot()) return;
+            if ((showSettings || pauseShot) && SettingsScreenshot()) return;
             if (eliteSmoke && run.Time >= 5 && run.EliteRooms.Count > 0 && run.EliteRooms[0].State == EliteRoomState.Open)
                 run.Teleport(run.EliteRooms[0].Position);
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
@@ -502,19 +503,22 @@ namespace ThornThrone.Mobile
             yield return CaptureTga(path);
         }
 
-        /// <summary>-thornShowSettings: at 2 s the pause and the settings open, the screenshot is taken, the run goes on.</summary>
+        /// <summary>
+        /// -thornShowSettings: at 2 s the pause and the settings open, the screenshot is taken, the run goes on.
+        /// -thornPauseShot: the same with the pause screen only.
+        /// </summary>
         private bool SettingsScreenshot()
         {
             if (!settingsShown)
             {
                 if (state != State.Playing || run.Time < 2) return false;
                 SetPaused(true);
-                OpenSettings();
+                if (!pauseShot) OpenSettings();
                 settingsShown = true;
                 settingsShownAt = Time.unscaledTime;
                 return true;
             }
-            if (state != State.Settings) return false;
+            if (state != (pauseShot ? State.Paused : State.Settings)) return false;
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
             if (shot != null && !screenshotTaken && Time.unscaledTime - settingsShownAt >= 1)
             {
@@ -523,7 +527,7 @@ namespace ThornThrone.Mobile
             }
             if (Time.unscaledTime - settingsShownAt >= 2)
             {
-                CloseSettings();
+                if (!pauseShot) CloseSettings();
                 SetPaused(false);
             }
             return true;

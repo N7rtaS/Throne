@@ -156,6 +156,33 @@ namespace ThornThrone.Simulation.Tests
         }
 
         [Test]
+        public void UiScaleBoundsRoundTripThroughJsonAndStore()
+        {
+            // Mechanics §20 П5: 80–130 %. The float bounds (0.8f, 1.3f) are written as "0.8" and "1.3" and must load back.
+            foreach (var scale in new[] { ProfileSettings.MinUiScale, 0.9f, 1.2f, ProfileSettings.MaxUiScale })
+            {
+                var profile = Profile.CreateNew(ProfileKind.User);
+                profile.Settings.UiScale = scale;
+                var copy = ProfileJson.FromJson(ProfileJson.ToJson(profile), ProfileKind.User);
+                Assert.That(copy.Settings.UiScale, Is.EqualTo(scale), $"scale {scale}");
+                var fs = new FakeFileSystem();
+                Assert.That(new SaveStore(fs, ProfileKind.User).Save(profile).Status, Is.EqualTo(SaveStatus.Saved), $"scale {scale}");
+                Assert.That(new SaveStore(fs, ProfileKind.User).Load().Profile.Settings.UiScale, Is.EqualTo(scale), $"scale {scale}");
+            }
+        }
+
+        [Test]
+        public void UiScaleOutsideBoundsIsRejected()
+        {
+            foreach (var text in new[] { "0.79", "1.31" })
+            {
+                var json = ProfileJson.ToJson(Profile.CreateNew(ProfileKind.User)).Replace("\"uiScale\": 1.0", "\"uiScale\": " + text);
+                Assert.That(json, Does.Contain("\"uiScale\": " + text));
+                Assert.That(() => ProfileJson.FromJson(json, ProfileKind.User), Throws.Exception, text);
+            }
+        }
+
+        [Test]
         public void EncodingIsDeterministic()
         {
             var a = Sample();
