@@ -104,6 +104,8 @@ namespace ThornThrone.Simulation
         PickupSpawned, PickupCollected,
         HeroDamaged, HeroDashed, HeroTeleported, LevelUp, EnemyResurrected, EnemyStunned, EnemyAttacked, EliteRoomOpened, EliteRoomStarted, EliteRoomCompleted, ChoicesReady, BossSpawned, RunFinished,
         HeroDowned, HeroRevived,
+        /// <summary>An ability hit an area (Echo Strike): Position is its centre, Direction and Extent its shape (Mechanics §26).</summary>
+        AbilityStrike,
     }
 
     /// <summary>
@@ -128,5 +130,8 @@ namespace ThornThrone.Simulation
         public DamageType DamageType;
         /// <summary>The hit was critical (<see cref="SimEventKind.EnemyDamaged"/> only).</summary>
         public bool Critical;
+
+        /// <summary>Length (X) and width (Y) of the struck rectangle (<see cref="SimEventKind.AbilityStrike"/> only).</summary>
+        public Vec2 Extent;
     }
 }

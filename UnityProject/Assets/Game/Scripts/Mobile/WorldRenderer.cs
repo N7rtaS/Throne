@@ -38,7 +38,7 @@ namespace ThornThrone.Mobile
         }
 
         private readonly Kind small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill,
-            warnRing, warnFill, fire, portal, portalRing, shield;
+            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable;
         private readonly Kind[] all;
 
         /// <summary>Instances of one baked model: matrices and VAT frame per instance, drawn per submesh.</summary>
@@ -103,6 +103,19 @@ namespace ThornThrone.Mobile
             public float Scale, Age;
         }
 
+        /// <summary>Area of an ability hit (Echo Strike) shown for <see cref="StrikeTime"/> seconds.</summary>
+        private struct Strike
+        {
+            public Matrix4x4 Matrix;
+            public float Age;
+        }
+
+        /// <summary>Seconds an ability hit area stays on screen (stand-in for kez_katana_echo_strike_survivors.vpcf until Task 37).</summary>
+        public const float StrikeTime = 0.15f;
+
+        private readonly Strike[] strikes = new Strike[32];
+        private int strikeCount;
+
         private readonly Dictionary<string, ModelBatch[]> looks = new Dictionary<string, ModelBatch[]>();
         private readonly List<ModelBatch> batches = new List<ModelBatch>();
         private readonly Corpse[] corpses = new Corpse[512];
@@ -155,6 +168,8 @@ namespace ThornThrone.Mobile
             for (int i = 0; i < run.EventCount; i++)
             {
                 var ev = run.Events[i];
+                if (ev.Kind == SimEventKind.AbilityStrike && strikeCount < strikes.Length)
+                    strikes[strikeCount++] = new Strike { Matrix = StrikeMatrix(ev.Position, ev.Direction, ev.Extent), Age = 0 };
                 if (ev.Kind != SimEventKind.EnemyDied || ev.EnemyDef == null) continue;
                 var batch = LookOf(ev.EnemyDef, ev.SpawnId);
                 if (batch == null || !batch.Visual.death.Valid || corpseCount == corpses.Length) continue;
@@ -164,6 +179,20 @@ namespace ThornThrone.Mobile
                     Scale = HeroView.ModelScale * ev.EnemyDef.ModelScale, Age = 0,
                 };
             }
+        }
+
+        /// <summary>Ability hit areas currently shown (EditMode tests).</summary>
+        public int StrikeCount => strikeCount;
+
+        /// <summary>
+        /// Flat box over the struck rectangle: centred at <paramref name="center"/>, length along
+        /// <paramref name="direction"/> (Unity z of the box), width across (x).
+        /// </summary>
+        public static Matrix4x4 StrikeMatrix(Vec2 center, Vec2 direction, Vec2 extent)
+        {
+            var forward = new Vector3(direction.X, 0, direction.Y);
+            var rotation = forward.sqrMagnitude > 1e-6f ? Quaternion.LookRotation(forward) : Quaternion.identity;
+            return Matrix4x4.TRS(ToWorld(center, 0.015f), rotation, new Vector3(extent.Y * Scale, 0.01f, extent.X * Scale));
         }
 
         /// <summary>Corpses currently playing their death clip (EditMode tests).</summary>
@@ -197,10 +226,12 @@ namespace ThornThrone.Mobile
             portal = Make(disc, template, new Color(.35f, .05f, .5f));
             portalRing = Make(ring, template, new Color(.8f, .4f, 1f));
             shield = Make(Annulus(0.8f, 1f, 32), template, new Color(.55f, .85f, 1f));
+            strike = Make(cube, template, new Color(.55f, .75f, 1f));        // stand-in for the katana slash (Task 37)
+            vulnerable = Make(ring, template, new Color(.75f, .3f, 1f));     // stand-in for kez_vulnerable_marker.vpcf
             experience = Make(cube, template, new Color(.35f, 1f, .55f));
             gold = Make(cube, template, new Color(1f, .82f, .2f));
             heal = Make(cube, template, new Color(1f, .4f, .45f));
-            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield };
+            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable };
         }
 
         /// <summary>Flat ring in the XZ plane, unit outer radius.</summary>
@@ -255,6 +286,14 @@ namespace ThornThrone.Mobile
                 c.Batch.Add(Matrix4x4.TRS(c.Position, c.Rotation, Vector3.one * c.Scale), EnemyVisual.Frame(death, c.Age));
                 i++;
             }
+            for (int i = 0; i < strikeCount;)
+            {
+                ref var s = ref strikes[i];
+                s.Age += run.Paused || run.Choosing ? 0 : dt;
+                if (s.Age > StrikeTime) { strikes[i] = strikes[--strikeCount]; continue; }
+                strike.Add(s.Matrix);
+                i++;
+            }
             foreach (var e in run.Enemies)
             {
                 if (!e.Active) continue;
@@ -265,6 +304,8 @@ namespace ThornThrone.Mobile
                 if (e.Shielded) shield.Add(Matrix4x4.TRS(ToWorld(at, 0.04f), Quaternion.identity, Vector3.one * Mathf.Max(0.8f, e.Radius * 2.5f * Scale)));
                 // Stand-in for generic_stunned.vpcf: a yellow ring; the enemy plays its idle clip.
                 if (e.Stunned) stun.Add(Matrix4x4.TRS(ToWorld(at, 0.05f), Quaternion.identity, Vector3.one * Mathf.Max(0.6f, e.Radius * 2f * Scale)));
+                // Stand-in for kez_vulnerable_marker.vpcf: a violet ring just outside the stun ring (Task 37).
+                if (e.Status.Vulnerable) vulnerable.Add(Matrix4x4.TRS(ToWorld(at, 0.06f), Quaternion.identity, Vector3.one * Mathf.Max(0.75f, e.Radius * 2.4f * Scale)));
                 var look = LookOf(e);
                 if (look != null)
                 {

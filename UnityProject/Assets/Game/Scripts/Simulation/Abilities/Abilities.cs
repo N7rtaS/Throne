@@ -29,16 +29,33 @@ namespace ThornThrone.Simulation
     /// <summary>Maps original powerup classes (_class) to implementations.</summary>
     public static class AbilityFactory
     {
-        private static readonly Dictionary<string, Func<OwnedPowerUp, IAbility>> factories =
-            new Dictionary<string, Func<OwnedPowerUp, IAbility>>
+        private static readonly Dictionary<string, Func<OwnedPowerUp, Run, IAbility>> factories =
+            new Dictionary<string, Func<OwnedPowerUp, Run, IAbility>>
             {
-                { "CSurvivorsPowerUpDefinition_ArcaneBolt", owned => new ArcaneBolt(owned) },
-                { "CSurvivorsPowerUpDefinition_MagicMissile", owned => new MagicMissile(owned) },
+                { "CSurvivorsPowerUpDefinition_ArcaneBolt", (owned, run) => new ArcaneBolt(owned) },
+                { "CSurvivorsPowerUpDefinition_MagicMissile", (owned, run) => new MagicMissile(owned) },
+                { "CSurvivorsPowerUpDefinition_EchoStrike", (owned, run) => new EchoStrike(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_InstantAttack", (owned, run) => new InstantAttack(owned, run.Enemies.Length) },
+            };
+
+        /// <summary>
+        /// Handlers that implement only some definitions of their class (InstantAttack: one targeting mode so far,
+        /// Mechanics §26 Р15). A class without an entry supports every definition.
+        /// </summary>
+        private static readonly Dictionary<string, Func<PowerUpDef, bool>> supports =
+            new Dictionary<string, Func<PowerUpDef, bool>>
+            {
+                { "CSurvivorsPowerUpDefinition_InstantAttack", InstantAttack.Supports },
             };
 
         public static bool Has(string powerUpClass) => powerUpClass != null && factories.ContainsKey(powerUpClass);
 
-        public static IAbility Create(OwnedPowerUp owned) =>
-            factories.TryGetValue(owned.Def.Class, out var create) ? create(owned) : null;
+        /// <summary>A handler exists for the class and implements this definition.</summary>
+        public static bool Has(PowerUpDef def) =>
+            def != null && Has(def.Class) && (!supports.TryGetValue(def.Class, out var check) || check(def));
+
+        /// <summary>Handler for an owned powerup of <paramref name="run"/> (buffers are sized by its pools), or null.</summary>
+        public static IAbility Create(OwnedPowerUp owned, Run run) =>
+            Has(owned.Def) && factories.TryGetValue(owned.Def.Class, out var create) ? create(owned, run) : null;
     }
 }

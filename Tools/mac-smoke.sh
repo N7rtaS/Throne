@@ -25,7 +25,9 @@
 #             9 -thornSettings / -thornExpectSettings given and no THORN_SETTINGS_SET / THORN_SETTINGS ok=1 line,
 #             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line,
 #             11 --hud-alloc and no THORN_HUD_ALLOC line, or it reports allocations or a measurement that saw nothing,
-#             12 -thornBoss given and no THORN_BOSS line with spawned=1 and attacks above zero.
+#             12 -thornBoss given and no THORN_BOSS line with spawned=1 and attacks above zero,
+#             13 -thornHero=KEY given and the THORN_MOBILE_SMOKE line is not about hero=KEY (Roadmap Task 19).
+# -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"
 unity="${THORN_UNITY:-/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity}"
@@ -238,6 +240,13 @@ run_once()
   else
     check_log "$runlog" || return $?
   fi
+  local arg
+  for arg in "$@"; do
+    if [[ "$arg" == -thornHero=* ]] && ! LC_ALL=C grep -aq "^THORN_MOBILE_SMOKE hero=${arg#-thornHero=} " "$runlog"; then
+      echo "mac-smoke: the run was not played by ${arg#-thornHero=}, see $runlog" >&2
+      return 13
+    fi
+  done
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi
 }
 if (( restart )); then

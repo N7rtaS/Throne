@@ -44,7 +44,13 @@ class SimulationCoverageTests(unittest.TestCase):
 
     def test_ability_classes_come_from_ability_factory(self):
         self.assertEqual(self.coverage.ability_classes,
-                         {"CSurvivorsPowerUpDefinition_ArcaneBolt", "CSurvivorsPowerUpDefinition_MagicMissile"})
+                         {"CSurvivorsPowerUpDefinition_ArcaneBolt", "CSurvivorsPowerUpDefinition_MagicMissile",
+                          "CSurvivorsPowerUpDefinition_EchoStrike", "CSurvivorsPowerUpDefinition_InstantAttack"})
+
+    def test_instant_attack_supports_only_strongest_target(self):
+        # Mechanics §26 Р15: Annihilation shares the class but not the targeting (Task 23).
+        self.assertEqual(self.coverage.ability_targeting,
+                         {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE"}})
 
     def test_supported_hero_attributes_has_thirty_four_entries(self):
         # 20 before Task 18 plus 14 attributes of passive items (Mechanics §25).
@@ -107,14 +113,15 @@ class ImplementationTests(unittest.TestCase):
     def test_demo_magic_missile_is_implemented(self):
         self.assertTrue(at_least("powerups/magic_missile", "implemented"))
 
-    def test_demo_echo_strike_is_none(self):
-        self.assertEqual(level("powerups/echo_strike"), "none")
+    def test_echo_strike_is_verified_and_annihilation_is_none(self):
+        self.assertEqual(level("powerups/echo_strike"), "verified")
+        self.assertEqual(level("powerups/annihilation"), "none")
 
     def test_demo_absorber_is_implemented(self):
         self.assertTrue(at_least("enemies/absorber", "implemented"))
 
     def test_powerups(self):
-        self.assertEqual(level("powerups/kez_innate"), "none")
+        self.assertTrue(at_least("powerups/kez_innate", "implemented"))
         self.assertTrue(at_least("powerups/yasha", "implemented"))
         self.assertTrue(at_least("powerups/blade_mail", "implemented"))
         self.assertTrue(at_least("powerups/crystalys", "implemented"))
@@ -135,7 +142,7 @@ class ImplementationTests(unittest.TestCase):
 
     def test_heroes_difficulty_and_mode(self):
         self.assertEqual(level("heroes/dragonus"), "verified")
-        self.assertEqual(level("heroes/kez"), "partial")
+        self.assertEqual(level("heroes/kez"), "verified")
         self.assertEqual(level("heroes/shen"), "partial")
         self.assertEqual(level("difficulty/meteor_mayhem"), "partial")
         self.assertEqual(level("game_modes/crownfall_act4"), "partial")
@@ -159,7 +166,7 @@ class VerifiedTests(unittest.TestCase):
         self.assertTrue(any(t.startswith("MagicMissileTests.cs:") for t in entry["tests"]), entry["tests"])
 
     def test_partial_is_not_raised_to_verified(self):
-        entry = Shared.registry()["definitions"]["heroes/kez"]
+        entry = Shared.registry()["definitions"]["heroes/shen"]
         self.assertTrue(entry["tests"])
         self.assertEqual(entry["implementation"], "partial")
 

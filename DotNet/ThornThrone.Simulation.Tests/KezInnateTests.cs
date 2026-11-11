@@ -6,7 +6,8 @@ namespace ThornThrone.Simulation.Tests
 {
     /// <summary>
     /// An innate with its own class (kez_innate, CSurvivorsPowerUpDefinition_InstantAttack) is the hero's ability:
-    /// its attributes stay in its Local and never reach the hero globals (Mechanics §3, Р).
+    /// its attributes stay in its Local and never reach the hero globals, except its MovementSpeed, which is the
+    /// hero's bonus speed (Mechanics §3, §26 Р14).
     /// </summary>
     public class KezInnateTests
     {
@@ -47,7 +48,12 @@ namespace ThornThrone.Simulation.Tests
                 var def = owned.Def;
                 if (def.IsInnate)
                 {
-                    if (IsInnateAbility(def) && !includeInnateAbility) continue;
+                    if (IsInnateAbility(def) && !includeInnateAbility)
+                    {
+                        // Mechanics §26 Р14: only MovementSpeed of an innate ability is the hero's.
+                        result[Attr.MovementSpeed] += Sum(def.BaseAttributes, Attr.MovementSpeed);
+                        continue;
+                    }
                     Add(result, def.BaseAttributes, 1);
                     if (def.Minor.Length > 0) Add(result, def.Minor[0].Global, 1);
                 }
@@ -84,7 +90,8 @@ namespace ThornThrone.Simulation.Tests
             {
                 foreach (var id in innate.Def.BaseAttributes.Select(a => a.Id).Distinct())
                 {
-                    Assert.That(run.Build.Global[id], Is.EqualTo(HeroBase(run.Hero, id)).Within(1e-4),
+                    float bonus = id == Attr.MovementSpeed ? Sum(innate.Def.BaseAttributes, id) : 0; // §26 Р14
+                    Assert.That(run.Build.Global[id], Is.EqualTo(HeroBase(run.Hero, id) + bonus).Within(1e-4),
                         $"Global[{Attr.Name(id)}]");
                     Assert.That(innate.Local[id], Is.EqualTo(Sum(innate.Def.BaseAttributes, id)).Within(1e-4),
                         $"kez_innate.Local[{Attr.Name(id)}]");
@@ -93,14 +100,6 @@ namespace ThornThrone.Simulation.Tests
                 Assert.That(run.Build.Stat(echo, Attr.Range), Is.EqualTo(echo.Local[Attr.Range]).Within(1e-4),
                     "Stat(echo_strike, Range)");
             });
-        }
-
-        [Test]
-        public void KezInnateIsReportedAsUnimplementedAbility()
-        {
-            var run = TestData.NewRun("kez");
-            Assert.That(run.Diagnostics.Has("ability:CSurvivorsPowerUpDefinition_InstantAttack"), Is.True);
-            Assert.That(Owned(run, "kez_innate").Ability, Is.Null);
         }
 
         [Test]
@@ -262,6 +261,150 @@ namespace ThornThrone.Simulation.Tests
                 Assert.That(run.MaxHealth, Is.EqualTo(100f).Within(1e-5), "MaxHealth");
                 Assert.That(run.DashCharges, Is.EqualTo(2), "DashCharges");
             });
+        }
+
+        // ------------------------------------------------------------------ Spot Weakness (InstantAttack), §26 Р10–Р15
+        /// <summary>Kez with only the innate (or also Echo Strike), nothing spawning on its own.</summary>
+        private static Run InnateArena(bool echo = false)
+        {
+            var run = TestData.NewRun("kez");
+            run.DebugInvulnerable = true;
+            run.DebugNoSpawns = true;
+            foreach (var owned in run.Build.Owned)
+                if (owned.Def.Key != "kez_innate" && !(echo && owned.Def.Key == "echo_strike")) owned.Ability = null;
+            return run;
+        }
+
+        private static Enemy Standing(Run run, Vec2 offset, float health)
+        {
+            var e = EchoStrikeTests.Standing(run, offset);
+            e.MaxHealth = e.Health = health;
+            return e;
+        }
+
+        private static float Base(Run run, int attribute) => Sum(run.Data.PowerUps["kez_innate"].BaseAttributes, attribute);
+
+        [Test]
+        public void InnateMarksTheStrongestEnemyInRange()
+        {
+            var run = InnateArena();
+            var weak = Standing(run, new Vec2(300, 0), 50);
+            var strong = Standing(run, new Vec2(-900, 0), 500);
+            var stronger = Standing(run, new Vec2(0, 1700), 5000); // beyond Range 1500
+            EchoStrikeTests.Steps(run, 1, Vec2.Zero);
+            Assert.That(strong.Status.Vulnerable, Is.True, "highest current health within Range");
+            Assert.That(weak.Status.Vulnerable, Is.False, "TargetCount 1, 760 from the target");
+            Assert.That(stronger.Status.Vulnerable, Is.False, "out of Range");
+        }
+
+        [Test]
+        public void EqualHealthPrefersTheCloserEnemy()
+        {
+            var run = InnateArena();
+            var far = Standing(run, new Vec2(-900, 0), 500);
+            var near = Standing(run, new Vec2(600, 0), 500);
+            EchoStrikeTests.Steps(run, 1, Vec2.Zero);
+            Assert.That(near.Status.Vulnerable, Is.True);
+            Assert.That(far.Status.Vulnerable, Is.False);
+        }
+
+        [Test]
+        public void MarkSpreadsWithinRadiusOfTheTarget()
+        {
+            var run = InnateArena();
+            Assert.That(Base(run, Attr.Radius), Is.EqualTo(180));
+            var target = Standing(run, new Vec2(700, 0), 500);
+            var close = Standing(run, new Vec2(700, 170), 50);
+            var away = Standing(run, new Vec2(700, -200), 50);
+            EchoStrikeTests.Steps(run, 1, Vec2.Zero);
+            Assert.That(target.Status.Vulnerable, Is.True);
+            Assert.That(close.Status.Vulnerable, Is.True, "170 from the target, within Radius 180");
+            Assert.That(away.Status.Vulnerable, Is.False, "200 from the target");
+        }
+
+        [Test]
+        public void MarkParametersComeFromData()
+        {
+            for (int relic = 0; relic <= 1; relic++)
+            {
+                var run = InnateArena();
+                if (relic > 0) Assert.That(run.ForceUpgrade("timeless_relic"), Is.True);
+                var e = Standing(run, new Vec2(500, 0), 500);
+                EchoStrikeTests.Steps(run, 1, Vec2.Zero);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(e.Status.VulnerableMultiplier, Is.EqualTo(Base(run, Attr.Id("VulnerabilityDamagePercent"))).Within(1e-5), "×2");
+                    Assert.That(e.Status.VulnerableStun, Is.EqualTo(Base(run, Attr.Id("VulnerabilityStunOnHitDuration")) + relic).Within(1e-5), $"1 + {relic} s");
+                    Assert.That(e.Status.VulnerableTime, Is.EqualTo(Base(run, Attr.Id("VulnerabilityDuration")) + relic).Within(1e-4), $"5.5 + {relic} s");
+                });
+            }
+        }
+
+        [Test]
+        public void InnateRepeatsEveryCooldown()
+        {
+            var run = InnateArena();
+            var e = Standing(run, new Vec2(500, 0), 500);
+            EchoStrikeTests.Steps(run, 1, Vec2.Zero);
+            Assert.That(e.Status.Vulnerable, Is.True);
+            EchoStrikeTests.Steps(run, (int)System.Math.Round(5.6f / run.Rules.Step), Vec2.Zero);
+            Assert.That(e.Status.Vulnerable, Is.False, "VulnerabilityDuration 5.5 s ran out");
+            EchoStrikeTests.Steps(run, (int)System.Math.Round(0.5f / run.Rules.Step), Vec2.Zero);
+            Assert.That(e.Status.Vulnerable, Is.True, "marked again after Cooldown 6 s");
+        }
+
+        [Test]
+        public void InnateDealsNoDamage()
+        {
+            var run = InnateArena();
+            var e = Standing(run, new Vec2(500, 0), 500);
+            var events = new List<SimEvent>();
+            EchoStrikeTests.Steps(run, (int)System.Math.Round(7f / run.Rules.Step), Vec2.Zero, events);
+            Assert.That(Base(run, Attr.Damage_Magical), Is.EqualTo(0));
+            Assert.That(events.Count(x => x.Kind == SimEventKind.EnemyDamaged), Is.EqualTo(0));
+            Assert.That(Owned(run, "kez_innate").Stats.Hits, Is.EqualTo(0));
+            Assert.That(e.Health, Is.EqualTo(500));
+        }
+
+        [Test]
+        public void EchoStrikeOnMarkedEnemyCritsAndStuns()
+        {
+            var run = InnateArena(echo: true);
+            var e = Standing(run, new Vec2(0, 400), 1e6f);
+            var events = new List<SimEvent>();
+            EchoStrikeTests.Steps(run, 15, Vec2.Zero, events);
+            var hit = events.Single(x => x.Kind == SimEventKind.EnemyDamaged && x.SpawnId == e.SpawnId);
+            Assert.That(hit.Critical, Is.True);
+            Assert.That(hit.Value, Is.EqualTo(20).Within(1e-3), "10 × VulnerabilityDamagePercent 2");
+            var stun = events.Single(x => x.Kind == SimEventKind.EnemyStunned && x.SpawnId == e.SpawnId);
+            Assert.That(stun.Value, Is.EqualTo(1).Within(1e-5), "VulnerabilityStunOnHitDuration 1");
+            Assert.That(e.Status.Vulnerable, Is.False, "the mark is spent");
+            var echo = Owned(run, "echo_strike").Stats;
+            Assert.That(echo.Crits, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void KezRunsAtThreeHundred()
+        {
+            var run = InnateArena();
+            Assert.That(run.Build.Global[Attr.MovementSpeed], Is.EqualTo(HeroBase(run.Hero, Attr.MovementSpeed) + Base(run, Attr.MovementSpeed)).Within(1e-4));
+            Assert.That(run.Build.Global[Attr.MovementSpeed], Is.EqualTo(300).Within(1e-4), "280 + 20");
+            var start = run.HeroPosition;
+            EchoStrikeTests.Steps(run, 10, new Vec2(0, 1));
+            float moved = (float)System.Math.Sqrt(Vec2.DistanceSquared(run.HeroPosition, start));
+            Assert.That(moved, Is.EqualTo(300 * 10 * run.Rules.Step).Within(1e-2), "100 units in 10 steps");
+        }
+
+        [Test]
+        public void AnnihilationIsNotImplementedYet()
+        {
+            var data = TestData.Load();
+            var annihilation = data.PowerUps["annihilation"];
+            Assert.That(annihilation.Class, Is.EqualTo(data.PowerUps["kez_innate"].Class), "same class");
+            Assert.That(AbilityFactory.Has(data.PowerUps["kez_innate"]), Is.True);
+            Assert.That(AbilityFactory.Has(annihilation), Is.False, "RANDOM_TARGET_IN_RANGE is Task 23");
+            Assert.That(Run.IsImplemented(annihilation), Is.False);
+            Assert.That(Run.IsImplemented(data.PowerUps["echo_strike"]), Is.True);
         }
 
         /// <summary>Number of interned attribute names (ids above it are unused).</summary>

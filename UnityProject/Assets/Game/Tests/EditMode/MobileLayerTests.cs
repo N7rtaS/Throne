@@ -89,5 +89,14 @@ namespace ThornThrone.Mobile.Tests
             Assert.That(p.y, Is.EqualTo(1f).Within(1e-5f));
             Assert.That(p.z, Is.EqualTo(2f).Within(1e-5f));
         }
+
+        [Test]
+        public void KezIsPlayableAndDrawnAsCapsule()
+        {
+            Assert.That(MobileGame.PlayableHeroes, Is.EqualTo(new[] { "dragonus", "kez" }), "Shen stays «в разработке» until Task 20");
+            Assert.That(MobileGame.UsesHeroModel("dragonus", true), Is.True);
+            Assert.That(MobileGame.UsesHeroModel("kez", true), Is.False, "no Kez model until Task 34");
+            Assert.That(MobileGame.UsesHeroModel("dragonus", false), Is.False, "no model loaded");
+        }
     }
 }

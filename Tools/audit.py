@@ -143,7 +143,7 @@ class CoverageError(Exception):
 
 Coverage = collections.namedtuple("Coverage", [
     "ability_classes", "hero_attributes", "used_attributes", "enemy_handled", "movements",
-    "pickup_conditions", "spawn_behaviors", "difficulty_unsupported", "field_maps"])
+    "pickup_conditions", "spawn_behaviors", "difficulty_unsupported", "field_maps", "ability_targeting"])
 FieldMaps = collections.namedtuple("FieldMaps", ["fields", "computed"])
 
 
@@ -400,6 +400,18 @@ def simulation_coverage(root=SIMULATION):
     ability_classes = set(re.findall(r'\{\s*"(\w+)",', factory))
     if not ability_classes:
         raise CoverageError("AbilityFactory has no registered classes")
+    # Handlers that implement only some m_eTargeting values of their class (AbilityFactory.supports, Mechanics §26 Р15).
+    ability_targeting = {}
+    for cls, handler in re.findall(r'\{\s*"(\w+)",\s*(\w+)\.Supports\s*\}', factory):
+        source = _read(root, f"Abilities/{handler}.cs")
+        body = _search(r"public static bool Supports\(PowerUpDef def\) =>(.*?);", source, f"{handler}.Supports").group(1)
+        if "def.Targeting" not in body:
+            raise CoverageError(f"{handler}.Supports does not check def.Targeting")
+        constants = dict(re.findall(r'const string (\w+) = "(\w+)";', source))
+        values = set(re.findall(r'"(\w+)"', body)) | {constants[n] for n in re.findall(r"\b(\w+)\b", body) if n in constants}
+        if not values:
+            raise CoverageError(f"{handler}.Supports names no targeting value")
+        ability_targeting[cls] = values
 
     declared = dict(re.findall(r"public static readonly int (\w+) = Id\(\"(\w+)\"\);", attributes))
     if not declared:
@@ -454,7 +466,7 @@ def simulation_coverage(root=SIMULATION):
     difficulty_unsupported = [CsCondition(c, "DifficultyDef", "Difficulty", maps)
                               for c, s in _if_branches(rules_body) if "Diagnostics.Report" in s]
     return Coverage(ability_classes, hero_attributes, used_attributes, enemy_handled, movements,
-                    pickup_conditions, spawn_behaviors, difficulty_unsupported, maps)
+                    pickup_conditions, spawn_behaviors, difficulty_unsupported, maps, ability_targeting)
 
 
 _METHOD = re.compile(r"^\s*(?:public|private|internal|protected)\b[^=;{]*?\b(\w+)\s*\(")
@@ -568,7 +580,9 @@ def implementation_levels(defs, registry, coverage, targets):
         value, role = defs["powerups"][key], registry[entry_key]["role"]
         cls = value.get("_class")
         if role == "active-ability" or (role == "innate" and cls != "CSurvivorsPowerUpDefinition"):
-            level = "implemented" if cls in coverage.ability_classes else "none"
+            allowed = coverage.ability_targeting.get(cls)
+            handled = cls in coverage.ability_classes and (allowed is None or value.get("m_eTargeting") in allowed)
+            level = "implemented" if handled else "none"
         elif role == "passive-item":
             level = "implemented" if passive(value) else "none"
         elif role == "recipe":

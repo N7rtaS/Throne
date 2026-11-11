@@ -223,7 +223,7 @@ namespace ThornThrone.Mobile
             var heroContent = Content(heroSelect);
             Label(heroContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -60), new Vector2(1200, 110), 72, TextAnchor.MiddleCenter).text = "Выберите героя";
             string[] heroes = { "dragonus", "shen", "kez" };
-            string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез\n(в разработке)" };
+            string[] titles = { "Драгонус", "Шен\n(в разработке)", "Кез" };
             for (int i = 0; i < heroes.Length; i++)
             {
                 string key = heroes[i];

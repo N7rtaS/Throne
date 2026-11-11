@@ -194,6 +194,11 @@ namespace ThornThrone.Simulation
                         Global.Add(def.BaseAttributes);
                         if (def.Minor.Length > 0) Global.Add(def.Minor[0].Global);
                     }
+                    else
+                    {
+                        // Its MovementSpeed is the hero's bonus speed: «Kez has bonus movement speed» (Mechanics §26 Р14).
+                        Global.Add(Attr.MovementSpeed, owned.Local[Attr.MovementSpeed]);
+                    }
                 }
                 else if (def.IsPassive)
                 {

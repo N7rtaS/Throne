@@ -36,6 +36,17 @@ namespace ThornThrone.Simulation
             };
         }
 
+        /// <summary>Area hit of an ability (<see cref="SimEventKind.AbilityStrike"/>): not about a pooled entity, SpawnId 0.</summary>
+        internal void EmitStrike(Vec2 center, Vec2 direction, Vec2 extent, float value)
+        {
+            if (EventCount == Events.Length) return;
+            Events[EventCount++] = new SimEvent
+            {
+                Kind = SimEventKind.AbilityStrike, Slot = -1, Position = center, Value = value,
+                Direction = direction, Extent = extent,
+            };
+        }
+
         private void Emit(SimEventKind kind, Projectile shot, Vec2 position, float value)
         {
             if (EventCount == Events.Length) return;

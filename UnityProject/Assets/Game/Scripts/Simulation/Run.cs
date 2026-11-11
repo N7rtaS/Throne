@@ -95,6 +95,10 @@ namespace ThornThrone.Simulation
 
         private readonly SpawnEvent[] spawnEvents;
         private readonly SpatialGrid grid;
+        /// <summary>Enemy grid of the current step, for area queries of abilities (rebuilt before abilities tick).</summary>
+        internal SpatialGrid Grid => grid;
+        /// <summary>Largest collision radius of any enemy spawned so far (area queries widen by it).</summary>
+        public float MaxEnemyRadius { get; private set; }
         private readonly float[] targetDistances = new float[64];
         private readonly int[] freeEnemies, freeProjectiles, freePickups;
         private int freeEnemyCount, freeProjectileCount, freePickupCount;
@@ -135,7 +139,7 @@ namespace ThornThrone.Simulation
         /// <summary>An upgrade is offered only if it does something in this build of the simulation.</summary>
         public static bool IsImplemented(PowerUpDef def)
         {
-            if (def.IsActive) return AbilityFactory.Has(def.Class);
+            if (def.IsActive) return AbilityFactory.Has(def);
             if (!def.IsPassive) return false;
             if (!GlobalsSupported(def.Minor) || !GlobalsSupported(def.Authored)) return false;
             return def.Minor.Length > 0 || def.Authored.Length > 0;
@@ -562,6 +566,7 @@ namespace ThornThrone.Simulation
             enemy.TouchDamage = def.TouchDamage * (1 + Difficulty.EnemyDamageMultiplier);
             enemy.Radius = def.HasCollisionRadius ? def.CollisionRadius
                 : Rules.DefaultCollisionRadius.TryGetValue(def.SeparationLayer, out var r) ? r : 40;
+            MaxEnemyRadius = Math.Max(MaxEnemyRadius, enemy.Radius);
             enemy.SeparationDistance = Mode.SeparationDistance.TryGetValue(def.SeparationLayer, out var d) ? d : enemy.Radius * 2;
             enemy.KnockbackScale = Math.Max(0, 1 - def.KnockbackResistance);
             enemy.EliteRoom = -1;
@@ -1207,7 +1212,7 @@ namespace ThornThrone.Simulation
             {
                 if (owned.Ability != null || !(owned.Def.IsActive || owned.Def.IsInnateAbility)) continue;
                 if (owned.Stats == null) owned.Stats = DamageStats.Register(owned.Def);
-                owned.Ability = AbilityFactory.Create(owned);
+                owned.Ability = AbilityFactory.Create(owned, this);
                 if (owned.Ability == null)
                     Diagnostics.Report("ability:" + owned.Def.Class, $"Ability {owned.Def.Class} ({owned.Def.Key}) is not implemented");
                 else if (owned.Ability is AbilityBase ability && !ability.DamageTypeKnown)

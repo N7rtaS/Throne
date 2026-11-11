@@ -74,6 +74,15 @@ namespace ThornThrone.Simulation
         public static readonly int ActiveAbilitySlots = Id("ActiveAbilitySlots");
         public static readonly int KnockbackDistanceMultiplier = Id("KnockbackDistanceMultiplier");
         public static readonly int DurationExtension = Id("DurationExtension");
+        // Echo Strike and Kez's innate (Mechanics §26).
+        public static readonly int Length = Id("Length");
+        public static readonly int Width = Id("Width");
+        public static readonly int DamageTicks = Id("DamageTicks");
+        public static readonly int InitialTickDelay = Id("InitialTickDelay");
+        public static readonly int TimeBetweenTicks = Id("TimeBetweenTicks");
+        public static readonly int VulnerabilityDamagePercent = Id("VulnerabilityDamagePercent");
+        public static readonly int VulnerabilityDuration = Id("VulnerabilityDuration");
+        public static readonly int VulnerabilityStunOnHitDuration = Id("VulnerabilityStunOnHitDuration");
     }
 
     /// <summary>Additive attribute totals.</summary>

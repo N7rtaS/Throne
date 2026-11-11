@@ -183,7 +183,7 @@ namespace ThornThrone.Mobile.Tests
             screens.Show();
             Assert.That(Root.Find("Hero select/Content/dragonus").GetComponent<Button>().interactable, Is.True);
             Assert.That(Root.Find("Hero select/Content/shen").GetComponent<Button>().interactable, Is.False);
-            Assert.That(Root.Find("Hero select/Content/kez").GetComponent<Button>().interactable, Is.False);
+            Assert.That(Root.Find("Hero select/Content/kez").GetComponent<Button>().interactable, Is.True, "Kez is playable (Task 19)");
             Assert.That(Root.Find("Hero select/Content/dragonus/Selected").gameObject.activeSelf, Is.True);
         }
 

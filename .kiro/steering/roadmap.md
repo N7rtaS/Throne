@@ -160,7 +160,7 @@ inclusion: manual
 - В `SupportedHeroAttributes`: Armor, DamageReflection, крит, AoEIncrease, ActiveAbilitySlots, KnockbackDistanceMultiplier, Projectile_BonusMagicDamage, BonusPhysicalDamage, DurationExtension, Lives, Luck. Жизни: возрождение 2.7 с с неуязвимостью. Удача для `m_luckyLootTable` (клиент или Р).
 - Тесты на каждую пассивку (ранг 1 и максимум), жизни, apex, перенос оставшихся проверок прототипа из 57 (Reaver, Heart, octarine+tome, сохранение дефицита HP).
 
-Task 19: Echo Strike и врождённая Kez, Kez играбелен (Spec)
+✅ (2026-11-11) Task 19: Echo Strike и врождённая Kez, Kez играбелен (Spec)
 - `EchoStrike`, `InstantAttack` (дальность 1500, радиус 180, перезарядка 6, уязвимость, скорость) по данным и `Descriptions.md`; Kez в меню (капсула).
 - Тесты: `KezStartsWithEchoStrikeFromData`, урон/радиус, уязвимость, бот-забег. Smoke `-thornHero=kez`.
 

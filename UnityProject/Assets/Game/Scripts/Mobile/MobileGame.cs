@@ -74,8 +74,14 @@ namespace ThornThrone.Mobile
         /// <summary>Visible half height around the hero in Source units (design decision until observed).</summary>
         private float VisibleHalfHeight = 900;
 
-        /// <summary>Heroes that can be played; Shen and Kez are «в разработке» until their abilities exist.</summary>
-        public static readonly string[] PlayableHeroes = { "dragonus" };
+        /// <summary>Heroes that can be played; Shen is «в разработке» until its abilities exist (Task 20).</summary>
+        public static readonly string[] PlayableHeroes = { "dragonus", "kez" };
+
+        /// <summary>The hero the converted model (heroBody) belongs to; other heroes are a capsule until Task 34 (Differences).</summary>
+        public const string ModelHero = "dragonus";
+
+        /// <summary>The hero is drawn with the converted model; false means the temporary capsule.</summary>
+        public static bool UsesHeroModel(string heroKey, bool modelLoaded) => modelLoaded && heroKey == ModelHero;
 
         private GameData data;
         /// <summary>The run of <see cref="AppFlow.Run"/> this view follows; null outside the Run and Results screens.</summary>
@@ -88,7 +94,10 @@ namespace ThornThrone.Mobile
         private WorldRenderer world;
         private Camera view;
         private Transform hero, ground;
+        /// <summary>View of the model of the current run's hero; null when the hero is the capsule.</summary>
         private HeroView heroView;
+        private HeroView modelView;
+        private Transform capsule;
         private float heroHeight = 0.7f;
         private Vec2 lastHeroPosition;
         /// <summary>Menu covers the flow screens Menu, Hero and Difficulty (FlowScreens shows which one).</summary>
@@ -365,7 +374,7 @@ namespace ThornThrone.Mobile
                 Debug.Log($"THORN_BOSS ok={(bossOk ? 1 : 0)} spawned={(spawned ? 1 : 0)} attacks={bossAttacks} " +
                           $"bossHp={(spawned ? run.Boss.Health : 0):0}/{(spawned ? run.Boss.MaxHealth : 0):0} time={run.Time:0.0}");
             }
-            Debug.Log($"THORN_MOBILE_SMOKE time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
+            Debug.Log($"THORN_MOBILE_SMOKE hero={run.Hero.Key} time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(bossSmoke ? (bossOk ? 0 : 12) : run.Kills > 0 ? 0 : 1);
             smoke = false;
@@ -398,10 +407,16 @@ namespace ThornThrone.Mobile
             return true;
         }
 
-        /// <summary>Requirement 18: the smoke run goes menu → Dragonus → echelon 1 through the same buttons and AppFlow.</summary>
+        /// <summary>
+        /// Requirement 18: the smoke run goes menu → hero → echelon 1 through the same buttons and AppFlow.
+        /// The hero is Dragonus or -thornHero=KEY (Task 19: -thornHero=kez).
+        /// </summary>
         private bool SmokeStart()
         {
-            if (Press("Menu/Content/Play") && Press("Hero select/Content/dragonus") && Press("Hero select/Content/Next")
+            var heroArg = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornHero="));
+            string smokeHero = heroArg != null ? heroArg.Substring("-thornHero=".Length) : PlayableHeroes[0];
+            if (Press("Menu/Content/Play") && Press("Hero select/Content/" + smokeHero) && Press("Hero select/Content/Next")
+                && flow.Hero == smokeHero
                 && Press("Difficulty/Content/Echelon 1") && Press("Difficulty/Content/Start") && run != null && run == flow.Run)
                 return true;
             Debug.Log("[Smoke] could not start the run through the screens, flow screen " + flow.Screen);
@@ -560,18 +575,17 @@ namespace ThornThrone.Mobile
 
             if (heroBody)
             {
-                heroView = HeroView.Create(heroBody, heroWearables, heroStyle, "skywrath_mage_idle", "skywrath_mage_run_glide", heroMaterials);
-                hero = heroView.transform;
-                heroHeight = 0;
+                modelView = HeroView.Create(heroBody, heroWearables, heroStyle, "skywrath_mage_idle", "skywrath_mage_run_glide", heroMaterials);
+                modelView.gameObject.SetActive(false);
             }
-            else
-            {
-                hero = GameObject.CreatePrimitive(PrimitiveType.Capsule).transform;
-                hero.name = "Hero (temporary)";
-                hero.localScale = new Vector3(.7f, .7f, .7f);
-                Destroy(hero.GetComponent<Collider>());
-                hero.GetComponent<Renderer>().sharedMaterial = Tinted(new Color(.2f, .85f, 1));
-            }
+            // Heroes without a converted model (Kez until Task 34) and builds without heroBody.
+            capsule = GameObject.CreatePrimitive(PrimitiveType.Capsule).transform;
+            capsule.name = "Hero (temporary)";
+            capsule.localScale = new Vector3(.7f, .7f, .7f);
+            Destroy(capsule.GetComponent<Collider>());
+            capsule.GetComponent<Renderer>().sharedMaterial = Tinted(new Color(.2f, .85f, 1));
+            capsule.gameObject.SetActive(false);
+            ShowHero(ModelHero);
             hero.gameObject.SetActive(false);
 
             // Key light from the first entry of m_TimeBasedLightingEnvironments (direction is Source x/y/z).
@@ -670,10 +684,21 @@ namespace ThornThrone.Mobile
             run = flow.Run;
             reportedDiagnostics = 0;
             state = State.Playing;
+            ShowHero(run.Hero.Key);
             hero.gameObject.SetActive(true);
             DropBossView();
             input.Reset();
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        }
+
+        /// <summary>Makes the model or the capsule the hero's view (<see cref="UsesHeroModel"/>); it stays hidden until shown.</summary>
+        private void ShowHero(string heroKey)
+        {
+            bool model = UsesHeroModel(heroKey, modelView != null);
+            if (hero) hero.gameObject.SetActive(false);
+            heroView = model ? modelView : null;
+            hero = model ? modelView.transform : capsule;
+            heroHeight = model ? 0 : 0.7f;
         }
 
         private void DropBossView()

@@ -132,5 +132,38 @@ namespace ThornThrone.Mobile.Tests
 
             Assert.That(world.CorpseCount, Is.EqualTo(0));
         }
+
+        [Test]
+        public void StrikeMatrixCoversTheStruckRectangle()
+        {
+            var m = WorldRenderer.StrikeMatrix(new Vec2(100, 460), new Vec2(0, 1), new Vec2(720, 420));
+            Vector3 position = m.GetColumn(3);
+            Assert.That(Vector3.Distance(new Vector3(position.x, 0, position.z), WorldRenderer.ToWorld(new Vec2(100, 460))), Is.LessThan(1e-4f));
+            Assert.That(m.MultiplyVector(Vector3.forward).magnitude, Is.EqualTo(7.2f).Within(1e-4f), "length along the strike");
+            Assert.That(m.MultiplyVector(Vector3.right).magnitude, Is.EqualTo(4.2f).Within(1e-4f), "width across");
+            Assert.That(Vector3.Angle(m.MultiplyVector(Vector3.forward), Vector3.forward), Is.LessThan(0.1f), "Source +y is Unity +z");
+            var side = WorldRenderer.StrikeMatrix(Vec2.Zero, new Vec2(1, 0), new Vec2(720, 420));
+            Assert.That(Vector3.Angle(side.MultiplyVector(Vector3.forward), Vector3.right), Is.LessThan(0.1f), "Source +x is Unity +x");
+        }
+
+        [Test]
+        public void ConsumeShowsEchoStrikeArea()
+        {
+            var data = LoadSourceData();
+            var world = Renderer();
+            var run = new Run(data, new Rules(), "kez", null, 7) { DebugInvulnerable = true, DebugNoSpawns = true };
+            run.ClearEvents();
+            var target = run.SpawnEnemy(data.Enemies["zombie"], run.HeroPosition + new Vec2(0, 300), -1);
+            target.Speed = 0;
+            target.MaxHealth = target.Health = 1e6f;
+            for (int i = 0; i < 10; i++)
+            {
+                run.Update(run.Rules.Step, Vec2.Zero, false);
+                world.Consume(run);
+                run.ClearEvents();
+            }
+            Assert.That(target.Health, Is.LessThan(target.MaxHealth), "Echo Strike hit the enemy in front");
+            Assert.That(world.StrikeCount, Is.EqualTo(1), "one strike area to draw");
+        }
     }
 }
