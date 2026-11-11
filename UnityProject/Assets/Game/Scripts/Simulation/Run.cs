@@ -95,7 +95,6 @@ namespace ThornThrone.Simulation
 
         private readonly SpawnEvent[] spawnEvents;
         private readonly SpatialGrid grid;
-        private readonly int[] queryBuffer = new int[2048];
         private readonly float[] targetDistances = new float[64];
         private readonly int[] freeEnemies, freeProjectiles, freePickups;
         private int freeEnemyCount, freeProjectileCount, freePickupCount;
@@ -653,11 +652,11 @@ namespace ThornThrone.Simulation
                 {
                     // Separation: soft push from neighbours within the layer distance (Mechanics §2).
                     Vec2 push = Vec2.Zero;
-                    int found = grid.Query(enemy.Position, enemy.SeparationDistance, queryBuffer);
+                    using var near = grid.Query(enemy.Position, enemy.SeparationDistance);
                     int used = 0;
-                    for (int n = 0; n < found && used < 16; n++)
+                    for (int n = 0; n < near.Count && used < 16; n++)
                     {
-                        var other = Enemies[queryBuffer[n]];
+                        var other = Enemies[near[n]];
                         if (other == enemy) continue;
                         Vec2 away = enemy.Position - other.Position;
                         float distanceSquared = away.LengthSquared;
@@ -744,10 +743,11 @@ namespace ThornThrone.Simulation
 
         public int CountTargets(Vec2 center, float range)
         {
-            int found = grid.Query(center, range, queryBuffer), count = 0;
-            for (int i = 0; i < found; i++)
+            using var near = grid.Query(center, range);
+            int count = 0;
+            for (int i = 0; i < near.Count; i++)
             {
-                var e = Enemies[queryBuffer[i]];
+                var e = Enemies[near[i]];
                 if (e.Targetable && Vec2.DistanceSquared(e.Position, center) <= range * range) count++;
             }
             return count;
@@ -756,10 +756,11 @@ namespace ThornThrone.Simulation
         /// <summary>Writes the closest targetable enemies within range into <see cref="TargetBuffer"/>, nearest first.</summary>
         public int ClosestTargets(Vec2 center, float range)
         {
-            int found = grid.Query(center, range, queryBuffer), count = 0;
-            for (int i = 0; i < found; i++)
+            using var near = grid.Query(center, range);
+            int count = 0;
+            for (int i = 0; i < near.Count; i++)
             {
-                var e = Enemies[queryBuffer[i]];
+                var e = Enemies[near[i]];
                 if (!e.Targetable) continue;
                 float d = Vec2.DistanceSquared(e.Position, center);
                 if (d > range * range) continue;
@@ -784,11 +785,12 @@ namespace ThornThrone.Simulation
         /// <summary>A random targetable enemy within range, skipping those the shot has already hit; null if none.</summary>
         public Enemy RandomTarget(Vec2 center, float range, Projectile exclude)
         {
-            int found = grid.Query(center, range, queryBuffer), seen = 0;
+            using var near = grid.Query(center, range);
+            int seen = 0;
             Enemy pick = null;
-            for (int i = 0; i < found; i++)
+            for (int i = 0; i < near.Count; i++)
             {
-                var e = Enemies[queryBuffer[i]];
+                var e = Enemies[near[i]];
                 if (!e.Targetable || (exclude != null && exclude.HasHit(e.SpawnId))) continue;
                 if (Vec2.DistanceSquared(e.Position, center) > range * range) continue;
                 if (Rng.Next(++seen) == 0) pick = e;
@@ -859,10 +861,10 @@ namespace ThornThrone.Simulation
         {
             var def = absorber.Def;
             float range = def.AbsorbRadius + absorber.Radius;
-            int found = grid.Query(absorber.Position, range + 150, queryBuffer);
-            for (int i = 0; i < found; i++)
+            using var near = grid.Query(absorber.Position, range + 150);
+            for (int i = 0; i < near.Count; i++)
             {
-                var other = Enemies[queryBuffer[i]];
+                var other = Enemies[near[i]];
                 if (!other.Active || other == absorber || other.Def.IsElite || other.Def.IsDestructible || !other.Hostile || other.Def.IsBoss) continue;
                 float reach = range + other.Radius;
                 if (Vec2.DistanceSquared(other.Position, absorber.Position) > reach * reach) continue;
@@ -953,18 +955,20 @@ namespace ThornThrone.Simulation
                     continue;
                 }
                 var handler = shot.Source?.Ability as IProjectileAbility;
+                var effect = shot.Source?.Ability as IProjectileHitEffect;
 
                 // Swept collision along the segment, nearest first.
                 float segmentLengthSquared = segment.LengthSquared;
                 Vec2 middle = start + segment * 0.5f;
-                int found = grid.Query(middle, (float)Math.Sqrt(segmentLengthSquared) * 0.5f + shot.Radius + 200, queryBuffer);
+                // Own query buffer: damage, hit effects and abilities called below may query the grid (Task 43).
+                using var near = grid.Query(middle, (float)Math.Sqrt(segmentLengthSquared) * 0.5f + shot.Radius + 200);
                 while (shot.RemainingHits > 0)
                 {
                     Enemy best = null;
                     float bestT = float.MaxValue;
-                    for (int n = 0; n < found; n++)
+                    for (int n = 0; n < near.Count; n++)
                     {
-                        var e = Enemies[queryBuffer[n]];
+                        var e = Enemies[near[n]];
                         if (!e.Targetable || shot.HasHit(e.SpawnId)) continue;
                         float t = segmentLengthSquared > 0 ? Vec2.Dot(e.Position - start, segment) / segmentLengthSquared : 0;
                         t = t < 0 ? 0 : t > 1 ? 1 : t;
@@ -987,6 +991,7 @@ namespace ThornThrone.Simulation
                     DamageEnemy(best, shot.Damage);
                     if (Finished) return;
                     Knockback(best, shot.Velocity, shot.Knockback);
+                    if (effect != null) { effect.AfterHit(this, shot, best); if (Finished) return; }
                     shot.RemainingHits--;
                 }
                 if (shot.RemainingHits <= 0 || shot.Life <= 0) RetireProjectile(shot);
@@ -1167,10 +1172,10 @@ namespace ThornThrone.Simulation
 
         private void LevelUpKnockback()
         {
-            int found = grid.Query(HeroPosition, Mode.LevelUpKnockbackRadius, queryBuffer);
-            for (int i = 0; i < found; i++)
+            using var near = grid.Query(HeroPosition, Mode.LevelUpKnockbackRadius);
+            for (int i = 0; i < near.Count; i++)
             {
-                var e = Enemies[queryBuffer[i]];
+                var e = Enemies[near[i]];
                 Vec2 away = e.Position - HeroPosition;
                 if (!e.Active || away.LengthSquared > Mode.LevelUpKnockbackRadius * Mode.LevelUpKnockbackRadius) continue;
                 Knockback(e, away, Mode.LevelUpKnockbackDistance);

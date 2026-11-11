@@ -16,6 +16,16 @@ namespace ThornThrone.Simulation
         bool OnHit(Run run, Projectile shot, Enemy hit);
     }
 
+    /// <summary>
+    /// An ability whose projectiles deal the standard damage and knockback and then add an effect to every enemy
+    /// they pierce. Runs inside the projectile's hit loop: grid queries made here get their own buffer
+    /// (<see cref="SpatialGrid.Query(Vec2, float)"/>), so they do not disturb the loop.
+    /// </summary>
+    public interface IProjectileHitEffect
+    {
+        void AfterHit(Run run, Projectile shot, Enemy hit);
+    }
+
     /// <summary>Maps original powerup classes (_class) to implementations.</summary>
     public static class AbilityFactory
     {
