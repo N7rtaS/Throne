@@ -103,6 +103,7 @@ inclusion: manual
 - Тесты: `AlphaIsFractionOfStep`, `TeleportResetsPreviousPosition`, `ReusedSlotHasNoInterpolationTrail`.
 
 ✅ (2026-11-11) Task 10: TextMeshPro, кириллический шрифт, HUD без аллокаций (Spec)
+Проверено в плеере: macOS Mono, `Tools/mac-smoke.sh --hud-alloc` (без Development Build) — 0 байт в `UpdateHud` и перестройке Canvas за ~1200 кадров после прогрева, 41–44 смены надписей (куча Mono, блоки 4 КБ); Development-плеер по точному счётчику — 0 байт. Фаза босса в плеере не замерялась; Android не измерен.
 - TMP; свободный кириллический SDF-шрифт (Noto Sans / PT Sans, лицензия в README); `GameUi` на `TMP_Text`; текст только при изменении, `SetText(format, value)`.
 - Тест: EditMode `HudUpdateDoesNotAllocate`.
 

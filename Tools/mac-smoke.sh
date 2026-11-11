@@ -2,18 +2,26 @@
 # Automatic macOS smoke check (design: .kiro/specs/build-readme-unity-tests-smoke/design.md §4).
 # Builds Builds/MacSmoke (MobileBuilder.BuildMacSmoke), runs the player with -thornSmoke in a 1280x720 window,
 # waits for it to quit and checks its log.
-# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [--flow] [extra player args, e.g. -thornBoss -thornElite]
+# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [--flow] [--hud-alloc] [extra player args, e.g. -thornBoss]
 #        Tools/mac-smoke.sh --check-log FILE        (only the log check, step 4)
 #        Tools/mac-smoke.sh --check-flow-log FILE   (THORN_FLOW ok=1, then the log check)
+#        Tools/mac-smoke.sh --check-hud-alloc-log FILE (THORN_HUD_ALLOC with zero bytes, then the log check)
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
 #   run 2 expects them after the restart (-thornExpectSettings), run 3 restores the defaults of the test profile.
 # --flow (design: .kiro/specs/screen-flow/design.md §4): run 1 walks the screens on a new test profile (-thornFlow,
 #   log mac-smoke-flow-1.log), run 2 checks the saved result and unlock after the restart (-thornExpectFlow).
+# --hud-alloc (design: .kiro/specs/hud-alloc-flaky-fix/design.md §4): builds the player without Development Build
+#   (-thornRelease, Builds/MacRelease) and runs it with -thornHudAlloc (log mac-smoke-hud-alloc.log); the
+#   THORN_HUD_ALLOC line must report 0 bytes of the HUD and of the canvas rebuild after warm-up, measured frames,
+#   label changes and a calibration above zero. Release Mono players have no profiler counter: the bytes come from
+#   the Mono heap (4 KB blocks). -thornHudAlloc as a player arg of the usual run checks the Development build, where
+#   the exact "GC Allocated In Frame" counter is used.
 # Exit codes: 0 ok, 2 build failed or player missing, 3 player timed out, 4 no THORN_MOBILE_SMOKE line,
 #             5 kills=0, 6 unhandled exception in the log, 7 player exit code is not 0,
 #             8 -thornInputScript=FILE given and no THORN_INPUT_SCRIPT ok=1 line (design: .kiro/specs/touch-controls-contract),
 #             9 -thornSettings / -thornExpectSettings given and no THORN_SETTINGS_SET / THORN_SETTINGS ok=1 line,
-#             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line.
+#             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line,
+#             11 --hud-alloc and no THORN_HUD_ALLOC line, or it reports allocations or a measurement that saw nothing.
 set -euo pipefail
 root="${0:A:h:h}"
 unity="${THORN_UNITY:-/Applications/Unity/Hub/Editor/6000.6.7f1/Unity.app/Contents/MacOS/Unity}"
@@ -53,6 +61,32 @@ check_flow()
   print -r -- "$line"
 }
 
+# HUD allocation smoke: 0 bytes of the HUD and of the canvas, the measurement ran and its calibration saw bytes.
+check_hud_alloc()
+{
+  local file="$1" line
+  line="$(LC_ALL=C grep -a '^THORN_HUD_ALLOC ' "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ -z "$line" ]]; then echo "mac-smoke: no THORN_HUD_ALLOC line in ${file}" >&2; return 11; fi
+  local pair key value bytes="" canvas="" frames="" changes="" calibration="" method=""
+  for pair in ${(z)line}; do
+    key="${pair%%=*}"; value="${pair#*=}"
+    case "$key" in
+      bytes) bytes="$value" ;;
+      canvas) canvas="$value" ;;
+      frames) frames="$value" ;;
+      changes) changes="$value" ;;
+      calibration) calibration="$value" ;;
+      method) method="$value" ;;
+    esac
+  done
+  if [[ "$bytes" != 0 || "$canvas" != 0 || ! "$frames" =~ '^[1-9][0-9]*$' || ! "$changes" =~ '^[1-9][0-9]*$' \
+        || ! "$calibration" =~ '^[1-9][0-9]*$' || -z "$method" || "$method" == none ]]; then
+    echo "mac-smoke: HUD allocates or was not measured: $line" >&2
+    return 11
+  fi
+  print -r -- "$line"
+}
+
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -71,25 +105,37 @@ if [[ "${1:-}" == "--check-flow-log" ]]; then
   check_log "$2"
   exit $?
 fi
+if [[ "${1:-}" == "--check-hud-alloc-log" ]]; then
+  check_hud_alloc "${2:?log file}" || exit $?
+  check_log "$2"
+  exit $?
+fi
 
 build=1
 restart=0
 flow=0
+hud_alloc=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-build) build=0; shift ;;
     --settings-restart) restart=1; shift ;;
     --flow) flow=1; shift ;;
+    --hud-alloc) hud_alloc=1; shift ;;
     *) break ;;
   esac
 done
+build_args=()
+if (( hud_alloc )); then
+  app="$root/Builds/MacRelease/ThornThrone.app"
+  build_args=(-thornRelease)
+fi
 
 if (( build )); then
   editor_lock || exit 2
   buildlog="$root/Research/mac-build.log"
   code=0
   "$unity" -batchmode -nographics -quit -projectPath "$root/UnityProject" \
-    -executeMethod ThornThrone.Editor.MobileBuilder.BuildMacSmoke -logFile "$buildlog" || code=$?
+    -executeMethod ThornThrone.Editor.MobileBuilder.BuildMacSmoke "${build_args[@]}" -logFile "$buildlog" || code=$?
   if (( code != 0 )) || ! LC_ALL=C grep -aq THORN_MAC_BUILD_OK "$buildlog"; then
     echo "mac-smoke: build failed (Unity exit $code), see $buildlog" >&2
     LC_ALL=C grep -aE 'error|Exception' "$buildlog" | tail -n 15 >&2 || true
@@ -152,6 +198,9 @@ run_once()
   if [[ " $* " == *" -thornFlow "* || " $* " == *" -thornExpectFlow "* ]]; then
     check_flow "$runlog" || return $?
   fi
+  if [[ " $* " == *" -thornHudAlloc "* ]]; then
+    check_hud_alloc "$runlog" || return $?
+  fi
   check_log "$runlog" || return $?
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi
 }
@@ -166,6 +215,10 @@ fi
 if (( flow )); then
   run_once "${log%.log}-flow-1.log" -thornFlow "$@" || exit $?
   run_once "$log" -thornExpectFlow "$@" || exit $?
+  exit 0
+fi
+if (( hud_alloc )); then
+  run_once "${log%.log}-hud-alloc.log" -thornHudAlloc "$@" || exit $?
   exit 0
 fi
 run_once "$log" "$@" || exit $?

@@ -348,17 +348,22 @@ namespace ThornThrone.Editor
             Debug.Log("THORN_ANDROID_BUILD_OK " + summary.totalSize);
         }
 
-        /// <summary>macOS player of the mobile scene for automatic smoke runs (-thornSmoke) on the development Mac.</summary>
+        /// <summary>
+        /// macOS player of the mobile scene for automatic smoke runs (-thornSmoke) on the development Mac. With
+        /// -thornRelease on the Unity command line: without Development Build, to Builds/MacRelease (the -thornHudAlloc
+        /// measurement, design: .kiro/specs/hud-alloc-flaky-fix/design.md §4).
+        /// </summary>
         public static void BuildMacSmoke()
         {
+            bool release = Environment.GetCommandLineArgs().Contains("-thornRelease");
             QualityPresetBuilder.Configure();
             CreateScene();
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
             {
                 scenes = new[] { ScenePath },
-                locationPathName = "../Builds/MacSmoke/ThornThrone.app",
+                locationPathName = release ? "../Builds/MacRelease/ThornThrone.app" : "../Builds/MacSmoke/ThornThrone.app",
                 target = BuildTarget.StandaloneOSX,
-                options = BuildOptions.Development,
+                options = release ? BuildOptions.None : BuildOptions.Development,
             });
             if (report.summary.result != BuildResult.Succeeded) throw new InvalidOperationException("macOS build failed: " + report.summary.result);
             Debug.Log("THORN_MAC_BUILD_OK");

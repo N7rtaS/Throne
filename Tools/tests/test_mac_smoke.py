@@ -19,6 +19,11 @@ def check(name):
 def check_flow(name):
     return subprocess.run(["zsh", SCRIPT, "--check-flow-log", os.path.join(LOGS, name)],
                           capture_output=True, text=True, timeout=30)
+
+
+def check_hud_alloc(name):
+    return subprocess.run(["zsh", SCRIPT, "--check-hud-alloc-log", os.path.join(LOGS, name)],
+                          capture_output=True, text=True, timeout=30)
 class MacSmokeLogCheckTests(unittest.TestCase):
     def test_successful_run_exits_zero_and_prints_smoke_line(self):
         result = check("ok.log")
@@ -55,5 +60,34 @@ class MacSmokeFlowCheckTests(unittest.TestCase):
         self.assertEqual(check_flow("ok.log").returncode, 10)
     def test_absent_log_exits_ten(self):
         self.assertEqual(check_flow("absent.log").returncode, 10)
+
+
+class MacSmokeHudAllocCheckTests(unittest.TestCase):
+    """--hud-alloc (design: .kiro/specs/hud-alloc-flaky-fix/design.md §4): code 11 unless 0 bytes were measured."""
+    def test_zero_bytes_exits_zero_and_prints_both_lines(self):
+        result = check_hud_alloc("hud-alloc-ok.log")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_HUD_ALLOC bytes=0 canvas=0 frames=1198 changes=41 method=mono_heap", result.stdout)
+        self.assertIn("THORN_MOBILE_SMOKE time=30.0 kills=29", result.stdout)
+
+    def test_hud_bytes_exit_eleven(self):
+        result = check_hud_alloc("hud-alloc-bytes.log")
+        self.assertEqual(result.returncode, 11)
+        self.assertIn("bytes=4096", result.stderr)
+
+    def test_canvas_bytes_exit_eleven(self):
+        self.assertEqual(check_hud_alloc("hud-alloc-canvas.log").returncode, 11)
+
+    def test_measurement_that_saw_nothing_exits_eleven(self):
+        self.assertEqual(check_hud_alloc("hud-alloc-unmeasured.log").returncode, 11)
+
+    def test_no_measured_frames_exits_eleven(self):
+        self.assertEqual(check_hud_alloc("hud-alloc-no-frames.log").returncode, 11)
+
+    def test_log_without_hud_alloc_line_exits_eleven(self):
+        self.assertEqual(check_hud_alloc("ok.log").returncode, 11)
+
+    def test_absent_log_exits_eleven(self):
+        self.assertEqual(check_hud_alloc("absent.log").returncode, 11)
 if __name__ == "__main__":
     unittest.main()

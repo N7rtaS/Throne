@@ -454,6 +454,9 @@ namespace ThornThrone.Mobile
 
         // ------------------------------------------------------------------ per frame
 
+        /// <summary>HUD labels UpdateHud has rewritten so far (HudText.Set returned true); for the -thornHudAlloc smoke.</summary>
+        public int HudTextChanges { get; private set; }
+
         public void UpdateHud(Run run, GameInput input)
         {
             var touch = input.Controller;
@@ -463,13 +466,13 @@ namespace ThornThrone.Mobile
             int maxDashes = Mathf.Max(1, (int)run.Build.Global[Attr.NumDashes]);
             float cooldown = Mathf.Max(0.01f, run.Build.Global[Attr.DashCooldown]);
             dashFill.fillAmount = Mathf.Clamp01((run.DashCharges + (run.DashCharges < maxDashes ? run.DashRecharge / cooldown : 0)) / maxDashes);
-            level.Set(run.HeroLevel);
+            if (level.Set(run.HeroLevel)) HudTextChanges++;
             int seconds = Mathf.FloorToInt(run.Time);
-            time.Set(seconds / 60, seconds % 60);
-            kills.Set(run.Kills);
+            if (time.Set(seconds / 60, seconds % 60)) HudTextChanges++;
+            if (kills.Set(run.Kills)) HudTextChanges++;
             bool bossVisible = run.BossSpawned && run.Boss != null && run.Boss.Active;
             if (bossText.gameObject.activeSelf != bossVisible) bossText.gameObject.SetActive(bossVisible);
-            if (bossVisible) boss.Set(Mathf.CeilToInt(run.Boss.Health));
+            if (bossVisible && boss.Set(Mathf.CeilToInt(run.Boss.Health))) HudTextChanges++;
 
             bool joystick = touch.JoystickActive;
             if (joystickBase.gameObject.activeSelf != joystick) joystickBase.gameObject.SetActive(joystick);

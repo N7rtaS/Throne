@@ -1,0 +1,3 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+THORN_HUD_ALLOC bytes=0 canvas=0 frames=0 changes=0 method=none calibration=0 calibration_payload=0 counter_valid=0 counter=0/0/0 thread=0/0/0 heap=0/0/0 development=0 sink=0
+THORN_MOBILE_SMOKE time=30.0 kills=29 level=1 hp=80/80 enemies=25 diagnostics=0

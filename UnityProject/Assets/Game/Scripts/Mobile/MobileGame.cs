@@ -147,10 +147,11 @@ namespace ThornThrone.Mobile
             SmokeOptions(args);
         }
 
-        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
         private void SmokeOptions(string[] args)
         {
             showSettings = smoke && args.Contains("-thornShowSettings");
+            if (smoke && args.Contains("-thornHudAlloc")) hudMeter = new HudAllocMeter();
             var script = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornInputScript="));
             if (smoke && script != null) inputScript = new InputScript(script.Substring("-thornInputScript=".Length));
             if (smoke && Environment.GetCommandLineArgs().Contains("-thornShowcase")) Showcase();
@@ -263,6 +264,8 @@ namespace ThornThrone.Mobile
         private float settingsShownAt;
         private InputScript inputScript;
         private float screenshotTime = 20;
+        /// <summary>-thornHudAlloc: allocations of the HUD after warm-up, logged as THORN_HUD_ALLOC at the end.</summary>
+        private HudAllocMeter hudMeter;
 
         /// <summary>Visual check: every enemy with a baked look in rings around the hero, no hero attacks.</summary>
         private void Showcase()
@@ -333,6 +336,13 @@ namespace ThornThrone.Mobile
                 return;
             }
             foreach (var room in run.EliteRooms) Debug.Log($"THORN_ELITE {room.Index} {room.Spawner.Key} {room.State} at {room.Position}");
+            if (hudMeter != null)
+            {
+                hudMeter.Calibrate();
+                Debug.Log(hudMeter.Report());
+                hudMeter.Dispose();
+                hudMeter = null;
+            }
             Debug.Log($"THORN_MOBILE_SMOKE time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(run.Kills > 0 ? 0 : 1);
@@ -782,7 +792,8 @@ namespace ThornThrone.Mobile
             world.Draw(run);
             if (state != State.Results)
             {
-                ui.UpdateHud(run, input);
+                if (hudMeter != null && hudMeter.Measuring(run.Time)) hudMeter.Update(ui, run, input);
+                else ui.UpdateHud(run, input);
                 UpdateEliteArrow();
             }
         }
