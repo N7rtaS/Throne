@@ -37,8 +37,11 @@ python3 Tools/research-client.py --check-readonly   # строки клиент�
 Сборка для Android:
 
 ```sh
-Tools/build-android.sh               # APK → Builds/Android/ThornThrone.apk, отчёт → Research/android-build-report.json
+Tools/build-android.sh               # release APK → Builds/Android/ThornThrone.apk, отчёт → Research/android-build-report.json
+Tools/build-android.sh -thornDevelopment   # development APK (профайлер)
 ```
+
+Аргументы скрипта передаются Unity. По умолчанию APK собирается без Development Build (`BuildOptions.None`), с `-thornDevelopment` — с `BuildOptions.Development`. Подпись — из переменных окружения `THORN_KEYSTORE` (путь к keystore вне репозитория), `THORN_KEYSTORE_PASS`, `THORN_KEY_ALIAS`, `THORN_KEY_PASS`; задаются все четыре или ни одной (иначе сборка падает). Без них APK подписан отладочным ключом Unity, скрипт печатает строку `THORN_ANDROID_DEBUG_SIGNED …` — такой APK для приёмки не годится. После сборки путь и пароли из настроек проекта стираются. Скрипт печатает `THORN_ANDROID_BUILD_OPTIONS options=… development=0|1 signing=custom|debug` и выходит с кодом 1, если в `Research/android-build.log` нет `THORN_ANDROID_BUILD_OK`. Отчёт `Research/android-build-report.json`: `result`, `errors`, `warnings`, `bytes`, `seconds`, `options`, `development`, `signing`, `scriptingBackend`, `architectures`, `minSdk`, `applicationId`.
 
 Инструменты Android (Gradle, NDK) не работают с путём, в котором есть кириллица («Терновый Трон»). Поэтому скрипт копирует `UnityProject` в `~/Library/Caches/ThornThroneAndroid`, собирает там и возвращает APK. Первая сборка занимает около 5 минут, следующие быстрее.
 

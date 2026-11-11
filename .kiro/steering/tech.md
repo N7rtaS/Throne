@@ -22,7 +22,7 @@
 # Тесты симуляции (из корня репозитория; решения .sln нет)
 dotnet test DotNet/ThornThrone.Simulation.Tests
 
-# Android APK → Builds/Android/ThornThrone.apk, отчёт → Research/android-build-report.json
+# Android APK (release; -thornDevelopment — development; подпись THORN_KEYSTORE*) → Builds/Android/ThornThrone.apk, отчёт → Research/android-build-report.json
 Tools/build-android.sh
 
 # Скриншот macOS smoke-сборки

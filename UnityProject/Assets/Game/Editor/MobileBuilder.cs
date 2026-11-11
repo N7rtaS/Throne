@@ -320,32 +320,98 @@ namespace ThornThrone.Editor
             PlayerSettings.runInBackground = false;
         }
 
+        /// <summary>
+        /// Android APK. Release (no Development Build) by default: acceptance is only on a signed IL2CPP ARM64 build
+        /// without Development Build (product.md). -thornDevelopment on the Unity command line builds a development
+        /// APK for the profiler. Signing: THORN_KEYSTORE, THORN_KEYSTORE_PASS, THORN_KEY_ALIAS, THORN_KEY_PASS
+        /// (the key lives outside the repository); without them the APK gets Unity's debug signature.
+        /// </summary>
         [MenuItem("Thorn Throne/Mobile/Build Android APK")]
         public static void BuildAndroid()
         {
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.Android &&
                 !EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android))
                 throw new InvalidOperationException("Cannot switch to Android (is Android Build Support installed?)");
+            bool development = Environment.GetCommandLineArgs().Contains("-thornDevelopment");
             ConfigureAndroid();
             QualityPresetBuilder.Configure();
             CreateScene();
             EditorUserBuildSettings.buildAppBundle = false;
             Directory.CreateDirectory(Path.GetDirectoryName(ApkPath));
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+            bool customKey = ConfigureSigning();
+            BuildReport report;
+            try
             {
-                scenes = new[] { ScenePath },
-                locationPathName = ApkPath,
-                target = BuildTarget.Android,
-                options = BuildOptions.Development,
-            });
+                report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
+                {
+                    scenes = new[] { ScenePath },
+                    locationPathName = ApkPath,
+                    target = BuildTarget.Android,
+                    options = development ? BuildOptions.Development : BuildOptions.None,
+                });
+            }
+            finally
+            {
+                // The keystore path and passwords must not stay in ProjectSettings.asset.
+                ResetSigning();
+            }
             var summary = report.summary;
+            string signing = customKey ? "custom" : "debug";
             File.WriteAllText("../Research/android-build-report.json", JsonUtility.ToJson(new Summary
             {
                 result = summary.result.ToString(), errors = summary.totalErrors, warnings = summary.totalWarnings,
                 bytes = summary.totalSize, seconds = (float)summary.totalTime.TotalSeconds,
+                options = summary.options.ToString(),
+                development = (summary.options & BuildOptions.Development) != 0,
+                signing = signing,
+                scriptingBackend = PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android).ToString(),
+                architectures = PlayerSettings.Android.targetArchitectures.ToString(),
+                minSdk = PlayerSettings.Android.minSdkVersion.ToString(),
+                applicationId = PlayerSettings.GetApplicationIdentifier(NamedBuildTarget.Android),
             }, true));
             if (summary.result != BuildResult.Succeeded) throw new InvalidOperationException("Android build failed: " + summary.result);
+            Debug.Log($"THORN_ANDROID_BUILD_OPTIONS options={summary.options} development={(development ? 1 : 0)} signing={signing}");
+            if (!customKey)
+                Debug.Log("THORN_ANDROID_DEBUG_SIGNED APK is signed with the Unity debug key and is not valid for acceptance " +
+                          "(set THORN_KEYSTORE, THORN_KEYSTORE_PASS, THORN_KEY_ALIAS, THORN_KEY_PASS)");
             Debug.Log("THORN_ANDROID_BUILD_OK " + summary.totalSize);
+        }
+
+        /// <summary>
+        /// Custom keystore from the environment. All four variables or none: a partial set is an error, so a release
+        /// build is never silently signed with the debug key by mistake.
+        /// </summary>
+        private static bool ConfigureSigning()
+        {
+            string keystore = Environment.GetEnvironmentVariable("THORN_KEYSTORE");
+            string keystorePass = Environment.GetEnvironmentVariable("THORN_KEYSTORE_PASS");
+            string alias = Environment.GetEnvironmentVariable("THORN_KEY_ALIAS");
+            string aliasPass = Environment.GetEnvironmentVariable("THORN_KEY_PASS");
+            var values = new[] { keystore, keystorePass, alias, aliasPass };
+            if (values.All(string.IsNullOrEmpty))
+            {
+                PlayerSettings.Android.useCustomKeystore = false;
+                return false;
+            }
+            if (values.Any(string.IsNullOrEmpty))
+                throw new InvalidOperationException("Android signing: set all of THORN_KEYSTORE, THORN_KEYSTORE_PASS, THORN_KEY_ALIAS, THORN_KEY_PASS or none");
+            if (!File.Exists(keystore))
+                throw new InvalidOperationException("Android signing: THORN_KEYSTORE file not found: " + keystore);
+            PlayerSettings.Android.useCustomKeystore = true;
+            PlayerSettings.Android.keystoreName = Path.GetFullPath(keystore);
+            PlayerSettings.Android.keystorePass = keystorePass;
+            PlayerSettings.Android.keyaliasName = alias;
+            PlayerSettings.Android.keyaliasPass = aliasPass;
+            return true;
+        }
+
+        private static void ResetSigning()
+        {
+            PlayerSettings.Android.useCustomKeystore = false;
+            PlayerSettings.Android.keystoreName = "";
+            PlayerSettings.Android.keystorePass = "";
+            PlayerSettings.Android.keyaliasName = "";
+            PlayerSettings.Android.keyaliasPass = "";
         }
 
         /// <summary>
@@ -376,6 +442,10 @@ namespace ThornThrone.Editor
             public int errors, warnings;
             public ulong bytes;
             public float seconds;
+            public string options;
+            public bool development;
+            public string signing;
+            public string scriptingBackend, architectures, minSdk, applicationId;
         }
     }
 }
