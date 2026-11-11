@@ -15,7 +15,7 @@ namespace ThornThrone.Simulation.Tests
     /// <summary>
     /// In-memory flat file system for SaveStore tests (design: .kiro/specs/progression-save-store/design.md, IFileSystem):
     /// optional byte quota (no space: writes a prefix and throws IOException), crash before the N-th mutating
-    /// operation (a crashed write leaves half of the bytes) and a log of every operation.
+    /// operation (a crashed write leaves half of the bytes), an IOException on the N-th Move and a log of every operation.
     /// </summary>
     public sealed class FakeFileSystem : IFileSystem
     {
@@ -26,6 +26,9 @@ namespace ThornThrone.Simulation.Tests
         /// <summary>1-based index of the mutating operation that crashes; 0 — never.</summary>
         public int CrashAt;
         public int MutatingOperations { get; private set; }
+        /// <summary>1-based index of the Move call that throws IOException and moves nothing; 0 — never.</summary>
+        public int MoveIoErrorAt;
+        public int Moves { get; private set; }
 
         public FakeFileSystem Clone()
         {
@@ -73,6 +76,8 @@ namespace ThornThrone.Simulation.Tests
         {
             Log.Add("move " + from + " " + to);
             if (Mutate()) throw new SimulatedCrash("crash before moving " + from);
+            Moves++;
+            if (MoveIoErrorAt > 0 && Moves == MoveIoErrorAt) throw new IOException("I/O error while moving " + from);
             if (!Files.TryGetValue(from, out var bytes)) throw new FileNotFoundException("No file", from);
             if (Files.ContainsKey(to)) throw new IOException("Target exists: " + to);
             Files.Remove(from);

@@ -229,9 +229,23 @@ namespace ThornThrone.Simulation.Tests
         [Test]
         public void InterruptedSaveNeverLosesConfirmedProfile()
         {
+            // Expected state per crash point (design: .kiro/specs/progression-save-store/design.md, «Состояния при сбое
+            // после каждого шага»): main 20 and backup 10 before the save of 30. Backup −1 — no backup file.
+            var expected = new[]
+            {
+                // 1: crash while writing tmp — old main, old backup, cut tmp.
+                new { Status = LoadStatus.Loaded, Currency = 20L, Backup = 10L },
+                // 2: crash before deleting the backup (after the tmp check) — old main, old backup, new tmp.
+                new { Status = LoadStatus.Loaded, Currency = 20L, Backup = 10L },
+                // 3: crash before Move(main, backup), the backup is deleted — old main, no backup, new tmp.
+                new { Status = LoadStatus.Loaded, Currency = 20L, Backup = -1L },
+                // 4: crash before Move(tmp, main) — no main, backup = old main, new tmp: the last confirmed profile.
+                new { Status = LoadStatus.RestoredFromBackup, Currency = 20L, Backup = 20L },
+                // 5: no crash — new main, backup = old main.
+                new { Status = LoadStatus.Loaded, Currency = 30L, Backup = 20L },
+            };
             var baseline = TwoSaves();
-            int crashes = 0;
-            for (int crashAt = 1; ; crashAt++)
+            for (int crashAt = 1; crashAt <= expected.Length; crashAt++)
             {
                 var fs = baseline.Clone();
                 fs.CrashAt = crashAt;
@@ -244,21 +258,51 @@ namespace ThornThrone.Simulation.Tests
                 {
                     crashed = true;
                 }
+                Assert.That(crashed, Is.EqualTo(crashAt < expected.Length), $"crash at {crashAt}");
                 fs.CrashAt = 0;
                 var result = new SaveStore(fs, ProfileKind.User).Load();
-                Assert.That(result.Status, Is.EqualTo(LoadStatus.Loaded).Or.EqualTo(LoadStatus.RestoredFromBackup), $"crash at {crashAt}");
-                Assert.That(result.Profile.Currency, Is.EqualTo(20).Or.EqualTo(30), $"crash at {crashAt}");
+                var e = expected[crashAt - 1];
+                Assert.That(result.Status, Is.EqualTo(e.Status), $"crash at {crashAt}");
+                Assert.That(result.Profile.Currency, Is.EqualTo(e.Currency), $"crash at {crashAt}");
                 Assert.That(result.PreservedFiles, Is.Empty, $"crash at {crashAt}");
                 Assert.That(fs.Files.ContainsKey(Temp), Is.False, $"crash at {crashAt}");
-                if (!crashed)
-                {
-                    Assert.That(result.Profile.Currency, Is.EqualTo(30));
-                    break;
-                }
-                crashes++;
+                if (e.Backup < 0) Assert.That(fs.Files.ContainsKey(Backup), Is.False, $"crash at {crashAt}");
+                else Assert.That(Currency(fs, Backup), Is.EqualTo(e.Backup), $"crash at {crashAt}");
             }
-            // tmp write, backup delete, main → backup, tmp → main.
-            Assert.That(crashes, Is.EqualTo(4));
+        }
+
+        private static long Currency(FakeFileSystem fs, string name)
+        {
+            Assert.That(SaveFormat.TryDecode(name, fs.Files[name], ProfileKind.User, ProfileMigrations.Default,
+                out var profile, out _, out var error), Is.True, () => error?.ToString());
+            return profile.Currency;
+        }
+
+        [Test]
+        public void IoErrorOnRenamingTempToMainRestoresPreviousProfileFromBackup()
+        {
+            var fs = new FakeFileSystem();
+            var store = new SaveStore(fs, ProfileKind.User);
+            Assert.That(store.Save(WithCurrency(10)).Succeeded, Is.True);
+            var confirmed = WithCurrency(20);
+            Assert.That(store.Save(confirmed).Succeeded, Is.True);
+            // Save of 30: Move(main → backup) is the first Move and succeeds, Move(tmp → main) throws IOException.
+            fs.MoveIoErrorAt = fs.Moves + 2;
+            SaveResult saved = null;
+            Assert.DoesNotThrow(() => saved = store.Save(WithCurrency(30)));
+            Assert.That(saved.Status, Is.EqualTo(SaveStatus.IoError));
+            Assert.That(saved.Succeeded, Is.False);
+            Assert.That(saved.Message, Does.Contain("I/O error"));
+            Assert.That(fs.Files.ContainsKey(Main), Is.False);
+            Assert.That(Currency(fs, Backup), Is.EqualTo(20));
+            fs.MoveIoErrorAt = 0;
+            var result = new SaveStore(fs, ProfileKind.User).Load();
+            Assert.That(result.Status, Is.EqualTo(LoadStatus.RestoredFromBackup));
+            Assert.That(result.Profile.Currency, Is.EqualTo(20));
+            Assert.That(Json(result.Profile), Is.EqualTo(Json(confirmed)));
+            Assert.That(result.PreservedFiles, Is.Empty);
+            Assert.That(result.Errors, Is.Empty);
+            Assert.That(fs.Files.ContainsKey(Temp), Is.False);
         }
 
         [Test]
