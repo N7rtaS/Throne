@@ -38,7 +38,7 @@ namespace ThornThrone.Mobile
         }
 
         private readonly Kind small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill,
-            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable;
+            warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst;
         private readonly Kind[] all;
 
         /// <summary>Instances of one baked model: matrices and VAT frame per instance, drawn per submesh.</summary>
@@ -115,6 +115,9 @@ namespace ThornThrone.Mobile
 
         private readonly Strike[] strikes = new Strike[32];
         private int strikeCount;
+        // Circular hits (Counter Helix, SimEventKind.AbilityBurst), shown for StrikeTime like the rectangles.
+        private readonly Strike[] bursts = new Strike[32];
+        private int burstCount;
 
         private readonly Dictionary<string, ModelBatch[]> looks = new Dictionary<string, ModelBatch[]>();
         private readonly List<ModelBatch> batches = new List<ModelBatch>();
@@ -170,6 +173,8 @@ namespace ThornThrone.Mobile
                 var ev = run.Events[i];
                 if (ev.Kind == SimEventKind.AbilityStrike && strikeCount < strikes.Length)
                     strikes[strikeCount++] = new Strike { Matrix = StrikeMatrix(ev.Position, ev.Direction, ev.Extent), Age = 0 };
+                if (ev.Kind == SimEventKind.AbilityBurst && burstCount < bursts.Length)
+                    bursts[burstCount++] = new Strike { Matrix = BurstMatrix(ev.Position, ev.Extent.X), Age = 0 };
                 if (ev.Kind != SimEventKind.EnemyDied || ev.EnemyDef == null) continue;
                 var batch = LookOf(ev.EnemyDef, ev.SpawnId);
                 if (batch == null || !batch.Visual.death.Valid || corpseCount == corpses.Length) continue;
@@ -183,6 +188,24 @@ namespace ThornThrone.Mobile
 
         /// <summary>Ability hit areas currently shown (EditMode tests).</summary>
         public int StrikeCount => strikeCount;
+
+        /// <summary>Circular ability hits currently shown (EditMode tests).</summary>
+        public int BurstCount => burstCount;
+
+        /// <summary>Flat disc over a struck circle of <paramref name="radius"/> (stand-in for axe_counter_helix.vpcf until Task 37).</summary>
+        public static Matrix4x4 BurstMatrix(Vec2 center, float radius) =>
+            Matrix4x4.TRS(ToWorld(center, 0.018f), Quaternion.identity, Vector3.one * (radius * Scale));
+
+        /// <summary>
+        /// Radius of the hero's Rot circle, 0 without Rot (stand-in for pudge_rot.vpcf until Task 37, Mechanics §28 Р9).
+        /// </summary>
+        public static float RotRadius(Run run)
+        {
+            var owned = run.Build.Owned;
+            for (int i = 0; i < owned.Count; i++)
+                if (owned[i].Ability is Rot rot) return rot.Radius(run);
+            return 0;
+        }
 
         /// <summary>
         /// Flat box over the struck rectangle: centred at <paramref name="center"/>, length along
@@ -228,10 +251,26 @@ namespace ThornThrone.Mobile
             shield = Make(Annulus(0.8f, 1f, 32), template, new Color(.55f, .85f, 1f));
             strike = Make(cube, template, new Color(.55f, .75f, 1f));        // stand-in for the katana slash (Task 37)
             vulnerable = Make(ring, template, new Color(.75f, .3f, 1f));     // stand-in for kez_vulnerable_marker.vpcf
+            rot = Additive(Make(disc, template, new Color(.1f, .3f, .04f)));  // stand-in for pudge_rot.vpcf (Task 37)
+            burst = Additive(Make(disc, template, new Color(.5f, .25f, .1f))); // stand-in for axe_counter_helix.vpcf
             experience = Make(cube, template, new Color(.35f, 1f, .55f));
             gold = Make(cube, template, new Color(1f, .82f, .2f));
             heal = Make(cube, template, new Color(1f, .4f, .45f));
-            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable };
+            all = new[] { small, large, elite, boss, friendly, bolt, missile, stun, hostileBolt, experience, gold, heal, roomRing, roomFill, warnRing, warnFill, fire, portal, portalRing, shield, strike, vulnerable, rot, burst };
+        }
+
+        /// <summary>
+        /// Additive blending without depth writes: the shape tints the ground under it. The blend comes from the render
+        /// state only, so it works with the opaque Unlit variant (no transparent keyword needed in the player).
+        /// </summary>
+        private static Kind Additive(Kind kind)
+        {
+            var material = kind.Params.material;
+            material.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.One);
+            material.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.One);
+            material.SetFloat("_ZWrite", 0);
+            material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            return kind;
         }
 
         /// <summary>Flat ring in the XZ plane, unit outer radius.</summary>
@@ -294,6 +333,18 @@ namespace ThornThrone.Mobile
                 strike.Add(s.Matrix);
                 i++;
             }
+            for (int i = 0; i < burstCount;)
+            {
+                ref var b = ref bursts[i];
+                b.Age += run.Paused || run.Choosing ? 0 : dt;
+                if (b.Age > StrikeTime) { bursts[i] = bursts[--burstCount]; continue; }
+                burst.Add(b.Matrix);
+                i++;
+            }
+            float rotRadius = RotRadius(run);
+            if (rotRadius > 0)
+                rot.Add(Matrix4x4.TRS(ToWorld(run.Interpolate(run.PreviousHeroPosition, run.HeroPosition), 0.012f),
+                    Quaternion.identity, Vector3.one * (rotRadius * Scale)));
             foreach (var e in run.Enemies)
             {
                 if (!e.Active) continue;

@@ -7,6 +7,7 @@
 #        Tools/mac-smoke.sh --check-flow-log FILE   (THORN_FLOW ok=1, then the log check)
 #        Tools/mac-smoke.sh --check-hud-alloc-log FILE (THORN_HUD_ALLOC with zero bytes, then the log check)
 #        Tools/mac-smoke.sh --check-boss-log FILE   (THORN_BOSS spawned=1 attacks>0, then the log check without kills)
+#        Tools/mac-smoke.sh --check-force-log FILE KEY[,KEY…] (THORN_FORCE with hits of every key, then the log check)
 # -thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): the hero has no abilities, so kills are not
 #   required; Imperia must spawn and attack (THORN_BOSS line), the rest of the log check is the same.
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
@@ -26,7 +27,9 @@
 #             10 -thornFlow / -thornExpectFlow given and no THORN_FLOW ok=1 line,
 #             11 --hud-alloc and no THORN_HUD_ALLOC line, or it reports allocations or a measurement that saw nothing,
 #             12 -thornBoss given and no THORN_BOSS line with spawned=1 and attacks above zero,
-#             13 -thornHero=KEY given and the THORN_MOBILE_SMOKE line is not about hero=KEY (Roadmap Task 19).
+#             13 -thornHero=KEY given and the THORN_MOBILE_SMOKE line is not about hero=KEY (Roadmap Task 19),
+#             14 -thornForce=KEY[,KEY…] given and the THORN_FORCE line misses a key, reports it refused or with 0 hits
+#                (design: .kiro/specs/rot-counter-helix/design.md, Mechanics §28 Р11).
 # -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"
@@ -115,6 +118,25 @@ check_boss()
   fi
   print -r -- "$line"
 }
+# Forced upgrades (-thornForce=KEY[,KEY…]): every key is on the THORN_FORCE line as key=rank:hits with rank and
+# hits above zero (code 14 otherwise).
+check_force()
+{
+  local file="$1" keys="$2" line key pair found
+  line="$(LC_ALL=C grep -a '^THORN_FORCE' "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ -z "$line" ]]; then echo "mac-smoke: no THORN_FORCE line in ${file}" >&2; return 14; fi
+  for key in ${(s:,:)keys}; do
+    found=""
+    for pair in ${(z)line}; do
+      [[ "${pair%%=*}" == "$key" ]] && found="${pair#*=}"
+    done
+    if [[ ! "$found" =~ '^[1-9][0-9]*:[1-9][0-9]*$' ]]; then
+      echo "mac-smoke: forced upgrade ${key} was refused or made no hits: $line" >&2
+      return 14
+    fi
+  done
+  print -r -- "$line"
+}
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -136,6 +158,11 @@ fi
 if [[ "${1:-}" == "--check-boss-log" ]]; then
   check_boss "${2:?log file}" || exit $?
   check_log "$2" no-kills
+  exit $?
+fi
+if [[ "${1:-}" == "--check-force-log" ]]; then
+  check_force "${2:?log file}" "${3:?keys}" || exit $?
+  check_log "$2"
   exit $?
 fi
 if [[ "${1:-}" == "--check-hud-alloc-log" ]]; then
@@ -245,6 +272,9 @@ run_once()
     if [[ "$arg" == -thornHero=* ]] && ! LC_ALL=C grep -aq "^THORN_MOBILE_SMOKE hero=${arg#-thornHero=} " "$runlog"; then
       echo "mac-smoke: the run was not played by ${arg#-thornHero=}, see $runlog" >&2
       return 13
+    fi
+    if [[ "$arg" == -thornForce=* ]]; then
+      check_force "$runlog" "${arg#-thornForce=}" || return $?
     fi
   done
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi

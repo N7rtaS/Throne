@@ -47,6 +47,17 @@ namespace ThornThrone.Simulation
             };
         }
 
+        /// <summary>Circular hit of an ability (<see cref="SimEventKind.AbilityBurst"/>): not about a pooled entity, SpawnId 0.</summary>
+        internal void EmitBurst(Vec2 center, float radius, float value)
+        {
+            if (EventCount == Events.Length) return;
+            Events[EventCount++] = new SimEvent
+            {
+                Kind = SimEventKind.AbilityBurst, Slot = -1, Position = center, Value = value,
+                Extent = new Vec2(radius, 0),
+            };
+        }
+
         private void Emit(SimEventKind kind, Projectile shot, Vec2 position, float value)
         {
             if (EventCount == Events.Length) return;

@@ -156,7 +156,7 @@ namespace ThornThrone.Mobile
             SmokeOptions(args);
         }
 
-        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite).</summary>
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce).</summary>
         private void SmokeOptions(string[] args)
         {
             showSettings = smoke && args.Contains("-thornShowSettings");
@@ -177,6 +177,13 @@ namespace ThornThrone.Mobile
                 foreach (var room in run.EliteRooms) room.UnlockTime = 1;
                 eliteSmoke = true;
                 screenshotTime = 9.5f;
+            }
+            var forceArg = args.FirstOrDefault(a => a.StartsWith(SmokeForce.Prefix));
+            if (smoke && forceArg != null)
+            {
+                force = new SmokeForce();
+                if (!force.Apply(run, SmokeForce.Parse(forceArg))) Debug.LogWarning("[Smoke] -thornForce: an upgrade was refused: " + forceArg);
+                force.KeepOnlyForced(run);
             }
             var drawMode = args.FirstOrDefault(a => a.StartsWith("-thornDrawMode="));
             if (drawMode != null) WorldRenderer.DebugDrawMode = int.Parse(drawMode.Substring("-thornDrawMode=".Length));
@@ -374,6 +381,7 @@ namespace ThornThrone.Mobile
                 Debug.Log($"THORN_BOSS ok={(bossOk ? 1 : 0)} spawned={(spawned ? 1 : 0)} attacks={bossAttacks} " +
                           $"bossHp={(spawned ? run.Boss.Health : 0):0}/{(spawned ? run.Boss.MaxHealth : 0):0} time={run.Time:0.0}");
             }
+            if (force != null) Debug.Log(force.Report(run));
             Debug.Log($"THORN_MOBILE_SMOKE hero={run.Hero.Key} time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(bossSmoke ? (bossOk ? 0 : 12) : run.Kills > 0 ? 0 : 1);
@@ -383,6 +391,8 @@ namespace ThornThrone.Mobile
         // ------------------------------------------------------------------ smoke: screen flow
 
         private bool flowSmoke;
+        /// <summary>Upgrades given by -thornForce=KEY[,KEY…] (Mechanics §28 Р11); null without the option.</summary>
+        private SmokeForce force;
         /// <summary>Screens the flow went through during -thornFlow (FollowFlow appends).</summary>
         private List<string> flowScreens;
         private string flowFailed;

@@ -45,7 +45,8 @@ class SimulationCoverageTests(unittest.TestCase):
     def test_ability_classes_come_from_ability_factory(self):
         self.assertEqual(self.coverage.ability_classes,
                          {"CSurvivorsPowerUpDefinition_ArcaneBolt", "CSurvivorsPowerUpDefinition_MagicMissile",
-                          "CSurvivorsPowerUpDefinition_EchoStrike", "CSurvivorsPowerUpDefinition_InstantAttack"})
+                          "CSurvivorsPowerUpDefinition_EchoStrike", "CSurvivorsPowerUpDefinition_InstantAttack",
+                          "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", "CSurvivorsPowerUpDefinition_CounterHelix"})
 
     def test_instant_attack_supports_only_strongest_target(self):
         # Mechanics §26 Р15: Annihilation shares the class but not the targeting (Task 23).

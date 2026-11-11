@@ -165,5 +165,48 @@ namespace ThornThrone.Mobile.Tests
             Assert.That(target.Health, Is.LessThan(target.MaxHealth), "Echo Strike hit the enemy in front");
             Assert.That(world.StrikeCount, Is.EqualTo(1), "one strike area to draw");
         }
+
+        [Test]
+        public void RotCircleIsShownOnlyWithRot()
+        {
+            var data = LoadSourceData();
+            var run = new Run(data, new Rules(), "dragonus", null, 7);
+            Assert.That(WorldRenderer.RotRadius(run), Is.EqualTo(0), "no Rot, no circle");
+            Assert.That(run.ForceUpgrade("rot"), Is.True);
+            Assert.That(WorldRenderer.RotRadius(run), Is.EqualTo(250).Within(1e-3f), "Radius 250 of rot");
+        }
+
+        [Test]
+        public void BurstMatrixCoversTheStruckCircle()
+        {
+            var m = WorldRenderer.BurstMatrix(new Vec2(100, -200), 360);
+            Vector3 position = m.GetColumn(3);
+            Assert.That(Vector3.Distance(new Vector3(position.x, 0, position.z), WorldRenderer.ToWorld(new Vec2(100, -200))), Is.LessThan(1e-4f));
+            Assert.That(m.MultiplyVector(Vector3.right).magnitude, Is.EqualTo(3.6f).Within(1e-4f), "unit disc scaled to the radius");
+            Assert.That(m.MultiplyVector(Vector3.forward).magnitude, Is.EqualTo(3.6f).Within(1e-4f));
+        }
+
+        [Test]
+        public void ConsumeShowsCounterHelixBurst()
+        {
+            var data = LoadSourceData();
+            var world = Renderer();
+            var run = new Run(data, new Rules(), "dragonus", null, 7) { DebugInvulnerable = true, DebugNoSpawns = true };
+            Assert.That(run.ForceUpgrade("counter_helix"), Is.True);
+            foreach (var owned in run.Build.Owned) if (owned.Def.Key != "counter_helix") owned.Ability = null;
+            run.ClearEvents();
+            var target = run.SpawnEnemy(data.Enemies["zombie"], run.HeroPosition + new Vec2(0, 200), -1);
+            target.Speed = 0;
+            target.MaxHealth = target.Health = 1e6f;
+            for (int i = 0; i < 5; i++)
+            {
+                run.Update(run.Rules.Step, Vec2.Zero, false);
+                world.Consume(run);
+                run.ClearEvents();
+            }
+            Assert.That(target.Health, Is.LessThan(target.MaxHealth), "Counter Helix hit the enemy");
+            Assert.That(world.BurstCount, Is.EqualTo(1), "one disc to draw");
+            Assert.That(world.StrikeCount, Is.EqualTo(0), "not a rectangle");
+        }
     }
 }

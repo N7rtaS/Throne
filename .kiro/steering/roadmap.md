@@ -167,7 +167,7 @@ inclusion: manual
 ✅ (2026-11-11) Task 20: Врождённая Shen, Shen играбелен (Quick Spec)
 - `MagicDamageWeakensPhysicalDamageResistance` через статусы; Shen в меню. Smoke `-thornHero=shen`.
 
-Task 21: Rot и Counter Helix (Spec) — примитив области вокруг героя; тики по данным, нет тиков на паузе, ранги. Smoke `-thornForce=rot,counter_helix`.
+✅ (2026-11-12) Task 21: Rot и Counter Helix (Spec) — примитив области вокруг героя; тики по данным, нет тиков на паузе, ранги. Smoke `-thornForce=rot,counter_helix`.
 
 Task 22: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Spec) — общий механизм цепи (из MagicMissile), мгновенный луч, заморозка; тесты по данным.
 

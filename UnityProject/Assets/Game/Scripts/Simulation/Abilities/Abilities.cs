@@ -36,6 +36,8 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_MagicMissile", (owned, run) => new MagicMissile(owned) },
                 { "CSurvivorsPowerUpDefinition_EchoStrike", (owned, run) => new EchoStrike(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_InstantAttack", (owned, run) => new InstantAttack(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", (owned, run) => new Rot(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_CounterHelix", (owned, run) => new CounterHelix(owned, run.Enemies.Length) },
             };
 
         /// <summary>

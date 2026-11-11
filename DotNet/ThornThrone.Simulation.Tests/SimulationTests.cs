@@ -235,7 +235,7 @@ namespace ThornThrone.Simulation.Tests
                 }
                 Assert.That(run.Build.Choose(choices[0]), Is.True);
             }
-            Assert.That(rounds, Is.EqualTo(26), "implemented skills: Arcane Bolt ranks 2-9, Magic Missile and Echo Strike ranks 1-9");
+            Assert.That(rounds, Is.EqualTo(44), "implemented skills: Arcane Bolt ranks 2-9, Magic Missile, Echo Strike, Rot and Counter Helix ranks 1-9");
             TestContext.WriteLine($"{rounds} upgrades until the pool is exhausted");
         }
 

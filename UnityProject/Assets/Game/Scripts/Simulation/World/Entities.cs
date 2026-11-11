@@ -106,6 +106,8 @@ namespace ThornThrone.Simulation
         HeroDowned, HeroRevived,
         /// <summary>An ability hit an area (Echo Strike): Position is its centre, Direction and Extent its shape (Mechanics §26).</summary>
         AbilityStrike,
+        /// <summary>An ability hit a circle (Counter Helix): Position is its centre, Extent.X its radius (Mechanics §28 Р8).</summary>
+        AbilityBurst,
     }
 
     /// <summary>
@@ -131,7 +133,10 @@ namespace ThornThrone.Simulation
         /// <summary>The hit was critical (<see cref="SimEventKind.EnemyDamaged"/> only).</summary>
         public bool Critical;
 
-        /// <summary>Length (X) and width (Y) of the struck rectangle (<see cref="SimEventKind.AbilityStrike"/> only).</summary>
+        /// <summary>
+        /// Length (X) and width (Y) of the struck rectangle (<see cref="SimEventKind.AbilityStrike"/>);
+        /// radius (X) of the struck circle (<see cref="SimEventKind.AbilityBurst"/>).
+        /// </summary>
         public Vec2 Extent;
     }
 }

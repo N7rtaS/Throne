@@ -117,5 +117,29 @@ class MacSmokeBossCheckTests(unittest.TestCase):
         self.assertEqual(check_boss("absent.log").returncode, 12)
     def test_usual_check_still_requires_kills_on_boss_log(self):
         self.assertEqual(check("boss-ok.log").returncode, 5)
+def check_force(name, keys):
+    return subprocess.run(["zsh", SCRIPT, "--check-force-log", os.path.join(LOGS, name), keys],
+                          capture_output=True, text=True, timeout=30)
+class MacSmokeForceCheckTests(unittest.TestCase):
+    """-thornForce (design: .kiro/specs/rot-counter-helix/design.md, Mechanics §28 Р11): code 14 unless every key hit."""
+    def test_every_key_with_hits_exits_zero_and_prints_both_lines(self):
+        result = check_force("force-ok.log", "rot,counter_helix")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_FORCE rot=1:82 counter_helix=1:37", result.stdout)
+        self.assertIn("THORN_MOBILE_SMOKE hero=dragonus time=30.0 kills=140", result.stdout)
+    def test_key_without_hits_exits_fourteen(self):
+        result = check_force("force-no-hits.log", "rot,counter_helix")
+        self.assertEqual(result.returncode, 14)
+        self.assertIn("counter_helix", result.stderr)
+    def test_refused_key_exits_fourteen(self):
+        self.assertEqual(check_force("force-refused.log", "rot,counter_helix").returncode, 14)
+    def test_key_missing_from_the_line_exits_fourteen(self):
+        self.assertEqual(check_force("force-ok.log", "rot,laguna_blade").returncode, 14)
+    def test_log_without_force_line_exits_fourteen(self):
+        self.assertEqual(check_force("force-no-line.log", "rot").returncode, 14)
+    def test_absent_log_exits_fourteen(self):
+        self.assertEqual(check_force("absent.log", "rot").returncode, 14)
+    def test_force_log_with_exception_exits_six(self):
+        self.assertEqual(check_force("force-exception.log", "rot,counter_helix").returncode, 6)
 if __name__ == "__main__":
     unittest.main()
