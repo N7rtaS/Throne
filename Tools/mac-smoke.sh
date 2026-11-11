@@ -29,7 +29,8 @@
 #             12 -thornBoss given and no THORN_BOSS line with spawned=1 and attacks above zero,
 #             13 -thornHero=KEY given and the THORN_MOBILE_SMOKE line is not about hero=KEY (Roadmap Task 19),
 #             14 -thornForce=KEY[,KEY…] given and the THORN_FORCE line misses a key, reports it refused or with 0 hits
-#                (design: .kiro/specs/rot-counter-helix/design.md, Mechanics §28 Р11).
+#                (design: .kiro/specs/rot-counter-helix/design.md, Mechanics §28 Р11). With -thornForce the run lasts
+#                30 s and longer until every key has hits, at most 65 game seconds (Mechanics §30 Р9).
 # -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"

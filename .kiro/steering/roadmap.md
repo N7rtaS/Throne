@@ -171,7 +171,7 @@ inclusion: manual
 
 ✅ (2026-11-12) Task 22: Knife Throw, Chain Frost, Laguna Blade, Frostbite (Spec) — общий механизм цепи (из MagicMissile), мгновенный луч, заморозка; тесты по данным. Smoke `-thornForce=knife_throw,chain_frost,laguna_blade,frostbite`.
 
-Task 23: Swashbuckle, Stampede, Annihilation, Track (Spec) — по классу на способность; Track — метка с бонусом при убийстве.
+✅ (2026-11-12) Task 23: Swashbuckle, Stampede, Annihilation, Track (Spec) — по классу на способность; Track — метка с бонусом при убийстве.
 
 Task 24: Land Mine, Mortimer Kisses (Spec) — пул `GroundObject` (размер и переполнение задокументированы), навесной снаряд с задержкой (`TriggerTime`, `InitialTickDelay`).
 

@@ -3,21 +3,27 @@ using System;
 namespace ThornThrone.Simulation
 {
     /// <summary>
-    /// Instant attack on chosen enemies (CSurvivorsPowerUp_InstantAttack); so far only Kez's innate «Spot Weakness»
-    /// (m_eTargeting STRONGEST_TARGET_IN_RANGE). Every Cooldown, if an enemy is within Range, picks the TargetCount
-    /// strongest enemies (highest current health, then closer, then lower slot) and hits each of them and every
-    /// enemy within Radius × (1 + AoEIncrease) of it: damage when it is above 0, then the vulnerability mark
-    /// (VulnerabilityDamagePercent, VulnerabilityStunOnHitDuration, VulnerabilityDuration). The selection and the
-    /// area of the mark are design decisions (Mechanics §26 Р10–Р15).
+    /// Instant attack on chosen enemies (CSurvivorsPowerUp_InstantAttack): Kez's innate «Spot Weakness»
+    /// (m_eTargeting STRONGEST_TARGET_IN_RANGE) and Annihilation (RANDOM_TARGET_IN_RANGE). Every Cooldown, if an
+    /// enemy is within Range, picks TargetCount enemies — the strongest (highest current health, then closer, then
+    /// lower slot) or random different ones — and hits each of them and every enemy within Radius × (1 + AoEIncrease)
+    /// of it: damage when it is above 0, then the vulnerability mark (VulnerabilityDamagePercent,
+    /// VulnerabilityStunOnHitDuration, VulnerabilityDuration). The selection and the area of the mark are design
+    /// decisions (Mechanics §26 Р10–Р15, §30 Р15–Р17).
     /// </summary>
     public sealed class InstantAttack : AbilityBase
     {
-        /// <summary>The only targeting mode implemented; Annihilation (RANDOM_TARGET_IN_RANGE) is Task 23.</summary>
         public const string StrongestTarget = "STRONGEST_TARGET_IN_RANGE";
+        public const string RandomTarget = "RANDOM_TARGET_IN_RANGE";
 
-        private const int MaxTargets = 64;
+        /// <summary>Radius of the AbilityBurst event on a random target (display only, Mechanics §30 Р17).</summary>
+        public const float BurstRadius = 80;
 
-        private readonly StrongestTargets targets = new StrongestTargets(MaxTargets);
+        private const int MaxStrongest = 64;
+
+        private readonly bool random;
+        private readonly StrongestTargets strongest;
+        private readonly RandomTargets randomTargets;
         // Enemies of one attack, copied out of the grid queries: damage can kill and recycle slots (split units).
         private readonly Enemy[] area;
         private readonly int[] areaIds;
@@ -26,21 +32,28 @@ namespace ThornThrone.Simulation
         /// <param name="maxEnemies">Size of the enemy pool: one attack can reach every enemy.</param>
         public InstantAttack(OwnedPowerUp owned, int maxEnemies) : base(owned)
         {
+            random = owned.Def.Targeting == RandomTarget;
+            if (random) randomTargets = new RandomTargets(maxEnemies);
+            else strongest = new StrongestTargets(MaxStrongest);
             area = new Enemy[maxEnemies];
             areaIds = new int[maxEnemies];
         }
 
-        /// <summary>Definitions of the class this handler implements (Mechanics §26 Р15).</summary>
-        public static bool Supports(PowerUpDef def) => def.Targeting == StrongestTarget;
+        /// <summary>Definitions of the class this handler implements (Mechanics §26 Р15, §30 Р15).</summary>
+        public static bool Supports(PowerUpDef def) => def.Targeting == StrongestTarget || def.Targeting == RandomTarget;
 
-        public int TargetCount(Run run) => Math.Min(MaxTargets, Math.Max(1, (int)Stat(run, Attr.TargetCount)));
+        public int TargetCount(Run run) =>
+            Math.Min(random ? randomTargets.Capacity : strongest.Capacity, Math.Max(1, (int)Stat(run, Attr.TargetCount)));
         public float MarkRadius(Run run) => Area(run, Attr.Radius);
 
         public override void Tick(Run run, float dt)
         {
             cooldown -= dt;
             if (cooldown > 0) return;
-            int count = targets.Collect(run, run.HeroPosition, Stat(run, Attr.Range), TargetCount(run));
+            float range = Stat(run, Attr.Range);
+            int count = random
+                ? randomTargets.Collect(run, run.HeroPosition, range, TargetCount(run))
+                : strongest.Collect(run, run.HeroPosition, range, TargetCount(run));
             if (count == 0) return;
             cooldown = Cooldown(run);
             int affected = Surround(run, count, MarkRadius(run));
@@ -70,9 +83,11 @@ namespace ThornThrone.Simulation
             int affected = 0;
             for (int t = 0; t < count; t++)
             {
-                var target = targets.Live(t);
+                var target = random ? randomTargets.Live(t) : strongest.Live(t);
                 if (target == null) continue;
-                affected = Add(target, target.SpawnId, affected);
+                // Random targets are different enemies and Annihilation has no Radius: no duplicate check needed.
+                affected = random && radius <= 0 ? Append(target, affected) : Add(target, target.SpawnId, affected);
+                if (random) run.EmitBurst(target.Position, BurstRadius, owned.Def.Id);
                 if (radius <= 0) continue;
                 using var near = run.Grid.Query(target.Position, radius);
                 for (int i = 0; i < near.Count; i++)
@@ -83,6 +98,14 @@ namespace ThornThrone.Simulation
                 }
             }
             return affected;
+        }
+
+        private int Append(Enemy e, int count)
+        {
+            if (count == area.Length) return count;
+            area[count] = e;
+            areaIds[count] = e.SpawnId;
+            return count + 1;
         }
 
         private int Add(Enemy e, int spawnId, int count)

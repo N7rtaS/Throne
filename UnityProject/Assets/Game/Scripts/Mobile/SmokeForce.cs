@@ -59,6 +59,24 @@ namespace ThornThrone.Mobile
                 if (!keys.Contains(owned.Def.Key)) owned.Ability = null;
         }
 
+        /// <summary>
+        /// Longest smoke run with forced upgrades, game seconds: the usual 30 s run goes on until every forced key
+        /// has hit, at most this long. Stampede charges at once without enemies near and next after its 30 s
+        /// cooldown; the longest active cooldown in the data is Annihilation's 60 s (Mechanics §30 Р9).
+        /// </summary>
+        public const float MaxSeconds = 65;
+
+        /// <summary>Every key was given and has hits: the smoke run may end.</summary>
+        public bool AllHit(Run run)
+        {
+            for (int i = 0; i < keys.Count; i++)
+            {
+                var owned = Owned(run, keys[i]);
+                if (refused[i] || owned == null || owned.Stats == null || owned.Stats.Hits == 0) return false;
+            }
+            return true;
+        }
+
         /// <summary>«THORN_FORCE rot=1:82 counter_helix=1:37»: rank and hits per key, «refused» for a refused upgrade.</summary>
         public string Report(Run run)
         {

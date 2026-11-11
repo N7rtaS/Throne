@@ -96,10 +96,11 @@ namespace ThornThrone.Simulation
             var position = enemy.Position;
             int room = enemy.EliteRoom;
             bool boss = enemy == Boss;
+            bool tracked = enemy.Status.AmplifyTime > 0; // Track's mark (Mechanics §30 Р19, Р20)
             RetireEnemy(enemy, SimEventKind.EnemyDied);
             Kills++;
             if (boss) { Finish(true); return true; }
-            DropRewards(def, position);
+            DropRewards(def, position, tracked);
             if (def.SplitOnDeathNumUnits > 0 && Data.EnemiesById.TryGetValue(def.SplitOnDeathEnemyId, out var split))
             {
                 for (int i = 0; i < def.SplitOnDeathNumUnits; i++)
@@ -119,7 +120,7 @@ namespace ThornThrone.Simulation
         /// </summary>
         private void DamageHero(float amount, Enemy attacker = null)
         {
-            if (amount <= 0 || Finished || DebugInvulnerable || Downed) return;
+            if (amount <= 0 || Finished || DebugInvulnerable || Downed || Charging) return; // Stampede (§30 Р12)
             float armor = Math.Min(Build.Global[Attr.Armor], Rules.MaxHeroArmor);
             float taken = amount * (1 - armor);
             Health = Math.Max(0, Health - taken);

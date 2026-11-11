@@ -360,11 +360,12 @@ namespace ThornThrone.Simulation
                 dashTimer = Build.Global[Attr.DashDuration];
                 Emit(SimEventKind.HeroDashed, -1, HeroPosition, 0);
             }
-            Vec2 velocity = dashTimer > 0 ? Facing * Build.Global[Attr.DashSpeed] : move * Build.Global[Attr.MovementSpeed];
+            Vec2 velocity = dashTimer > 0 ? Facing * Build.Global[Attr.DashSpeed] : move * HeroSpeed;
             var p = HeroPosition + velocity * dt;
             p = new Vec2(Clamp(p.X, minX + 100, maxX - 100), Clamp(p.Y, minY + 100, maxY - 100));
             p = PushOutOfSolids(p);
             HeroPosition = Data.Nav != null ? Data.Nav.Move(HeroPosition, p, Rules.HeroRadius, NavMask) : p;
+            UpdateCharge(dt); // Stampede (Mechanics §30 Р11)
             Heal(Build.Global[Attr.HPRegen] * dt);
             stepIndex++;
             historyHead = (historyHead + 1) % heroHistory.Length;
@@ -984,9 +985,10 @@ namespace ThornThrone.Simulation
         /// <summary>
         /// Rewards: every m_vecPickupChances entry rolls independently; m_vecLootTable gives one pickup chosen by
         /// weight; each m_fullLootTable collection rolls its chance and drops Min..Max of every entry
-        /// (interpretations, Mechanics §9); then the luck roll (Mechanics §25 Р11).
+        /// (interpretations, Mechanics §9); then the luck roll (Mechanics §25 Р11), won without a roll by an enemy
+        /// marked by Track (<paramref name="tracked"/>, §30 Р20).
         /// </summary>
-        private void DropRewards(EnemyDef def, Vec2 position)
+        private void DropRewards(EnemyDef def, Vec2 position, bool tracked)
         {
             foreach (var chance in def.PickupChances)
             {
@@ -1011,7 +1013,8 @@ namespace ThornThrone.Simulation
             // Luck: one roll per kill of an enemy with rewards, success drops m_luckyLootTable (Mechanics §25 Р11, Р12).
             float luck = Build.Global[Attr.Luck];
             bool rewards = def.PickupChances.Length + def.LootTable.Length + def.FullLoot.Length > 0;
-            if (rewards && luck > 0 && Rng.Chance(Math.Min(1, luck))) DropCollections(Mode.LuckyLoot, position);
+            // An enemy marked by Track drops it without the roll (Mechanics §30 Р20).
+            if (rewards && (tracked || (luck > 0 && Rng.Chance(Math.Min(1, luck))))) DropCollections(Mode.LuckyLoot, position);
         }
 
         private void DropCollections(LootCollectionDef[] collections, Vec2 position)

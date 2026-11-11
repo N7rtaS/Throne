@@ -48,13 +48,15 @@ class SimulationCoverageTests(unittest.TestCase):
                           "CSurvivorsPowerUpDefinition_EchoStrike", "CSurvivorsPowerUpDefinition_InstantAttack",
                           "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", "CSurvivorsPowerUpDefinition_CounterHelix",
                           "CSurvivorsPowerUpDefinition_KnifeThrow", "CSurvivorsPowerUpDefinition_ProjectileAttack",
-                          "CSurvivorsPowerUpDefinition_LagunaBlade", "CSurvivorsPowerUpDefinition_Frostbite"})
+                          "CSurvivorsPowerUpDefinition_LagunaBlade", "CSurvivorsPowerUpDefinition_Frostbite",
+                          "CSurvivorsPowerUpDefinition_Swashbuckle", "CSurvivorsPowerUpDefinition_Stampede",
+                          "CSurvivorsPowerUpDefinition_Track"})
 
-    def test_instant_attack_supports_only_strongest_target(self):
-        # Mechanics §26 Р15: Annihilation shares the class but not the targeting (Task 23).
+    def test_instant_attack_supports_strongest_and_random_targets(self):
+        # Mechanics §26 Р15, §30 Р15: Kez's innate is STRONGEST_TARGET_IN_RANGE, Annihilation RANDOM_TARGET_IN_RANGE.
         # Mechanics §29 Р6: Chain Frost, the only ProjectileAttack definition, is STRONGEST_TARGET_IN_RANGE.
         self.assertEqual(self.coverage.ability_targeting,
-                         {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE"},
+                         {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE", "RANDOM_TARGET_IN_RANGE"},
                           "CSurvivorsPowerUpDefinition_ProjectileAttack": {"STRONGEST_TARGET_IN_RANGE"}})
 
     def test_supported_hero_attributes_has_thirty_four_entries(self):
@@ -118,9 +120,12 @@ class ImplementationTests(unittest.TestCase):
     def test_demo_magic_missile_is_implemented(self):
         self.assertTrue(at_least("powerups/magic_missile", "implemented"))
 
-    def test_echo_strike_is_verified_and_annihilation_is_none(self):
+    def test_echo_strike_is_verified(self):
         self.assertEqual(level("powerups/echo_strike"), "verified")
-        self.assertEqual(level("powerups/annihilation"), "none")
+
+    def test_task_23_abilities_are_implemented(self):
+        for key in ("swashbuckle", "stampede", "annihilation", "track"):
+            self.assertTrue(at_least("powerups/" + key, "implemented"), key)
 
     def test_demo_absorber_is_implemented(self):
         self.assertTrue(at_least("enemies/absorber", "implemented"))

@@ -30,14 +30,12 @@ namespace ThornThrone.Simulation
         private int queued;
         private float cooldown;
         // Enemies of one hit, copied out of the grid query: damage can kill and recycle slots (split units).
-        private readonly Enemy[] hits;
-        private readonly int[] hitIds;
+        private readonly RectangleTargets targets;
 
         /// <param name="maxEnemies">Size of the enemy pool: one hit can reach every enemy.</param>
         public EchoStrike(OwnedPowerUp owned, int maxEnemies) : base(owned)
         {
-            hits = new Enemy[maxEnemies];
-            hitIds = new int[maxEnemies];
+            targets = new RectangleTargets(maxEnemies);
         }
 
         public float Length(Run run) => Area(run, Attr.Length);
@@ -66,7 +64,7 @@ namespace ThornThrone.Simulation
             if (cooldown > 0) return;
             Vec2 origin = run.HeroPosition, direction = run.Facing;
             float length = Length(run), width = Width(run);
-            if (Collect(run, origin, direction, length, width, true) == 0) return;
+            if (!RectangleTargets.Any(run, origin, direction, length, width)) return;
             cooldown = Cooldown(run);
             if (queued == MaxQueued)
             {
@@ -83,49 +81,18 @@ namespace ThornThrone.Simulation
 
         private void Strike(Run run, ref Cast cast)
         {
-            int count = Collect(run, cast.Origin, cast.Direction, cast.Length, cast.Width, false);
+            int count = targets.Collect(run, cast.Origin, cast.Direction, cast.Length, cast.Width);
             run.EmitStrike(cast.Origin + cast.Direction * (cast.Length * 0.5f), cast.Direction,
                 new Vec2(cast.Length, cast.Width), owned.Def.Id);
             for (int i = 0; i < count; i++)
             {
-                var e = hits[i];
-                hits[i] = null;
-                if (!e.Active || e.SpawnId != hitIds[i]) continue;
+                var e = targets.Live(i);
+                if (e == null || run.Finished) continue;
+                int id = e.SpawnId;
                 run.DealDamage(e, cast.Hit);
                 if (run.Finished) return;
-                if (e.Active && e.SpawnId == hitIds[i]) run.Knockback(e, cast.Direction, cast.Knockback);
+                if (e.Active && e.SpawnId == id) run.Knockback(e, cast.Direction, cast.Knockback);
             }
         }
-
-        /// <summary>
-        /// Targetable enemies whose circle touches the rectangle from <paramref name="origin"/> along
-        /// <paramref name="direction"/>; written to <see cref="hits"/> unless only the presence is asked.
-        /// </summary>
-        private int Collect(Run run, Vec2 origin, Vec2 direction, float length, float width, bool any)
-        {
-            float half = width * 0.5f;
-            Vec2 side = direction.Perpendicular;
-            Vec2 center = origin + direction * (length * 0.5f);
-            float reach = (float)Math.Sqrt(length * length * 0.25f + half * half) + run.MaxEnemyRadius;
-            using var near = run.Grid.Query(center, reach);
-            int count = 0;
-            for (int i = 0; i < near.Count; i++)
-            {
-                var e = run.Enemies[near[i]];
-                if (!e.Targetable) continue;
-                Vec2 d = e.Position - origin;
-                float along = Vec2.Dot(d, direction), across = Vec2.Dot(d, side);
-                float dx = along - Clamp(along, 0, length), dy = across - Clamp(across, -half, half);
-                if (dx * dx + dy * dy > e.Radius * e.Radius) continue;
-                if (any) return 1;
-                if (count == hits.Length) break;
-                hits[count] = e;
-                hitIds[count] = e.SpawnId;
-                count++;
-            }
-            return count;
-        }
-
-        private static float Clamp(float value, float min, float max) => value < min ? min : value > max ? max : value;
     }
 }

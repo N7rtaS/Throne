@@ -396,14 +396,14 @@ namespace ThornThrone.Simulation.Tests
         }
 
         [Test]
-        public void AnnihilationIsNotImplementedYet()
+        public void AnnihilationSharesTheClassAndIsImplemented()
         {
             var data = TestData.Load();
             var annihilation = data.PowerUps["annihilation"];
             Assert.That(annihilation.Class, Is.EqualTo(data.PowerUps["kez_innate"].Class), "same class");
             Assert.That(AbilityFactory.Has(data.PowerUps["kez_innate"]), Is.True);
-            Assert.That(AbilityFactory.Has(annihilation), Is.False, "RANDOM_TARGET_IN_RANGE is Task 23");
-            Assert.That(Run.IsImplemented(annihilation), Is.False);
+            Assert.That(AbilityFactory.Has(annihilation), Is.True, "RANDOM_TARGET_IN_RANGE since Task 23 (Mechanics §30 Р15)");
+            Assert.That(Run.IsImplemented(annihilation), Is.True);
             Assert.That(Run.IsImplemented(data.PowerUps["echo_strike"]), Is.True);
         }
 

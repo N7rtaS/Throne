@@ -46,14 +46,14 @@
   "powerups": {
    "role:service:not-rollable": 1,
    "prototype:none": 37,
-   "implementation:none": 11,
+   "implementation:none": 7,
    "unreachable": 2,
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 28,
+   "implementation:verified": 31,
    "reachable": 45,
-   "implementation:implemented": 8,
+   "implementation:implemented": 9,
    "role:recipe": 9,
    "role:active-ability": 17,
    "role:innate": 3
@@ -100,9 +100,9 @@
    "reachable": 59,
    "role:attribute": 51,
    "prototype:none": 50,
-   "implementation:none": 13,
+   "implementation:none": 8,
    "unreachable": 6,
-   "implementation:verified": 23,
+   "implementation:verified": 28,
    "implementation:implemented": 15
   }
  },
@@ -490,6 +490,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:DragonusInnateAddsOneTarget",
     "AppFlowTests.cs:InvalidCommandChangesNothing",
     "AppFlowTests.cs:PlayAgainKeepsHeroAndEchelonWithNewSeed",
     "AppFlowTests.cs:ResultIsRecordedOnce",
@@ -533,7 +534,11 @@
     "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
-    "SimulationTests.cs:NewRun"
+    "SimulationTests.cs:NewRun",
+    "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp",
+    "SwashStampedeTrackTests.cs:BotRunsWithAllFour",
+    "SwashStampedeTrackTests.cs:StepsDoNotAllocateAfterWarmUpWithAllFour",
+    "TrackTests.cs:DragonusInnateAddsOneTarget"
    ],
    "implementation": "verified",
    "required": true
@@ -601,7 +606,8 @@
     "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData",
     "ShenInnateTests.cs:StepsDoNotAllocateAfterWarmUpWithShen",
     "SimulationTests.cs:CatalogMatchesAudit",
-    "SimulationTests.cs:DashComesFromHeroData"
+    "SimulationTests.cs:DashComesFromHeroData",
+    "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp"
    ],
    "implementation": "partial",
    "required": true
@@ -646,6 +652,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "ChainBeamFreezeTests.cs:Arena",
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
@@ -669,7 +676,11 @@
     "ProfileTests.cs:Sample",
     "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
-    "SimulationTests.cs:DashComesFromHeroData"
+    "SimulationTests.cs:DashComesFromHeroData",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
+    "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -1686,7 +1697,8 @@
     "PassiveItemTests.cs:PhylacteryAddsToArcaneBoltDamage",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
-    "SimulationTests.cs:Shoot"
+    "SimulationTests.cs:Shoot",
+    "TrackTests.cs:ArcaneBoltHitsAMarkedEnemyHarder"
    ],
    "implementation": "verified",
    "required": true
@@ -1744,7 +1756,7 @@
     "EchoStrikeTests.cs:LaterTicksHitTheSameAreaAfterTheHeroLeaves",
     "EchoStrikeTests.cs:RankNineUsesAuthoredRecords",
     "EchoStrikeTests.cs:Upgrade",
-    "KezInnateTests.cs:AnnihilationIsNotImplementedYet",
+    "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented",
     "KezInnateTests.cs:EchoStrikeOnMarkedEnemyCritsAndStuns",
     "KezInnateTests.cs:InnateArena",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
@@ -1799,9 +1811,10 @@
    "source": "pangolier",
    "missingResources": [],
    "tests": [
-    "StatusTests.cs:DotOverflowReplacesShortestAndReports"
+    "StatusTests.cs:DotOverflowReplacesShortestAndReports",
+    "SwashStampedeTrackTests.cs:PauseAndChoiceStopSeriesChargeAndCooldowns"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/stampede": {
@@ -1844,7 +1857,7 @@
    "source": "centaur",
    "missingResources": [],
    "tests": [],
-   "implementation": "none",
+   "implementation": "implemented",
    "required": true
   },
   "powerups/counter_helix": {
@@ -1998,9 +2011,9 @@
    "source": "skreeauk",
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:AnnihilationIsNotImplementedYet"
+    "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/chain_frost": {
@@ -2333,7 +2346,7 @@
    "tests": [
     "DamageTests.cs:AmplificationAppliesToPhysicalAndMagical"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/spirits": {
@@ -2599,9 +2612,10 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:KezInnateKeepsTheStrongestTarget",
     "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
-    "KezInnateTests.cs:AnnihilationIsNotImplementedYet",
+    "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented",
     "KezInnateTests.cs:Base",
     "KezInnateTests.cs:InnateArena",
     "KezInnateTests.cs:InnateDealsNoDamage",
@@ -2848,7 +2862,10 @@
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
-    "StatusTests.cs:Zombie"
+    "StatusTests.cs:Zombie",
+    "TrackTests.cs:KillAfterTheMarkEndsDropsAsBefore",
+    "TrackTests.cs:MarkedEnemyWithRewardsAlwaysDropsLuckyLoot",
+    "TrackTests.cs:UnmarkedEnemyDropsNoLuckyLootWithoutLuck"
    ],
    "implementation": "verified",
    "required": true
@@ -3820,7 +3837,9 @@
     "MagicMissileTests.cs:StatusResistanceScalesStun",
     "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
     "SimulationTests.cs:MissingImperiaFieldFailsLoading",
-    "StatusTests.cs:ControlDurationScalesWithStatusResistance"
+    "StatusTests.cs:ControlDurationScalesWithStatusResistance",
+    "TrackTests.cs:ImperiaIsMarked",
+    "TrackTests.cs:MarkedEnemyWithoutRewardsDropsNothing"
    ],
    "implementation": "verified",
    "required": true
@@ -4395,7 +4414,10 @@
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
-    "StatusTests.cs:Zombie"
+    "StatusTests.cs:Zombie",
+    "TrackTests.cs:KillAfterTheMarkEndsDropsAsBefore",
+    "TrackTests.cs:MarkedEnemyWithRewardsAlwaysDropsLuckyLoot",
+    "TrackTests.cs:UnmarkedEnemyDropsNoLuckyLootWithoutLuck"
    ],
    "implementation": "verified",
    "required": true
@@ -5444,7 +5466,8 @@
    "missingResources": [],
    "tests": [
     "LuckTests.cs:Kill",
-    "LuckTests.cs:LuckyLootIsReadFromMode"
+    "LuckTests.cs:LuckyLootIsReadFromMode",
+    "TrackTests.cs:Kill"
    ],
    "implementation": "verified",
    "required": true
@@ -5480,7 +5503,8 @@
    "missingResources": [],
    "tests": [
     "LuckTests.cs:Kill",
-    "LuckTests.cs:LuckyLootIsReadFromMode"
+    "LuckTests.cs:LuckyLootIsReadFromMode",
+    "TrackTests.cs:Kill"
    ],
    "implementation": "verified",
    "required": true
@@ -5814,8 +5838,12 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6047,7 +6075,9 @@
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:KezRunsAtThreeHundred",
     "KezInnateTests.cs:ReferenceGlobal",
-    "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
+    "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents",
+    "StampedeTests.cs:ChargeStartsWithoutEnemiesAndRunsAtItsSpeedForItsDuration",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
    "required": true
@@ -6094,10 +6124,14 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
-    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6179,13 +6213,15 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
     "ChainFrostTests.cs:RanksUseAuthoredRecords",
     "FrostbiteTests.cs:FrostbiteIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "KnifeThrowTests.cs:KnifeThrowIsImplementedAndUsesItsDataAtRankOne",
-    "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne"
+    "LagunaBladeTests.cs:LagunaBladeIsImplementedAndUsesItsDataAtRankOne",
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
    "required": true
@@ -6470,7 +6506,9 @@
    "missingResources": [],
    "tests": [
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6678,7 +6716,8 @@
    "missingResources": [],
    "tests": [
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6711,7 +6750,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6779,7 +6819,8 @@
    "tests": [
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "KezInnateTests.cs:MarkSpreadsWithinRadiusOfTheTarget",
-    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne"
+    "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6810,7 +6851,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -6951,8 +6993,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_Duration": {
@@ -6981,8 +7025,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_DurationExtension": {
@@ -7010,7 +7056,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "ShenInnateTests.cs:DurationExtensionLengthensWeakening"
+    "ShenInnateTests.cs:DurationExtensionLengthensWeakening",
+    "StampedeTests.cs:DurationExtensionLengthensTheCharge"
    ],
    "implementation": "verified",
    "required": true
@@ -7039,8 +7086,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ActiveAbilitySlots": {
@@ -7166,7 +7215,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData"
+    "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "verified",
    "required": true
@@ -7436,8 +7486,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_IncomingDamageAmplificationDuration": {
@@ -7464,8 +7516,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileDamagePercent": {
@@ -7590,7 +7644,9 @@
    "missingResources": [],
    "tests": [
     "LuckTests.cs:HeroesStartWithLuckFromData",
-    "LuckTests.cs:LuckRun"
+    "LuckTests.cs:LuckRun",
+    "TrackTests.cs:EnemyKilledAfterTrackDropsGold",
+    "TrackTests.cs:Unlucky"
    ],
    "implementation": "verified",
    "required": true
@@ -7632,10 +7688,12 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
-    "SimulationTests.cs:DragonusStartsWithInnateBonuses"
+    "SimulationTests.cs:DragonusStartsWithInnateBonuses",
+    "TrackTests.cs:TrackIsImplementedAndUsesItsDataAtRankOne"
    ],
    "implementation": "partial",
    "required": true

@@ -45,6 +45,23 @@ namespace ThornThrone.Mobile.Tests
         }
 
         [Test]
+        public void AllHitWaitsForEveryForcedKey()
+        {
+            var run = new Run(LoadSourceData(), new Rules(), "dragonus", null, 7);
+            var force = new SmokeForce();
+            Assert.That(force.Apply(run, SmokeForce.Parse("-thornForce=rot,stampede")), Is.True);
+            Assert.That(force.AllHit(run), Is.False, "no hits yet");
+            foreach (var owned in run.Build.Owned) if (owned.Def.Key == "rot") owned.Stats.Hits = 3;
+            Assert.That(force.AllHit(run), Is.False, "stampede has not hit");
+            foreach (var owned in run.Build.Owned) if (owned.Def.Key == "stampede") owned.Stats.Hits = 1;
+            Assert.That(force.AllHit(run), Is.True);
+            var refused = new SmokeForce();
+            refused.Apply(run, SmokeForce.Parse("-thornForce=no_such_power"));
+            Assert.That(refused.AllHit(run), Is.False, "a refused key never ends the wait");
+            Assert.That(SmokeForce.MaxSeconds, Is.GreaterThan(60), "Annihilation's 60 s cooldown fits");
+        }
+
+        [Test]
         public void UnknownKeyIsReportedAsRefused()
         {
             var run = new Run(LoadSourceData(), new Rules(), "dragonus", null, 7);

@@ -42,11 +42,14 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_ProjectileAttack", (owned, run) => new ChainFrost(owned, run) },
                 { "CSurvivorsPowerUpDefinition_LagunaBlade", (owned, run) => new LagunaBlade(owned, run) },
                 { "CSurvivorsPowerUpDefinition_Frostbite", (owned, run) => new Frostbite(owned) },
+                { "CSurvivorsPowerUpDefinition_Swashbuckle", (owned, run) => new Swashbuckle(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_Stampede", (owned, run) => new Stampede(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_Track", (owned, run) => new Track(owned) },
             };
 
         /// <summary>
-        /// Handlers that implement only some definitions of their class (InstantAttack: one targeting mode so far,
-        /// Mechanics §26 Р15; ProjectileAttack: Chain Frost's targeting, §29 Р6). A class without an entry supports
+        /// Handlers that implement only some definitions of their class (InstantAttack: strongest and random targets,
+        /// Mechanics §26 Р15, §30 Р15; ProjectileAttack: Chain Frost's targeting, §29 Р6). A class without an entry supports
         /// every definition.
         /// </summary>
         private static readonly Dictionary<string, Func<PowerUpDef, bool>> supports =

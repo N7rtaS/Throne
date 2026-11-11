@@ -93,6 +93,12 @@ namespace ThornThrone.Simulation
         public static readonly int ModifierDamagePerTick = Id("ModifierDamagePerTick");
         public static readonly int ProjectileDamagePercent = Id("ProjectileDamagePercent");
         public static readonly int ProjectileHorizontalOffset = Id("ProjectileHorizontalOffset");
+        // Swashbuckle, Stampede, Track (Mechanics §30).
+        public static readonly int Directions = Id("Directions");
+        public static readonly int Duration = Id("Duration");
+        public static readonly int StampedeMovementSpeed = Id("StampedeMovementSpeed");
+        public static readonly int IncomingDamageAmplification = Id("IncomingDamageAmplification");
+        public static readonly int IncomingDamageAmplificationDuration = Id("IncomingDamageAmplificationDuration");
     }
 
     /// <summary>Additive attribute totals.</summary>

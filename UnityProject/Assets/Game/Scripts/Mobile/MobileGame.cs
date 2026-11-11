@@ -357,6 +357,8 @@ namespace ThornThrone.Mobile
                 StartCoroutine(CaptureTga(shot.Substring("-thornScreenshot=".Length)));
             }
             if (run.Time < 30 && !run.Finished) return;
+            // -thornForce: wait for every forced key to hit (Stampede's second charge comes at 30 s), Mechanics §30 Р9.
+            if (force != null && !force.AllHit(run) && run.Time < SmokeForce.MaxSeconds && !run.Finished) return;
             if (inputScript != null && !inputScript.Finished)
             {
                 Debug.Log("THORN_INPUT_SCRIPT ok=0 failed=not_finished_in_30s");
