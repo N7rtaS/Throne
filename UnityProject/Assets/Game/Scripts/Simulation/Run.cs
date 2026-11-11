@@ -174,7 +174,7 @@ namespace ThornThrone.Simulation
             data.Pickups.TryGetValue("experience", out experienceDef);
             foreach (var e in data.Enemies.Values) if (e.IsBoss) { bossDef = e; break; }
 
-            Enemies = Create(Rules.MaxEnemies, i => new Enemy { Slot = i }, out freeEnemies, out freeEnemyCount);
+            Enemies = Create(Rules.MaxEnemies, i => new Enemy(Rules.MaxDotsPerEnemy) { Slot = i }, out freeEnemies, out freeEnemyCount);
             Projectiles = Create(Rules.MaxProjectiles, i => new Projectile { Slot = i }, out freeProjectiles, out freeProjectileCount);
             Pickups = Create(Rules.MaxPickups, i => new Pickup { Slot = i }, out freePickups, out freePickupCount);
             grid = new SpatialGrid(minX - 2500, minY - 2500, maxX + 2500, maxY + 2500, 256, Rules.MaxEnemies);
@@ -310,6 +310,8 @@ namespace ThornThrone.Simulation
             if (BossSpawned) { UpdateBoss(dt); if (Finished) return; }
             RebuildGrid();
             UpdateEnemies(dt);
+            if (Finished) return;
+            UpdateStatuses(dt);
             if (Finished) return;
             RebuildGrid();
             for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
@@ -558,7 +560,7 @@ namespace ThornThrone.Simulation
             enemy.AttackWindup = -1;
             enemy.AttackCooldown = def.Attacks.Length > 0 ? Rng.Range(0, def.Attacks[0].Cooldown) : 0;
             enemy.ResurrectionsLeft = def.ResurrectionTimes;
-            enemy.StunTimer = 0;
+            enemy.Status.Reset();
             if (eventIndex >= 0) spawnEvents[eventIndex].Alive++;
             ActiveEnemies++;
             ReportUnsupportedEnemy(def);
@@ -613,14 +615,15 @@ namespace ThornThrone.Simulation
             {
                 var enemy = Enemies[i];
                 if (!enemy.Active) continue;
+                int spawnId = enemy.SpawnId;
                 enemy.Age += dt;
                 var def = enemy.Def;
                 Vec2 toHero = HeroPosition - enemy.Position;
                 Vec2 desired;
                 // Stunned: no own movement and attack timers stand still; separation and contact still apply
                 // (interpretation, Mechanics §15).
-                bool stunned = enemy.StunTimer > 0;
-                if (stunned) { enemy.StunTimer -= dt; desired = Vec2.Zero; }
+                bool stunned = enemy.Stunned;
+                if (stunned) desired = Vec2.Zero;
                 else switch (def.Movement)
                 {
                     case MovementBehavior.Tracking:
@@ -648,6 +651,7 @@ namespace ThornThrone.Simulation
                     }
                     default: desired = Vec2.Zero; break;
                 }
+                desired *= enemy.Status.MoveFactor; // slow and freeze (Mechanics §24)
 
                 if (def.Movement != MovementBehavior.Stationary)
                 {
@@ -680,12 +684,14 @@ namespace ThornThrone.Simulation
                     if (contactTimer <= 0 && !(Rules.DashGrantsInvulnerability && Dashing))
                     {
                         contactTimer = Rules.ContactDamageInterval;
-                        DamageHero(enemy.TouchDamage);
+                        DamageHero(enemy.TouchDamage, enemy);
                         if (Finished) return;
+                        if (!enemy.Active || enemy.SpawnId != spawnId) continue; // killed by reflection
                     }
                 }
 
                 if (def.Attacks.Length > 0 && !stunned) { UpdateEnemyAttack(enemy, dt); if (Finished) return; }
+                if (!enemy.Active || enemy.SpawnId != spawnId) continue;
                 if (def.AbsorbRadius > 0) Absorb(enemy);
 
                 // Despawn enemies left far behind.
@@ -696,41 +702,6 @@ namespace ThornThrone.Simulation
                     if (enemy.OutOfRangeTime >= Mode.EnemyDespawnTime) RetireEnemy(enemy, SimEventKind.EnemyDespawned);
                 }
                 else enemy.OutOfRangeTime = 0;
-            }
-        }
-
-        public void DamageEnemy(Enemy enemy, float damage)
-        {
-            if (!enemy.Active || Finished || !enemy.Targetable) return;
-            enemy.Health -= damage;
-            if (enemy == Boss) ClampBossHealth(enemy);
-            Emit(SimEventKind.EnemyDamaged, enemy, enemy.Position, damage);
-            if (enemy.Health > 0) return;
-            var def = enemy.Def;
-            if (enemy.ResurrectionsLeft > 0)
-            {
-                // Resurrector: returns with full health and faster (m_flMovementSpeedMultiplierPerDeath).
-                enemy.ResurrectionsLeft--;
-                enemy.Health = enemy.MaxHealth;
-                enemy.Speed *= 1 + def.MovementSpeedMultiplierPerDeath;
-                Emit(SimEventKind.EnemyResurrected, enemy, enemy.Position, enemy.ResurrectionsLeft);
-                return;
-            }
-            var position = enemy.Position;
-            int room = enemy.EliteRoom;
-            bool boss = enemy == Boss;
-            RetireEnemy(enemy, SimEventKind.EnemyDied);
-            Kills++;
-            if (boss) { Finish(true); return; }
-            DropRewards(def, position);
-            if (def.SplitOnDeathNumUnits > 0 && Data.EnemiesById.TryGetValue(def.SplitOnDeathEnemyId, out var split))
-            {
-                for (int i = 0; i < def.SplitOnDeathNumUnits; i++)
-                {
-                    var offset = Vec2.FromAngle(Rng.Angle()) * Math.Max(1, def.SplitOnDeathKnockbackDistance);
-                    var child = SpawnEnemy(split, ClampToMap(position + offset), -1);
-                    if (child != null) child.EliteRoom = room;
-                }
             }
         }
 
@@ -799,19 +770,6 @@ namespace ThornThrone.Simulation
             return pick;
         }
 
-        /// <summary>
-        /// Stuns for duration × (1 − m_flStatusResistance); a longer remaining stun is kept (interpretation).
-        /// Imperia and other enemies with resistance 1 are immune.
-        /// </summary>
-        public void Stun(Enemy enemy, float duration)
-        {
-            if (!enemy.Active || enemy.Def.Movement == MovementBehavior.Stationary) return;
-            float time = duration * Math.Max(0, 1 - enemy.Def.StatusResistance);
-            if (time <= enemy.StunTimer) return;
-            enemy.StunTimer = time;
-            Emit(SimEventKind.EnemyStunned, enemy, enemy.Position, time);
-        }
-
         // ------------------------------------------------------------------ projectiles
 
         /// <summary>
@@ -833,7 +791,7 @@ namespace ThornThrone.Simulation
                 {
                     float reach = attack.Radius + Rules.HeroRadius;
                     if (Vec2.DistanceSquared(enemy.Position, HeroPosition) < reach * reach && !(Rules.DashGrantsInvulnerability && Dashing))
-                        DamageHero(attack.Damage * (1 + Difficulty.EnemyDamageMultiplier));
+                        DamageHero(attack.Damage * (1 + Difficulty.EnemyDamageMultiplier), enemy);
                     return;
                 }
                 var shot = SpawnProjectile(null);
@@ -898,6 +856,9 @@ namespace ThornThrone.Simulation
             shot.Bounces = 0;
             shot.Stun = 0;
             shot.ArmTime = 0;
+            shot.DamageType = DamageType.Pure;
+            shot.DamageFlags = DamageFlags.None;
+            shot.DamageSource = source?.Stats ?? DamageStats.Other;
             ActiveProjectiles++;
             Emit(SimEventKind.ProjectileFired, shot, HeroPosition, 0);
             return shot;
@@ -989,7 +950,7 @@ namespace ThornThrone.Simulation
                         if (!flying) shot.RemainingHits = 0;
                         break;
                     }
-                    DamageEnemy(best, shot.Damage);
+                    DealDamage(best, shot.Hit);
                     if (Finished) return;
                     Knockback(best, shot.Velocity, shot.Knockback);
                     if (effect != null) { effect.AfterHit(this, shot, best); if (Finished) return; }
@@ -1224,9 +1185,12 @@ namespace ThornThrone.Simulation
             foreach (var owned in Build.Owned)
             {
                 if (owned.Ability != null || !(owned.Def.IsActive || owned.Def.IsInnateAbility)) continue;
+                if (owned.Stats == null) owned.Stats = DamageStats.Register(owned.Def);
                 owned.Ability = AbilityFactory.Create(owned);
                 if (owned.Ability == null)
                     Diagnostics.Report("ability:" + owned.Def.Class, $"Ability {owned.Def.Class} ({owned.Def.Key}) is not implemented");
+                else if (owned.Ability is AbilityBase ability && !ability.DamageTypeKnown)
+                    Diagnostics.Report("damage-type:" + owned.Def.Key, $"Ability {owned.Def.Key} has no single damage type (Damage_Physical or Damage_Magical); its hits are pure");
             }
         }
 
@@ -1237,14 +1201,6 @@ namespace ThornThrone.Simulation
 
         /// <summary>Debug hook: ends the run as a victory (the original menu has a «Win Game» debug button; smoke -thornFlow).</summary>
         public void DebugWin() => Finish(true);
-
-        private void DamageHero(float amount)
-        {
-            if (amount <= 0 || Finished || DebugInvulnerable) return;
-            Health = Math.Max(0, Health - amount);
-            Emit(SimEventKind.HeroDamaged, -1, HeroPosition, amount);
-            if (Health <= 0) Finish(false);
-        }
 
         private void Heal(float amount)
         {

@@ -57,6 +57,18 @@ namespace ThornThrone.Simulation
         public static readonly int ProjectileBounces = Id("ProjectileBounces");
         public static readonly int StunDuration = Id("StunDuration");
         public static readonly int Radius = Id("Radius");
+        // Combat core (Mechanics §24).
+        public static readonly int Damage_Physical = Id("Damage_Physical");
+        public static readonly int DamageMultiplier = Id("DamageMultiplier");
+        public static readonly int DamageMultiplier_Physical = Id("DamageMultiplier_Physical");
+        public static readonly int BonusPhysicalDamage = Id("BonusPhysicalDamage");
+        public static readonly int Projectile_BonusMagicDamage = Id("Projectile_BonusMagicDamage");
+        public static readonly int CriticalStrike_Physical_Chance = Id("CriticalStrike_Physical_Chance");
+        public static readonly int CriticalStrike_Physical_DamageMultiplier = Id("CriticalStrike_Physical_DamageMultiplier");
+        public static readonly int CriticalStrike_Projectile_Chance = Id("CriticalStrike_Projectile_Chance");
+        public static readonly int CriticalStrike_Projectile_DamageMultiplier = Id("CriticalStrike_Projectile_DamageMultiplier");
+        public static readonly int Armor = Id("Armor");
+        public static readonly int DamageReflection = Id("DamageReflection");
     }
 
     /// <summary>Additive attribute totals.</summary>

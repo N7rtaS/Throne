@@ -28,9 +28,14 @@ namespace ThornThrone.Simulation
         /// <summary>Ground walker sees its chase target in a straight line (refreshed every third step).</summary>
         public bool ClearPath;
         public int ResurrectionsLeft;
-        /// <summary>Seconds of stun left: no movement and no attacks (Magic Missile).</summary>
-        public float StunTimer;
-        public bool Stunned => StunTimer > 0;
+        /// <summary>Statuses of this slot, created with the pool and cleared on every spawn (Mechanics §24).</summary>
+        public readonly EnemyStatus Status;
+        /// <summary>Seconds of stun left: no movement and no attacks (Magic Missile). Set through <see cref="Run.Stun"/>.</summary>
+        public float StunTimer => Status.Stun;
+        public bool Stunned => Status.Stunned;
+
+        public Enemy() : this(4) { }
+        public Enemy(int maxDots) { Status = new EnemyStatus(maxDots); }
         public bool Hostile => !Def.PlayerFriendly;
         public bool Targetable => Active && !Def.PlayerFriendly && !Def.Invulnerable && !Shielded;
     }
@@ -49,6 +54,13 @@ namespace ThornThrone.Simulation
         /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
         public Vec2 PreviousPosition;
         public float Speed, Radius, Damage, Knockback, Life;
+        /// <summary>Type and delivery of <see cref="Damage"/> against enemies (pure by default; abilities set them at launch).</summary>
+        public DamageType DamageType;
+        public DamageFlags DamageFlags;
+        /// <summary>Statistics entry the hits are counted in.</summary>
+        public DamageStatEntry DamageSource;
+        /// <summary>Hit on an enemy, snapshotted at launch.</summary>
+        public DamageInfo Hit => new DamageInfo(Damage, DamageType, DamageFlags, DamageSource);
         public int RemainingHits;
         public Enemy Target;
         public int TargetSpawnId;
@@ -111,5 +123,9 @@ namespace ThornThrone.Simulation
         public EnemyDef EnemyDef;
         /// <summary>Enemy direction at the time of the event (enemy events only).</summary>
         public Vec2 Direction;
+        /// <summary>Type of the damage (<see cref="SimEventKind.EnemyDamaged"/> only).</summary>
+        public DamageType DamageType;
+        /// <summary>The hit was critical (<see cref="SimEventKind.EnemyDamaged"/> only).</summary>
+        public bool Critical;
     }
 }

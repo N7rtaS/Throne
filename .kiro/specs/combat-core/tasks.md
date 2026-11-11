@@ -1,0 +1,11 @@
+# План: общее ядро боя (Task 17)
+- [x] 1. Тесты до кода: `DamageTests.cs` и `StatusTests.cs` по `design.md` §6 (заглушки API, чтобы сборка шла); запустить, убедиться, что новые тесты падают по нужной причине, а старые зелёные — _Требования 2–28_
+- [x] 2. `Combat/DamageInfo.cs` (`DamageType`, `DamageFlags`, `DamageInfo`), `Combat/DamageStats.cs`; новые `Attr` в `Stats/Attributes.cs`; `Rules.MaxHeroArmor`, `Rules.MaxDotsPerEnemy` — _Требования 5, 27_
+- [x] 3. `Abilities/AbilityBase.cs`; перенести `ArcaneBolt` и `MagicMissile` в свои файлы на `AbilityBase`; `Projectile.Hit`; тип урона из данных с диагностикой — _Требования 1–4_
+- [x] 4. `Run.Combat.cs`: `DealDamage` (криты, уязвимость, ослабление, усиление, чистый урон, порог Империи, статистика, событие), обёртка `DamageEnemy`; цикл снарядов и Magic Missile на `DealDamage` — _Требования 6–13, 27_
+- [x] 5. `DamageHero` с бронёй и отражением; касание и ближняя атака передают нападающего; `Run.Boss.cs` без нападающего — _Требования 14, 15_
+- [x] 6. `Status/EnemyStatus.cs`: состояние и правила наложения; `Enemy.Status`, `Stunned`/`StunTimer` только чтение; сброс в `SpawnEnemy`; `Run.Stun/Slow/Freeze/ApplyDot/Weaken/Amplify/MarkVulnerable`; `UpdateStatuses` после `UpdateEnemies`; множитель скорости в `UpdateEnemies` — _Требования 16–26_
+- [x] 7. Записи статистики в `CreateAbilities`; сохранение при поглощении рецептом — _Требования 27, 28_
+- [x] 8. `.meta` для новых файлов и папок; `SimEvent.DamageType`, `SimEvent.Critical` — _Требования 13, 30_
+- [x] 9. Полный `dotnet test DotNet/ThornThrone.Simulation.Tests` (включая проверки выделений) и `python3 -m unittest discover -s Tools/tests`; проверить, что `Run.cs` вырос не больше чем на несколько строк — _Требования 4, 29, 30_
+- [x] 10. `Mechanics.md` §24 (Р1–Р16 с метками, ссылка из §15 на перенос оглушения); `product.md` не трогать; отметить Task 17 в `roadmap.md`; коммит — _Требование 31_

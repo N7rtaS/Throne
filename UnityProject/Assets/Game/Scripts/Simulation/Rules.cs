@@ -86,6 +86,14 @@ namespace ThornThrone.Simulation
         /// <summary>SPAWNER_ORIGIN_RADIUS spawn radius around a portal when the spawner has no m_vecOvalRadius.</summary>
         public float PortalSpawnRadius = 300;
 
+        // ---- Combat core (Р, Mechanics §24) ----
+
+        /// <summary>Upper limit of the hero's Armor (damage resistance fraction); data reaches 0.55 at most.</summary>
+        public float MaxHeroArmor = 0.9f;
+
+        /// <summary>Periodic effects one enemy holds at once; a new source replaces the one with the least time left.</summary>
+        public int MaxDotsPerEnemy = 4;
+
         /// <summary>Hard pool limits; reaching them is reported and never stops the run.</summary>
         public int MaxEnemies = 1024, MaxProjectiles = 1024, MaxPickups = 1024;
     }

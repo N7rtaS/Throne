@@ -11,6 +11,8 @@ namespace ThornThrone.Simulation
         /// <summary>Attributes of the powerup itself: base plus applied authored upgrades.</summary>
         public readonly AttributeSet Local = new AttributeSet();
         public IAbility Ability;
+        /// <summary>Damage statistics of this ability; kept in <see cref="Run.DamageStats"/> after a recipe consumes it.</summary>
+        public DamageStatEntry Stats;
     }
 
     /// <summary>

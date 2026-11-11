@@ -24,6 +24,18 @@ namespace ThornThrone.Simulation
             };
         }
 
+        /// <summary>Damage to an enemy: the enemy event plus the damage type and the critical flag (Mechanics §24).</summary>
+        private void Emit(SimEventKind kind, Enemy enemy, Vec2 position, float value, DamageType type, bool critical)
+        {
+            if (EventCount == Events.Length) return;
+            Events[EventCount++] = new SimEvent
+            {
+                Kind = kind, Slot = enemy.Slot, Position = position, Value = value,
+                SpawnId = enemy.SpawnId, EnemyDef = enemy.Def, Direction = enemy.Direction,
+                DamageType = type, Critical = critical,
+            };
+        }
+
         private void Emit(SimEventKind kind, Projectile shot, Vec2 position, float value)
         {
             if (EventCount == Events.Length) return;
