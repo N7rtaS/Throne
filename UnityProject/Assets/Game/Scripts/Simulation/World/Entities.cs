@@ -93,12 +93,23 @@ namespace ThornThrone.Simulation
         HeroDamaged, HeroDashed, HeroTeleported, LevelUp, EnemyResurrected, EnemyStunned, EnemyAttacked, EliteRoomOpened, EliteRoomStarted, EliteRoomCompleted, ChoicesReady, BossSpawned, RunFinished,
     }
 
-    /// <summary>Notification for presentation (views, effects, sound). Read and cleared every frame.</summary>
+    /// <summary>
+    /// Notification for presentation (views, effects, sound). Read and cleared every frame.
+    /// A slot may be reused by a new entity before the frame ends (up to 8 steps), so an event about a pooled entity
+    /// carries its <see cref="SpawnId"/>; compare it with the slot before reading the pool
+    /// (.kiro/specs/corpse-enemy-slot-reuse).
+    /// </summary>
     public struct SimEvent
     {
         public SimEventKind Kind;
         public int Slot;
         public Vec2 Position;
         public float Value;
+        /// <summary>SpawnId of the enemy, projectile or pickup; 0 for events that are not about a pooled entity.</summary>
+        public int SpawnId;
+        /// <summary>Definition of the enemy at the time of the event (enemy events only).</summary>
+        public EnemyDef EnemyDef;
+        /// <summary>Enemy direction at the time of the event (enemy events only).</summary>
+        public Vec2 Direction;
     }
 }

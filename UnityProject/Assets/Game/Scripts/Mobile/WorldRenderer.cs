@@ -132,33 +132,46 @@ namespace ThornThrone.Mobile
             }
         }
 
-        private ModelBatch LookOf(Enemy e) =>
-            looks.TryGetValue(e.Def.Key, out var variants) ? variants[(int)((uint)e.SpawnId % (uint)variants.Length)] : null;
+        private ModelBatch LookOf(Enemy e) => LookOf(e.Def, e.SpawnId);
 
-        private Quaternion Facing(Run run, Enemy e)
+        private ModelBatch LookOf(EnemyDef def, int spawnId) =>
+            looks.TryGetValue(def.Key, out var variants) ? variants[(int)((uint)spawnId % (uint)variants.Length)] : null;
+
+        private Quaternion Facing(Run run, Enemy e) => Facing(run, e.Def, e.Position, e.Direction);
+
+        private Quaternion Facing(Run run, EnemyDef def, Vec2 position, Vec2 direction)
         {
-            Vec2 d = e.Def.Movement == MovementBehavior.Tracking ? run.HeroPosition - e.Position : e.Direction;
+            Vec2 d = def.Movement == MovementBehavior.Tracking ? run.HeroPosition - position : direction;
             if (d.LengthSquared < 1e-4f) d = new Vec2(0, -1);
             return Quaternion.Euler(0, Mathf.Atan2(d.X, d.Y) * Mathf.Rad2Deg + yawOffset, 0);
         }
 
-        /// <summary>Reads simulation events of this frame (call before Run.ClearEvents).</summary>
+        /// <summary>
+        /// Reads simulation events of this frame (call before Run.ClearEvents). A corpse is built from the event alone:
+        /// by now the enemy's slot may hold a new enemy (.kiro/specs/corpse-enemy-slot-reuse).
+        /// </summary>
         public void Consume(Run run)
         {
             for (int i = 0; i < run.EventCount; i++)
             {
                 var ev = run.Events[i];
-                if (ev.Kind != SimEventKind.EnemyDied || ev.Slot < 0) continue;
-                var e = run.Enemies[ev.Slot];
-                var batch = LookOf(e);
+                if (ev.Kind != SimEventKind.EnemyDied || ev.EnemyDef == null) continue;
+                var batch = LookOf(ev.EnemyDef, ev.SpawnId);
                 if (batch == null || !batch.Visual.death.Valid || corpseCount == corpses.Length) continue;
                 corpses[corpseCount++] = new Corpse
                 {
-                    Batch = batch, Position = ToWorld(e.Position), Rotation = Facing(run, e),
-                    Scale = HeroView.ModelScale * e.Def.ModelScale, Age = 0,
+                    Batch = batch, Position = ToWorld(ev.Position), Rotation = Facing(run, ev.EnemyDef, ev.Position, ev.Direction),
+                    Scale = HeroView.ModelScale * ev.EnemyDef.ModelScale, Age = 0,
                 };
             }
         }
+
+        /// <summary>Corpses currently playing their death clip (EditMode tests).</summary>
+        public int CorpseCount => corpseCount;
+
+        /// <summary>Look, world position and rotation of a corpse (EditMode tests).</summary>
+        public (EnemyVisual Visual, Vector3 Position, Quaternion Rotation) CorpseAt(int index) =>
+            (corpses[index].Batch.Visual, corpses[index].Position, corpses[index].Rotation);
 
         public WorldRenderer(Material template)
         {
@@ -215,7 +228,8 @@ namespace ThornThrone.Mobile
         {
             var go = GameObject.CreatePrimitive(type);
             var mesh = go.GetComponent<MeshFilter>().sharedMesh;
-            Object.Destroy(go);
+            if (Application.isPlaying) Object.Destroy(go);
+            else Object.DestroyImmediate(go); // EditMode tests: Destroy is not allowed outside play mode
             return mesh;
         }
 

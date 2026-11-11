@@ -161,7 +161,7 @@ namespace ThornThrone.Simulation
                 FireHostile(Boss.Position, Vec2.FromAngle(a), speed, d.MagicMissileProjectileRadius,
                     d.MagicMissileDamage, Rules.BossMagicMissileLife, true);
             }
-            Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.MagicMissile);
+            Emit(SimEventKind.EnemyAttacked, Boss, Boss.Position, (int)BossAttack.MagicMissile);
         }
 
         private void BurningGround(ImperiaDef d)
@@ -177,7 +177,7 @@ namespace ThornThrone.Simulation
                     * Rng.Range(radius * Rules.BossMeteorScatterMin, radius * Rules.BossMeteorScatterMax);
                 AddHazard(HazardKind.MeteorTelegraph, ClampToMap(at), radius, delay);
             }
-            Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.BurningGround);
+            Emit(SimEventKind.EnemyAttacked, Boss, Boss.Position, (int)BossAttack.BurningGround);
         }
 
         private void StartRays()
@@ -193,7 +193,7 @@ namespace ThornThrone.Simulation
             raysEmit = d.RadiateRaysCastStartDuration;
             raysAngle = Rng.Angle();
             AddHazard(HazardKind.RaysTelegraph, Boss.Position, Rules.BossRaysTelegraphRadius, raysEmit);
-            Emit(SimEventKind.EnemyAttacked, Boss.Slot, Boss.Position, (int)BossAttack.RadiateRays);
+            Emit(SimEventKind.EnemyAttacked, Boss, Boss.Position, (int)BossAttack.RadiateRays);
         }
 
         /// <summary>One ray every m_flRadiateRaysInterval, turning by m_flRadiateRaysAngle degrees.</summary>

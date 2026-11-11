@@ -432,7 +432,8 @@ namespace ThornThrone.Simulation
                 Emit(SimEventKind.HeroTeleported, -1, HeroPosition, 0);
             }
             Boss = SpawnEnemy(bossDef, bossAt, -1);
-            Emit(SimEventKind.BossSpawned, Boss?.Slot ?? -1, Boss?.Position ?? HeroPosition, 0);
+            if (Boss != null) Emit(SimEventKind.BossSpawned, Boss, Boss.Position, 0);
+            else Emit(SimEventKind.BossSpawned, -1, HeroPosition, 0);
             if (Boss != null) StartBossFight();
         }
 
@@ -561,7 +562,7 @@ namespace ThornThrone.Simulation
             if (eventIndex >= 0) spawnEvents[eventIndex].Alive++;
             ActiveEnemies++;
             ReportUnsupportedEnemy(def);
-            Emit(SimEventKind.EnemySpawned, enemy.Slot, position, 0);
+            Emit(SimEventKind.EnemySpawned, enemy, position, 0);
             return enemy;
         }
 
@@ -592,7 +593,7 @@ namespace ThornThrone.Simulation
             freeEnemies[freeEnemyCount++] = enemy.Slot;
             ActiveEnemies--;
             if (enemy == Boss && kind != SimEventKind.EnemyDied) Boss = null;
-            Emit(kind, enemy.Slot, enemy.Position, 0);
+            Emit(kind, enemy, enemy.Position, 0);
         }
 
         // ------------------------------------------------------------------ enemies
@@ -703,7 +704,7 @@ namespace ThornThrone.Simulation
             if (!enemy.Active || Finished || !enemy.Targetable) return;
             enemy.Health -= damage;
             if (enemy == Boss) ClampBossHealth(enemy);
-            Emit(SimEventKind.EnemyDamaged, enemy.Slot, enemy.Position, damage);
+            Emit(SimEventKind.EnemyDamaged, enemy, enemy.Position, damage);
             if (enemy.Health > 0) return;
             var def = enemy.Def;
             if (enemy.ResurrectionsLeft > 0)
@@ -712,7 +713,7 @@ namespace ThornThrone.Simulation
                 enemy.ResurrectionsLeft--;
                 enemy.Health = enemy.MaxHealth;
                 enemy.Speed *= 1 + def.MovementSpeedMultiplierPerDeath;
-                Emit(SimEventKind.EnemyResurrected, enemy.Slot, enemy.Position, enemy.ResurrectionsLeft);
+                Emit(SimEventKind.EnemyResurrected, enemy, enemy.Position, enemy.ResurrectionsLeft);
                 return;
             }
             var position = enemy.Position;
@@ -808,7 +809,7 @@ namespace ThornThrone.Simulation
             float time = duration * Math.Max(0, 1 - enemy.Def.StatusResistance);
             if (time <= enemy.StunTimer) return;
             enemy.StunTimer = time;
-            Emit(SimEventKind.EnemyStunned, enemy.Slot, enemy.Position, time);
+            Emit(SimEventKind.EnemyStunned, enemy, enemy.Position, time);
         }
 
         // ------------------------------------------------------------------ projectiles
@@ -827,7 +828,7 @@ namespace ThornThrone.Simulation
                 enemy.AttackWindup -= dt;
                 if (enemy.AttackWindup >= 0) return;
                 enemy.AttackWindup = -1;
-                Emit(SimEventKind.EnemyAttacked, enemy.Slot, enemy.Position, attack.Speed);
+                Emit(SimEventKind.EnemyAttacked, enemy, enemy.Position, attack.Speed);
                 if (attack.Speed <= 0)
                 {
                     float reach = attack.Radius + Rules.HeroRadius;
@@ -898,7 +899,7 @@ namespace ThornThrone.Simulation
             shot.Stun = 0;
             shot.ArmTime = 0;
             ActiveProjectiles++;
-            Emit(SimEventKind.ProjectileFired, shot.Slot, HeroPosition, 0);
+            Emit(SimEventKind.ProjectileFired, shot, HeroPosition, 0);
             return shot;
         }
 
@@ -908,7 +909,7 @@ namespace ThornThrone.Simulation
             shot.Target = null;
             freeProjectiles[freeProjectileCount++] = shot.Slot;
             ActiveProjectiles--;
-            Emit(SimEventKind.ProjectileEnded, shot.Slot, shot.Position, 0);
+            Emit(SimEventKind.ProjectileEnded, shot, shot.Position, 0);
         }
 
         private void UpdateProjectiles(float dt)
@@ -1098,7 +1099,7 @@ namespace ThornThrone.Simulation
             pickup.Value = value;
             ActivePickups++;
             if (def == experienceDef) ActiveExperiencePickups++;
-            Emit(SimEventKind.PickupSpawned, pickup.Slot, position, value);
+            Emit(SimEventKind.PickupSpawned, pickup, position, value);
             return pickup;
         }
 
@@ -1152,7 +1153,7 @@ namespace ThornThrone.Simulation
                     if (Pickups[i].Active && Pickups[i].Def == experienceDef) Pickups[i].Attracted = true;
             if (p.Def.RewardsTreasure && p.Def.TreasureVariant == 0) PendingItems++;
             Gold += p.Def.GoldAmount;
-            Emit(SimEventKind.PickupCollected, p.Slot, p.Position, p.Value);
+            Emit(SimEventKind.PickupCollected, p, p.Position, p.Value);
         }
 
         public void AddExperience(float amount)
@@ -1256,12 +1257,6 @@ namespace ThornThrone.Simulation
             Finished = true;
             Victory = victory;
             Emit(SimEventKind.RunFinished, -1, HeroPosition, victory ? 1 : 0);
-        }
-
-        private void Emit(SimEventKind kind, int slot, Vec2 position, float value)
-        {
-            if (EventCount == Events.Length) return;
-            Events[EventCount++] = new SimEvent { Kind = kind, Slot = slot, Position = position, Value = value };
         }
     }
 }
