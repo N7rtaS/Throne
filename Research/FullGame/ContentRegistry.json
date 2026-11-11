@@ -30,10 +30,10 @@
   "difficulty": {
    "role:difficulty": 8,
    "prototype:none": 8,
-   "implementation:implemented": 3,
+   "implementation:verified": 4,
    "reachable": 8,
-   "implementation:verified": 3,
-   "implementation:partial": 2
+   "implementation:partial": 2,
+   "implementation:implemented": 2
   },
   "heroes": {
    "role:hero": 3,
@@ -63,7 +63,7 @@
    "prototype:partial": 24,
    "implementation:implemented": 32,
    "reachable": 38,
-   "implementation:verified": 9,
+   "implementation:verified": 10,
    "role:split-spawn": 1,
    "unreachable": 5,
    "prototype:none": 19,
@@ -71,16 +71,14 @@
    "role:destructible": 3,
    "role:final-boss": 1,
    "role:friendly": 2,
-   "implementation:partial": 1,
    "implementation:none": 1
   },
   "spawners": {
    "role:spawner": 39,
    "prototype:none": 26,
-   "implementation:implemented": 36,
+   "implementation:implemented": 37,
    "unreachable": 7,
    "reachable": 36,
-   "implementation:partial": 1,
    "prototype:partial": 17,
    "implementation:verified": 6,
    "role:elite-room": 4
@@ -261,8 +259,10 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "ProfileTests.cs:Sample"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "difficulty/harder_punches": {
@@ -287,6 +287,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "ProfileTests.cs:Sample",
     "SimulationTests.cs:DifficultyScalesEnemies"
    ],
    "implementation": "verified",
@@ -488,6 +489,13 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AppFlowTests.cs:InvalidCommandChangesNothing",
+    "AppFlowTests.cs:PlayAgainKeepsHeroAndEchelonWithNewSeed",
+    "AppFlowTests.cs:ResultIsRecordedOnce",
+    "AppFlowTests.cs:ScreensFollowMenuHeroDifficultyRunResults",
+    "AppFlowTests.cs:StartCreatesRunOnStackedEchelon",
+    "AppFlowTests.cs:StartRun",
+    "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "DashInputTests.cs:DashInFrameWithStepGoesOnlyToFirstStep",
     "DashInputTests.cs:DashPressedWhileStoppedIsIgnored",
     "DashInputTests.cs:DashRequestIsDroppedOnPause",
@@ -495,6 +503,16 @@
     "DashInputTests.cs:DashRequestSurvivesFrameWithoutStep",
     "DashInputTests.cs:PropertyHero",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
+    "ProfileTests.cs:Sample",
+    "RenderInterpolationTests.cs:AlphaIsFractionOfStep",
+    "RenderInterpolationTests.cs:BossSpawnTeleportResetsPreviousPosition",
+    "RenderInterpolationTests.cs:ChoiceOpenedMidFrameDropsWholeSteps",
+    "RenderInterpolationTests.cs:InterpolateLerpsByAlpha",
+    "RenderInterpolationTests.cs:PreviousPositionIsPositionBeforeLastStep",
+    "RenderInterpolationTests.cs:RaysTeleportResetsBossPreviousPosition",
+    "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
+    "RenderInterpolationTests.cs:StopKeepsAlpha",
+    "RenderInterpolationTests.cs:TeleportResetsPreviousPosition",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
     "SimulationTests.cs:NewRun"
@@ -542,6 +560,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KezInnateTests.cs:PlainInnatesStillAddToGlobals",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
@@ -594,6 +613,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "DashInputTests.cs:DashInFrameWithStepGoesOnlyToFirstStep",
     "DashInputTests.cs:PendingDashIsConsumedEvenIfDashCannotStart",
     "DashInputTests.cs:PropertyHero",
@@ -602,6 +622,7 @@
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:KezInnateIsReportedAsUnimplementedAbility",
     "KezInnateTests.cs:KezKeepsHeroBaseAttributes",
+    "ProfileTests.cs:Sample",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData"
    ],
@@ -656,7 +677,11 @@
    "nameInClientBinary": true,
    "source": null,
    "missingResources": [],
-   "tests": [],
+   "tests": [
+    "SaveStoreTests.cs:Apply",
+    "SaveStoreTests.cs:OtherRulesVersionLoadsUnchanged",
+    "SaveStoreTests.cs:SchemaOneWithGold"
+   ],
    "implementation": "none",
    "required": true
   },
@@ -2597,6 +2622,7 @@
     "MagicMissileTests.cs:ImpactDamagesAndStunsNearbyButNotFarEnemies",
     "MagicMissileTests.cs:MissileBouncesToAnotherEnemy",
     "MagicMissileTests.cs:StunnedEnemyStandsStill",
+    "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
     "SimulationTests.cs:AbsorberGrowsByEatingHorde",
     "SimulationTests.cs:Arena",
     "SimulationTests.cs:ContactDamageRespectsInterval",
@@ -3684,10 +3710,12 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
    "tests": [
+    "SimulationTests.cs:BossPillarsDoNotReportUnsupportedEnemyClass",
+    "SimulationTests.cs:BossPillarsStaySolidInvulnerableAndUntargetable",
     "SimulationTests.cs:FightTakesPlaceInBossRoomWithPillars",
     "SimulationTests.cs:ImperiaDefinitionIsReadFromData"
    ],
-   "implementation": "partial",
+   "implementation": "verified",
    "required": true
   },
   "enemies/death": {
@@ -3911,7 +3939,7 @@
    "spawnBehavior": "STATIC_IN_MAP_IGNORE_PLAYER_RADIUS",
    "missingResources": [],
    "tests": [],
-   "implementation": "partial",
+   "implementation": "implemented",
    "required": true
   },
   "spawners/skeleton_intro": {
@@ -4110,6 +4138,7 @@
     "MagicMissileTests.cs:ImpactDamagesAndStunsNearbyButNotFarEnemies",
     "MagicMissileTests.cs:MissileBouncesToAnotherEnemy",
     "MagicMissileTests.cs:StunnedEnemyStandsStill",
+    "RenderInterpolationTests.cs:ReusedSlotHasNoInterpolationTrail",
     "SimulationTests.cs:AbsorberGrowsByEatingHorde",
     "SimulationTests.cs:Arena",
     "SimulationTests.cs:ContactDamageRespectsInterval",

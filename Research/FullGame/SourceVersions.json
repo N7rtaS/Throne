@@ -16,7 +16,8 @@
   "com.unity.render-pipelines.universal": "17.6.0",
   "com.unity.ugui": "2.6.0",
   "com.unity.collab-proxy": "2.13.6",
-  "com.unity.modules.vectorgraphics": "1.0.0"
+  "com.unity.modules.vectorgraphics": "1.0.0",
+  "com.unity.test-framework": "1.8.0"
  },
  "tools": {
   "source2viewer": "Version: 20.1.7467+9e2e6c7f67e3c4e5a5f443a60c3a5d841ba8f304",

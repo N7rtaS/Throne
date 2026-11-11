@@ -575,8 +575,10 @@ namespace ThornThrone.Simulation
         private void ReportUnsupportedEnemy(EnemyDef def)
         {
             if (!FirstTime(def)) return;
+            // Pillars (boss_tower): solid, invulnerable, friendly bodies of the boss room, handled in Run.Boss.cs (Mechanics §12).
             bool handled = def.Class == "CSurvivorsEnemyDefinition" || def.IsBoss || def.ResurrectionTimes > 0
-                           || def.AbsorbRadius > 0 || def.SplitOnDeathNumUnits > 0 || def.Class.EndsWith("_Golem");
+                           || def.AbsorbRadius > 0 || def.SplitOnDeathNumUnits > 0 || def.Class.EndsWith("_Golem")
+                           || def.Class == "CSurvivorsEnemyDefinition_Pillar";
             if (!handled)
                 Diagnostics.Report("enemy-class:" + def.Class, $"Special behaviour of {def.Class} ({def.Key}) is not implemented");
             if (def.Movement == MovementBehavior.Unknown)

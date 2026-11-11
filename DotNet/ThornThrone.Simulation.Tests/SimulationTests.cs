@@ -533,6 +533,39 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(run.Enemies.Count(e => e.Active && e.Def.Key == "boss_tower"), Is.EqualTo(4));
         }
 
+        /// <summary>Pillar behaviour (solid, invulnerable, friendly) is implemented: no "not implemented" diagnostic.</summary>
+        [Test]
+        public void BossPillarsDoNotReportUnsupportedEnemyClass()
+        {
+            var run = BossRun();
+            TestData.Simulate(run, 1, r => Vec2.Zero);
+            Assert.That(run.Diagnostics.Has("enemy-class:CSurvivorsEnemyDefinition_Pillar"), Is.False);
+            Assert.That(run.Diagnostics.Messages.Where(m => m.Contains("boss_tower")), Is.Empty);
+        }
+
+        [Test]
+        public void BossPillarsStaySolidInvulnerableAndUntargetable()
+        {
+            var run = BossRun();
+            var pillars = run.Enemies.Where(e => e.Active && e.Def.Key == "boss_tower").ToList();
+            Assert.That(pillars.Count, Is.EqualTo(4));
+            foreach (var p in pillars)
+            {
+                Assert.That(p.Def.Class, Is.EqualTo("CSurvivorsEnemyDefinition_Pillar"));
+                Assert.That(p.Def.HasSolidBody && p.Def.Invulnerable && p.Def.PlayerFriendly, Is.True);
+                Assert.That(p.Targetable, Is.False);
+            }
+        }
+
+        [Test]
+        public void UnimplementedEnemyClassIsStillReported()
+        {
+            var run = TestData.NewRun();
+            var snotty = run.Data.Enemies.Values.First(d => d.Class == "CSurvivorsEnemyDefinition_Snotty");
+            run.SpawnEnemy(snotty, run.HeroPosition + new Vec2(300, 0), -1);
+            Assert.That(run.Diagnostics.Has("enemy-class:CSurvivorsEnemyDefinition_Snotty"), Is.True);
+        }
+
         [Test]
         public void MagicMissilesAndMeteorsHurt()
         {

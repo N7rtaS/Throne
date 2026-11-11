@@ -72,7 +72,7 @@
 
 ## Текущее состояние (ноябрь 2026)
 - Блоки A и B дорожной карты закрыты (задачи 1–16).
-- Проходят 146 тестов симуляции и профиля (`dotnet test`), 119 тестов инструментов (`python3 -m unittest discover -s Tools/tests`) и 101 EditMode-тест Unity (`Tools/unity-tests.sh`).
+- Проходят 149 тестов симуляции и профиля (`dotnet test`), 119 тестов инструментов (`python3 -m unittest discover -s Tools/tests`) и 101 EditMode-тест Unity (`Tools/unity-tests.sh`).
 - Симуляция: режим, расписание, элитные комнаты, Империя, эшелоны, навигация. Способности: Arcane Bolt и Magic Missile.
 - Представление: интерполяция положений между шагами для 60 FPS (Mechanics §17). UI на TextMeshPro с кириллическим PT Sans SDF, HUD без выделений памяти (в плеере без Development Build — `Tools/mac-smoke.sh --hud-alloc`).
 - Сенсорное управление по ТЗ §6: `TouchController` (привязка касаний, мёртвая зона, фиксированный и плавающий джойстик, леворукий режим, цели ≥ 48 dp, «Назад», подтверждение выхода), smoke-сценарий ввода `-thornInputScript`.

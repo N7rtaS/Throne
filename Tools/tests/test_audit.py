@@ -119,7 +119,7 @@ class ImplementationTests(unittest.TestCase):
         self.assertEqual(level("powerups/gold"), "none")
 
     def test_enemies(self):
-        self.assertEqual(level("enemies/boss_tower"), "partial")
+        self.assertTrue(at_least("enemies/boss_tower", "implemented"))
         self.assertEqual(level("enemies/snotty"), "none")
 
     def test_pickups(self):
