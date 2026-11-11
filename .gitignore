@@ -38,6 +38,7 @@ __pycache__/
 /Research/unity-tests.log
 /Research/mac-smoke.log
 /Research/mac-smoke-*.log
+/Research/Скриншоты/*.log
 # Logs and report of the last local build (MobileBuilder.BuildMacSmoke, Tools/build-android.sh)
 /Research/mac-build.log
 /Research/android-build.log
