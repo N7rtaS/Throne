@@ -25,12 +25,18 @@ namespace ThornThrone.App
         public int UnlockedEchelon;
         /// <summary>Fixed result of the run: score, gold, abilities and items (Mechanics §37 Р2).</summary>
         public RunSummary Summary;
+        /// <summary>Currency of the profile after this run's gold was paid in (Mechanics §38 М10, «Всего золота»).</summary>
+        public long TotalGold;
+        /// <summary>The currency pays for at least one next permanent upgrade (М10, «Доступны улучшения!»).</summary>
+        public bool UpgradesAvailable;
     }
 
     /// <summary>
     /// Screen flow of the app without the engine (Mechanics §23): menu → hero → difficulty → run → results → again
     /// or back. Creates the <see cref="Run"/> on the chosen hero and echelon, reads open echelons from the profile
     /// (Ф1) and records a finished run once through the reward journal (Ф3), saving the profile at once (§22 Р5).
+    /// The gold of the run is paid into the profile by the same operation; permanent upgrades are bought outside a
+    /// run and apply to the start attributes of the next one (Mechanics §38).
     /// A command that is not valid on the current screen changes nothing and returns false.
     /// </summary>
     public sealed class AppFlow
@@ -155,7 +161,8 @@ namespace ThornThrone.App
         }
 
         /// <summary>
-        /// Ф3: adds the result of the finished run, opens the next echelon after a victory (Ф2), marks
+        /// Ф3: adds the result of the finished run, pays its gold into the currency (§38 М2), opens the next echelon
+        /// after a victory (Ф2), marks
         /// «result:&lt;runId&gt;» in the journal and saves. False if the run is not finished or already recorded:
         /// the profile is not changed and not saved again (a failed save is repeated by <see cref="RetryFailedSave"/>).
         /// </summary>
@@ -174,7 +181,7 @@ namespace ThornThrone.App
                 DurationSeconds = Run.Time,
                 Level = Run.HeroLevel,
                 Kills = Run.Kills,
-                // Ф4: the score of the run (Mechanics §37 Р4); gold is stored, not yet paid as currency (Task 31).
+                // Ф4: the score of the run (Mechanics §37 Р4) and its gold, paid into the currency below (§38 М2).
                 Score = Run.Score,
                 Gold = Run.Gold,
             };
@@ -185,8 +192,13 @@ namespace ThornThrone.App
                 unlocked = Echelon + 1;
             }
             profile.Results.Add(result);
+            profile.Currency += Run.Gold;
             profile.Journal.TryAdd(operation);
-            LastOutcome = new RunOutcome { Result = result, Echelon = Echelon, UnlockedEchelon = unlocked, Summary = Run.Summary };
+            LastOutcome = new RunOutcome
+            {
+                Result = result, Echelon = Echelon, UnlockedEchelon = unlocked, Summary = Run.Summary,
+                TotalGold = profile.Currency, UpgradesAvailable = MetaProgression.AnyAffordable(data, profile),
+            };
             LastSave = save(profile);
             return true;
         }
@@ -231,6 +243,19 @@ namespace ThornThrone.App
             return true;
         }
 
+        /// <summary>
+        /// Mechanics §38 М4–М7: buys level <paramref name="level"/> of a permanent upgrade (<see cref="MetaProgression.Buy"/>)
+        /// on any screen but the run and saves the profile once. A repeated press returns AlreadyOwned without a charge
+        /// or a save; a failed save keeps the purchase and is repeated by <see cref="RetryFailedSave"/>.
+        /// </summary>
+        public PurchaseResult BuyUpgrade(string key, int level)
+        {
+            if (Screen == AppScreen.Run) return PurchaseResult.RunInProgress;
+            var result = MetaProgression.Buy(profile, data, key, level);
+            if (result == PurchaseResult.Bought) LastSave = save(profile);
+            return result;
+        }
+
         /// <summary>Ф11: saves again after a failed save; false if there is nothing to retry.</summary>
         public bool RetryFailedSave()
         {
@@ -267,7 +292,11 @@ namespace ThornThrone.App
         {
             Seed = seeds();
             runId = "run-" + Guid.NewGuid().ToString("N");
-            Run = new Run(data, rules(), Hero, UnlockId(Echelon), Seed);
+            // Permanent upgrades of the profile (§38 М8); their problems are reported by the run.
+            var diagnostics = new Diagnostics();
+            var start = MetaProgression.StartAttributes(data, profile, diagnostics);
+            Run = new Run(data, rules(), Hero, UnlockId(Echelon), Seed, startAttributes: start);
+            Run.Diagnostics.Include(diagnostics);
             Screen = AppScreen.Run;
         }
     }

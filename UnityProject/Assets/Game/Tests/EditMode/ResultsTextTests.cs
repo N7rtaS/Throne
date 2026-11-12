@@ -71,7 +71,7 @@ namespace ThornThrone.Mobile.Tests
         [Test]
         public void HeaderShowsOutcomeScoreAndGold()
         {
-            var victory = ResultsText.Header(Summary(true), 2, "Тяжёлые удары");
+            var victory = ResultsText.Header(Summary(true), 2, "Тяжёлые удары", 51234);
             Assert.That(victory, Does.Contain("Победа!"));
             Assert.That(victory, Does.Contain("Эшелон 2 — Тяжёлые удары"));
             Assert.That(victory, Does.Contain("Времени прожито 12:42"));
@@ -79,7 +79,41 @@ namespace ThornThrone.Mobile.Tests
             Assert.That(victory, Does.Contain("Убито 32 414"));
             Assert.That(victory, Does.Contain("Итоговый счёт 330 000"));
             Assert.That(victory, Does.Contain("Золота получено 1 234"));
-            Assert.That(ResultsText.Header(Summary(false), 1, "x"), Does.Contain("Поражение").And.Not.Contain("Победа!"));
+            Assert.That(victory, Does.Contain("Всего золота 51 234"), "profile gold after the run (Mechanics §38 М10)");
+            Assert.That(ResultsText.Header(Summary(false), 1, "x", 0), Does.Contain("Поражение").And.Not.Contain("Победа!")
+                .And.Contain("Всего золота 0"));
+        }
+        [Test]
+        public void NoticesShowUnlockAndAvailableUpgrades()
+        {
+            Assert.That(ResultsText.Notices(false, false), Is.Empty);
+            Assert.That(ResultsText.Notices(true, false), Is.EqualTo("Открыта новая сложность!"));
+            Assert.That(ResultsText.Notices(false, true), Is.EqualTo("Доступны улучшения!"));
+            Assert.That(ResultsText.Notices(true, true), Does.Contain("Открыта новая сложность!").And.Contain("Доступны улучшения!"));
+        }
+        /// <summary>A run that makes the profile's gold enough for a level shows «Доступны улучшения!» (Т6.2).</summary>
+        [Test]
+        public void ResultsScreenShowsTotalGoldAndAvailableUpgrades()
+        {
+            var profile = Profile.CreateNew(ProfileKind.Test);
+            profile.Currency = 250;
+            profile.Unlocks.Add("echelon_2");
+            var flow = new AppFlow(Data(), profile, p => new SaveResult(SaveStatus.Saved, null), () => 7, MobileGame.PlayableHeroes);
+            var ui = new GameUi(Localization("powerups_ru.json"), AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath), Localization("difficulty_ru.json"));
+            var screens = new FlowScreens(flow, ui);
+            flow.Play();
+            flow.Next();
+            flow.SelectEchelon(1);
+            flow.Start();
+            flow.Run.DebugWin();
+            screens.Finish();
+            var root = GameObject.Find("UI").transform.Find("Safe area/Results/Content");
+            Assert.That(root.Find("Text").GetComponent<TMP_Text>().text, Does.Contain("Всего золота " + ResultsText.Integer(profile.Currency)));
+            var notice = root.Find("Unlocked");
+            Assert.That(notice.gameObject.activeSelf, Is.True);
+            Assert.That(notice.GetComponent<TMP_Text>().text, Is.EqualTo("Доступны улучшения!"), "echelon 2 was already open");
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath);
+            Assert.That(font.HasCharacters("Всего золота Доступны улучшения!", out var missing), Is.True, "missing: " + (missing == null ? "" : string.Join(",", missing)));
         }
         [Test]
         public void AbilityTableShowsRankDamageTimeHeldAndDps()

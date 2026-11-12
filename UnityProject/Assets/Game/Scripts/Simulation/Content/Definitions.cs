@@ -19,6 +19,25 @@ namespace ThornThrone.Simulation
     /// only RARITY_COMMON; authored records have no rarity field and count as common (Mechanics §33 Р7).
     /// </summary>
     public enum UpgradeRarity { Common }
+    /// <summary>One level of a permanent upgrade (client MetaProgressionTier_t): m_flValue and m_cost.m_nMinigameCurrency.</summary>
+    public sealed class MetaTierDef
+    {
+        /// <summary>What this level adds to the attribute; not summed with lower levels (Mechanics §38 М3).</summary>
+        public float Value;
+        /// <summary>Price in gold (m_nMinigameCurrency).</summary>
+        public int Cost;
+    }
+    /// <summary>A hero attribute with m_vecMetaProgressionTiers in survivors_attributes.json (Mechanics §38).</summary>
+    public sealed class MetaUpgradeDef
+    {
+        /// <summary>Attribute name without the k_eSurvivorsAttribute_ prefix (MaxHP); the key in Profile.MetaUpgrades.</summary>
+        public string Key;
+        public int AttributeId;
+        /// <summary>m_bPercentage: the value is shown as a percentage.</summary>
+        public bool Percentage;
+        /// <summary>Levels 1..N in data order.</summary>
+        public MetaTierDef[] Tiers;
+    }
 
     public sealed class UpgradeChoice
     {

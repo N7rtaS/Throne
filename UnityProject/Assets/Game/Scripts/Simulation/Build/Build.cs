@@ -41,6 +41,7 @@ namespace ThornThrone.Simulation
         private readonly ModeDef mode;
         private readonly HeroDef hero;
         private readonly Func<PowerUpDef, bool> implemented;
+        private readonly AttributeValue[] start;
         private ChoiceSource source;
         private readonly HashSet<int> consumed = new HashSet<int>();
         // Pre-sized above the 47 powerups: list growth inside a step is an allocation.
@@ -65,9 +66,13 @@ namespace ThornThrone.Simulation
         /// <summary>m_nMaxActiveSlots plus ActiveAbilitySlots (Apex), Mechanics §25 Р6.</summary>
         public int MaxActiveSlots => mode.MaxActiveSlots + (int)Global[Attr.ActiveAbilitySlots];
 
-        public Build(GameData data, Rules rules, ModeDef mode, HeroDef hero, Func<PowerUpDef, bool> implemented)
+        /// <param name="startAttributes">Permanent upgrades of the profile (Mechanics §38 М8); added to the hero's base
+        /// attributes on every recalculation. Null — none.</param>
+        public Build(GameData data, Rules rules, ModeDef mode, HeroDef hero, Func<PowerUpDef, bool> implemented,
+            IReadOnlyList<AttributeValue> startAttributes = null)
         {
             this.data = data;
+            start = Copy(startAttributes);
             this.rules = rules;
             this.mode = mode;
             this.hero = hero;
@@ -77,6 +82,13 @@ namespace ThornThrone.Simulation
             foreach (int id in hero.StartingPowerUps) Acquire(data.PowerUpsById[id]);
             Recalculate();
             RerollsLeft = (int)Global[Attr.MaxRerolls];
+        }
+
+        private static AttributeValue[] Copy(IReadOnlyList<AttributeValue> items)
+        {
+            var copy = new AttributeValue[items?.Count ?? 0];
+            for (int i = 0; i < copy.Length; i++) copy[i] = items[i];
+            return copy;
         }
 
         public OwnedPowerUp Find(PowerUpDef def)
@@ -438,6 +450,7 @@ namespace ThornThrone.Simulation
         {
             Global.Clear();
             Global.Add(hero.BaseAttributes);
+            Global.Add(start);
             for (int i = 0; i < Owned.Count; i++)
             {
                 var owned = Owned[i];

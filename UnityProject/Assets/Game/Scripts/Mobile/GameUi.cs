@@ -401,17 +401,18 @@ namespace ThornThrone.Mobile
 
         /// <summary>
         /// Ф8: outcome, echelon, time, level, kills, score and gold, the ability and item tables (Mechanics §37 Р6);
-        /// «Открыта новая сложность!» when the run opened one; Ф11 error line. Texts are built once here, not per frame.
+        /// «Всего золота», «Открыта новая сложность!» and «Доступны улучшения!» (§38 М10); Ф11 error line. Texts are built once here, not per frame.
         /// </summary>
         public void ShowResults(AppFlow flow)
         {
             Show(results);
             var outcome = flow.LastOutcome;
             var summary = outcome.Summary;
-            resultText.text = ResultsText.Header(summary, outcome.Echelon, EchelonName(flow, outcome.Echelon));
+            resultText.text = ResultsText.Header(summary, outcome.Echelon, EchelonName(flow, outcome.Echelon), outcome.TotalGold);
             resultAbilities.text = ResultsText.Abilities(summary.Abilities, Name);
             resultItems.text = ResultsText.Items(summary.Items, Name);
-            resultUnlocked.gameObject.SetActive(outcome.UnlockedEchelon > 0);
+            resultUnlocked.text = ResultsText.Notices(outcome.UnlockedEchelon > 0, outcome.UpgradesAvailable);
+            resultUnlocked.gameObject.SetActive(resultUnlocked.text.Length > 0);
             SetResultSaveError(flow.SaveFailed);
         }
 

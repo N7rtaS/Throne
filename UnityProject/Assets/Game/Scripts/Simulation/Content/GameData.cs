@@ -26,6 +26,10 @@ namespace ThornThrone.Simulation
         public readonly Dictionary<string, PickupDef> Pickups = new Dictionary<string, PickupDef>();
         public readonly Dictionary<int, PickupDef> PickupsById = new Dictionary<int, PickupDef>();
         public readonly Dictionary<string, JObject> AttributeDefinitions = new Dictionary<string, JObject>();
+        /// <summary>Attributes with m_vecMetaProgressionTiers in data order (Mechanics §38).</summary>
+        public readonly List<MetaUpgradeDef> MetaUpgrades = new List<MetaUpgradeDef>();
+        /// <summary><see cref="MetaUpgrades"/> by <see cref="MetaUpgradeDef.Key"/> (MaxHP).</summary>
+        public readonly Dictionary<string, MetaUpgradeDef> MetaUpgradesByKey = new Dictionary<string, MetaUpgradeDef>();
         /// <summary>Problems of the data found while loading; every run reports them too.</summary>
         public readonly Diagnostics Diagnostics = new Diagnostics();
 
@@ -74,7 +78,16 @@ namespace ThornThrone.Simulation
         {
             switch (category)
             {
-                case "attributes": AttributeDefinitions[key] = v; Attr.Id(key); break;
+                case "attributes":
+                    AttributeDefinitions[key] = v;
+                    Attr.Id(key);
+                    if (v["m_vecMetaProgressionTiers"] is JArray tiers)
+                    {
+                        var meta = ReadMetaUpgrade(key, v, tiers);
+                        MetaUpgrades.Add(meta);
+                        MetaUpgradesByKey.Add(meta.Key, meta);
+                    }
+                    break;
                 case "difficulty":
                     if (!Difficulties.ContainsKey(key)) DifficultyOrder.Add(key);
                     Difficulties[key] = ReadDifficulty(key, v);
@@ -252,6 +265,31 @@ namespace ThornThrone.Simulation
                 foreach (JObject layer in layers)
                     mode.SeparationDistance[S(layer, "m_eSeparationLayer")] = F(layer, "m_flSeperationDistance");
             return mode;
+        }
+
+        /// <summary>
+        /// m_vecMetaProgressionTiers of an attribute (Mechanics §38). m_flValue and m_cost.m_nMinigameCurrency are
+        /// required: a missing one fails loading instead of becoming zero.
+        /// </summary>
+        private static MetaUpgradeDef ReadMetaUpgrade(string key, JObject v, JArray tiers)
+        {
+            int id = Attr.Id(key);
+            var result = new MetaUpgradeDef
+            {
+                Key = Attr.Name(id), AttributeId = id, Percentage = B(v, "m_bPercentage"), Tiers = new MetaTierDef[tiers.Count],
+            };
+            for (int i = 0; i < tiers.Count; i++)
+            {
+                string Missing(string field) => $"attributes/{key}: meta progression tier {i + 1} has no {field}";
+                if (!(tiers[i] is JObject tier)) throw new System.IO.InvalidDataException(Missing("fields"));
+                if (!tier.TryGetValue("m_flValue", out var value) || value.Type == JTokenType.Null)
+                    throw new System.IO.InvalidDataException(Missing("m_flValue"));
+                if (!(tier["m_cost"] is JObject cost)) throw new System.IO.InvalidDataException(Missing("m_cost"));
+                if (!cost.TryGetValue("m_nMinigameCurrency", out var price) || price.Type == JTokenType.Null)
+                    throw new System.IO.InvalidDataException(Missing("m_cost.m_nMinigameCurrency"));
+                result.Tiers[i] = new MetaTierDef { Value = (float)value, Cost = (int)price };
+            }
+            return result;
         }
 
         private static LevelDef ReadLevel(string key, JObject v) => new LevelDef

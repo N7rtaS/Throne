@@ -155,7 +155,9 @@ namespace ThornThrone.Simulation
             return true;
         }
 
-        public Run(GameData data, Rules rules, string heroKey, string difficultyKey = null, ulong seed = 1, string modeKey = "crownfall_act4")
+        /// <param name="startAttributes">Hero attributes of the profile's permanent upgrades (Mechanics §38 М8); null — none.</param>
+        public Run(GameData data, Rules rules, string heroKey, string difficultyKey = null, ulong seed = 1, string modeKey = "crownfall_act4",
+            IReadOnlyList<AttributeValue> startAttributes = null)
         {
             Data = data;
             Rules = rules ?? new Rules();
@@ -164,7 +166,7 @@ namespace ThornThrone.Simulation
             Level = data.Levels[Mode.LevelName];
             Difficulty = data.Difficulty(difficultyKey ?? Mode.DifficultyName);
             Hero = data.Heroes[heroKey];
-            Build = new Build(data, Rules, Mode, Hero, IsImplemented);
+            Build = new Build(data, Rules, Mode, Hero, IsImplemented, startAttributes);
             // Until arena navigation is imported (gnv), the walkable area is the rectangle around all named arena
             // points plus 500 units; without arena data, m_vMapBounds centred on the origin (prototype rule).
             if (data.ArenaTargets.Count > 0)

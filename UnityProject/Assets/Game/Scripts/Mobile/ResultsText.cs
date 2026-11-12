@@ -37,13 +37,27 @@ namespace ThornThrone.Mobile
         /// <summary>Damage per second with one decimal and a comma ({f:1:ability_dps}).</summary>
         public static string Dps(double value) => value.ToString("#,0.0", Numbers);
 
-        /// <summary>Outcome, echelon, time, level, kills, final score and gold earned (Т5.1).</summary>
-        public static string Header(RunSummary summary, int echelon, string echelonName)
+        /// <summary>
+        /// Outcome, echelon, time, level, kills, final score, gold earned (Т5.1) and the profile's gold after it was
+        /// paid in, «Всего золота» (DOTA_Survivors_TotalGold, Mechanics §38 М10).
+        /// </summary>
+        public static string Header(RunSummary summary, int echelon, string echelonName, long totalGold)
         {
             return $"<size=56><b>{(summary.Victory ? "Победа!" : "Поражение")}</b></size>" +
                    $"\nЭшелон {echelon} — {echelonName}" +
                    $"\nВремени прожито {Time(summary.Seconds)}   Уровень игрока {summary.Level}   Убито {Integer(summary.Kills)}" +
-                   $"\nИтоговый счёт {Integer(summary.Score)}   Золота получено {Integer(summary.Gold)}";
+                   $"\nИтоговый счёт {Integer(summary.Score)}   Золота получено {Integer(summary.Gold)}   Всего золота {Integer(totalGold)}";
+        }
+
+        /// <summary>
+        /// The line under the tables: «Открыта новая сложность!» (Ф8) and «Доступны улучшения!»
+        /// (DOTA_Survivors_UpgradesAvailable, Mechanics §38 М10); empty when neither applies.
+        /// </summary>
+        public static string Notices(bool unlocked, bool upgradesAvailable)
+        {
+            if (unlocked && upgradesAvailable) return "Открыта новая сложность!   Доступны улучшения!";
+            if (unlocked) return "Открыта новая сложность!";
+            return upgradesAvailable ? "Доступны улучшения!" : "";
         }
 
         /// <summary>«Способность / Уровень / Всего урона / Время владения / УРОН/С» (AbilityStats); consumed rows grey.</summary>
