@@ -12,6 +12,10 @@ namespace ThornThrone.Simulation
         public readonly AttributeSet Local = new AttributeSet();
         /// <summary>How many times each m_vecMinorUpgradeChoices variant was taken (client m_vecMinorUpgrades, К; Mechanics §33 Р3).</summary>
         public int[] MinorCounts;
+        /// <summary>Aghanim's Scepter and Shard taken (client m_bScepterUpgraded / m_bShardUpgraded, К; Mechanics §34 Р6).</summary>
+        public bool Scepter, Shard;
+        /// <summary>Kills of <see cref="Stats"/> when the scepter was taken: Magic Missile counts its kills from then (Р10).</summary>
+        public int KillsAtScepter;
         public IAbility Ability;
         /// <summary>Damage statistics of this ability; kept in <see cref="Run.DamageStats"/> after a recipe consumes it.</summary>
         public DamageStatEntry Stats;
@@ -33,7 +37,7 @@ namespace ThornThrone.Simulation
         private readonly ModeDef mode;
         private readonly HeroDef hero;
         private readonly Func<PowerUpDef, bool> implemented;
-        private bool itemChoices;
+        private ChoiceSource source;
         private readonly HashSet<int> consumed = new HashSet<int>();
         // Pre-sized above the 47 powerups: list growth inside a step is an allocation.
         private readonly List<PowerUpDef> candidates = new List<PowerUpDef>(64);
@@ -49,6 +53,8 @@ namespace ThornThrone.Simulation
         public int RerollsLeft { get; private set; }
         /// <summary>True when the last generated choice list was empty and the fallback reward applies.</summary>
         public bool ChoicesAreFallback { get; private set; }
+        /// <summary>Source of the last generated choice list.</summary>
+        public ChoiceSource Source => source;
         public int Version { get; private set; }
         /// <summary>m_nMaxActiveSlots plus ActiveAbilitySlots (Apex), Mechanics §25 Р6.</summary>
         public int MaxActiveSlots => mode.MaxActiveSlots + (int)Global[Attr.ActiveAbilitySlots];
@@ -134,20 +140,43 @@ namespace ThornThrone.Simulation
         /// Up to m_nLevelUpChoices different options by weight (<see cref="OfferWeight(PowerUpDef, bool)"/>); fewer when
         /// fewer are left. A minor upgrade rolls its variant right after its card is drawn (Mechanics §33 Р2).
         /// </summary>
-        public void GenerateChoices(Rng rng, bool items = false)
+        public void GenerateChoices(Rng rng, bool items = false) => GenerateChoices(rng, items ? ChoiceSource.Item : ChoiceSource.Level);
+
+        /// <summary>
+        /// Choice list of <paramref name="from"/>. Level and Item: by weight (<see cref="OfferWeight(PowerUpDef, bool)"/>).
+        /// Scepter and Shard: owned abilities that can take it (<see cref="CanScepter"/>, <see cref="CanShard"/>) with equal
+        /// weights (Mechanics §34 Р4).
+        /// </summary>
+        public void GenerateChoices(Rng rng, ChoiceSource from)
         {
-            itemChoices = items;
+            source = from;
             Choices.Clear();
             candidates.Clear();
             weights.Clear();
             kinds.Clear();
-            foreach (var def in data.PowerUps.Values)
+            if (from == ChoiceSource.Scepter || from == ChoiceSource.Shard)
             {
-                float weight = OfferWeight(def, items, out var kind);
-                if (weight <= 0) continue;
-                candidates.Add(def);
-                weights.Add(weight);
-                kinds.Add(kind);
+                var kind = from == ChoiceSource.Scepter ? OfferKind.Scepter : OfferKind.Shard;
+                for (int i = 0; i < Owned.Count; i++)
+                {
+                    var def = Owned[i].Def;
+                    if (kind == OfferKind.Scepter ? !CanScepter(def) : !CanShard(def)) continue;
+                    candidates.Add(def);
+                    weights.Add(1);
+                    kinds.Add(kind);
+                }
+            }
+            else
+            {
+                bool items = from == ChoiceSource.Item;
+                foreach (var def in data.PowerUps.Values)
+                {
+                    float weight = OfferWeight(def, items, out var kind);
+                    if (weight <= 0) continue;
+                    candidates.Add(def);
+                    weights.Add(weight);
+                    kinds.Add(kind);
+                }
             }
             while (Choices.Count < mode.LevelUpChoices && Choices.Count < Offers.Length && candidates.Count > 0)
             {
@@ -174,8 +203,22 @@ namespace ThornThrone.Simulation
             var owned = Find(def);
             int rank = owned?.Rank ?? 0;
             var rarity = kind == OfferKind.Minor ? def.Minor[variant].Rarity : UpgradeRarity.Common;
-            offer.Reset(def, kind, rank, kind == OfferKind.Minor ? rank : rank + 1, variant, rarity);
-            if (kind == OfferKind.Minor)
+            bool aghanim = kind == OfferKind.Scepter || kind == OfferKind.Shard;
+            offer.Reset(def, kind, rank, kind == OfferKind.Minor || aghanim ? rank : rank + 1, variant, rarity);
+            offer.HasScepter = owned != null && owned.Scepter;
+            offer.HasShard = owned != null && owned.Shard;
+            if (aghanim)
+            {
+                // The scepter's own record (m_scepterUpgradeDefinition); the other effects have only a text (Р5).
+                if (kind == OfferKind.Scepter && def.Scepter != null)
+                {
+                    AddChanges(offer, owned, def.Scepter.Local, -1);
+                    AddChanges(offer, null, def.Scepter.Global, -1);
+                }
+                var extra = AghanimEffects.ScepterGlobal(def);
+                if (kind == OfferKind.Scepter && extra.Length > 0) AddChanges(offer, null, extra, -1);
+            }
+            else if (kind == OfferKind.Minor)
             {
                 AddChanges(offer, owned, def.Minor[variant].Local, MinorDamageAttribute(def));
                 AddChanges(offer, null, def.Minor[variant].Global, -1);
@@ -232,7 +275,7 @@ namespace ThornThrone.Simulation
         {
             if (RerollsLeft <= 0 || ChoicesAreFallback) return false;
             RerollsLeft--;
-            GenerateChoices(rng, itemChoices);
+            GenerateChoices(rng, source);
             return true;
         }
 
@@ -242,7 +285,52 @@ namespace ThornThrone.Simulation
             int at = Choices.IndexOf(def);
             if (at < 0) return false;
             var offer = Offers[at];
-            return offer.Kind == OfferKind.Minor ? UpgradeMinor(def, offer.MinorIndex) : Upgrade(def);
+            switch (offer.Kind)
+            {
+                case OfferKind.Minor: return UpgradeMinor(def, offer.MinorIndex);
+                case OfferKind.Scepter: return UpgradeScepter(def);
+                case OfferKind.Shard: return UpgradeShard(def);
+                default: return Upgrade(def);
+            }
+        }
+
+        /// <summary>
+        /// An owned active ability (not innate) with m_bIsScepterUpgradeable, an implemented effect
+        /// (<see cref="AghanimEffects.Has"/>) and no scepter yet (Mechanics §34 Р4, Р6).
+        /// </summary>
+        public bool CanScepter(PowerUpDef def)
+        {
+            var owned = Find(def);
+            return owned != null && !owned.Scepter && AghanimEffects.Has(def, false);
+        }
+
+        /// <summary>The same rule as <see cref="CanScepter"/> with m_bIsShardUpgradeable and the shard flag.</summary>
+        public bool CanShard(PowerUpDef def)
+        {
+            var owned = Find(def);
+            return owned != null && !owned.Shard && AghanimEffects.Has(def, true);
+        }
+
+        /// <summary>Sets the scepter flag once; false and nothing changed on a repeat (Т4). Also for tests and debug tools.</summary>
+        public bool UpgradeScepter(PowerUpDef def)
+        {
+            if (!CanScepter(def)) return false;
+            var owned = Find(def);
+            owned.Scepter = true;
+            owned.KillsAtScepter = owned.Stats?.Kills ?? 0;
+            Recalculate();
+            Choices.Clear();
+            return true;
+        }
+
+        /// <summary>Sets the shard flag once; false and nothing changed on a repeat (Т4). Also for tests and debug tools.</summary>
+        public bool UpgradeShard(PowerUpDef def)
+        {
+            if (!CanShard(def)) return false;
+            Find(def).Shard = true;
+            Recalculate();
+            Choices.Clear();
+            return true;
         }
 
         /// <summary>
@@ -349,6 +437,16 @@ namespace ThornThrone.Simulation
                         var local = def.Minor[m].Local;
                         for (int k = 0; k < local.Length; k++) owned.Local.Add(Remap(local[k].Id, damage), local[k].Value * times);
                         Global.Add(def.Minor[m].Global, times);
+                    }
+                    // Aghanim's Scepter: its record and extra attributes once while the flag is set (Mechanics §34 Р6).
+                    if (owned.Scepter)
+                    {
+                        if (def.Scepter != null)
+                        {
+                            owned.Local.Add(def.Scepter.Local);
+                            Global.Add(def.Scepter.Global);
+                        }
+                        Global.Add(AghanimEffects.ScepterGlobal(def));
                     }
                 }
             }

@@ -14,6 +14,9 @@ namespace ThornThrone.Simulation
         /// <summary>Radius of the AbilityBurst event on a target (display only, Mechanics §30 Р21).</summary>
         public const float BurstRadius = 80;
 
+        /// <summary>_class of Track: its scepter «Каждая сокровищница даёт два предмета» is applied by the run (Mechanics §34 Р9).</summary>
+        public const string ClassName = "CSurvivorsPowerUpDefinition_Track";
+
         private const int MaxTargets = 64;
 
         private readonly StrongestTargets targets = new StrongestTargets(MaxTargets);

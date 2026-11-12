@@ -166,8 +166,9 @@ class ImplementationTests(unittest.TestCase):
         self.assertEqual(audit.enemy_role("snotty", value, set(), set()), "friendly")
 
     def test_pickups(self):
-        self.assertEqual(level("pickups/shard"), "none")
-        self.assertEqual(level("pickups/scepter"), "none")
+        # Treasure variants 1 and 2 are spawned by Run.Drop since Task 27 (Mechanics §34).
+        self.assertTrue(at_least("pickups/shard", "implemented"))
+        self.assertTrue(at_least("pickups/scepter", "implemented"))
         self.assertTrue(at_least("pickups/treasure", "implemented"))
         self.assertTrue(at_least("pickups/nothing", "implemented"))
 

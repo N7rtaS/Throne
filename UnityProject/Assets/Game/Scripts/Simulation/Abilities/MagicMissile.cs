@@ -10,7 +10,9 @@ namespace ThornThrone.Simulation
     /// yet (m_eBounceTargeting RANDOM_TARGET_AT_RANGE, <see cref="ChainBounce"/>) and cannot hit for
     /// m_flBounceMinimumLifetime after a bounce.
     /// Damage and stun are snapshotted at launch. Area damage on impact and bounce selection are interpretations
-    /// of the data and the description (Mechanics §15).
+    /// of the data and the description (Mechanics §15). Aghanim's Scepter adds m_flScepterDamageIncreasePerEnemyKilled to
+    /// the base damage for every kill of this ability since the scepter; the shard multiplies the damage by
+    /// 1 + m_flShardDamageMultiplier (Mechanics §34 Р10).
     /// </summary>
     public sealed class MagicMissile : AbilityBase, IProjectileAbility
     {
@@ -20,11 +22,26 @@ namespace ThornThrone.Simulation
         private readonly int[] areaIds = new int[64];
         private float cooldown;
 
-        public MagicMissile(OwnedPowerUp owned) : base(owned)
+        /// <param name="run">Reports missing data fields.</param>
+        public MagicMissile(OwnedPowerUp owned, Run run) : base(owned)
         {
             var delay = owned.Def.Raw?["m_flBounceMinimumLifetime"];
             bounceDelay = delay != null ? (float)delay : 0;
+            ScepterDamagePerKill = DataField(run, "m_flScepterDamageIncreasePerEnemyKilled");
+            ShardDamageMultiplier = DataField(run, "m_flShardDamageMultiplier");
         }
+
+        /// <summary>m_flScepterDamageIncreasePerEnemyKilled (Д 0.01).</summary>
+        public float ScepterDamagePerKill { get; }
+        /// <summary>m_flShardDamageMultiplier (Д 0.25).</summary>
+        public float ShardDamageMultiplier { get; }
+
+        /// <summary>Current scepter bonus: per-kill damage × kills of this ability since the scepter; 0 without it.</summary>
+        public float ScepterBonus => owned.Scepter && owned.Stats != null
+            ? ScepterDamagePerKill * Math.Max(0, owned.Stats.Kills - owned.KillsAtScepter) : 0;
+
+        protected override float BonusDamage(Run run) => ScepterBonus;
+        protected override float DamageScale(Run run) => owned.Shard ? 1 + ShardDamageMultiplier : 1;
 
         public int Bounces(Run run) => Math.Max(0, (int)Stat(run, Attr.ProjectileBounces));
         public float StunDuration(Run run) => EffectDuration(run, Attr.StunDuration);

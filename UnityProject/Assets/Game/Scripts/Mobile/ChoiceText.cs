@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -47,6 +48,10 @@ namespace ThornThrone.Mobile
         public const string New = "Новое";
         /// <summary>DOTA_Survivors_MaxLevel.</summary>
         public const string MaxLevel = "МАКС.";
+        /// <summary>DOTA_AbilityTooltip_Aghs_Scepter in Russian patch notes (Д); header of a scepter card (Mechanics §34 Р5).</summary>
+        public const string Scepter = "Скипетр Аганима";
+        /// <summary>The Russian localization keeps «Aghanim's Shard» in English; text of the project (Р5).</summary>
+        public const string Shard = "Осколок Аганима";
 
         /// <summary>Rarity line; the data has only RARITY_COMMON, its Russian name is a design decision (Р12).</summary>
         public static string Rarity(UpgradeRarity rarity) => "Обычное";
@@ -77,18 +82,29 @@ namespace ThornThrone.Mobile
             {
                 case OfferKind.New: return New;
                 case OfferKind.Minor: return MaxLevel;
+                case OfferKind.Scepter: return Scepter;
+                case OfferKind.Shard: return Shard;
                 default: return $"Уровень {offer.Rank} -> <b>{offer.NextRank}</b> / {offer.Def.MaxLevel}";
             }
         }
 
         /// <param name="name">Localized powerup name.</param>
-        /// <param name="description">Localized description, shown on a new active ability (Т5.5).</param>
+        /// <param name="description">
+        /// Localized description, shown on a new active ability (Т5.5); on a scepter or shard card the Aghanim text with
+        /// its numbers (<see cref="Substitute"/>, <see cref="ShardText"/>).
+        /// </param>
         public static string Format(ChoiceOffer offer, string name, string description, IReadOnlyDictionary<string, JObject> attributes)
         {
             var sb = new StringBuilder();
             sb.Append("<b>").Append(name).Append("</b>\n");
             sb.Append(Header(offer)).Append('\n');
-            sb.Append(Rarity(offer.Rarity)).Append("\n\n");
+            sb.Append(Rarity(offer.Rarity)).Append('\n');
+            // An ability that already has Aghanim shows it on its cards (ТЗ_Полная_игра_Unity.md §6.3, Т7.1).
+            if (offer.HasScepter) sb.Append(Scepter).Append('\n');
+            if (offer.HasShard) sb.Append(Shard).Append('\n');
+            sb.Append('\n');
+            bool aghanim = offer.Kind == OfferKind.Scepter || offer.Kind == OfferKind.Shard;
+            if (aghanim) sb.Append(description).Append('\n');
             if (offer.Kind == OfferKind.New && offer.Def.IsActive && offer.ChangeCount == 0)
             {
                 sb.Append(description);
@@ -100,6 +116,60 @@ namespace ThornThrone.Mobile
                 sb.Append(Change(change, IsPercentage(attributes, change.Attribute))).Append('\n');
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Replaces the placeholders «{f:N:name}» of a localized text with <paramref name="value"/>(name) shown with N
+        /// decimals; an unknown name or form stays as it is (Mechanics §34 Р5).
+        /// </summary>
+        public static string Substitute(string template, Func<string, float?> value)
+        {
+            if (string.IsNullOrEmpty(template)) return template ?? "";
+            var sb = new StringBuilder(template.Length);
+            int at = 0;
+            while (at < template.Length)
+            {
+                int open = template.IndexOf('{', at);
+                int close = open < 0 ? -1 : template.IndexOf('}', open);
+                if (close < 0) { sb.Append(template, at, template.Length - at); break; }
+                sb.Append(template, at, open - at);
+                string token = template.Substring(open + 1, close - open - 1);
+                var parts = token.Split(':');
+                float? v = parts.Length == 3 && parts[0] == "f" && int.TryParse(parts[1], out _) ? value(parts[2]) : null;
+                if (v.HasValue) sb.Append(v.Value.ToString("F" + parts[1], CultureInfo.InvariantCulture));
+                else sb.Append('{').Append(token).Append('}');
+                at = close + 1;
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Numbers of the scepter texts (Mechanics §34 Р5): damage_per_enemy and extra_damage (Magic Missile),
+        /// counter_chance (Counter Helix, %), speed_damage_multiplier and actual_damage_multiplier (Stampede, % now).
+        /// </summary>
+        public static float? ScepterValue(Run run, PowerUpDef def, string name)
+        {
+            switch (name)
+            {
+                case "damage_per_enemy": return Field(def, "m_flScepterDamageIncreasePerEnemyKilled");
+                case "extra_damage":
+                    var owned = run.Build.Find(def);
+                    return owned?.Ability is MagicMissile missile ? missile.ScepterBonus : 0;
+                case "counter_chance": return Field(def, "m_flChanceToCounter") * 100;
+                case "speed_damage_multiplier": return Field(def, Stampede.ScepterField) * 100;
+                case "actual_damage_multiplier": return Field(def, Stampede.ScepterField) * run.HeroSpeed;
+                default: return null;
+            }
+        }
+
+        private static float? Field(PowerUpDef def, string field) =>
+            def.Raw?[field] is JValue v && (v.Type == JTokenType.Float || v.Type == JTokenType.Integer) ? (float?)(float)v : null;
+
+        /// <summary>Shard card: the data has no m_sLocShardAbilityDesc, so «Урон: ×1.25» from m_flShardDamageMultiplier (text of the project, Р5).</summary>
+        public static string ShardText(PowerUpDef def)
+        {
+            float multiplier = Field(def, "m_flShardDamageMultiplier") ?? 0;
+            return "Урон: ×<b>" + (1 + multiplier).ToString("0.##", CultureInfo.InvariantCulture) + "</b>";
         }
 
         /// <summary>Fallback card: the powerup «gold» and its amount (Mechanics §33 Р8–Р9).</summary>

@@ -9,6 +9,11 @@ namespace ThornThrone.Simulation
     /// </summary>
     public sealed class Stampede : AbilityBase
     {
+        /// <summary>_class of Stampede: its scepter raises the physical damage of every ability (Run.Aghanim.cs, Mechanics §34 Р7).</summary>
+        public const string ClassName = "CSurvivorsPowerUpDefinition_Stampede";
+        /// <summary>Scepter field: damage per 100 of walking speed (Д 0.1).</summary>
+        public const string ScepterField = "m_flMovementSpeedPercentDamageMultiplier";
+
         private readonly CircleTargets targets;
         // Per enemy slot: number of the charge that hit it and the SpawnId it had then (one hit per charge, Р13).
         private readonly int[] hitCharge, hitSpawn;

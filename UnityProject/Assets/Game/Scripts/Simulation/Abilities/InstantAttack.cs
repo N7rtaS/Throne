@@ -19,6 +19,9 @@ namespace ThornThrone.Simulation
         /// <summary>Radius of the AbilityBurst event on a random target (display only, Mechanics §30 Р17).</summary>
         public const float BurstRadius = 80;
 
+        /// <summary>Lives of Annihilation's scepter: «дополнительную жизнь» of the text, one (Mechanics §34 Р8).</summary>
+        public const int ScepterLives = 1;
+
         private const int MaxStrongest = 64;
 
         private readonly bool random;

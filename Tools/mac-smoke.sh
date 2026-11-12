@@ -8,6 +8,7 @@
 #        Tools/mac-smoke.sh --check-hud-alloc-log FILE (THORN_HUD_ALLOC with zero bytes, then the log check)
 #        Tools/mac-smoke.sh --check-boss-log FILE   (THORN_BOSS spawned=1 attacks>0, then the log check without kills)
 #        Tools/mac-smoke.sh --check-force-log FILE KEY[,KEY…] (THORN_FORCE with hits of every key, then the log check)
+#        Tools/mac-smoke.sh --check-elite-log FILE   (the elite room's scepter was chosen, then the log check)
 # -thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): the hero has no abilities, so kills are not
 #   required; Imperia must spawn and attack (THORN_BOSS line), the rest of the log check is the same.
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
@@ -31,6 +32,11 @@
 #             14 -thornForce=KEY[,KEY…] given and the THORN_FORCE line misses a key, reports it refused or with 0 hits
 #                (design: .kiro/specs/rot-counter-helix/design.md, Mechanics §28 Р11). With -thornForce the run lasts
 #                30 s and longer until every key has hits, at most 65 game seconds (Mechanics §30 Р9).
+#                KEY+scepter / KEY+shard gives the ability and its Aghanim's Scepter / Shard (Mechanics §34 Р16).
+#             15 -thornElite given and no THORN_ELITE_SCEPTER ok=1 line or no THORN_AGHANIM source=Scepter line: the first
+#                elite room's scepter was not dropped, collected or chosen (design: .kiro/specs/aghanim-upgrades/design.md).
+#             16 -thornShowChoice=SOURCE given and no THORN_CHOICE_SHOT line: the choice of SOURCE (level, item, scepter,
+#                shard) did not open or was not shot (the picture goes to -thornScreenshot, see Tools/mac-screenshot.sh).
 # -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"
@@ -138,6 +144,18 @@ check_force()
   done
   print -r -- "$line"
 }
+# Elite smoke (-thornElite): the first room's scepter was chosen (code 15 otherwise).
+check_elite_scepter()
+{
+  local file="$1" line choice
+  line="$(LC_ALL=C grep -a '^THORN_ELITE_SCEPTER ' "$file" 2> /dev/null | tail -n 1 || true)"
+  choice="$(LC_ALL=C grep -a '^THORN_AGHANIM source=Scepter ' "$file" 2> /dev/null | head -n 1 || true)"
+  if [[ "$line" != "THORN_ELITE_SCEPTER ok=1 "* || -z "$choice" ]]; then
+    echo "mac-smoke: no scepter choice from the elite room: ${line:-no THORN_ELITE_SCEPTER line}, see $file" >&2
+    return 15
+  fi
+  print -r -- "$choice"
+}
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -163,6 +181,11 @@ if [[ "${1:-}" == "--check-boss-log" ]]; then
 fi
 if [[ "${1:-}" == "--check-force-log" ]]; then
   check_force "${2:?log file}" "${3:?keys}" || exit $?
+  check_log "$2"
+  exit $?
+fi
+if [[ "${1:-}" == "--check-elite-log" ]]; then
+  check_elite_scepter "${2:?log file}" || exit $?
   check_log "$2"
   exit $?
 fi
@@ -276,6 +299,13 @@ run_once()
     fi
     if [[ "$arg" == -thornForce=* ]]; then
       check_force "$runlog" "${arg#-thornForce=}" || return $?
+    fi
+    if [[ "$arg" == -thornElite ]]; then
+      check_elite_scepter "$runlog" || return $?
+    fi
+    if [[ "$arg" == -thornShowChoice=* ]] && ! LC_ALL=C grep -aq "^THORN_CHOICE_SHOT source=" "$runlog"; then
+      echo "mac-smoke: the ${arg#-thornShowChoice=} choice was not shot, see $runlog" >&2
+      return 16
     fi
   done
   if (( rc != 0 )); then echo "mac-smoke: player exit code $rc, see $runlog" >&2; return 7; fi

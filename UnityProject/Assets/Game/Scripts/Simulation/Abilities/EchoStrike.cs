@@ -9,7 +9,9 @@ namespace ThornThrone.Simulation
     /// TimeBetweenTicks, all on the remembered area. A hit deals physical damage to every enemy whose circle touches
     /// the Length × Width rectangle (both × (1 + AoEIncrease)) and pushes it along the strike by KnockbackDistance.
     /// Damage, knockback and the shape are snapshotted at the cast. The shape and timing rules are design decisions
-    /// (Mechanics §26 Р1–Р9).
+    /// (Mechanics §26 Р1–Р9). With Aghanim's Scepter every hit also strikes the same rectangle behind the hero
+    /// (−facing): an enemy touching both takes one hit, the cast starts when either has a target, and the flag is
+    /// snapshotted with the cast (Mechanics §34 Р15).
     /// </summary>
     public sealed class EchoStrike : AbilityBase
     {
@@ -23,6 +25,7 @@ namespace ThornThrone.Simulation
             public Vec2 Origin, Direction;
             public float Length, Width, Knockback, Interval, Timer;
             public int Remaining;
+            public bool Back;
             public DamageInfo Hit;
         }
 
@@ -64,7 +67,9 @@ namespace ThornThrone.Simulation
             if (cooldown > 0) return;
             Vec2 origin = run.HeroPosition, direction = run.Facing;
             float length = Length(run), width = Width(run);
-            if (!RectangleTargets.Any(run, origin, direction, length, width)) return;
+            bool back = owned.Scepter;
+            if (!RectangleTargets.Any(run, origin, direction, length, width)
+                && !(back && RectangleTargets.Any(run, origin, -direction, length, width))) return;
             cooldown = Cooldown(run);
             if (queued == MaxQueued)
             {
@@ -75,15 +80,22 @@ namespace ThornThrone.Simulation
             {
                 Origin = origin, Direction = direction, Length = length, Width = width,
                 Knockback = KnockbackDistance(run), Interval = Interval(run), Timer = InitialDelay(run),
-                Remaining = Ticks(run), Hit = Hit(run),
+                Remaining = Ticks(run), Back = back, Hit = Hit(run),
             };
         }
 
         private void Strike(Run run, ref Cast cast)
         {
-            int count = targets.Collect(run, cast.Origin, cast.Direction, cast.Length, cast.Width);
+            int front = targets.Collect(run, cast.Origin, cast.Direction, cast.Length, cast.Width);
             run.EmitStrike(cast.Origin + cast.Direction * (cast.Length * 0.5f), cast.Direction,
                 new Vec2(cast.Length, cast.Width), owned.Def.Id);
+            int count = front;
+            if (cast.Back)
+            {
+                count = targets.Collect(run, cast.Origin, -cast.Direction, cast.Length, cast.Width, front);
+                run.EmitStrike(cast.Origin - cast.Direction * (cast.Length * 0.5f), -cast.Direction,
+                    new Vec2(cast.Length, cast.Width), owned.Def.Id);
+            }
             for (int i = 0; i < count; i++)
             {
                 var e = targets.Live(i);
@@ -91,7 +103,8 @@ namespace ThornThrone.Simulation
                 int id = e.SpawnId;
                 run.DealDamage(e, cast.Hit);
                 if (run.Finished) return;
-                if (e.Active && e.SpawnId == id) run.Knockback(e, cast.Direction, cast.Knockback);
+                // Pushed along the rectangle that touched it first.
+                if (e.Active && e.SpawnId == id) run.Knockback(e, i < front ? cast.Direction : -cast.Direction, cast.Knockback);
             }
         }
     }

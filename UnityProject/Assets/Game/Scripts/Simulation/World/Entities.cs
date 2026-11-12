@@ -42,7 +42,11 @@ namespace ThornThrone.Simulation
 
     public sealed class Projectile
     {
-        public const int MaxHits = 32;
+        /// <summary>
+        /// Enemies one shot remembers as hit: Knife Throw's scepter pierces 1 + 99 (Mechanics §34 Р12). A shot whose records
+        /// are full stops hitting, so it never hits an enemy twice.
+        /// </summary>
+        public const int MaxHits = 128;
         public int Slot, SpawnId;
         public bool Active;
         public OwnedPowerUp Source;

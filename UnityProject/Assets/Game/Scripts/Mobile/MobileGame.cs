@@ -156,7 +156,7 @@ namespace ThornThrone.Mobile
             SmokeOptions(args);
         }
 
-        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce).</summary>
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce, -thornShowChoice).</summary>
         private void SmokeOptions(string[] args)
         {
             showSettings = smoke && args.Contains("-thornShowSettings");
@@ -177,7 +177,11 @@ namespace ThornThrone.Mobile
                 foreach (var room in run.EliteRooms) room.UnlockTime = 1;
                 eliteSmoke = true;
                 screenshotTime = 9.5f;
+                // The run waits for the room's scepter and its choice (Mechanics §34 Р16); the hero must live that long.
+                run.DebugInvulnerable = true;
             }
+            var choiceArg = args.FirstOrDefault(a => a.StartsWith(ChoiceShotPrefix));
+            if (smoke && choiceArg != null) choiceShotSource = choiceArg.Substring(ChoiceShotPrefix.Length);
             var forceArg = args.FirstOrDefault(a => a.StartsWith(SmokeForce.Prefix));
             if (smoke && forceArg != null)
             {
@@ -337,7 +341,13 @@ namespace ThornThrone.Mobile
         private void SmokeCheck()
         {
             if (!smoke || run == null) return;
-            if (state == State.Choosing) { run.Choose(0); AfterChoice(); }
+            if (state == State.Choosing)
+            {
+                if (HoldForChoiceShot()) return;
+                LogAghanimChoice();
+                run.Choose(0);
+                AfterChoice();
+            }
             // The -thornFlow script drives its own short runs; the 30 s smoke run starts after it.
             if (flowSmoke) return;
             inputScript?.Update(run, input);
@@ -350,6 +360,9 @@ namespace ThornThrone.Mobile
             if ((showSettings || pauseShot) && SettingsScreenshot()) return;
             if (eliteSmoke && run.Time >= 5 && run.EliteRooms.Count > 0 && run.EliteRooms[0].State == EliteRoomState.Open)
                 run.Teleport(run.EliteRooms[0].Position);
+            if (eliteSmoke) FinishEliteFight();
+            // The room's scepter flies to the standing hero (it may lie where the hero cannot walk).
+            if (eliteSmoke) foreach (var p in run.Pickups) if (p.Active && p.Def.Key == "scepter") p.Attracted = true;
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
             if (shot != null && run.Time >= screenshotTime && !screenshotTaken)
             {
@@ -357,6 +370,8 @@ namespace ThornThrone.Mobile
                 StartCoroutine(CaptureTga(shot.Substring("-thornScreenshot=".Length)));
             }
             if (run.Time < 30 && !run.Finished) return;
+            // -thornElite: wait for the scepter of the first room and its choice, at most EliteMaxSeconds (Mechanics §34 Р16).
+            if (eliteSmoke && !eliteScepterChosen && run.Time < EliteMaxSeconds && !run.Finished) return;
             // -thornForce: wait for every forced key to hit (Stampede's second charge comes at 30 s), Mechanics §30 Р9.
             if (force != null && !force.AllHit(run) && run.Time < SmokeForce.MaxSeconds && !run.Finished) return;
             if (inputScript != null && !inputScript.Finished)
@@ -384,10 +399,79 @@ namespace ThornThrone.Mobile
                           $"bossHp={(spawned ? run.Boss.Health : 0):0}/{(spawned ? run.Boss.MaxHealth : 0):0} time={run.Time:0.0}");
             }
             if (force != null) Debug.Log(force.Report(run));
+            if (eliteSmoke) Debug.Log($"THORN_ELITE_SCEPTER ok={(eliteScepterChosen ? 1 : 0)} time={run.Time:0.0}");
             Debug.Log($"THORN_MOBILE_SMOKE hero={run.Hero.Key} time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
             Application.Quit(bossSmoke ? (bossOk ? 0 : 12) : run.Kills > 0 ? 0 : 1);
             smoke = false;
+        }
+
+        // ------------------------------------------------------------------ smoke: Aghanim and the choice screen
+
+        private const string ChoiceShotPrefix = "-thornShowChoice=";
+        /// <summary>-thornElite: longest wait for the first room's scepter, game seconds.</summary>
+        private const float EliteMaxSeconds = 120;
+        /// <summary>-thornElite: seconds of the first room's fight before the smoke finishes it.</summary>
+        private const float EliteAssistSeconds = 20;
+        private bool eliteScepterChosen, choiceShotPending, choiceShotDone;
+        /// <summary>-thornShowChoice=level|item|scepter|shard: the first choice of that source is shot before the automatic pick.</summary>
+        private string choiceShotSource;
+
+        /// <summary>
+        /// -thornShowChoice: keeps the open choice of the wanted source until its -thornScreenshot picture is written
+        /// (THORN_CHOICE_SHOT line); the timed screenshot is skipped then. True while the choice must stay open.
+        /// </summary>
+        private bool HoldForChoiceShot()
+        {
+            if (choiceShotSource == null || choiceShotDone) return false;
+            if (!string.Equals(run.ChoiceSource.ToString(), choiceShotSource, StringComparison.OrdinalIgnoreCase)) return false;
+            var path = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="))?.Substring("-thornScreenshot=".Length);
+            if (path == null)
+            {
+                Debug.LogWarning("[Smoke] -thornShowChoice needs -thornScreenshot=PATH");
+                choiceShotDone = true;
+                return false;
+            }
+            if (!choiceShotPending)
+            {
+                choiceShotPending = true;
+                screenshotTaken = true;
+                StartCoroutine(ChoiceShot(path));
+            }
+            return true;
+        }
+
+        private System.Collections.IEnumerator ChoiceShot(string path)
+        {
+            yield return StartCoroutine(CaptureTga(path));
+            choiceShotDone = true;
+            Debug.Log($"THORN_CHOICE_SHOT source={run.ChoiceSource} offers={run.Build.OfferCount} fallback={(run.ChoicesAreFallback ? 1 : 0)}");
+        }
+
+        private float eliteFightStart = -1;
+
+        /// <summary>
+        /// -thornElite: the starting attack alone may not clear a room in time (the resurrector returns twice), so after
+        /// EliteAssistSeconds of fight the smoke kills the room's enemies through Run.DamageEnemy. Deaths, split units
+        /// and the room's scepter go through the usual path (Mechanics §34 Р1, Р16).
+        /// </summary>
+        private void FinishEliteFight()
+        {
+            if (run.EliteRooms.Count == 0 || run.EliteRooms[0].State != EliteRoomState.Fighting) return;
+            if (eliteFightStart < 0) eliteFightStart = run.Time;
+            if (run.Time - eliteFightStart < EliteAssistSeconds) return;
+            foreach (var e in run.Enemies)
+                if (e.Active && e.EliteRoom == 0 && e.Targetable) run.DamageEnemy(e, 1e7f);
+        }
+
+        /// <summary>THORN_AGHANIM line for every scepter or shard choice the smoke takes (first card).</summary>
+        private void LogAghanimChoice()
+        {
+            var source = run.ChoiceSource;
+            if (source != ChoiceSource.Scepter && source != ChoiceSource.Shard) return;
+            string chosen = run.ChoicesAreFallback || run.Build.OfferCount == 0 ? "fallback" : run.Build.Offers[0].Def.Key;
+            Debug.Log($"THORN_AGHANIM source={source} offers={run.Build.OfferCount} chosen={chosen} time={run.Time:0.0}");
+            if (source == ChoiceSource.Scepter) eliteScepterChosen = true;
         }
 
         // ------------------------------------------------------------------ smoke: screen flow

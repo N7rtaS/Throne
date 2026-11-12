@@ -141,5 +141,22 @@ class MacSmokeForceCheckTests(unittest.TestCase):
         self.assertEqual(check_force("absent.log", "rot").returncode, 14)
     def test_force_log_with_exception_exits_six(self):
         self.assertEqual(check_force("force-exception.log", "rot,counter_helix").returncode, 6)
+    def test_aghanim_keys_are_checked_with_their_suffix(self):
+        result = check_force("force-aghanim.log", "arcane_bolt+scepter,magic_missile+shard")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(check_force("force-aghanim.log", "arcane_bolt+shard").returncode, 14)
+def check_elite(name):
+    return subprocess.run(["zsh", SCRIPT, "--check-elite-log", os.path.join(LOGS, name)],
+                          capture_output=True, text=True, timeout=30)
+class MacSmokeEliteCheckTests(unittest.TestCase):
+    """-thornElite (design: .kiro/specs/aghanim-upgrades/design.md, Mechanics §34 Р16): code 15 unless the scepter was chosen."""
+    def test_chosen_scepter_exits_zero_and_prints_the_choice(self):
+        result = check_elite("elite-ok.log")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_AGHANIM source=Scepter offers=1 chosen=arcane_bolt", result.stdout)
+    def test_no_scepter_exits_fifteen(self):
+        self.assertEqual(check_elite("elite-no-scepter.log").returncode, 15)
+    def test_absent_log_exits_fifteen(self):
+        self.assertEqual(check_elite("absent.log").returncode, 15)
 if __name__ == "__main__":
     unittest.main()

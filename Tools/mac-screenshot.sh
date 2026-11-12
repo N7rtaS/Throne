@@ -8,6 +8,8 @@ out="${1:?output png}"; shift
 out="${out:A}"
 mkdir -p "${out:h}"
 log="${out%.png}.log"
+# A log left by an earlier run already has the THORN_MOBILE_SMOKE line the wait below looks for.
+rm -f "$log"
 tga="$(mktemp -t thorn).tga"
 rm -f "$tga"
 open -n "$root/Builds/MacSmoke/ThornThrone.app" --args -screen-fullscreen 0 -screen-width 1600 -screen-height 720 \

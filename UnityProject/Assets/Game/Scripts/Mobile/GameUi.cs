@@ -421,7 +421,7 @@ namespace ThornThrone.Mobile
         public void ShowChoices(Run run)
         {
             choices.SetActive(true);
-            choiceTitle.text = run.ChoosingItems ? "Выберите предмет" : "Новый уровень";
+            choiceTitle.text = ChoiceTitle(run.ChoiceSource);
             for (int i = 0; i < cards.Length; i++)
             {
                 bool visible = run.ChoicesAreFallback ? i == 1 : i < run.Choices.Count;
@@ -615,8 +615,25 @@ namespace ThornThrone.Mobile
 
         // ------------------------------------------------------------------ card text
 
-        private string CardText(Run run, ChoiceOffer offer) =>
-            ChoiceText.Format(offer, Name(offer.Def), Text(offer.Def, "LocAbilityDesc"), run.Data.AttributeDefinitions);
+        private static string ChoiceTitle(ChoiceSource source)
+        {
+            switch (source)
+            {
+                case ChoiceSource.Item: return "Выберите предмет";
+                case ChoiceSource.Scepter: return ChoiceText.Scepter;
+                case ChoiceSource.Shard: return ChoiceText.Shard;
+                default: return "Новый уровень";
+            }
+        }
+
+        private string CardText(Run run, ChoiceOffer offer)
+        {
+            var def = offer.Def;
+            string description = offer.Kind == OfferKind.Scepter
+                ? ChoiceText.Substitute(Text(def, "LocScepterAbilityDesc"), name => ChoiceText.ScepterValue(run, def, name))
+                : offer.Kind == OfferKind.Shard ? ChoiceText.ShardText(def) : Text(def, "LocAbilityDesc");
+            return ChoiceText.Format(offer, Name(def), description, run.Data.AttributeDefinitions);
+        }
 
         private string GoldName(Run run) =>
             run.Data.PowerUps.TryGetValue(run.Rules.FallbackPowerUp, out var gold) ? Name(gold) : run.Rules.FallbackPowerUp;

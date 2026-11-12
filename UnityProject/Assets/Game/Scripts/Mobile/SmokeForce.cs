@@ -8,11 +8,13 @@ namespace ThornThrone.Mobile
     /// Smoke option -thornForce=KEY[,KEY…] (Mechanics §28 Р11): after the run starts every key is given through
     /// <see cref="Run.ForceUpgrade"/> (a repeated key raises the rank); at the end the THORN_FORCE line reports the rank
     /// and the hits of each key, «refused» when the upgrade was refused. Tools/mac-smoke.sh exits with code 14 when a
-    /// key was refused or made no hits.
+    /// key was refused or made no hits. KEY+scepter / KEY+shard (Mechanics §34 Р16) gives the ability when it is not owned
+    /// and then its Aghanim's Scepter or Shard through <see cref="Run.DebugGrant"/>; the line reports the whole key.
     /// </summary>
     public sealed class SmokeForce
     {
         public const string Prefix = "-thornForce=";
+        public const string ScepterSuffix = "+scepter", ShardSuffix = "+shard";
 
         private readonly List<string> keys = new List<string>();
         private readonly List<bool> refused = new List<bool>();
@@ -40,13 +42,30 @@ namespace ThornThrone.Mobile
             bool ok = true;
             foreach (var key in upgrades)
             {
-                bool done = run.ForceUpgrade(key);
+                bool done = Give(run, key);
                 ok &= done;
                 int at = keys.IndexOf(key);
                 if (at < 0) { keys.Add(key); refused.Add(!done); }
                 else refused[at] |= !done;
             }
             return ok;
+        }
+
+        /// <summary>The powerup key of KEY, KEY+scepter or KEY+shard.</summary>
+        public static string PowerUp(string key)
+        {
+            int plus = key.IndexOf('+');
+            return plus < 0 ? key : key.Substring(0, plus);
+        }
+
+        private static bool Give(Run run, string key)
+        {
+            string powerUp = PowerUp(key);
+            if (powerUp == key) return run.ForceUpgrade(key);
+            string suffix = key.Substring(powerUp.Length);
+            if (suffix != ScepterSuffix && suffix != ShardSuffix) return false;
+            bool owned = run.Build.Rank(powerUp) > 0 || run.ForceUpgrade(powerUp);
+            return owned && run.DebugGrant(powerUp, suffix == ShardSuffix);
         }
 
         /// <summary>
@@ -56,7 +75,7 @@ namespace ThornThrone.Mobile
         public void KeepOnlyForced(Run run)
         {
             foreach (var owned in run.Build.Owned)
-                if (!keys.Contains(owned.Def.Key)) owned.Ability = null;
+                if (!keys.Exists(k => PowerUp(k) == owned.Def.Key)) owned.Ability = null;
         }
 
         /// <summary>
@@ -93,7 +112,8 @@ namespace ThornThrone.Mobile
 
         private static OwnedPowerUp Owned(Run run, string key)
         {
-            foreach (var owned in run.Build.Owned) if (owned.Def.Key == key) return owned;
+            string powerUp = PowerUp(key);
+            foreach (var owned in run.Build.Owned) if (owned.Def.Key == powerUp) return owned;
             return null;
         }
     }

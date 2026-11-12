@@ -8,7 +8,8 @@ namespace ThornThrone.Simulation
     /// for the last knife. A knife flies straight along the hero's facing at the moment it is thrown, from a point
     /// ProjectileHorizontalOffset to the side (the sides alternate), for Range; it pierces 1 + ProjectileHitCount
     /// enemies and pushes them along its flight. Damage is snapshotted at the throw. The volley, side and flight
-    /// rules are design decisions (Mechanics §29 Р7–Р11).
+    /// rules are design decisions (Mechanics §29 Р7–Р11). Aghanim's Scepter: m_scepterUpgradeDefinition
+    /// ProjectileHitCount +99, applied by <see cref="Build"/> (Mechanics §34 Р12).
     /// </summary>
     public sealed class KnifeThrow : AbilityBase
     {

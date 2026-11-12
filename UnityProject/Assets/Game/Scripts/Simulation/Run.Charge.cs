@@ -24,7 +24,7 @@ namespace ThornThrone.Simulation
         }
 
         /// <summary>Walking speed of the hero now.</summary>
-        private float HeroSpeed => Charging ? Math.Max(Build.Global[Attr.MovementSpeed], ChargeSpeed) : Build.Global[Attr.MovementSpeed];
+        public float HeroSpeed => Charging ? Math.Max(Build.Global[Attr.MovementSpeed], ChargeSpeed) : Build.Global[Attr.MovementSpeed];
 
         /// <summary>Called after the hero moved: the step that started the charge walks at the old speed.</summary>
         private void UpdateCharge(float dt)

@@ -69,5 +69,35 @@ namespace ThornThrone.Mobile.Tests
             Assert.That(force.Apply(run, SmokeForce.Parse("-thornForce=no_such_power,rot")), Is.False);
             Assert.That(force.Report(run), Is.EqualTo("THORN_FORCE no_such_power=refused rot=1:0"));
         }
+    
+        [Test]
+        public void AghanimKeysGiveTheAbilityAndItsScepterOrShard()
+        {
+            var run = new Run(LoadSourceData(), new Rules(), "dragonus", null, 7);
+            var force = new SmokeForce();
+            Assert.That(force.Apply(run, SmokeForce.Parse("-thornForce=arcane_bolt+scepter,magic_missile+shard,magic_missile+scepter")), Is.True);
+            Assert.That(run.Build.Rank("arcane_bolt"), Is.EqualTo(1), "an owned ability keeps its rank");
+            Assert.That(run.Build.Rank("magic_missile"), Is.EqualTo(1), "a new ability is given once");
+            foreach (var owned in run.Build.Owned)
+            {
+                if (owned.Def.Key == "arcane_bolt") Assert.That(owned.Scepter && !owned.Shard, Is.True);
+                if (owned.Def.Key == "magic_missile") Assert.That(owned.Scepter && owned.Shard, Is.True);
+            }
+            Assert.That(force.Report(run), Is.EqualTo("THORN_FORCE arcane_bolt+scepter=1:0 magic_missile+shard=1:0 magic_missile+scepter=1:0"));
+            force.KeepOnlyForced(run);
+            foreach (var owned in run.Build.Owned)
+                Assert.That(owned.Ability != null, Is.EqualTo(owned.Def.Key == "arcane_bolt" || owned.Def.Key == "magic_missile"), owned.Def.Key);
+            Assert.That(SmokeForce.PowerUp("knife_throw+scepter"), Is.EqualTo("knife_throw"));
+        }
+
+        [Test]
+        public void AghanimKeyWithoutAnEffectOrWithAnUnknownSuffixIsRefused()
+        {
+            var run = new Run(LoadSourceData(), new Rules(), "dragonus", null, 7);
+            var force = new SmokeForce();
+            Assert.That(force.Apply(run, SmokeForce.Parse("-thornForce=arcane_bolt+shard,rot+magic,arcane_bolt+scepter,arcane_bolt+scepter")), Is.False);
+            Assert.That(force.Report(run), Is.EqualTo("THORN_FORCE arcane_bolt+shard=refused rot+magic=refused arcane_bolt+scepter=refused"),
+                "no shard for Arcane Bolt, an unknown suffix, a second scepter");
+        }
     }
 }

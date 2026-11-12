@@ -52,7 +52,7 @@ namespace ThornThrone.Simulation
             new Dictionary<string, Func<OwnedPowerUp, Run, IAbility>>
             {
                 { "CSurvivorsPowerUpDefinition_ArcaneBolt", (owned, run) => new ArcaneBolt(owned) },
-                { "CSurvivorsPowerUpDefinition_MagicMissile", (owned, run) => new MagicMissile(owned) },
+                { "CSurvivorsPowerUpDefinition_MagicMissile", (owned, run) => new MagicMissile(owned, run) },
                 { "CSurvivorsPowerUpDefinition_EchoStrike", (owned, run) => new EchoStrike(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_InstantAttack", (owned, run) => new InstantAttack(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", (owned, run) => new Rot(owned, run.Enemies.Length) },

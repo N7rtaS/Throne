@@ -48,7 +48,7 @@ namespace ThornThrone.Simulation
         public float Experience { get; private set; }
         public int PendingLevels { get; private set; }
         public bool Choosing { get; private set; }
-        public bool ChoosingItems { get; private set; }
+        public bool ChoosingItems => ChoiceSource == ChoiceSource.Item;
         public int PendingItems { get; private set; }
         public int Kills { get; private set; }
         public int Gold { get; private set; }
@@ -309,10 +309,9 @@ namespace ThornThrone.Simulation
                 if (index < 0 || index >= Build.Choices.Count || !Build.Choose(Build.Choices[index])) return false;
                 OnBuildChanged();
             }
-            if (ChoosingItems) PendingItems--;
-            else PendingLevels--;
+            ConsumeChoice(); // Run.Aghanim.cs
             Choosing = false;
-            if (PendingItems > 0 || PendingLevels > 0) OpenChoices();
+            if (HasPendingChoice) OpenChoices();
             return true;
         }
 
@@ -340,7 +339,7 @@ namespace ThornThrone.Simulation
             UpdateGroundObjects(dt); // Mechanics §31 Р3
             UpdateCompanions(dt); // Mechanics §32 Р3
             if (!Downed) UpdatePickups(dt);
-            if (PendingItems > 0 && !Choosing) OpenChoices();
+            if ((PendingAghanim || PendingItems > 0) && !Choosing) OpenChoices(); // Mechanics §34 Р3
             if (PendingLevels > 0 && !Choosing)
             {
                 choiceDelay -= dt;
@@ -598,6 +597,8 @@ namespace ThornThrone.Simulation
         private readonly HashSet<object> reported = new HashSet<object>(256);
 
         private bool FirstTime(object key) => reported.Add(key);
+        /// <summary>Key of the «projectile:max-hits» diagnostic (an object, so the check does not box).</summary>
+        private static readonly object MaxHitsKey = new object();
 
         private void ReportUnsupportedEnemy(EnemyDef def)
         {
@@ -952,6 +953,13 @@ namespace ThornThrone.Simulation
                 using var near = grid.Query(middle, (float)Math.Sqrt(segmentLengthSquared) * 0.5f + shot.Radius + 200);
                 while (shot.RemainingHits > 0)
                 {
+                    if (shot.HitCount >= Projectile.MaxHits)
+                    {
+                        if (FirstTime(MaxHitsKey))
+                            Diagnostics.Report("projectile:max-hits", $"A shot hit {Projectile.MaxHits} enemies, the limit of its hit records; it stopped");
+                        shot.RemainingHits = 0;
+                        break;
+                    }
                     Enemy best = null;
                     float bestT = float.MaxValue;
                     for (int n = 0; n < near.Count; n++)
@@ -992,13 +1000,14 @@ namespace ThornThrone.Simulation
         /// Rewards: every m_vecPickupChances entry rolls independently; m_vecLootTable gives one pickup chosen by
         /// weight; each m_fullLootTable collection rolls its chance and drops Min..Max of every entry
         /// (interpretations, Mechanics §9); then the luck roll (Mechanics §25 Р11), won without a roll by an enemy
-        /// marked by Track (<paramref name="tracked"/>, §30 Р20).
+        /// marked by Track (<paramref name="tracked"/>, §30 Р20). An enemy of an elite room (<paramref name="room"/>) drops no
+        /// scepter of its own: the room gives one (Mechanics §34 Р1).
         /// </summary>
-        private void DropRewards(EnemyDef def, Vec2 position, bool tracked)
+        private void DropRewards(EnemyDef def, Vec2 position, bool tracked, int room)
         {
             foreach (var chance in def.PickupChances)
             {
-                if (!Data.Pickups.TryGetValue(chance.PickupName, out var pickup)) continue;
+                if (!Data.Pickups.TryGetValue(chance.PickupName, out var pickup) || (room >= 0 && IsScepter(pickup))) continue;
                 float probability = chance.Chance;
                 if (pickup == experienceDef) probability *= 1 + Difficulty.XPDropChanceMultiplier;
                 if (Rng.Chance(probability)) Drop(pickup, position, chance.ExperienceReward);
@@ -1037,10 +1046,11 @@ namespace ThornThrone.Simulation
             }
         }
 
+        /// <summary>Treasure variants 0–2: item, shard, scepter (Run.Aghanim.cs; literals so Tools/audit.py reads the condition).</summary>
         private void Drop(PickupDef pickup, Vec2 position, int experience)
         {
             if (pickup == experienceDef) AddExperiencePickup(position, experience);
-            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet" || (pickup.RewardsTreasure && pickup.TreasureVariant == 0)) SpawnPickup(pickup, ClampToMap(position), 0);
+            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet" || (pickup.RewardsTreasure && pickup.TreasureVariant >= 0 && pickup.TreasureVariant <= 2)) SpawnPickup(pickup, ClampToMap(position), 0);
             else if (pickup.Key == "nothing") { }
             else if (FirstTime(pickup)) Diagnostics.Report("pickup:" + pickup.Key, $"Pickup {pickup.Key} is not implemented");
         }
@@ -1149,7 +1159,7 @@ namespace ThornThrone.Simulation
             if (p.Def.Key == "magnet")
                 for (int i = 0; i < Pickups.Length; i++)
                     if (Pickups[i].Active && Pickups[i].Def == experienceDef) Pickups[i].Attracted = true;
-            if (p.Def.RewardsTreasure && p.Def.TreasureVariant == 0) PendingItems++;
+            if (p.Def.RewardsTreasure) OnTreasure(p.Def); // item, shard or scepter (Mechanics §34)
             Gold += p.Def.GoldAmount;
             Emit(SimEventKind.PickupCollected, p, p.Position, p.Value);
         }
@@ -1184,8 +1194,8 @@ namespace ThornThrone.Simulation
         private void OpenChoices()
         {
             pendingDash = false; // a stop drops the pending dash (ТЗ_Мобильная_версия_v2.md §6, §8)
-            ChoosingItems = PendingItems > 0;
-            Build.GenerateChoices(Rng, ChoosingItems);
+            ChoiceSource = NextSource();
+            Build.GenerateChoices(Rng, ChoiceSource);
             Choosing = true;
             Emit(SimEventKind.ChoicesReady, -1, HeroPosition, Build.Choices.Count);
         }

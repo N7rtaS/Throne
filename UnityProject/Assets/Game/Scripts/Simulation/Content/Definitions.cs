@@ -180,6 +180,10 @@ namespace ThornThrone.Simulation
         public AttributeValue[] BaseAttributes;
         public UpgradeChoice[] Authored, Minor;
         public int[] RecipeItems;
+        /// <summary>m_bIsScepterUpgradeable / m_bIsShardUpgradeable; an absent boolean of the schema is false (Mechanics §34).</summary>
+        public bool ScepterUpgradeable, ShardUpgradeable;
+        /// <summary>m_scepterUpgradeDefinition: attributes the scepter adds (rot, knife_throw), or null.</summary>
+        public UpgradeChoice Scepter;
         public bool IsRecipe => RecipeItems != null && RecipeItems.Length > 0;
         /// <summary>The _class of a definition without its own behaviour (a plain attribute set).</summary>
         public const string PlainClass = "CSurvivorsPowerUpDefinition";

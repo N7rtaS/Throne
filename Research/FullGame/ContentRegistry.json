@@ -51,9 +51,9 @@
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 35,
+   "implementation:verified": 36,
    "reachable": 45,
-   "implementation:implemented": 9,
+   "implementation:implemented": 8,
    "role:recipe": 9,
    "role:active-ability": 17,
    "role:innate": 3
@@ -76,21 +76,20 @@
   "spawners": {
    "role:spawner": 39,
    "prototype:none": 26,
-   "implementation:implemented": 34,
+   "implementation:implemented": 31,
    "unreachable": 7,
    "reachable": 36,
-   "implementation:verified": 9,
+   "implementation:verified": 12,
    "prototype:partial": 17,
    "role:elite-room": 4
   },
   "pickups": {
    "role:pickup": 11,
    "prototype:partial": 1,
-   "implementation:verified": 6,
+   "implementation:verified": 8,
    "reachable": 7,
    "prototype:none": 10,
    "unreachable": 4,
-   "implementation:none": 2,
    "implementation:implemented": 3
   },
   "attributes": {
@@ -102,8 +101,8 @@
    "prototype:none": 50,
    "implementation:none": 5,
    "unreachable": 6,
-   "implementation:verified": 31,
-   "implementation:implemented": 15
+   "implementation:verified": 32,
+   "implementation:implemented": 14
   }
  },
  "attributesUsedWithoutDefinition": [
@@ -490,6 +489,9 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:StepsWithScepterEffectsDoNotAllocateAfterWarmUp",
+    "AghanimTests.cs:Quiet",
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
     "AnnihilationTests.cs:DragonusInnateAddsOneTarget",
     "AppFlowTests.cs:InvalidCommandChangesNothing",
     "AppFlowTests.cs:PlayAgainKeepsHeroAndEchelonWithNewSeed",
@@ -502,6 +504,7 @@
     "ChainBeamFreezeTests.cs:BotRunsWithAllFour",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "ChainBeamFreezeTests.cs:StepsDoNotAllocateAfterWarmUpWithAllFour",
+    "ChoiceRulesTests.cs:CardNextValuesMatchValuesAfterChoosing",
     "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
     "CounterHelixTests.cs:CircleTargetsSkipsAnEnemyWhoseSlotWasTaken",
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
@@ -587,7 +590,11 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:MagicMissileReadsItsAghanimFieldsAndReportsAMissingOne",
+    "AghanimTests.cs:ScepterAndShardAreFlagsGivenOnce",
+    "AghanimTests.cs:ShardPickupOpensTheShardChoiceForMagicMissile",
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
+    "ChoiceRulesTests.cs:CardNextValuesMatchValuesAfterChoosing",
     "DamageTests.cs:AbilityDamageTypeComesFromData",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KezInnateTests.cs:PlainInnatesStillAddToGlobals",
@@ -656,10 +663,17 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:EchoStrikeScepterAlsoStrikesBehindTheHero",
+    "AghanimEffectTests.cs:EchoStrikeScepterHitsAnEnemyInBothRectanglesOnce",
+    "AghanimEffectTests.cs:StepsWithScepterEffectsDoNotAllocateAfterWarmUp",
+    "AghanimTests.cs:KnifeThrowScepterCardShowsTheHitCountChange",
+    "AghanimTests.cs:ScepterRecordIsAppliedOnceFromTheFlag",
+    "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold",
     "AnnihilationTests.cs:AnnihilationIsImplementedAndUsesItsDataAtRankOne",
     "AppFlowTests.cs:UnavailableHeroCannotBeSelected",
     "ChainBeamFreezeTests.cs:Arena",
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
+    "ChoiceRulesTests.cs:CardNextValuesMatchValuesAfterChoosing",
     "CompanionPoolTests.cs:PoolSizeComesFromRules",
     "CompanionPoolTests.cs:SpiritRun",
     "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
@@ -723,6 +737,9 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
+    "ChoiceRulesTests.cs:MissingFallbackDataIsReportedAndGivesNothing",
+    "ChoiceRulesTests.cs:ServicePowerUpsAreNeverOffered",
     "PassiveItemTests.cs:EveryPassiveAndRecipeIsImplemented"
    ],
    "implementation": "none",
@@ -751,6 +768,7 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:ServicePowerUpsAreNeverOffered",
     "SaveStoreTests.cs:Apply",
     "SaveStoreTests.cs:OtherRulesVersionLoadsUnchanged",
     "SaveStoreTests.cs:SchemaOneWithGold"
@@ -787,6 +805,9 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:MaxedPassiveItemIsNotOffered",
+    "ChoiceRulesTests.cs:NewPassiveCardShowsYashaSpeed280To305",
+    "MinorUpgradeTests.cs:MinorCandidateUsesExistingItemWeight",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -890,6 +911,7 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:PassiveRankCardUsesNextAuthoredRecord",
     "DamageTests.cs:PhysicalCritUsesCrystalysMultiplier",
     "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades"
    ],
@@ -1109,6 +1131,8 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:ApexSlotOffersNewAbilitiesAgain",
+    "ChoiceRulesTests.cs:PlainPassives",
     "PassiveItemTests.cs:ApexAllowsSixthActiveAbility"
    ],
    "implementation": "verified",
@@ -1637,12 +1661,28 @@
    "source": "vengefulspirit",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:MagicMissileScepterAddsDamagePerKillCountedFromTheScepter",
+    "AghanimEffectTests.cs:MagicMissileShardMultipliesTheDamage",
+    "AghanimEffectTests.cs:StepsWithScepterEffectsDoNotAllocateAfterWarmUp",
+    "AghanimTests.cs:EveryCandidateIsOfferedWithEqualChance",
+    "AghanimTests.cs:MagicMissileReadsItsAghanimFieldsAndReportsAMissingOne",
+    "AghanimTests.cs:PartOneHasScepterEffectsAndPartTwoNotYet",
+    "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
+    "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
+    "AghanimTests.cs:ScepterAndShardAreFlagsGivenOnce",
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
+    "AghanimTests.cs:ShardPickupOpensTheShardChoiceForMagicMissile",
+    "AghanimTests.cs:TwoScepterPickupsGiveTwoChoicesAndTwoScepters",
+    "ChoiceRulesTests.cs:NewAbilityCardHasNoChanges",
     "DamageTests.cs:AbilityDamageTypeComesFromData",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "MagicMissileTests.cs:Arena",
     "MagicMissileTests.cs:Missile",
     "MagicMissileTests.cs:RanksApplyAuthoredUpgrades",
     "MagicMissileTests.cs:ShenStartsWithMagicMissileFromData",
+    "MinorUpgradeTests.cs:MinorCandidateUsesExistingItemWeight",
+    "MinorUpgradeTests.cs:UnknownRarityIsReportedOnceAndCountsAsCommon",
     "PassiveItemTests.cs:BloodstoneWidensMagicMissileImpact",
     "PassiveItemTests.cs:TimelessRelicExtendsMagicMissileStun",
     "ShenInnateTests.cs:BotRunsWithShen",
@@ -1701,12 +1741,26 @@
    "source": "skywrath_mage",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:ArcaneBoltScepterFiresTwoBoltsAtEveryMomentOfTheVolley",
+    "AghanimTests.cs:EliteOutsideARoomDropsAScepterThatOpensTheScepterChoice",
+    "AghanimTests.cs:NormalCardsCarryTheAghanimFlags",
+    "AghanimTests.cs:ScepterAndShardAreFlagsGivenOnce",
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
+    "AghanimTests.cs:TwoScepterPickupsGiveTwoChoicesAndTwoScepters",
+    "ChoiceRulesTests.cs:MinorCardShowsVariantChange",
+    "ChoiceRulesTests.cs:RankCardShowsAuthoredRecordWithCurrentValues",
     "DamageTests.cs:AbilityDamageTypeComesFromData",
     "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
     "DamageTests.cs:DamageStatsCountDealtHealthBySource",
     "DamageTests.cs:FlatBonusesFollowDamageType",
     "FrostbiteTests.cs:ArcaneBoltHitsAFrostbittenEnemyHarder",
     "GridQueryTests.cs:PiercingSetup",
+    "MinorUpgradeTests.cs:AbilityUsesMinorUpgradeOnItsNextHit",
+    "MinorUpgradeTests.cs:ChoosingMinorOfferAppliesItsVariant",
+    "MinorUpgradeTests.cs:EveryOfferIsCommon",
+    "MinorUpgradeTests.cs:MaxedAbilityIsOfferedAsMinorUpgradeWithEveryVariant",
+    "MinorUpgradeTests.cs:MinorCandidateUsesExistingItemWeight",
+    "MinorUpgradeTests.cs:MinorUpgradeNeedsMaximumRank",
     "PassiveItemTests.cs:BoltPush",
     "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley",
     "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
@@ -1765,6 +1819,9 @@
    "source": "kez",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:EchoStrikeScepterAlsoStrikesBehindTheHero",
+    "AghanimEffectTests.cs:EchoStrikeScepterHitsAnEnemyInBothRectanglesOnce",
+    "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold",
     "EchoStrikeTests.cs:Arena",
     "EchoStrikeTests.cs:BotRunsWithKez",
     "EchoStrikeTests.cs:Echo",
@@ -1827,6 +1884,8 @@
    "source": "pangolier",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:StampedeScepterRaisesOtherPhysicalHitsAndLeavesMagicalOnes",
+    "AghanimEffectTests.cs:SwashbuckleScepterAddsTheVerticalStrikes",
     "StatusTests.cs:DotOverflowReplacesShortestAndReports",
     "SwashStampedeTrackTests.cs:PauseAndChoiceStopSeriesChargeAndCooldowns"
    ],
@@ -1872,8 +1931,11 @@
    "nameInClientBinary": false,
    "source": "centaur",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "AghanimEffectTests.cs:StampedeScepterRaisesOtherPhysicalHitsAndLeavesMagicalOnes",
+    "AghanimEffectTests.cs:StampedeScepterRaisesPhysicalDamageByTheChargeSpeed"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/counter_helix": {
@@ -1915,6 +1977,7 @@
    "source": "axe",
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
     "CounterHelixTests.cs:Arena",
     "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
@@ -1967,6 +2030,7 @@
    "source": "pudge",
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
     "CounterHelixTests.cs:StepsDoNotAllocateAfterWarmUpWithRotAndCounterHelix",
     "RotTests.cs:BloodstoneWidensTheCircle",
@@ -2027,7 +2091,9 @@
    "source": "skreeauk",
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented"
+    "AghanimTests.cs:AnnihilationScepterGivesExactlyOneLife",
+    "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented",
+    "MinorUpgradeTests.cs:MinorUpgradeOfOtherDamageTypeRaisesAbilityDamage"
    ],
    "implementation": "verified",
    "required": true
@@ -2084,6 +2150,7 @@
    "source": "lich",
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "ChainFrostTests.cs:Arena",
     "ChainFrostTests.cs:ChainFrostIsImplementedAndUsesItsDataAtRankOne",
@@ -2202,6 +2269,12 @@
    "source": "lina",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:LagunaBladeScepterGivesOneTargetAllBolts",
+    "AghanimEffectTests.cs:LagunaBladeScepterSendsEveryBoltToTheStrongestNow",
+    "AghanimEffectTests.cs:StampedeScepterRaisesOtherPhysicalHitsAndLeavesMagicalOnes",
+    "AghanimTests.cs:EveryCandidateIsOfferedWithEqualChance",
+    "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "LagunaBladeTests.cs:Arena",
     "LagunaBladeTests.cs:Blade",
@@ -2323,6 +2396,13 @@
    "source": "bakeet",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:KnifeThrowScepterPiercesFortyEnemiesAndNoneTwice",
+    "AghanimTests.cs:EveryCandidateIsOfferedWithEqualChance",
+    "AghanimTests.cs:KnifeThrowScepterCardShowsTheHitCountChange",
+    "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
+    "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
+    "AghanimTests.cs:ScepterRecordIsAppliedOnceFromTheFlag",
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "ChainBeamFreezeTests.cs:PauseAndChoiceStopVolleysAndStatuses",
     "KnifeThrowTests.cs:Arena",
@@ -2377,6 +2457,7 @@
    "source": "bounty_hunter",
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:TrackScepterMakesEveryTreasureGiveTwoItems",
     "DamageTests.cs:AmplificationAppliesToPhysicalAndMagical"
    ],
    "implementation": "verified",
@@ -2559,6 +2640,7 @@
    "source": "snotty",
    "missingResources": [],
    "tests": [
+    "MinorUpgradeTests.cs:MinorUpgradeOfOtherDamageTypeRaisesAbilityDamage",
     "SnottyBatTests.cs:Base",
     "SnottyBatTests.cs:BatIsNotAnEnemy",
     "SnottyBatTests.cs:BatOf",
@@ -2606,6 +2688,7 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:ScepterAndShardAreFlagsGivenOnce",
     "DamageTests.cs:WeakenAmplifiesOnlyPhysicalDamage",
     "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData",
     "ShenInnateTests.cs:static"
@@ -2691,6 +2774,7 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:PartOneHasScepterEffectsAndPartTwoNotYet",
     "AnnihilationTests.cs:KezInnateKeepsTheStrongestTarget",
     "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
@@ -2911,6 +2995,7 @@
    "missingResources": [],
    "tests": [
     "ChainBeamFreezeTests.cs:Standing",
+    "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
     "DamageTests.cs:ContactStep",
     "DamageTests.cs:DamageStatsCountDealtHealthBySource",
     "DamageTests.cs:Dummy",
@@ -3549,6 +3634,7 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:EliteOutsideARoomDropsAScepterThatOpensTheScepterChoice",
     "SimulationTests.cs:ArchersShootTheHero"
    ],
    "implementation": "verified",
@@ -4473,6 +4559,7 @@
    "missingResources": [],
    "tests": [
     "ChainBeamFreezeTests.cs:Standing",
+    "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
     "DamageTests.cs:ContactStep",
     "DamageTests.cs:DamageStatsCountDealtHealthBySource",
     "DamageTests.cs:Dummy",
@@ -5133,8 +5220,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/elite_turrets": {
@@ -5165,6 +5254,7 @@
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
    "tests": [
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
     "SimulationTests.cs:TurretsBecomeVulnerableOneByOne"
    ],
    "implementation": "verified",
@@ -5196,8 +5286,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/elite_granite_golem_large": {
@@ -5226,8 +5318,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/imperia_portal": {
@@ -5494,8 +5588,12 @@
    ],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
+    "AghanimTests.cs:ShardPickupOpensTheShardChoiceForMagicMissile"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/scepter": {
@@ -5526,8 +5624,17 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "none",
+   "tests": [
+    "AghanimEffectTests.cs:TrackScepterMakesEveryTreasureGiveTwoItems",
+    "AghanimTests.cs:EliteOutsideARoomDropsAScepterThatOpensTheScepterChoice",
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
+    "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
+    "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
+    "AghanimTests.cs:TwoScepterPickupsGiveTwoChoicesAndTwoScepters",
+    "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/gold_coin": {
@@ -5599,6 +5706,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
     "LuckTests.cs:Kill",
     "LuckTests.cs:LuckyLootIsReadFromMode",
     "TrackTests.cs:Kill"
@@ -5632,6 +5740,9 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "AghanimEffectTests.cs:TrackScepterMakesEveryTreasureGiveTwoItems",
+    "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
+    "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
     "RewardSourceTests.cs:ItemAndLevelRewardsKeepSeparateQueues",
     "RewardSourceTests.cs:MapItemGivesAnItemWithoutConsumingALevel",
     "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure",
@@ -5898,6 +6009,7 @@
    "tests": [
     "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
     "DamageTests.cs:FlatBonusesFollowDamageType",
+    "MinorUpgradeTests.cs:AbilityUsesMinorUpgradeOnItsNextHit",
     "SpiritsTests.cs:SpiritKeepsItsNumbersFromTheSummon"
    ],
    "implementation": "partial",
@@ -5940,6 +6052,9 @@
     "CounterHelixTests.cs:CounterHelixIsImplementedAndUsesItsDataAtRankOne",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
     "LandMineTests.cs:LandMineIsImplementedAndUsesItsDataAtRankOne",
+    "MinorUpgradeTests.cs:BaseDamage",
+    "MinorUpgradeTests.cs:ExpectedGain",
+    "MinorUpgradeTests.cs:MinorUpgradeOfOtherDamageTypeRaisesAbilityDamage",
     "SnottyBatTests.cs:SnottyBatIsImplementedAndUsesItsDataAtRankOne",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne",
     "SwashbuckleTests.cs:SwashbuckleIsImplementedAndUsesItsDataAtRankOne",
@@ -6013,8 +6128,12 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:MinorCardShowsVariantChange",
     "KezInnateTests.cs:InnateDealsNoDamage",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
+    "MinorUpgradeTests.cs:BaseDamage",
+    "MinorUpgradeTests.cs:ExpectedGain",
+    "MinorUpgradeTests.cs:MinorUpgradeOfOtherDamageTypeRaisesAbilityDamage",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "RotTests.cs:RotIsImplementedAndUsesItsDataAtRankOne",
     "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne"
@@ -6053,6 +6172,7 @@
    "missingResources": [],
    "tests": [
     "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
+    "MinorUpgradeTests.cs:AbilityUsesMinorUpgradeOnItsNextHit",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -6174,6 +6294,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "ChoiceRulesTests.cs:NewPassiveCardShowsYashaSpeed280To305",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:KezRunsAtThreeHundred",
     "KezInnateTests.cs:ReferenceGlobal",
@@ -7030,8 +7151,12 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "AghanimTests.cs:KnifeThrowScepterCardShowsTheHitCountChange",
+    "AghanimTests.cs:ScepterRecordIsAppliedOnceFromTheFlag",
+    "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_ProjectileHorizontalOffset": {

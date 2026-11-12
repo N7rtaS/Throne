@@ -9,7 +9,8 @@ namespace ThornThrone.Simulation
     /// from the hero's current position, evenly around the circle starting at the world +X axis (2: right and left),
     /// whatever the hero faces. Every touched enemy takes physical damage once per strike and is pushed along the
     /// first rectangle that touched it by KnockbackDistance. Damage, knockback and the shape are snapshotted at the
-    /// start of the series. Mechanics §30 Р4–Р8.
+    /// start of the series. Mechanics §30 Р4–Р8. Aghanim's Scepter doubles the directions (2 → 4: the vertical strikes
+    /// are added), snapshotted with the series (Mechanics §34 Р13).
     /// </summary>
     public sealed class Swashbuckle : AbilityBase
     {
@@ -38,6 +39,8 @@ namespace ThornThrone.Simulation
         public int Ticks(Run run) => Math.Max(1, (int)Stat(run, Attr.DamageTicks));
         public float Interval(Run run) => Math.Max(run.Rules.Step, Stat(run, Attr.TimeBetweenTicks));
         public int Directions(Run run) => Math.Min(MaxDirections, Math.Max(1, (int)Stat(run, Attr.Directions)));
+        /// <summary>Rectangles of one strike: <see cref="Directions"/>, × 2 with the scepter.</summary>
+        public int StrikeDirections(Run run) => Math.Min(MaxDirections, Directions(run) * (owned.Scepter ? 2 : 1));
 
         /// <summary>The <paramref name="index"/>-th of <paramref name="count"/> strike directions.</summary>
         public static Vec2 Direction(int index, int count)
@@ -58,7 +61,7 @@ namespace ThornThrone.Simulation
             }
             if (cooldown > dt * 0.5f || remaining > 0) return; // half a step of float tolerance (Mechanics §30 Р2)
             float l = Length(run), w = Width(run);
-            int n = Directions(run);
+            int n = StrikeDirections(run);
             if (!AnyTarget(run, n, l, w)) return;
             cooldown = Cooldown(run);
             length = l;

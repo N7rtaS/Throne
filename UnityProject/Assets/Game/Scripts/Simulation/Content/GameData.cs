@@ -293,6 +293,15 @@ namespace ThornThrone.Simulation
             BaseAttributes = Attributes(v["m_vecBaseAttributes"]),
             Authored = Choices(key, v, "m_vecAuthoredUpgradeChoices"), Minor = Choices(key, v, "m_vecMinorUpgradeChoices"),
             RecipeItems = Ints(v, "m_vecRecipeItems"),
+            ScepterUpgradeable = B(v, "m_bIsScepterUpgradeable"), ShardUpgradeable = B(v, "m_bIsShardUpgradeable"),
+            Scepter = v["m_scepterUpgradeDefinition"] is JObject scepter
+                ? new UpgradeChoice
+                {
+                    Rarity = UpgradeRarity.Common,
+                    Local = Attributes(scepter["m_vecUpgradeAttributes"]),
+                    Global = Attributes(scepter["m_vecGlobalUpgradeAttributes"]),
+                }
+                : null,
         };
 
         private static PickupDef ReadPickup(string key, JObject v) => new PickupDef

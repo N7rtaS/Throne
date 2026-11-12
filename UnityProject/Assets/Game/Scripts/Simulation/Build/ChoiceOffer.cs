@@ -9,7 +9,14 @@ namespace ThornThrone.Simulation
         Rank,
         /// <summary>One m_vecMinorUpgradeChoices variant of an active ability at m_nMaxLevel.</summary>
         Minor,
+        /// <summary>Aghanim's Scepter for an owned ability (Mechanics §34).</summary>
+        Scepter,
+        /// <summary>Aghanim's Shard for an owned ability (Mechanics §34).</summary>
+        Shard,
     }
+
+    /// <summary>What opened the choice: a level, an item treasure, a scepter or a shard (Mechanics §34 Р3).</summary>
+    public enum ChoiceSource { Level, Item, Scepter, Shard }
 
     /// <summary>
     /// One attribute a card changes: the summed attribute now and after the choice, not the value after formulas
@@ -38,6 +45,8 @@ namespace ThornThrone.Simulation
         /// <summary>Index into Def.Minor for <see cref="OfferKind.Minor"/>, else −1.</summary>
         public int MinorIndex;
         public UpgradeRarity Rarity;
+        /// <summary>The ability already has Aghanim's Scepter / Shard (shown on the card, ТЗ_Полная_игра_Unity.md §6.3).</summary>
+        public bool HasScepter, HasShard;
         public readonly AttributeChange[] Changes = new AttributeChange[MaxChanges];
         public int ChangeCount;
 
@@ -49,6 +58,7 @@ namespace ThornThrone.Simulation
             NextRank = nextRank;
             MinorIndex = minorIndex;
             Rarity = rarity;
+            HasScepter = HasShard = false;
             ChangeCount = 0;
         }
 

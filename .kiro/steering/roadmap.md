@@ -180,8 +180,13 @@ inclusion: manual
 ✅ (2026-11-12) Task 26: Малые улучшения, редкость, правила выбора (Spec)
 - `m_vecMinorUpgradeChoices` после максимума; редкость на карточке; заполненные слоты; запасная награда (A19: `pile_of_coal`/`gold` по клиенту, иначе Р); карточки показывают конкретные изменения.
 
-Task 27: Aghanim (Spec)
+✅ (2026-11-12) Task 27: Aghanim (Spec)
 - `scepter` из элитных врагов, `shard` по клиенту; эффекты для каждой способности с `m_bIsScepterUpgradeable`/`m_bIsShardUpgradeable` (Arcane Bolt — удвоение снарядов; Magic Missile — `m_flScepterDamageIncreasePerEnemyKilled`, `m_flShardDamageMultiplier`); экран выбора; без двойного начисления.
+- По решению владельца В0 задача разбита: здесь механизм, экран, выдача и 9 эффектов (часть 1), остальные 8 эффектов — Task 27б.
+- Заметка проверяющего Task 26 (экран выбора никто не видел глазами до автовыбора) закрыта здесь: smoke `-thornShowChoice=level|item|scepter|shard` с `-thornScreenshot` снимает первый выбор этого вида (`Tools/mac-screenshot.sh out.png -thornElite -thornShowChoice=scepter`).
+
+Task 27б: Aghanim, эффекты с новыми сущностями (Spec)
+- `IKillEffect` (вызов из `Run.Kill` до `RetireEnemy`), `Run.HeroHitSerial`; эффекты скипетра Counter Helix, Rot (заморозка, след облаков), Chain Frost (деление 50%), Frostbite (раскол 200), Land Mine (капкан, радиомина, вакуум), Spirits, Mortimer Kisses, Snotty Bat. Правила утверждены владельцем 12.11.2026: `.kiro/specs/aghanim-upgrades/design.md` §0 (В4б, В4г) и §5, задачи 13–17 `tasks.md`; добавить каждую способность в `AghanimEffects`.
 
 Task 28: Все рецепты и матрица «предмет × способность» (Spec)
 - Трезубцы, Daedalus, Khanda и др.; момент объединения по клиенту, иначе Р; уведомление в UI; параметризованный тест матрицы. `audit.py`: все powerups implemented/verified.

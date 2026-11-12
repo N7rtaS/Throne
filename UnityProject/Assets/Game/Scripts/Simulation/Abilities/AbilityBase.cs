@@ -61,19 +61,25 @@ namespace ThornThrone.Simulation
         public float Damage(Run run)
         {
             var global = run.Build.Global;
+            float own = BonusDamage(run);
             switch (DamageType)
             {
                 case DamageType.Physical:
-                    return (Stat(run, Attr.Damage_Physical) + global[Attr.BonusPhysicalDamage])
-                        * (1 + global[Attr.DamageMultiplier] + global[Attr.DamageMultiplier_Physical]);
+                    return (Stat(run, Attr.Damage_Physical) + global[Attr.BonusPhysicalDamage] + own)
+                        * (1 + global[Attr.DamageMultiplier] + global[Attr.DamageMultiplier_Physical]) * DamageScale(run);
                 case DamageType.Magical:
                     float bonus = IsProjectileAttack ? global[Attr.Projectile_BonusMagicDamage] : 0;
-                    return (Stat(run, Attr.Damage_Magical) + bonus)
-                        * (1 + global[Attr.DamageMultiplier] + global[Attr.DamageMultiplier_Magical]);
+                    return (Stat(run, Attr.Damage_Magical) + bonus + own)
+                        * (1 + global[Attr.DamageMultiplier] + global[Attr.DamageMultiplier_Magical]) * DamageScale(run);
                 default:
-                    return Stat(run, Attr.Damage_Physical) + Stat(run, Attr.Damage_Magical);
+                    return (Stat(run, Attr.Damage_Physical) + Stat(run, Attr.Damage_Magical) + own) * DamageScale(run);
             }
         }
+
+        /// <summary>Flat damage of the ability itself, added before multipliers (Magic Missile's scepter, Mechanics §34 Р10).</summary>
+        protected virtual float BonusDamage(Run run) => 0;
+        /// <summary>Own factor applied after multipliers (Magic Missile's shard, Mechanics §34 Р10).</summary>
+        protected virtual float DamageScale(Run run) => 1;
 
         public float Cooldown(Run run) =>
             Math.Max(0.1f, owned.Local[Attr.Cooldown]

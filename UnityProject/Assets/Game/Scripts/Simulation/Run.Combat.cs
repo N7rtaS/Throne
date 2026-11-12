@@ -42,7 +42,7 @@ namespace ThornThrone.Simulation
                         critical = true;
                     }
                 }
-                amount *= multiplier;
+                amount *= multiplier * StampedeFactor(source, info); // Stampede's scepter (Mechanics §34 Р7)
                 if (info.Type == DamageType.Physical && status.WeakenTime > 0) amount *= 1 + status.WeakenStrength;
                 if (status.AmplifyTime > 0) amount *= 1 + status.AmplifyStrength;
                 amount *= ProjectileAmplification.Factor(status, info); // Frostbite (Mechanics §29 Р24)
@@ -100,7 +100,7 @@ namespace ThornThrone.Simulation
             RetireEnemy(enemy, SimEventKind.EnemyDied);
             Kills++;
             if (boss) { Finish(true); return true; }
-            DropRewards(def, position, tracked);
+            DropRewards(def, position, tracked, room);
             if (def.SplitOnDeathNumUnits > 0 && Data.EnemiesById.TryGetValue(def.SplitOnDeathEnemyId, out var split))
             {
                 for (int i = 0; i < def.SplitOnDeathNumUnits; i++)
@@ -110,6 +110,7 @@ namespace ThornThrone.Simulation
                     if (child != null) child.EliteRoom = room;
                 }
             }
+            if (room >= 0) RoomScepter(room, position); // one scepter per room (Mechanics §34 Р1)
             return true;
         }
 

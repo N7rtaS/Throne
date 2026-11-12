@@ -16,6 +16,8 @@ namespace ThornThrone.Simulation
         /// <summary>Channel progress 0..1 while the hero stands in the trigger radius.</summary>
         public float Progress;
         public int Alive;
+        /// <summary>The room's one scepter has dropped (Mechanics §34 Р1).</summary>
+        public bool ScepterDropped;
     }
 
     public sealed partial class Run
