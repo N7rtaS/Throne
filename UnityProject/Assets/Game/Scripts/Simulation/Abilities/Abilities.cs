@@ -45,6 +45,17 @@ namespace ThornThrone.Simulation
         /// <summary>Advances the companion by <paramref name="dt"/>; returns false when it is over and its slot is freed.</summary>
         bool UpdateCompanion(Run run, Companion companion, float dt);
     }
+    /// <summary>
+    /// An ability that reacts to the death of an enemy (Frostbite's and Mortimer Kisses' scepters, Mechanics §34 Р17).
+    /// <see cref="Run"/> calls it from Kill before the enemy is retired, so the enemy is still active, keeps its
+    /// statuses and position; a resurrection is not a death. It runs inside a damage call: grid queries made here get
+    /// their own buffer, and it must not damage enemies (a death inside a death).
+    /// </summary>
+    public interface IKillEffect
+    {
+        /// <param name="source">Statistics entry of the killing hit (an ability's Stats, Reflection or Other).</param>
+        void OnKill(Run run, Enemy enemy, DamageStatEntry source);
+    }
     /// <summary>Maps original powerup classes (_class) to implementations.</summary>
     public static class AbilityFactory
     {
@@ -56,15 +67,15 @@ namespace ThornThrone.Simulation
                 { "CSurvivorsPowerUpDefinition_EchoStrike", (owned, run) => new EchoStrike(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_InstantAttack", (owned, run) => new InstantAttack(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", (owned, run) => new Rot(owned, run.Enemies.Length) },
-                { "CSurvivorsPowerUpDefinition_CounterHelix", (owned, run) => new CounterHelix(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_CounterHelix", (owned, run) => new CounterHelix(owned, run) },
                 { "CSurvivorsPowerUpDefinition_KnifeThrow", (owned, run) => new KnifeThrow(owned) },
                 { "CSurvivorsPowerUpDefinition_ProjectileAttack", (owned, run) => new ChainFrost(owned, run) },
                 { "CSurvivorsPowerUpDefinition_LagunaBlade", (owned, run) => new LagunaBlade(owned, run) },
-                { "CSurvivorsPowerUpDefinition_Frostbite", (owned, run) => new Frostbite(owned) },
+                { "CSurvivorsPowerUpDefinition_Frostbite", (owned, run) => new Frostbite(owned, run) },
                 { "CSurvivorsPowerUpDefinition_Swashbuckle", (owned, run) => new Swashbuckle(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_Stampede", (owned, run) => new Stampede(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_Track", (owned, run) => new Track(owned) },
-                { "CSurvivorsPowerUpDefinition_LandMine", (owned, run) => new LandMine(owned, run.Enemies.Length) },
+                { "CSurvivorsPowerUpDefinition_LandMine", (owned, run) => new LandMine(owned, run) },
                 { "CSurvivorsPowerUpDefinition_MortimerKisses", (owned, run) => new MortimerKisses(owned, run) },
                 { "CSurvivorsPowerUpDefinition_Spirits", (owned, run) => new Spirits(owned, run.Enemies.Length) },
                 { "CSurvivorsPowerUpDefinition_Snotty", (owned, run) => new SnottyBat(owned, run) },

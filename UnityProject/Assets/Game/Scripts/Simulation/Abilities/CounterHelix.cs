@@ -7,8 +7,9 @@ namespace ThornThrone.Simulation
     /// Radius × (1 + AoEIncrease) around the hero, the cast snapshots damage, radius and knockback and queues
     /// DamageTicks spins: the first after InitialTickDelay, the next every max(step, TimeBetweenTicks). A spin is
     /// centred on the hero's current position, deals physical damage to every enemy touching the circle and pushes
-    /// each survivor away from the hero. Without Aghanim it does not react to damage on the hero
-    /// (m_flChanceToCounter is Task 27). Mechanics §28 Р5–Р8.
+    /// each survivor away from the hero. Mechanics §28 Р5–Р8. With Aghanim's Scepter every hit that hurts the hero
+    /// (<see cref="Run.HeroHitSerial"/>) starts the same cast with m_flChanceToCounter, if no cast is running and
+    /// m_flDelayBetweenCounters has passed since the last answer; the cooldown cast stays (Mechanics §34 Р18).
     /// </summary>
     public sealed class CounterHelix : AbilityBase
     {
@@ -16,13 +17,22 @@ namespace ThornThrone.Simulation
 
         private readonly CircleTargets targets;
         private float cooldown, timer, radius, knockback, interval;
-        private int remaining;
+        private float counterDelay;
+        private int remaining, seenHits;
         private DamageInfo hit;
 
-        /// <param name="maxEnemies">Size of the enemy pool: one spin can reach every enemy.</param>
-        public CounterHelix(OwnedPowerUp owned, int maxEnemies) : base(owned)
+        /// <summary>m_flChanceToCounter: chance of an answer to a hit with the scepter (1 in the data: no roll).</summary>
+        public float ChanceToCounter { get; }
+        /// <summary>m_flDelayBetweenCounters: seconds after an answer during which hits are not answered.</summary>
+        public float DelayBetweenCounters { get; }
+
+        /// <param name="run">Its enemy pool sizes the buffer (one spin can reach every enemy); reports missing fields.</param>
+        public CounterHelix(OwnedPowerUp owned, Run run) : base(owned)
         {
-            targets = new CircleTargets(maxEnemies);
+            targets = new CircleTargets(run.Enemies.Length);
+            ChanceToCounter = DataField(run, "m_flChanceToCounter");
+            DelayBetweenCounters = DataField(run, "m_flDelayBetweenCounters");
+            seenHits = run.HeroHitSerial;
         }
 
         public float Radius(Run run) => Area(run, Attr.Radius);
@@ -33,6 +43,7 @@ namespace ThornThrone.Simulation
         public override void Tick(Run run, float dt)
         {
             cooldown -= dt;
+            counterDelay -= dt;
             if (remaining > 0)
             {
                 timer -= dt;
@@ -44,10 +55,32 @@ namespace ThornThrone.Simulation
                     timer += interval;
                 }
             }
+            if (Counter(run)) return;
             if (cooldown > Epsilon || remaining > 0) return;
             float area = Radius(run);
             if (!CircleTargets.Any(run, run.HeroPosition, area)) return;
             cooldown = Cooldown(run);
+            Start(run, area);
+        }
+
+        /// <summary>
+        /// The scepter's answer to new hits on the hero: one cast, without a target check and without touching the
+        /// cooldown. Hits taken without the scepter, during a cast or during the delay are not answered later (Р18).
+        /// </summary>
+        private bool Counter(Run run)
+        {
+            int serial = run.HeroHitSerial;
+            if (serial == seenHits) return false;
+            seenHits = serial;
+            if (!owned.Scepter || remaining > 0 || counterDelay > Epsilon) return false;
+            if (ChanceToCounter < 1 && run.Rng.NextFloat() >= ChanceToCounter) return false;
+            counterDelay = DelayBetweenCounters;
+            Start(run, Radius(run));
+            return true;
+        }
+
+        private void Start(Run run, float area)
+        {
             radius = area;
             knockback = KnockbackDistance(run);
             interval = Interval(run);

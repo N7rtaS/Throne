@@ -9,6 +9,8 @@ namespace ThornThrone.Simulation
     /// in its life. After Duration + DurationExtension seconds it explodes: an AbilityBurst and the same hit once to
     /// every targetable enemy touching Radius × (1 + AoEIncrease) around it. Damage, radii and life are snapshotted at
     /// the summon. Mechanics §32 Р4–Р10 (design decisions; owner's decisions 12.11.2026 for Р5, Р7, Р8).
+    /// With Aghanim's Scepter a touch explodes instead of hitting the touched enemy alone: the same explosion as at the
+    /// end of the life, around the spirit; only the touched enemy is marked, and the spirit flies on (Mechanics §34 Р24).
     /// </summary>
     public sealed class Spirits : AbilityBase, ICompanionAbility
     {
@@ -18,10 +20,14 @@ namespace ThornThrone.Simulation
         public const float SpiritRadius = 50;
         private const float Epsilon = 1e-4f;
         private const double TurnRate = RotationSpeedDeg * Math.PI / 180;
-        private readonly CircleTargets targets;
+        private readonly CircleTargets targets, blast;
         private float cooldown;
         /// <param name="maxEnemies">Size of the enemy pool.</param>
-        public Spirits(OwnedPowerUp owned, int maxEnemies) : base(owned) { targets = new CircleTargets(maxEnemies); }
+        public Spirits(OwnedPowerUp owned, int maxEnemies) : base(owned)
+        {
+            targets = new CircleTargets(maxEnemies);
+            blast = new CircleTargets(maxEnemies);
+        }
         public int Count(Run run) => Math.Max(1, (int)Stat(run, Attr.TargetCount));
         /// <summary>Own Duration plus DurationExtension (DurationEffect 1, Р5).</summary>
         public float Duration(Run run) => EffectDuration(run, Attr.Duration);
@@ -81,17 +87,19 @@ namespace ThornThrone.Simulation
                 if (e == null || run.Finished) continue;
                 if (spirit.HitMarks[e.Slot] == e.SpawnId) continue;
                 spirit.HitMarks[e.Slot] = e.SpawnId;
-                run.DealDamage(e, hit);
+                if (owned.Scepter) Explode(run, spirit); // Р24
+                else run.DealDamage(e, hit);
             }
         }
+        /// <summary>An AbilityBurst and the hit once to every enemy touching the spirit's Radius; its own buffer, since a touch calls it inside <see cref="Touch"/>.</summary>
         private void Explode(Run run, Companion spirit)
         {
             run.EmitBurst(spirit.Position, spirit.Radius, owned.Def.Id);
-            int count = targets.Collect(run, spirit.Position, spirit.Radius);
+            int count = blast.Collect(run, spirit.Position, spirit.Radius);
             var hit = spirit.Hit;
             for (int i = 0; i < count; i++)
             {
-                var e = targets.Live(i);
+                var e = blast.Live(i);
                 if (e == null || run.Finished) continue;
                 run.DealDamage(e, hit);
             }

@@ -102,6 +102,25 @@ namespace ThornThrone.Simulation
         public bool DebugSpawnPickup(string key, Vec2 position) =>
             Data.Pickups.TryGetValue(key, out var def) && SpawnPickup(def, ClampToMap(position), 0) != null;
 
+        // ------------------------------------------------------------------ hooks of part 2 (Task 27б)
+
+        /// <summary>
+        /// Number of hits that hurt the hero (damage after armor above 0) since the start of the run. Counter Helix's
+        /// scepter compares it in its Tick: abilities act after the enemies in a step, so a touch or melee hit is
+        /// answered in the same step, a hostile projectile (moved after the abilities) in the next (Mechanics §34 Р17).
+        /// </summary>
+        public int HeroHitSerial { get; private set; }
+
+        /// <summary>Calls every <see cref="IKillEffect"/> of the build for a dying enemy, before it is retired (Р17).</summary>
+        private void KillEffects(Enemy enemy, DamageStatEntry source)
+        {
+            for (int i = 0; i < Build.Owned.Count; i++)
+                if (Build.Owned[i].Ability is IKillEffect effect) effect.OnKill(this, enemy, source);
+        }
+
+        /// <summary>Puts a pickup of an ability on the ground (Mortimer Kisses' cookie, Р23); false when the pool is full.</summary>
+        internal bool SpawnAbilityPickup(PickupDef def, Vec2 position) => SpawnPickup(def, ClampToMap(position), 0) != null;
+
         // ------------------------------------------------------------------ Stampede's scepter
 
         private int stampedeVersion = -1;

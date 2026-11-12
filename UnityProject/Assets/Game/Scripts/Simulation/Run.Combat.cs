@@ -64,7 +64,7 @@ namespace ThornThrone.Simulation
                 if (vulnerableStun > 0) Stun(target, vulnerableStun);
                 return dealt;
             }
-            if (Kill(target)) source.Kills++;
+            if (Kill(target, source)) source.Kills++;
             return dealt;
         }
 
@@ -80,8 +80,11 @@ namespace ThornThrone.Simulation
         public void DamageEnemy(Enemy enemy, float damage) =>
             DealDamage(enemy, new DamageInfo(damage, DamageType.Pure, DamageFlags.None, DamageStats.Other));
 
-        /// <summary>Health reached zero: resurrection, or death with rewards and split units. Returns true on death.</summary>
-        private bool Kill(Enemy enemy)
+        /// <summary>
+        /// Health reached zero: resurrection, or death with rewards and split units. Returns true on death. The kill
+        /// effects of the abilities see the enemy before it is retired (Mechanics §34 Р17).
+        /// </summary>
+        private bool Kill(Enemy enemy, DamageStatEntry source)
         {
             var def = enemy.Def;
             if (enemy.ResurrectionsLeft > 0)
@@ -97,6 +100,7 @@ namespace ThornThrone.Simulation
             int room = enemy.EliteRoom;
             bool boss = enemy == Boss;
             bool tracked = enemy.Status.AmplifyTime > 0; // Track's mark (Mechanics §30 Р19, Р20)
+            KillEffects(enemy, source); // Run.Aghanim.cs
             RetireEnemy(enemy, SimEventKind.EnemyDied);
             Kills++;
             if (boss) { Finish(true); return true; }
@@ -125,6 +129,7 @@ namespace ThornThrone.Simulation
             float armor = Math.Min(Build.Global[Attr.Armor], Rules.MaxHeroArmor);
             float taken = amount * (1 - armor);
             Health = Math.Max(0, Health - taken);
+            if (taken > 0) HeroHitSerial++; // Counter Helix's scepter (Mechanics §34 Р17)
             Emit(SimEventKind.HeroDamaged, -1, HeroPosition, taken);
             if (Health <= 0) { HeroDown(); return; } // a life or defeat (Mechanics §25 Р8)
             float reflection = Build.Global[Attr.DamageReflection];

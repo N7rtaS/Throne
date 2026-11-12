@@ -10,10 +10,6 @@ namespace ThornThrone.Simulation.Tests
     /// </summary>
     public class AghanimTests
     {
-        /// <summary>Abilities whose scepter effect exists after part 1 of the task (design §8).</summary>
-        internal static readonly string[] PartOne =
-            { "arcane_bolt", "magic_missile", "knife_throw", "annihilation", "track", "swashbuckle", "echo_strike", "stampede", "laguna_blade" };
-
         internal static OwnedPowerUp Owned(Run run, string key) => RotTests.Owned(run, key);
 
         /// <summary>A pickup of <paramref name="key"/> on the hero, collected in the next step.</summary>
@@ -59,11 +55,11 @@ namespace ThornThrone.Simulation.Tests
         }
 
         [Test]
-        public void PartOneHasScepterEffectsAndPartTwoNotYet()
+        public void EveryScepterAbilityHasItsEffectAfterPartTwo()
         {
             var data = TestData.Load();
             foreach (var def in data.PowerUps.Values.Where(d => d.ScepterUpgradeable))
-                Assert.That(AghanimEffects.Has(def, false), Is.EqualTo(PartOne.Contains(def.Key)), def.Key);
+                Assert.That(AghanimEffects.Has(def, false), Is.True, def.Key);
             Assert.That(AghanimEffects.Has(data.PowerUps["magic_missile"], true), Is.True);
             Assert.That(AghanimEffects.Has(data.PowerUps["kez_innate"], false), Is.False);
         }
@@ -251,8 +247,8 @@ namespace ThornThrone.Simulation.Tests
                 var keys = Enumerable.Range(0, run.Build.OfferCount).Select(i => run.Build.Offers[i].Def.Key).ToList();
                 Assert.That(keys.Count, Is.EqualTo(3), $"seed {seed}: m_nLevelUpChoices");
                 Assert.That(keys.Distinct().Count(), Is.EqualTo(3));
-                Assert.That(keys, Is.SubsetOf(new[] { "arcane_bolt", "magic_missile", "knife_throw" }),
-                    "counter_helix has no effect yet, laguna_blade has its scepter, the innate is not offered");
+                Assert.That(keys, Is.SubsetOf(new[] { "arcane_bolt", "magic_missile", "knife_throw", "counter_helix" }),
+                    "laguna_blade has its scepter, the innate is not offered");
                 for (int i = 0; i < run.Build.OfferCount; i++)
                 {
                     var offer = run.Build.Offers[i];

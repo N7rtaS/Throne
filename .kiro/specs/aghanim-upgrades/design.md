@@ -17,6 +17,15 @@
 - Echo Strike со скипетром срабатывает, если цель есть в любом из двух прямоугольников; враг отталкивается вдоль того прямоугольника, который задел его первым.
 - Smoke: `-thornElite` ждёт скипетр первой комнаты до 120 игровых секунд (герой неуязвим, через 20 с боя smoke добивает врагов комнаты через `Run.DamageEnemy`, скипетр летит к герою), строки `THORN_AGHANIM`, `THORN_ELITE_SCEPTER`, код 15 в `mac-smoke.sh`. Опция `-thornShowChoice=level|item|scepter|shard` (заметка проверяющего Task 26) держит первый выбор этого источника открытым, пока `-thornScreenshot` не запишет снимок (`THORN_CHOICE_SHOT`, код 16).
 
+## 0.2 Отступления реализации части 2 (Task 27б)
+- `IKillEffect` реализуют Frostbite и Mortimer Kisses. Magic Missile считает убийства по-прежнему через `owned.Stats.Kills` (часть 1), хука ему не нужно.
+- Counter Helix: ответ на удар — такой же каст, но без проверки врагов в круге (удар уже случился) и без сброса перезарядки. Удары во время каста и задержки не запоминаются (Mechanics §34 Р18).
+- Rot: первое облако появляется сразу после скипетра на месте героя, дальше по шагу следа; облако — `GroundObject` в фазе `Burning`, его удар и заморозка снимаются при появлении (`GroundObject.FreezeStrength/FreezeTime`).
+- Land Mine: вид передаётся в `Run.SpawnGroundObject(source, position, variant)`, чтобы событие появления уже несло `SimEvent.Variant`. Оглушение капкана — `GroundObject.Stun`. Радиомина взрывается в том же обновлении, в котором её коснулся враг после взведения. Притяжение ограничено расстоянием до центра.
+- Chain Frost: копия ищет цель через `Run.RandomTarget(center, range, exclude, skipSpawnId)`, чтобы не взять цель оригинала.
+- Snotty Bat: вторая мышь появляется у героя с точкой орбиты напротив первой; при скипетре, полученном позже, первая мышь остаётся.
+- Unity-слой не менялся: облака рисуются тем же диском, что лужа Mortimer, капкан и радиомина — той же миной (Differences Б19).
+
 ## 1. Обзор
 - **Состояние.** `OwnedPowerUp.Scepter` и `Shard` (флаги, **К** `m_bScepterUpgraded` / `m_bShardUpgraded`). Методы `Build.UpgradeScepter(def)` и `UpgradeShard(def)` возвращают ложь при повторе. `Recalculate` прибавляет `m_scepterUpgradeDefinition` к `Local` (или к `Global`, если в записи есть глобальные атрибуты) один раз, если флаг стоит.
 - **Выбор.** Вместо `GenerateChoices(rng, bool items)` — `GenerateChoices(rng, ChoiceSource source)`, где `ChoiceSource { Level, Item, Scepter, Shard }`. Виды карточки дополняются `OfferKind.Scepter` и `OfferKind.Shard`. Старая перегрузка с `bool` остаётся для тестов и вызывает новую.

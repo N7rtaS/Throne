@@ -780,8 +780,11 @@ namespace ThornThrone.Simulation
             return count;
         }
 
-        /// <summary>A random targetable enemy within range, skipping those the shot has already hit; null if none.</summary>
-        public Enemy RandomTarget(Vec2 center, float range, Projectile exclude)
+        /// <summary>
+        /// A random targetable enemy within range, skipping those the shot has already hit and the enemy
+        /// <paramref name="skipSpawnId"/> (Chain Frost's copy, Mechanics §34 Р20); null if none.
+        /// </summary>
+        public Enemy RandomTarget(Vec2 center, float range, Projectile exclude, int skipSpawnId = 0)
         {
             using var near = grid.Query(center, range);
             int seen = 0;
@@ -789,7 +792,7 @@ namespace ThornThrone.Simulation
             for (int i = 0; i < near.Count; i++)
             {
                 var e = Enemies[near[i]];
-                if (!e.Targetable || (exclude != null && exclude.HasHit(e.SpawnId))) continue;
+                if (!e.Targetable || (exclude != null && exclude.HasHit(e.SpawnId)) || (skipSpawnId != 0 && e.SpawnId == skipSpawnId)) continue;
                 if (Vec2.DistanceSquared(e.Position, center) > range * range) continue;
                 if (Rng.Next(++seen) == 0) pick = e;
             }

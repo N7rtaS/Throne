@@ -10,9 +10,10 @@ namespace ThornThrone.Simulation
     /// Radius × (1 + AoEIncrease) (the same <see cref="GroundObject"/> and SpawnId) that deals DamageTicks magical
     /// ticks, the first after InitialTickDelay, then every TimeBetweenTicks, to every targetable enemy touching it.
     /// All numbers are snapshotted at launch. Mechanics §31 Р11–Р18 (design decisions; owner's decisions 12.11.2026
-    /// for Р2, Р12, Р14).
+    /// for Р2, Р12, Р14). With Aghanim's Scepter an enemy killed by this ability drops, with m_flSpawnPickupOnKillPercent,
+    /// the pickup m_unSpawnPickupOnKillID (the healing cookie) where it dies (Mechanics §34 Р23).
     /// </summary>
-    public sealed class MortimerKisses : AbilityBase, IGroundObjectAbility
+    public sealed class MortimerKisses : AbilityBase, IGroundObjectAbility, IKillEffect
     {
         private const float Epsilon = 1e-4f;
         private readonly RandomTargets picks;
@@ -21,11 +22,26 @@ namespace ThornThrone.Simulation
         private int volleyRemaining;
         /// <summary>m_flMinRange: enemies closer to the hero are not picked (Р12).</summary>
         public float MinRange { get; }
+        /// <summary>m_flSpawnPickupOnKillPercent: chance of the cookie per kill with the scepter.</summary>
+        public float CookieChance { get; }
+        /// <summary>Pickup of m_unSpawnPickupOnKillID, or null when the data has none.</summary>
+        public PickupDef Cookie { get; }
         public MortimerKisses(OwnedPowerUp owned, Run run) : base(owned)
         {
             picks = new RandomTargets(run.Enemies.Length);
             targets = new CircleTargets(run.Enemies.Length);
             MinRange = DataField(run, "m_flMinRange");
+            CookieChance = DataField(run, "m_flSpawnPickupOnKillPercent");
+            int cookie = (int)DataField(run, "m_unSpawnPickupOnKillID");
+            if (run.Data.PickupsById.TryGetValue(cookie, out var def)) Cookie = def;
+            else run.Diagnostics.Report($"ability:{owned.Def.Key}:pickup:{cookie}",
+                $"Ability {owned.Def.Key} names pickup {cookie} (m_unSpawnPickupOnKillID), which the data does not have; no cookie");
+        }
+        /// <summary>The scepter's cookie: kills of this ability only, one roll per kill (Р23).</summary>
+        public void OnKill(Run run, Enemy enemy, DamageStatEntry source)
+        {
+            if (!owned.Scepter || source != owned.Stats || Cookie == null) return;
+            if (run.Rng.Chance(CookieChance)) run.SpawnAbilityPickup(Cookie, enemy.Position);
         }
         public int Volley(Run run) => Math.Max(1, (int)Stat(run, Attr.TargetCount));
         public float Interval(Run run) => Math.Max(run.Rules.Step, Stat(run, Attr.ProjectileAttackInterval));

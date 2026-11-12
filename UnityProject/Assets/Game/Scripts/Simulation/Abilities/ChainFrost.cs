@@ -9,6 +9,8 @@ namespace ThornThrone.Simulation
     /// freezes every enemy touching the FreezeSplashRadius circle around it; then the shot bounces ProjectileBounces
     /// times (m_eBounceTargeting RANDOM_TARGET_AT_RANGE, <see cref="ChainBounce"/>). Damage, stun and freeze are
     /// snapshotted at launch. Interpretations of the data and the description: Mechanics §29 Р1–Р6, Р13–Р17.
+    /// With Aghanim's Scepter every successful bounce splits the shot with a chance of 50%: a copy with the same hit
+    /// records, bounces left, damage, stun and freeze flies from the impact to another random enemy (Mechanics §34 Р20).
     /// </summary>
     public sealed class ChainFrost : AbilityBase, IProjectileAbility
     {
@@ -16,6 +18,8 @@ namespace ThornThrone.Simulation
         public const string StrongestTarget = "STRONGEST_TARGET_IN_RANGE";
         public const string RandomBounce = "RANDOM_TARGET_AT_RANGE";
         private const int MaxTargets = 64;
+        /// <summary>Chance of a split per bounce with the scepter: «шанс в 50%» of the description (Д, text).</summary>
+        public const float ScepterSplitChance = 0.5f;
         private readonly StrongestTargets targets = new StrongestTargets(MaxTargets);
         private readonly CircleTargets area;
         private float cooldown;
@@ -97,7 +101,43 @@ namespace ThornThrone.Simulation
                 var e = area.Live(i);
                 if (e != null) run.Freeze(e, shot.FreezeStrength, shot.FreezeTime);
             }
-            return ChainBounce.Next(run, shot, impact, Stat(run, Attr.Range), LegLife(run, shot.Speed), BounceDelay);
+            float range = Stat(run, Attr.Range), life = LegLife(run, shot.Speed);
+            if (!ChainBounce.Next(run, shot, impact, range, life, BounceDelay)) return false;
+            if (owned.Scepter && run.Rng.Chance(ScepterSplitChance)) Split(run, shot, impact, range, life);
+            return true;
+        }
+
+        /// <summary>
+        /// The scepter's copy of a shot that has just bounced: same numbers and hit records, its own random target
+        /// other than the original's; nothing when there is none or the pool is full (Р20).
+        /// </summary>
+        private void Split(Run run, Projectile shot, Vec2 impact, float range, float life)
+        {
+            var next = run.RandomTarget(impact, range, shot, shot.TargetSpawnId);
+            if (next == null) return;
+            var copy = run.SpawnProjectile(owned);
+            if (copy == null) return;
+            copy.Position = impact;
+            copy.Speed = shot.Speed;
+            copy.Velocity = (next.Position - impact).Normalized * shot.Speed;
+            copy.Radius = shot.Radius;
+            copy.Damage = shot.Damage;
+            copy.DamageType = shot.DamageType;
+            copy.DamageFlags = shot.DamageFlags;
+            copy.DamageSource = shot.DamageSource;
+            copy.Knockback = 0;
+            copy.Stun = shot.Stun;
+            copy.FreezeRadius = shot.FreezeRadius;
+            copy.FreezeStrength = shot.FreezeStrength;
+            copy.FreezeTime = shot.FreezeTime;
+            copy.RemainingHits = 1;
+            copy.Bounces = shot.Bounces;
+            copy.Life = life;
+            copy.ArmTime = BounceDelay;
+            copy.Target = next;
+            copy.TargetSpawnId = next.SpawnId;
+            Array.Copy(shot.HitSpawnIds, copy.HitSpawnIds, shot.HitCount);
+            copy.HitCount = shot.HitCount;
         }
     }
 }

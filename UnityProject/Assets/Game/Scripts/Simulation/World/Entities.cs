@@ -109,7 +109,8 @@ namespace ThornThrone.Simulation
     /// <summary>Stage of a <see cref="GroundObject"/>: a mine arms, waits and counts down; a glob flies and burns (Mechanics §31).</summary>
     public enum GroundPhase { Arming, Armed, Triggered, Falling, Burning }
     /// <summary>
-    /// Pooled object left on the ground by an ability (Land Mine's mine, Mortimer Kisses' glob and puddle). It does not
+    /// Pooled object left on the ground by an ability (Land Mine's mine, Mortimer Kisses' glob and puddle, Rot's cloud
+    /// with the scepter). It does not
     /// move, so it has no previous position: presentation draws a flying glob from <see cref="Origin"/>,
     /// <see cref="Position"/>, <see cref="Age"/> and <see cref="FlightTime"/>. The source ability updates it every
     /// step (<see cref="IGroundObjectAbility"/>); its numbers are snapshotted when it is created (Mechanics §31 Р1–Р3).
@@ -132,6 +133,10 @@ namespace ThornThrone.Simulation
         public float Timer;
         public float FlightTime, Life, ArmTime, Interval;
         public int TicksLeft;
+        /// <summary>Kind of the object within its ability: Land Mine's mine, stasis trap or radio mine (Mechanics §34 Р21); 0 otherwise.</summary>
+        public int Variant;
+        /// <summary>Stun seconds and freeze (strength, seconds) the object puts on what it hits, snapshotted at creation (Mechanics §34).</summary>
+        public float Stun, FreezeStrength, FreezeTime;
         /// <summary><see cref="Run.Time"/> of the step that created it: not advanced in that step.</summary>
         public float Born;
         /// <summary>Type and delivery of <see cref="Damage"/>, snapshotted at creation.</summary>
@@ -195,7 +200,7 @@ namespace ThornThrone.Simulation
         AbilityStrike,
         /// <summary>An ability hit a circle (Counter Helix): Position is its centre, Extent.X its radius (Mechanics §28 Р8).</summary>
         AbilityBurst,
-        /// <summary>A ground object appeared (Mechanics §31): Slot, SpawnId, Position (mine or landing point), Value the powerup ID.</summary>
+        /// <summary>A ground object appeared (Mechanics §31): Slot, SpawnId, Position (mine or landing point), Value the powerup ID, Variant.</summary>
         GroundObjectSpawned,
         /// <summary>A ground object ended: Slot, SpawnId, Position, Value the powerup ID.</summary>
         GroundObjectEnded,
@@ -227,6 +232,8 @@ namespace ThornThrone.Simulation
         public DamageType DamageType;
         /// <summary>The hit was critical (<see cref="SimEventKind.EnemyDamaged"/> only).</summary>
         public bool Critical;
+        /// <summary><see cref="GroundObject.Variant"/> (ground object events only; Land Mine's kind, Mechanics §34 Р21).</summary>
+        public int Variant;
 
         /// <summary>
         /// Length (X) and width (Y) of the struck rectangle (<see cref="SimEventKind.AbilityStrike"/>);

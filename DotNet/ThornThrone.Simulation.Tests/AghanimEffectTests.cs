@@ -274,6 +274,8 @@ namespace ThornThrone.Simulation.Tests
 
         [TestCase("dragonus", "magic_missile,knife_throw,laguna_blade,track")]
         [TestCase("kez", "swashbuckle,stampede,annihilation,arcane_bolt")]
+        [TestCase("dragonus", "rot,counter_helix,chain_frost,frostbite")]
+        [TestCase("kez", "land_mine,mortimer_kisses,spirits,snotty_bat")]
         public void StepsWithScepterEffectsDoNotAllocateAfterWarmUp(string hero, string keys)
         {
             var run = TestData.NewRun(hero, rules: new Rules { ContactDamageInterval = 30 });
@@ -281,7 +283,7 @@ namespace ThornThrone.Simulation.Tests
             foreach (var key in keys.Split(',')) Assert.That(run.ForceUpgrade(key), Is.True, key);
             foreach (var owned in run.Build.Owned.Where(o => o.Def.IsActive).ToList())
                 Assert.That(run.DebugGrant(owned.Def.Key, false), Is.True, owned.Def.Key);
-            if (hero == "dragonus") Assert.That(run.DebugGrant("magic_missile", true), Is.True);
+            if (keys.Contains("magic_missile")) Assert.That(run.DebugGrant("magic_missile", true), Is.True);
             TestData.Simulate(run, 40, TestData.Bot);
             long allocated = 0;
             int steps = 0;

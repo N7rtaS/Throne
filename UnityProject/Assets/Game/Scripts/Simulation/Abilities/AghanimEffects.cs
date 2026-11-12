@@ -5,8 +5,9 @@ namespace ThornThrone.Simulation
 {
     /// <summary>
     /// Which abilities have an Aghanim's Scepter or Shard effect in this build of the simulation (Mechanics §34). Only
-    /// these are offered on the Aghanim screen; the effects live in the files of their abilities. Task 27 part 1 has the
-    /// nine effects that change numbers or target rules; the other eight come with Task 27б (design §8).
+    /// these are offered on the Aghanim screen; the effects live in the files of their abilities. Task 27 part 1 added the
+    /// nine effects that change numbers or target rules, Task 27б the eight that create or change entities (design §8):
+    /// all 17 abilities with m_bIsScepterUpgradeable.
     /// </summary>
     public static class AghanimEffects
     {
@@ -23,6 +24,14 @@ namespace ThornThrone.Simulation
             { "CSurvivorsPowerUpDefinition_EchoStrike", All },
             { "CSurvivorsPowerUpDefinition_Stampede", All },
             { "CSurvivorsPowerUpDefinition_LagunaBlade", All },
+            { "CSurvivorsPowerUpDefinition_CounterHelix", All },
+            { "CSurvivorsPowerUpDefinition_AreaAttack_CircleConstant", All },
+            { "CSurvivorsPowerUpDefinition_ProjectileAttack", ChainFrost.Supports },
+            { "CSurvivorsPowerUpDefinition_Frostbite", All },
+            { "CSurvivorsPowerUpDefinition_LandMine", All },
+            { "CSurvivorsPowerUpDefinition_Spirits", All },
+            { "CSurvivorsPowerUpDefinition_MortimerKisses", All },
+            { "CSurvivorsPowerUpDefinition_Snotty", All },
         };
 
         private static readonly Dictionary<string, Func<PowerUpDef, bool>> shard = new Dictionary<string, Func<PowerUpDef, bool>>

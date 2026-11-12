@@ -1,7 +1,7 @@
 namespace ThornThrone.Simulation
 {
     /// <summary>
-    /// Pool of ground objects (mines, lava globs and puddles), Mechanics §31 Р1–Р3. One pool of
+    /// Pool of ground objects (mines, lava globs and puddles, Rot's clouds), Mechanics §31 Р1–Р3. One pool of
     /// <see cref="Rules.MaxGroundObjects"/> slots per run, shared by every ability; a full pool skips new objects,
     /// reports «pool:ground» once and never removes the old ones. Objects are updated in the step after projectiles,
     /// also while the hero is down, by the ability that made them.
@@ -12,8 +12,11 @@ namespace ThornThrone.Simulation
         public int ActiveGroundObjects { get; private set; }
         private readonly int[] freeGroundObjects;
         private int freeGroundObjectCount;
-        /// <summary>A new ground object of <paramref name="source"/> at <paramref name="position"/>, or null when the pool is full (Р2).</summary>
-        public GroundObject SpawnGroundObject(OwnedPowerUp source, Vec2 position)
+        /// <summary>
+        /// A new ground object of <paramref name="source"/> at <paramref name="position"/>, or null when the pool is full (Р2).
+        /// <paramref name="variant"/> is set before the spawn event, which carries it (Mechanics §34 Р21).
+        /// </summary>
+        public GroundObject SpawnGroundObject(OwnedPowerUp source, Vec2 position, int variant = 0)
         {
             if (freeGroundObjectCount == 0)
             {
@@ -29,6 +32,8 @@ namespace ThornThrone.Simulation
             obj.Position = obj.Origin = position;
             obj.Radius = obj.Age = obj.Timer = obj.FlightTime = obj.Life = obj.ArmTime = obj.Interval = 0;
             obj.TicksLeft = 0;
+            obj.Variant = variant;
+            obj.Stun = obj.FreezeStrength = obj.FreezeTime = 0;
             obj.Born = Time;
             obj.Damage = 0;
             obj.DamageType = DamageType.Pure;

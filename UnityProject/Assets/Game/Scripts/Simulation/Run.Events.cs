@@ -71,6 +71,7 @@ namespace ThornThrone.Simulation
             Events[EventCount++] = new SimEvent
             {
                 Kind = kind, Slot = obj.Slot, Position = position, Value = obj.Source?.Def.Id ?? 0, SpawnId = obj.SpawnId,
+                Variant = obj.Variant,
             };
         }
         /// <summary>Event about a companion: its slot and SpawnId, Value the powerup ID of its source (Mechanics §32 Р18).</summary>
