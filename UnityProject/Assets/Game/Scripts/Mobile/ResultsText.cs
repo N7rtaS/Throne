@@ -49,16 +49,16 @@ namespace ThornThrone.Mobile
         /// <summary>«Способность / Уровень / Всего урона / Время владения / УРОН/С» (AbilityStats); consumed rows grey.</summary>
         public static string Abilities(IReadOnlyList<PowerUpResult> rows, Func<PowerUpDef, string> name)
         {
-            var text = new StringBuilder("<b>Способность<pos=40%>Уровень<pos=51%>Всего урона<pos=67%>Время владения<pos=86%>УРОН/С</b>");
+            var text = new StringBuilder("<b>Способность<pos=32%>Уровень<pos=45%>Всего урона<pos=62%>Время владения<pos=84%>УРОН/С</b>");
             return Rows(text, rows, row =>
-                $"{name(row.Def)}<pos=40%>{row.Rank}<pos=51%>{Integer(row.Damage)}<pos=67%>{Time(row.Held)}<pos=86%>{Dps(row.Dps)}");
+                $"{name(row.Def)}<pos=32%>{row.Rank}<pos=45%>{Integer(row.Damage)}<pos=62%>{Time(row.Held)}<pos=84%>{Dps(row.Dps)}");
         }
 
         /// <summary>«Предмет / Уровень / Время владения» (ItemStats); consumed rows grey.</summary>
         public static string Items(IReadOnlyList<PowerUpResult> rows, Func<PowerUpDef, string> name)
         {
-            var text = new StringBuilder("<b>Предмет<pos=50%>Уровень<pos=68%>Время владения</b>");
-            return Rows(text, rows, row => $"{name(row.Def)}<pos=50%>{row.Rank}<pos=68%>{Time(row.Held)}");
+            var text = new StringBuilder("<b>Предмет<pos=45%>Уровень<pos=63%>Время владения</b>");
+            return Rows(text, rows, row => $"{name(row.Def)}<pos=45%>{row.Rank}<pos=63%>{Time(row.Held)}");
         }
 
         private static string Rows(StringBuilder text, IReadOnlyList<PowerUpResult> rows, Func<PowerUpResult, string> line)

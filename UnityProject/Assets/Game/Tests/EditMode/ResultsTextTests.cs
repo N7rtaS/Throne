@@ -153,13 +153,7 @@ namespace ThornThrone.Mobile.Tests
             for (int i = 0; i < ResultsText.MaxRows; i++) items.Add(new PowerUpResult(yasha, 10, 0, 5999, true));
             root.Find("Abilities").GetComponent<TMP_Text>().text = ResultsText.Abilities(many, d => longest);
             root.Find("Items").GetComponent<TMP_Text>().text = ResultsText.Items(items, d => longest);
-            // The longest name fits its column: 40 % of the ability table, 50 % of the item table (the <pos> tags).
-            var abilitiesLabel = root.Find("Abilities").GetComponent<TMP_Text>();
-            var itemsLabel = root.Find("Items").GetComponent<TMP_Text>();
-            Assert.That(abilitiesLabel.GetPreferredValues(longest).x, Is.LessThan(0.40f * abilitiesLabel.rectTransform.rect.width), longest);
-            Assert.That(itemsLabel.GetPreferredValues(longest).x, Is.LessThan(0.50f * itemsLabel.rectTransform.rect.width), longest);
-            Assert.That(abilitiesLabel.GetPreferredValues("<b>Время владения</b>").x, Is.LessThan(0.19f * abilitiesLabel.rectTransform.rect.width));
-            Assert.That(itemsLabel.GetPreferredValues("<b>Время владения</b>").x, Is.LessThan(0.32f * itemsLabel.rectTransform.rect.width));
+            // Column widths within a line: ResultsTableColumnsDoNotOverlap.
             var rects = new List<(string Name, Rect Rect)>();
             var corners = new Vector3[4];
             foreach (Transform child in root)
@@ -180,6 +174,65 @@ namespace ThornThrone.Mobile.Tests
             for (int i = 0; i < rects.Count; i++)
             for (int k = i + 1; k < rects.Count; k++)
                 Assert.That(rects[i].Rect.Overlaps(rects[k].Rect), Is.False, $"{rects[i].Name} {rects[i].Rect} overlaps {rects[k].Name} {rects[k].Rect}");
+        }
+        /// <summary>Visible space between the end of a column's text and the next <c>&lt;pos&gt;</c> (half the 26 px font).</summary>
+        private const float ColumnGap = 13f;
+        /// <summary>
+        /// Within every line of both tables, the text of each column (header in bold, the widest Russian name, the
+        /// widest numbers) ends at least <see cref="ColumnGap"/> before the next column's <c>&lt;pos&gt;</c> and the last
+        /// column fits the label. Content is laid out in the 1920×1080 container, so screen and UI scale only change
+        /// its fit; the cases are the worst ones of the review (1280×720 at 130 %, 1600×720).
+        /// </summary>
+        [TestCase(1280, 720, 1.3f)]
+        [TestCase(1600, 720, 1.0f)]
+        [TestCase(1600, 720, 1.3f)]
+        public void ResultsTableColumnsDoNotOverlap(int width, int height, float uiScale)
+        {
+            var ui = new GameUi(Localization("powerups_ru.json"), AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath), Localization("difficulty_ru.json"));
+            var screen = new Vector2(width, height);
+            ui.ApplyScreen(screen, new Rect(Vector2.zero, screen), 400, GameUi.CanvasScaleFor(screen, uiScale));
+            var root = GameObject.Find("UI").transform.Find("Safe area/Results/Content");
+            var abilitiesLabel = root.Find("Abilities").GetComponent<TMP_Text>();
+            var itemsLabel = root.Find("Items").GetComponent<TMP_Text>();
+            string widest = "";
+            float widestWidth = 0;
+            foreach (var v in Localization("powerups_ru.json"))
+            {
+                if (!v.Key.EndsWith("_LocAbilityName")) continue;
+                float w = abilitiesLabel.GetPreferredValues(v.Value).x;
+                if (w > widestWidth) { widestWidth = w; widest = v.Value; }
+            }
+            var bolt = Data().PowerUps["arcane_bolt"];
+            var yasha = Data().PowerUps["yasha"];
+            // Rank 10, 9 999 999 damage, 99:59 held, 100 000,0 per second; consumed (grey) rows too.
+            var abilities = new[] { new PowerUpResult(bolt, 10, 9999999, 5999, false), new PowerUpResult(bolt, 10, 9999999, 100, true) };
+            var items = new[] { new PowerUpResult(yasha, 10, 0, 5999, false), new PowerUpResult(yasha, 10, 0, 5999, true) };
+            Assert.That(ResultsText.Abilities(abilities, d => widest), Does.Contain(">100 000,0"));
+            var overlaps = new List<string>();
+            ColumnOverlaps(abilitiesLabel, ResultsText.Abilities(abilities, d => widest), overlaps);
+            ColumnOverlaps(itemsLabel, ResultsText.Items(items, d => widest), overlaps);
+            Assert.That(overlaps, Is.Empty, string.Join("\n", overlaps));
+        }
+        private static void ColumnOverlaps(TMP_Text label, string text, List<string> overlaps)
+        {
+            float width = label.rectTransform.rect.width;
+            var pos = new System.Text.RegularExpressions.Regex("<pos=([0-9.]+)%>");
+            foreach (var line in text.Split('\n'))
+            {
+                bool bold = line.StartsWith("<b>");
+                var segments = pos.Split(line);
+                // Split keeps the captured percentages: text, pos, text, pos, text...
+                float start = 0;
+                for (int i = 0; i < segments.Length; i += 2)
+                {
+                    float end = i + 1 < segments.Length ? float.Parse(segments[i + 1], System.Globalization.CultureInfo.InvariantCulture) / 100f * width : width + ColumnGap;
+                    string segment = segments[i].Replace("<b>", "").Replace("</b>", "");
+                    float need = label.GetPreferredValues(bold ? "<b>" + segment + "</b>" : segment).x;
+                    if (start + need + ColumnGap > end)
+                        overlaps.Add($"{label.name}: «{segment}» needs {need:0} + {ColumnGap:0} from {start:0}, next column at {end:0} (label {width:0})");
+                    start = end;
+                }
+            }
         }
     }
 }

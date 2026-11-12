@@ -202,8 +202,8 @@ namespace ThornThrone.Mobile
             var resultsContent = Content(results);
             // Header, then the ability and item tables of the client's PostGameScreen (Mechanics §37 Р6).
             resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-900, 530), new Vector2(1800, 240), 40, TextAnchor.MiddleCenter);
-            resultAbilities = Label(resultsContent, "Abilities", new Vector2(.5f, .5f), new Vector2(-920, 280), new Vector2(1100, 410), 26, TextAnchor.UpperLeft);
-            resultItems = Label(resultsContent, "Items", new Vector2(.5f, .5f), new Vector2(230, 280), new Vector2(690, 410), 26, TextAnchor.UpperLeft);
+            resultAbilities = Label(resultsContent, "Abilities", new Vector2(.5f, .5f), new Vector2(-920, 280), new Vector2(1080, 410), 26, TextAnchor.UpperLeft);
+            resultItems = Label(resultsContent, "Items", new Vector2(.5f, .5f), new Vector2(200, 280), new Vector2(740, 410), 26, TextAnchor.UpperLeft);
             // DOTA_Survivors_NewDifficultyUnlocked.
             resultUnlocked = Label(resultsContent, "Unlocked", new Vector2(.5f, .5f), new Vector2(-700, -132), new Vector2(1400, 60), 40, TextAnchor.MiddleCenter);
             resultUnlocked.text = "Открыта новая сложность!";
