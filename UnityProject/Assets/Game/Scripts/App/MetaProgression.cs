@@ -23,6 +23,29 @@ namespace ThornThrone.App
     }
 
     /// <summary>
+    /// One card of the «Улучшения» screen (Mechanics §40 У2–У7): the bought level, m_flValue of that level and of the
+    /// next one (level values, not sums, §38 М3), the price of the next level and the currency it lacks.
+    /// </summary>
+    public sealed class MetaUpgradeRow
+    {
+        public MetaUpgradeDef Def;
+        /// <summary>Bought level 0..<see cref="MaxLevel"/>.</summary>
+        public int Level;
+        public int MaxLevel;
+        /// <summary>m_flValue of level <see cref="Level"/>; 0 before the first level.</summary>
+        public float Current;
+        /// <summary>m_flValue of level <see cref="Level"/> + 1; null at the last level.</summary>
+        public float? Next;
+        /// <summary>m_nMinigameCurrency of the next level; 0 at the last level.</summary>
+        public int Cost;
+        /// <summary>The currency pays for the next level.</summary>
+        public bool Affordable;
+        /// <summary>Cost − currency when the currency is short, otherwise 0 (У7, «Требуется N золота»).</summary>
+        public long Shortage;
+        public bool IsMax => Next == null;
+    }
+
+    /// <summary>
     /// Permanent upgrades of the profile without the engine (Mechanics §38): levels by attribute in
     /// <see cref="Profile.MetaUpgrades"/>, purchases paid with <see cref="Profile.Currency"/> once through the reward
     /// journal («meta:&lt;attribute&gt;:&lt;level&gt;»), and the start attributes of a new run.
@@ -93,6 +116,28 @@ namespace ThornThrone.App
                 if (level > 0) result.Add(new AttributeValue(def.AttributeId, def.Tiers[level - 1].Value));
             }
             return result.ToArray();
+        }
+
+        /// <summary>Mechanics §40 У2–У7: a row per attribute in data order for the «Улучшения» screen.</summary>
+        public static List<MetaUpgradeRow> Rows(GameData data, Profile profile)
+        {
+            var rows = new List<MetaUpgradeRow>(data.MetaUpgrades.Count);
+            foreach (var def in data.MetaUpgrades)
+            {
+                int level = Level(profile, def);
+                var next = NextTier(profile, def);
+                int cost = next != null ? next.Cost : 0;
+                rows.Add(new MetaUpgradeRow
+                {
+                    Def = def, Level = level, MaxLevel = def.Tiers.Length,
+                    Current = level > 0 ? def.Tiers[level - 1].Value : 0f,
+                    Next = next != null ? next.Value : (float?)null,
+                    Cost = cost,
+                    Affordable = next != null && profile.Currency >= cost,
+                    Shortage = next != null ? Math.Max(0, cost - profile.Currency) : 0,
+                });
+            }
+            return rows;
         }
 
         /// <summary>М10: the currency pays for at least one next level.</summary>

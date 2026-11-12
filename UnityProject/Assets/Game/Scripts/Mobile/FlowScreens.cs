@@ -32,6 +32,19 @@ namespace ThornThrone.Mobile
             ui.HeroScreenRequested += () => Go(flow.ToHero);
             ui.DifficultyRequested += () => Go(flow.ToDifficulty);
             ui.MenuRequested += () => Go(flow.ToMenu);
+            ui.UpgradesRequested += () => Go(flow.OpenUpgrades);
+            ui.UpgradeBought += (key, level) => Buy(key, level);
+        }
+
+        /// <summary>
+        /// Mechanics §40 У8–У9: buys the level the card asked for and redraws the screen; a failed save of the purchase
+        /// shows the error line. Returns the answer of <see cref="AppFlow.BuyUpgrade"/>.
+        /// </summary>
+        public PurchaseResult Buy(string key, int level)
+        {
+            var result = flow.BuyUpgrade(key, level);
+            if (flow.Screen == AppScreen.Upgrades) ui.ShowUpgrades(flow, result == PurchaseResult.Bought && flow.SaveFailed);
+            return result;
         }
 
         public AppFlow Flow => flow;
@@ -45,6 +58,7 @@ namespace ThornThrone.Mobile
                 {
                     case AppScreen.Hero: return BackScreen.Hero;
                     case AppScreen.Difficulty: return BackScreen.Difficulty;
+                    case AppScreen.Upgrades: return BackScreen.Upgrades;
                     case AppScreen.Run: return BackScreen.Playing;
                     case AppScreen.Results: return BackScreen.Results;
                     default: return BackScreen.Menu;
@@ -59,13 +73,14 @@ namespace ThornThrone.Mobile
             {
                 case AppScreen.Hero: ui.ShowHeroSelect(flow); break;
                 case AppScreen.Difficulty: ui.ShowDifficulty(flow); break;
+                case AppScreen.Upgrades: ui.ShowUpgrades(flow); break;
                 case AppScreen.Run: ui.ShowRun(); break;
                 case AppScreen.Results: ui.ShowResults(flow); break;
                 default: ui.ShowMenu(flow); break;
             }
         }
 
-        /// <summary>Ф10: hero → menu, difficulty → hero. False on other screens.</summary>
+        /// <summary>Ф10: hero → menu, difficulty → hero, upgrades → difficulty (§40 У1). False on other screens.</summary>
         public bool Back() => Go(flow.Back);
 
         /// <summary>Results → menu (Android Back on the results screen, Р11).</summary>
@@ -77,11 +92,12 @@ namespace ThornThrone.Mobile
         /// <summary>Ф5: «Завершить забег» → menu without a record.</summary>
         public bool Abandon() => Go(flow.Abandon);
 
-        /// <summary>Ф11: repeats a failed result save and updates the error line.</summary>
+        /// <summary>Ф11: repeats a failed result or purchase save and updates the error lines.</summary>
         public bool RetryFailedSave()
         {
             if (!flow.RetryFailedSave()) return false;
             ui.SetResultSaveError(flow.SaveFailed);
+            if (flow.Screen == AppScreen.Upgrades) ui.SetUpgradesSaveError(flow.SaveFailed);
             return true;
         }
 

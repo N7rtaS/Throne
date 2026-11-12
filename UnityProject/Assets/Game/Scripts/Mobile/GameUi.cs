@@ -31,8 +31,12 @@ namespace ThornThrone.Mobile
         public event Action<int> EchelonSelected;
         /// <summary>«Далее» (hero), «Начать» (difficulty), «Назад» on both screens (Ф10).</summary>
         public event Action NextRequested, StartRequested, BackRequested;
-        /// <summary>Results: «Сыграть ещё», «Выбор героя», «Сложность» (Ф8); «В меню» is <see cref="MenuRequested"/>.</summary>
+        /// <summary>Results: «Сыграть ещё», «Выбор героя», «Улучшения и сложность» (Ф8, §40 У11); «В меню» is <see cref="MenuRequested"/>.</summary>
         public event Action PlayAgainRequested, HeroScreenRequested, DifficultyRequested;
+        /// <summary>«Улучшения» on the difficulty screen (Mechanics §40 У1).</summary>
+        public event Action UpgradesRequested;
+        /// <summary>«Купить» of an upgrade card: the attribute and the level after the one the card shows (§40 У8).</summary>
+        public event Action<string, int> UpgradeBought;
         public event Action<int> ChoiceSelected;
         public event Action RerollRequested, PauseRequested, ResumeRequested, QuitRunRequested, MenuRequested;
         /// <summary>«Завершить» and «Отмена» of the quit confirmation (ТЗ_Мобильная_версия_v2.md §6).</summary>
@@ -52,7 +56,7 @@ namespace ThornThrone.Mobile
         private readonly Dictionary<string, string> names;
         private readonly RectTransform safe;
         private readonly Canvas canvas;
-        private readonly GameObject menu, heroSelect, difficulty, hud, choices, pause, confirm, results, settings;
+        private readonly GameObject menu, heroSelect, difficulty, upgrades, hud, choices, pause, confirm, results, settings;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
         private readonly TMP_Text bossText, resultText, resultAbilities, resultItems, rerollText, choiceTitle, settingsError, profileWarning, resultUnlocked, resultSaveError;
         private readonly Dictionary<string, string> difficultyNames;
@@ -69,8 +73,25 @@ namespace ThornThrone.Mobile
             return i >= 0 ? HeroTitles[i] : key;
         }
 
-        /// <summary>Hero cards in display order with their selection frames.</summary>
-        private readonly List<(string Key, Button Button, GameObject Selected)> heroCards = new List<(string, Button, GameObject)>();
+        /// <summary>Hero cards in display order with their texts and selection frames.</summary>
+        private readonly List<(string Key, Button Button, TMP_Text Text, GameObject Selected)> heroCards = new List<(string, Button, TMP_Text, GameObject)>();
+        /// <summary>Upgrade cards in data order (Mechanics §40 У3): survivors_attributes.json has 14 attributes with tiers.</summary>
+        private readonly UpgradeCard[] upgradeCards = new UpgradeCard[MaxUpgrades];
+        public const int MaxUpgrades = 14;
+        /// <summary>Level marks per card: the attributes have at most 5 levels.</summary>
+        public const int MaxUpgradeLevels = 5;
+        private readonly TMP_Text upgradesGold, upgradesError, upgradesAvailable;
+
+        private sealed class UpgradeCard
+        {
+            public RectTransform Root;
+            public Button Buy;
+            public TMP_Text BuyText, Name, Value, Cost, Needed;
+            public Image[] Pips;
+            /// <summary>Attribute and bought level the card shows since the last <see cref="ShowUpgrades"/>.</summary>
+            public string Key;
+            public int Level;
+        }
         /// <summary>Echelon cards 1..MaxEchelons (index n − 1).</summary>
         private readonly EchelonCard[] echelonCards = new EchelonCard[MaxEchelons];
         /// <summary>Cards on the difficulty screen: survivors_difficulty.json has 8 (Mechanics §8).</summary>
@@ -227,7 +248,8 @@ namespace ThornThrone.Mobile
             // Ф8: four buttons in a row; «В меню» is the mobile addition (the original closes the window).
             Button(resultsContent, "Play again", new Vector2(.5f, .5f), new Vector2(-900, -400), new Vector2(420, 120), "Сыграть ещё", 44, () => PlayAgainRequested?.Invoke());
             Button(resultsContent, "Hero", new Vector2(.5f, .5f), new Vector2(-440, -400), new Vector2(420, 120), "Выбор героя", 44, () => HeroScreenRequested?.Invoke());
-            Button(resultsContent, "Difficulty", new Vector2(.5f, .5f), new Vector2(20, -400), new Vector2(420, 120), "Сложность", 44, () => DifficultyRequested?.Invoke());
+            // §40 У11: DOTA_Survivors_UpgradesDifficultyButton; 32 px keeps it on one line of the 420 px button.
+            Button(resultsContent, "Difficulty", new Vector2(.5f, .5f), new Vector2(20, -400), new Vector2(420, 120), UpgradesText.DifficultyButton, 32, () => DifficultyRequested?.Invoke());
             Button(resultsContent, "Menu", new Vector2(.5f, .5f), new Vector2(480, -400), new Vector2(420, 120), "В меню", 44, () => MenuRequested?.Invoke());
 
             // Menu
@@ -245,15 +267,17 @@ namespace ThornThrone.Mobile
             profileWarning.color = new Color(1, .82f, .4f);
             profileWarning.gameObject.SetActive(false);
 
-            // Hero select (DOTASurvivorsGameMenuHeroScreen): cards, «Назад», «Далее».
+            // Hero select (DOTASurvivorsGameMenuHeroScreen): cards with the starting and innate abilities (§40 Г1), «Назад», «Далее».
             heroSelect = Panel(safe, "Hero select", new Color(.03f, .04f, .07f, 1));
             var heroContent = Content(heroSelect);
             Label(heroContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -60), new Vector2(1200, 110), 72, TextAnchor.MiddleCenter).text = "Выберите героя";
             for (int i = 0; i < HeroKeys.Length; i++)
             {
                 string key = HeroKeys[i];
-                var b = Button(heroContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 340), HeroTitles[i], 52, () => HeroSelected?.Invoke(key));
-                heroCards.Add((key, b, Frame(b.transform)));
+                var b = Button(heroContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -360), new Vector2(520, 640), HeroTitles[i], 28, () => HeroSelected?.Invoke(key));
+                var text = b.GetComponentInChildren<TMP_Text>();
+                text.alignment = TextAlignmentOptions.Top;
+                heroCards.Add((key, b, text, Frame(b.transform)));
             }
             Button(heroContent, "Back", new Vector2(.5f, 0), new Vector2(-560, 40), new Vector2(520, 120), "Назад", 44, () => BackRequested?.Invoke());
             Button(heroContent, "Next", new Vector2(.5f, 0), new Vector2(40, 40), new Vector2(520, 120), "Далее", 44, () => NextRequested?.Invoke());
@@ -264,8 +288,29 @@ namespace ThornThrone.Mobile
             Label(difficultyContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -20), new Vector2(1200, 100), 64, TextAnchor.MiddleCenter).text = "Сложность";
             for (int i = 0; i < MaxEchelons; i++)
                 echelonCards[i] = NewEchelonCard(difficultyContent, i + 1, new Vector2(-930 + (i % 4) * 470, i < 4 ? 30 : -350));
-            Button(difficultyContent, "Back", new Vector2(.5f, 0), new Vector2(-560, 40), new Vector2(520, 120), "Назад", 44, () => BackRequested?.Invoke());
-            Button(difficultyContent, "Start", new Vector2(.5f, 0), new Vector2(40, 40), new Vector2(520, 120), "Начать", 44, () => StartRequested?.Invoke());
+            Button(difficultyContent, "Back", new Vector2(.5f, 0), new Vector2(-900, 46), new Vector2(420, 110), "Назад", 44, () => BackRequested?.Invoke());
+            // §40 У1, У10: «Улучшения» between «Назад» and «Начать», «Доступны улучшения!» under it.
+            Button(difficultyContent, "Upgrades", new Vector2(.5f, 0), new Vector2(-210, 46), new Vector2(420, 110), UpgradesText.Title, 44, () => UpgradesRequested?.Invoke());
+            upgradesAvailable = Label(difficultyContent, "Upgrades available", new Vector2(.5f, 0), new Vector2(-300, 44), new Vector2(600, 42), 30, TextAnchor.MiddleCenter);
+            upgradesAvailable.text = UpgradesText.Available;
+            upgradesAvailable.color = new Color(1, .82f, .4f);
+            upgradesAvailable.gameObject.SetActive(false);
+            Button(difficultyContent, "Start", new Vector2(.5f, 0), new Vector2(480, 46), new Vector2(420, 110), "Начать", 44, () => StartRequested?.Invoke());
+
+            // Upgrades (MetaProgressionSelection of DifficultySelectScreen as a screen of its own, §40 У1–У4).
+            upgrades = Panel(safe, "Upgrades", new Color(.03f, .04f, .07f, 1));
+            var upgradesContent = Content(upgrades);
+            Label(upgradesContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -4), new Vector2(1200, 88), 64, TextAnchor.MiddleCenter).text = UpgradesText.Title;
+            Label(upgradesContent, "Description", new Vector2(.5f, 1), new Vector2(-917, -94), new Vector2(1240, 46), 28, TextAnchor.MiddleLeft).text = UpgradesText.Description;
+            upgradesGold = Label(upgradesContent, "Total gold", new Vector2(.5f, 1), new Vector2(337, -90), new Vector2(580, 54), 36, TextAnchor.MiddleCenter);
+            upgradesGold.color = new Color(1, .82f, .4f);
+            for (int i = 0; i < MaxUpgrades; i++)
+                upgradeCards[i] = NewUpgradeCard(upgradesContent, i, new Vector2(-917 + (i % 7) * 264, i < 7 ? 25 : -352));
+            Button(upgradesContent, "Back", new Vector2(.5f, 0), new Vector2(-900, 40), new Vector2(420, 110), UpgradesText.Back, 44, () => BackRequested?.Invoke());
+            upgradesError = Label(upgradesContent, "Save error", new Vector2(.5f, 0), new Vector2(-440, 130), new Vector2(1340, 80), 34, TextAnchor.MiddleCenter);
+            upgradesError.text = UpgradesText.SaveError;
+            upgradesError.color = new Color(1, .45f, .4f);
+            upgradesError.gameObject.SetActive(false);
 
             // Settings: last, so it covers the menu or the pause it was opened from (П10).
             settings = Panel(safe, "Settings", new Color(.03f, .04f, .07f, 1));
@@ -381,7 +426,10 @@ namespace ThornThrone.Mobile
             hud.SetActive(true);
         }
 
-        /// <summary>Ф9: hero cards; an unavailable hero is not interactable, the chosen one is framed.</summary>
+        /// <summary>
+        /// Ф9: hero cards; an unavailable hero is not interactable, the chosen one is framed. §40 Г1: the card shows the
+        /// starting and innate abilities and the dash of the hero's data (<see cref="HeroInfo.Of"/> reports bad data).
+        /// </summary>
         public void ShowHeroSelect(AppFlow flow)
         {
             Show(heroSelect);
@@ -389,8 +437,56 @@ namespace ThornThrone.Mobile
             {
                 card.Button.interactable = flow.IsHeroPlayable(card.Key);
                 card.Selected.SetActive(card.Key == flow.Hero);
+                card.Text.text = HeroText.Card(flow.HeroInfo(card.Key), HeroTitle(card.Key), Name, def => Text(def, "LocAbilityDesc"));
             }
         }
+
+        /// <summary>
+        /// Mechanics §40 У2–У9: total gold, a card per attribute in data order (name, level marks, «current -> next» or
+        /// «+value», price or «МАКС.», «Купить» grey with «Требуется N золота» when the currency is short) and the
+        /// purchase error line. Built here, when the screen opens and after a purchase, not per frame.
+        /// </summary>
+        public void ShowUpgrades(AppFlow flow, bool saveError = false)
+        {
+            var rows = flow.UpgradeRows();
+            if (rows.Count > MaxUpgrades) throw new ArgumentException($"{rows.Count} permanent upgrades, the screen has {MaxUpgrades} cards");
+            Show(upgrades);
+            upgradesGold.text = UpgradesText.TotalGold(flow.Profile.Currency);
+            for (int i = 0; i < MaxUpgrades; i++)
+            {
+                var card = upgradeCards[i];
+                bool exists = i < rows.Count;
+                card.Root.gameObject.SetActive(exists);
+                if (!exists) continue;
+                var row = rows[i];
+                if (row.MaxLevel > MaxUpgradeLevels) throw new ArgumentException($"{row.Def.Key} has {row.MaxLevel} levels, a card shows {MaxUpgradeLevels}");
+                card.Key = row.Def.Key;
+                card.Level = row.Level;
+                card.Root.name = "Upgrade " + row.Def.Key;
+                card.Name.text = ChoiceText.AttributeName(row.Def.AttributeId);
+                card.Value.text = UpgradesText.Value(row);
+                card.Cost.text = UpgradesText.Cost(row);
+                card.Buy.gameObject.SetActive(!row.IsMax);
+                card.Buy.interactable = row.Affordable;
+                // У7: the tint of a disabled button is faint on this background; the caption turns grey as well.
+                card.BuyText.color = row.Affordable ? Color.white : LockedText;
+                card.Needed.gameObject.SetActive(!row.IsMax && !row.Affordable);
+                if (card.Needed.gameObject.activeSelf) card.Needed.text = UpgradesText.GoldNeeded(row.Shortage);
+                // Starts at the left: the marks of a 2-level attribute are centred like those of a 5-level one.
+                float left = (UpgradeCardSize.x - (row.MaxLevel * PipSize.x + (row.MaxLevel - 1) * PipGap)) / 2;
+                for (int p = 0; p < MaxUpgradeLevels; p++)
+                {
+                    var pip = card.Pips[p];
+                    pip.gameObject.SetActive(p < row.MaxLevel);
+                    pip.rectTransform.anchoredPosition = new Vector2(left + p * (PipSize.x + PipGap), pip.rectTransform.anchoredPosition.y);
+                    SetPip(pip, p < row.Level);
+                }
+            }
+            SetUpgradesSaveError(saveError);
+        }
+
+        /// <summary>У9: «Не удалось сохранить покупку» on the upgrades screen.</summary>
+        public void SetUpgradesSaveError(bool visible) => upgradesError.gameObject.SetActive(visible);
 
         /// <summary>
         /// Ф6: «Эшелон N», name and description of the N-th difficulty; a locked echelon is grey with a lock and
@@ -400,6 +496,7 @@ namespace ThornThrone.Mobile
         {
             if (flow.EchelonCount > MaxEchelons) throw new ArgumentException($"{flow.EchelonCount} echelons, the screen has {MaxEchelons} cards");
             Show(difficulty);
+            upgradesAvailable.gameObject.SetActive(flow.UpgradesAvailable);
             for (int i = 0; i < MaxEchelons; i++)
             {
                 int n = i + 1;
@@ -486,6 +583,7 @@ namespace ThornThrone.Mobile
             menu.SetActive(screen == menu);
             heroSelect.SetActive(screen == heroSelect);
             difficulty.SetActive(screen == difficulty);
+            upgrades.SetActive(screen == upgrades);
             hud.SetActive(screen == hud);
             results.SetActive(screen == results);
             choices.SetActive(false);
@@ -843,6 +941,52 @@ namespace ThornThrone.Mobile
             card.Lock = lockRect.gameObject;
             card.Selected = Frame(rect);
             return card;
+        }
+
+        private static readonly Vector2 UpgradeCardSize = new Vector2(250, 365);
+        private static readonly Vector2 PipSize = new Vector2(30, 20);
+        private const float PipGap = 8;
+        private static readonly Color PipBought = new Color(1, .82f, .4f, 1);
+        private static readonly Color PipEmpty = new Color(.55f, .55f, .55f, 1);
+
+        /// <summary>
+        /// Upgrade card 250×365 (§40 У4): name, level marks, value, price, «Купить» and «Требуется N золота». The card
+        /// is named «Upgrade N» until <see cref="ShowUpgrades"/> names it after its attribute.
+        /// </summary>
+        private UpgradeCard NewUpgradeCard(Transform parent, int index, Vector2 position)
+        {
+            var root = Place(parent, "Upgrade " + (index + 1), new Vector2(.5f, .5f), position, UpgradeCardSize);
+            root.gameObject.AddComponent<Image>().color = OpenCard;
+            var card = new UpgradeCard { Root = root, Pips = new Image[MaxUpgradeLevels] };
+            var top = new Vector2(0, 1);
+            card.Name = Label(root, "Name", top, new Vector2(8, -6), new Vector2(234, 64), 24, TextAnchor.UpperCenter);
+            for (int p = 0; p < MaxUpgradeLevels; p++)
+            {
+                var pip = Place(root, "Level " + (p + 1), top, new Vector2(0, -98), PipSize).gameObject.AddComponent<Image>();
+                pip.raycastTarget = false;
+                card.Pips[p] = pip;
+            }
+            card.Value = Label(root, "Value", top, new Vector2(6, -106), new Vector2(238, 42), 28, TextAnchor.MiddleCenter);
+            card.Cost = Label(root, "Cost", top, new Vector2(6, -150), new Vector2(238, 34), 24, TextAnchor.MiddleCenter);
+            card.Needed = Label(root, "Needed", top, new Vector2(4, -186), new Vector2(242, 58), 20, TextAnchor.MiddleCenter);
+            card.Needed.color = new Color(1, .55f, .45f, 1);
+            // 110 high: at 48 dp on a phone the button grows to about 120 units and still clears «Требуется N золота».
+            card.Buy = Button(root, "Buy", Vector2.zero, new Vector2(25, 10), new Vector2(200, 110), UpgradesText.Buy, 32, () =>
+            {
+                if (card.Key != null) UpgradeBought?.Invoke(card.Key, card.Level + 1);
+            });
+            card.BuyText = card.Buy.GetComponentInChildren<TMP_Text>();
+            return card;
+        }
+
+        /// <summary>A bought level is a filled gold square, a level to buy an empty grey frame (colour plus shape, ТЗ §7).</summary>
+        private static void SetPip(Image pip, bool bought)
+        {
+            pip.sprite = bought ? WhiteSprite : FrameSprite;
+            pip.type = bought ? Image.Type.Simple : Image.Type.Sliced;
+            pip.fillCenter = bought;
+            pip.pixelsPerUnitMultiplier = 2;
+            pip.color = bought ? PipBought : PipEmpty;
         }
 
         /// <summary>Gold frame around a card, 8 units outside it; hidden until the card is chosen.</summary>

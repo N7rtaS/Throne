@@ -605,6 +605,19 @@ namespace ThornThrone.Mobile
             return false;
         }
 
+        /// <summary>The upgrades screen of a profile without gold: 14 cards, «Всего золота 0», every «Купить» grey.</summary>
+        private bool UpgradesGreyWithoutGold()
+        {
+            var rows = flow.UpgradeRows();
+            if (rows.Count != GameUi.MaxUpgrades || flow.Profile.Currency != 0) return false;
+            foreach (var row in rows)
+            {
+                var buy = FindButton("Upgrades/Content/Upgrade " + row.Def.Key + "/Buy");
+                if (!buy || !buy.gameObject.activeInHierarchy || buy.interactable) return false;
+            }
+            return true;
+        }
+
         /// <summary>Records the first failed step; true while every step passed.</summary>
         private bool FlowStep(bool ok, string step)
         {
@@ -619,7 +632,8 @@ namespace ThornThrone.Mobile
         /// DebugWin → results (1 result, echelon 2 open, a repeated record changes nothing) → «Сыграть ещё» → pause →
         /// «Завершить забег» → menu (still 1 result) → hero → difficulty (echelon 2 open), then the usual 30 s smoke run.
         /// Requirement 20 (-thornExpectFlow): checks the profile the previous run saved, then the smoke run.
-        /// -thornFlowShot=menu|hero|difficulty|results takes the -thornScreenshot picture of that screen.
+        /// -thornFlowShot=menu|hero|difficulty|upgrades|results takes the -thornScreenshot picture of that screen.
+        /// The difficulty screen opens «Улучшения» and comes back (Mechanics §40 У1).
         /// </summary>
         private System.Collections.IEnumerator FlowSmoke(bool full)
         {
@@ -650,6 +664,11 @@ namespace ThornThrone.Mobile
                          && second.transform.Find("Lock").gameObject.activeSelf, "locked_echelon_2");
                 yield return null;
                 if (flowFailed == null && shotStep == "difficulty") yield return Shot(shotPath);
+                // Mechanics §40 У1–У7: a new profile has no gold, so every «Купить» is grey with «Требуется N золота».
+                FlowStep(Press("Difficulty/Content/Upgrades") && flow.Screen == AppScreen.Upgrades && UpgradesGreyWithoutGold(), "upgrades");
+                yield return null;
+                if (flowFailed == null && shotStep == "upgrades") yield return Shot(shotPath);
+                FlowStep(Press("Upgrades/Content/Back") && flow.Screen == AppScreen.Difficulty && flow.Echelon == 1, "upgrades_back");
                 FlowStep(Press("Difficulty/Content/Echelon 1") && Press("Difficulty/Content/Start") && flow.Screen == AppScreen.Run && run == flow.Run, "start");
                 float deadline = Time.unscaledTime + 60;
                 while (flowFailed == null && run != null && (run.Time < 2 || state != State.Playing) && Time.unscaledTime < deadline) yield return null;
@@ -1041,6 +1060,7 @@ namespace ThornThrone.Mobile
                 case BackAction.CloseConfirm: CloseConfirmQuit(); break;
                 case BackAction.ToMenu: if (flow.Screen == AppScreen.Results) screens.ToMenu(); else screens.Back(); break;
                 case BackAction.ToHeroSelect: screens.Back(); break;
+                case BackAction.ToDifficulty: screens.Back(); break;
                 case BackAction.QuitApp: Application.Quit(); break;
                 case BackAction.CloseSettings: CloseSettings(); break;
             }

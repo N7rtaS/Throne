@@ -13,6 +13,8 @@ namespace ThornThrone.App
         Difficulty,
         Run,
         Results,
+        /// <summary>Permanent upgrades, opened from the difficulty screen (Mechanics §40 У1).</summary>
+        Upgrades,
     }
 
     /// <summary>What the results screen shows about the last finished run.</summary>
@@ -128,12 +130,28 @@ namespace ThornThrone.App
             return true;
         }
 
-        /// <summary>Ф10: hero → menu, difficulty → hero; other screens are handled by the app (BackNavigation).</summary>
+        /// <summary>
+        /// Ф10: hero → menu, difficulty → hero, upgrades → difficulty with the same echelon (§40 У1); other screens
+        /// are handled by the app (BackNavigation).
+        /// </summary>
         public bool Back()
         {
             if (Screen == AppScreen.Hero) return Go(AppScreen.Hero, AppScreen.Menu);
+            if (Screen == AppScreen.Upgrades) return Go(AppScreen.Upgrades, AppScreen.Difficulty);
             return Go(AppScreen.Difficulty, AppScreen.Hero);
         }
+
+        /// <summary>Mechanics §40 У1: difficulty → upgrades.</summary>
+        public bool OpenUpgrades() => Go(AppScreen.Difficulty, AppScreen.Upgrades);
+
+        /// <summary>Mechanics §40 У2: cards of the upgrades screen for the current profile.</summary>
+        public List<MetaUpgradeRow> UpgradeRows() => MetaProgression.Rows(data, profile);
+
+        /// <summary>§38 М10: the currency pays for at least one next level («Доступны улучшения!»).</summary>
+        public bool UpgradesAvailable => MetaProgression.AnyAffordable(data, profile);
+
+        /// <summary>Mechanics §40 Г1: starting and innate ability and dash of a hero for its card.</summary>
+        public HeroInfo HeroInfo(string key) => App.HeroInfo.Of(data, key);
 
         public bool SelectEchelon(int echelon)
         {
