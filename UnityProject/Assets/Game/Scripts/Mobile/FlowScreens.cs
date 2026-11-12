@@ -61,7 +61,7 @@ namespace ThornThrone.Mobile
                 case AppScreen.Difficulty: ui.ShowDifficulty(flow); break;
                 case AppScreen.Run: ui.ShowRun(); break;
                 case AppScreen.Results: ui.ShowResults(flow); break;
-                default: ui.ShowMenu(); break;
+                default: ui.ShowMenu(flow); break;
             }
         }
 

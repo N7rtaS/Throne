@@ -137,12 +137,35 @@ namespace ThornThrone.Mobile
             ui.SettingStepped += StepSetting;
             // П11: smoke runs use the test profile and never touch the player's file.
             bool smokeRun = args.Contains("-thornSmoke");
+            bool flowRun = smokeRun && (args.Contains("-thornFlow") || args.Contains("-thornExpectFlow"));
+            // Mechanics §39 З7: -thornProfile=test|user; a smoke run never opens the user profile.
+            string profileArg = args.FirstOrDefault(a => a.StartsWith(ProfilePrefix))?.Substring(ProfilePrefix.Length);
+            if (profileArg != null && profileArg != "test" && profileArg != "user")
+            {
+                Debug.LogWarning("[Profile] unknown -thornProfile=" + profileArg + ", the default profile is used");
+                profileArg = null;
+            }
+            bool refuseUser = smokeRun && profileArg == "user";
+            testProfileSmoke = smokeRun && profileArg == "test" && !flowRun;
+            var kind = smokeRun || profileArg == "test" ? ProfileKind.Test : ProfileKind.User;
             // Ф13: -thornFlow starts from a new test profile (only test.save*; the player's file is not touched).
-            var profile = LoadSettings(smokeRun ? ProfileKind.Test : ProfileKind.User, smokeRun && args.Contains("-thornFlow"));
+            var profile = LoadSettings(kind, smokeRun && args.Contains("-thornFlow"));
             flow = new AppFlow(data, profile, saveProfile, () => (ulong)DateTime.UtcNow.Ticks + ++runCounter, PlayableHeroes);
+            // З7: the Ф13 check of -thornFlow/-thornExpectFlow needs the profile as the flow left it.
+            if (profileArg == "test" && !flowRun)
+            {
+                int added = flow.OpenAllEchelons();
+                Debug.Log($"THORN_PROFILE open_all added={added} saved={(added > 0 ? flow.LastSave.Status.ToString() : "-")}");
+            }
             screens = new FlowScreens(flow, ui);
             screens.ScreenChanged += FollowFlow;
             ShowMenu();
+            if (refuseUser)
+            {
+                Debug.Log("THORN_TEST_PROFILE ok=0 failed=user_profile_in_smoke");
+                Application.Quit(TestProfileExitCode);
+                return;
+            }
             if (smokeRun && !SmokeSettings(args)) return;
             if (args.Contains("-thornCloseup")) VisibleHalfHeight = 350;
             if (smokeRun) smoke = true;
@@ -152,8 +175,46 @@ namespace ThornThrone.Mobile
                 StartCoroutine(FlowSmoke(args.Contains("-thornFlow")));
                 return;
             }
-            if (smokeRun && !SmokeStart()) return;
+            if (smokeRun && !(testProfileSmoke ? TestProfileStart() : SmokeStart())) return;
             SmokeOptions(args);
+        }
+
+        private const string ProfilePrefix = "-thornProfile=";
+        /// <summary>Exit code of a failed -thornProfile smoke check (Mechanics §39 З8).</summary>
+        private const int TestProfileExitCode = 18;
+        /// <summary>-thornSmoke -thornProfile=test without -thornFlow/-thornExpectFlow.</summary>
+        private bool testProfileSmoke;
+
+        /// <summary>
+        /// Mechanics §39 З8: menu → hero → difficulty with every one of the 8 cards open and echelon 8 preselected
+        /// (Ф6), the run starts on it; THORN_TEST_PROFILE reports the check, a failure quits with code 18.
+        /// </summary>
+        private bool TestProfileStart()
+        {
+            var heroArg = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornHero="));
+            string smokeHero = heroArg != null ? heroArg.Substring("-thornHero=".Length) : PlayableHeroes[0];
+            string failed = null;
+            if (!(Press("Menu/Content/Play") && Press("Hero select/Content/" + smokeHero) && Press("Hero select/Content/Next")
+                  && flow.Screen == AppScreen.Difficulty)) failed = "screens";
+            int open = 0;
+            for (int n = 1; n <= flow.EchelonCount; n++)
+            {
+                var card = FindButton("Difficulty/Content/Echelon " + n);
+                if (card && card.interactable && card.gameObject.activeInHierarchy && !card.transform.Find("Lock").gameObject.activeSelf) open++;
+            }
+            if (failed == null && (open != 8 || flow.HighestUnlocked != 8)) failed = "unlocked";
+            if (failed == null && flow.Echelon != 8) failed = "preselected";
+            if (failed == null && !(Press("Difficulty/Content/Start") && run != null && run == flow.Run)) failed = "start";
+            int records = flow.TopRecords(Records.TableRows).Count;
+            if (failed != null)
+            {
+                Debug.Log($"THORN_TEST_PROFILE ok=0 failed={failed} unlocked={open} echelon={flow.Echelon} records={records}");
+                Application.Quit(TestProfileExitCode);
+                smoke = false;
+                return false;
+            }
+            Debug.Log($"THORN_TEST_PROFILE ok=1 unlocked={open} echelon={flow.Echelon} records={records}");
+            return true;
         }
 
         /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce, -thornShowChoice, -thornRecipe).</summary>
@@ -216,7 +277,7 @@ namespace ThornThrone.Mobile
                 profile = loaded.Profile;
                 status = loaded.Status;
                 foreach (var error in loaded.Errors) Debug.LogWarning("[Profile] " + error);
-                Debug.Log($"THORN_PROFILE kind={ProfileSchema.KindName(kind)} status={status} preserved={string.Join(";", loaded.PreservedFiles)}");
+                Debug.Log($"THORN_PROFILE kind={ProfileSchema.KindName(kind)} status={status} preserved={string.Join(";", loaded.PreservedFiles)} root={ProfileStorage.RootPath}");
                 if (reset && kind == ProfileKind.Test)
                 {
                     profile = Profile.CreateNew(kind);
@@ -558,7 +619,7 @@ namespace ThornThrone.Mobile
         /// DebugWin → results (1 result, echelon 2 open, a repeated record changes nothing) → «Сыграть ещё» → pause →
         /// «Завершить забег» → menu (still 1 result) → hero → difficulty (echelon 2 open), then the usual 30 s smoke run.
         /// Requirement 20 (-thornExpectFlow): checks the profile the previous run saved, then the smoke run.
-        /// -thornFlowShot=hero|difficulty|results takes the -thornScreenshot picture of that screen.
+        /// -thornFlowShot=menu|hero|difficulty|results takes the -thornScreenshot picture of that screen.
         /// </summary>
         private System.Collections.IEnumerator FlowSmoke(bool full)
         {
@@ -579,6 +640,7 @@ namespace ThornThrone.Mobile
             else
             {
                 FlowStep(flow.Screen == AppScreen.Menu && profile.Results.Count == 0 && flow.HighestUnlocked == 1, "new_profile");
+                if (flowFailed == null && shotStep == "menu") yield return Shot(shotPath);
                 FlowStep(Press("Menu/Content/Play") && flow.Screen == AppScreen.Hero, "play");
                 yield return null;
                 if (flowFailed == null && shotStep == "hero") yield return Shot(shotPath);

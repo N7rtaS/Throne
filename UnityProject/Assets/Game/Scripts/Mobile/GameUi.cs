@@ -56,6 +56,19 @@ namespace ThornThrone.Mobile
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
         private readonly TMP_Text bossText, resultText, resultAbilities, resultItems, rerollText, choiceTitle, settingsError, profileWarning, resultUnlocked, resultSaveError;
         private readonly Dictionary<string, string> difficultyNames;
+        /// <summary>Local records table of the main menu (Mechanics §39 З4).</summary>
+        private readonly TMP_Text menuRecords;
+        /// <summary>Hero cards in display order and their names.</summary>
+        public static readonly string[] HeroKeys = { "dragonus", "shen", "kez" };
+        public static readonly string[] HeroTitles = { "Драгонус", "Шен", "Кез" };
+
+        /// <summary>Russian name of a hero; an unknown key is shown as is.</summary>
+        public static string HeroTitle(string key)
+        {
+            int i = Array.IndexOf(HeroKeys, key);
+            return i >= 0 ? HeroTitles[i] : key;
+        }
+
         /// <summary>Hero cards in display order with their selection frames.</summary>
         private readonly List<(string Key, Button Button, GameObject Selected)> heroCards = new List<(string, Button, GameObject)>();
         /// <summary>Echelon cards 1..MaxEchelons (index n − 1).</summary>
@@ -67,7 +80,7 @@ namespace ThornThrone.Mobile
         {
             public Button Button;
             public Image Back;
-            public TMP_Text Text, Locked;
+            public TMP_Text Text, Locked, Record;
             public GameObject Lock, Selected;
         }
         private readonly TMP_Text[] settingValues = new TMP_Text[SettingsOptions.Count];
@@ -221,7 +234,10 @@ namespace ThornThrone.Mobile
             menu = Panel(safe, "Menu", new Color(.03f, .04f, .07f, 1));
             var menuContent = Content(menu);
             Label(menuContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -120), new Vector2(1200, 140), 96, TextAnchor.MiddleCenter).text = "Терновый трон";
-            Button(menuContent, "Play", new Vector2(.5f, .5f), new Vector2(-300, -40), new Vector2(600, 150), "Играть", 64, () => PlayRequested?.Invoke());
+            Button(menuContent, "Play", new Vector2(.5f, .5f), new Vector2(-860, -40), new Vector2(600, 150), "Играть", 64, () => PlayRequested?.Invoke());
+            // Mechanics §39 З4: local records instead of the client's friends leaderboard, right of «Играть».
+            menuRecords = Label(menuContent, "Records", new Vector2(.5f, .5f), new Vector2(-160, 250), new Vector2(1060, 470), 34, TextAnchor.UpperLeft);
+            menuRecords.text = RecordsText.Menu(null, HeroTitle);
             Button(menuContent, "Menu settings", new Vector2(.5f, 0), new Vector2(-260, 180), new Vector2(520, 110), "Настройки", 44, () => SettingsRequested?.Invoke());
             // П12: shown after a reset of a corrupt profile until the first run starts.
             profileWarning = Label(menuContent, "Profile warning", new Vector2(.5f, 0), new Vector2(-800, 160), new Vector2(1600, 110), 34, TextAnchor.MiddleCenter);
@@ -233,12 +249,10 @@ namespace ThornThrone.Mobile
             heroSelect = Panel(safe, "Hero select", new Color(.03f, .04f, .07f, 1));
             var heroContent = Content(heroSelect);
             Label(heroContent, "Title", new Vector2(.5f, 1), new Vector2(-600, -60), new Vector2(1200, 110), 72, TextAnchor.MiddleCenter).text = "Выберите героя";
-            string[] heroes = { "dragonus", "shen", "kez" };
-            string[] titles = { "Драгонус", "Шен", "Кез" };
-            for (int i = 0; i < heroes.Length; i++)
+            for (int i = 0; i < HeroKeys.Length; i++)
             {
-                string key = heroes[i];
-                var b = Button(heroContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 340), titles[i], 52, () => HeroSelected?.Invoke(key));
+                string key = HeroKeys[i];
+                var b = Button(heroContent, key, new Vector2(.5f, .5f), new Vector2(-840 + i * 580, -200), new Vector2(520, 340), HeroTitles[i], 52, () => HeroSelected?.Invoke(key));
                 heroCards.Add((key, b, Frame(b.transform)));
             }
             Button(heroContent, "Back", new Vector2(.5f, 0), new Vector2(-560, 40), new Vector2(520, 120), "Назад", 44, () => BackRequested?.Invoke());
@@ -287,6 +301,16 @@ namespace ThornThrone.Mobile
         // ------------------------------------------------------------------ screens
 
         public void ShowMenu() => Show(menu);
+
+        /// <summary>Mechanics §39 З4: the main menu with the local records table of the profile.</summary>
+        public void ShowMenu(AppFlow flow)
+        {
+            menuRecords.text = RecordsText.Menu(flow.TopRecords(Records.TableRows), HeroTitle);
+            Show(menu);
+        }
+
+        /// <summary>Text of the records table in the main menu.</summary>
+        public string MenuRecordsText => menuRecords.text;
 
         /// <summary>Settings over the current screen; hiding them shows that screen again (П10).</summary>
         public void ShowSettings(bool visible) => settings.SetActive(visible);
@@ -391,6 +415,8 @@ namespace ThornThrone.Mobile
                 card.Button.interactable = open;
                 card.Lock.SetActive(!open);
                 card.Locked.gameObject.SetActive(!open);
+                card.Record.text = open ? RecordsText.Card(flow.RecordOf(flow.Hero, n)) : "";
+                card.Record.gameObject.SetActive(card.Record.text.Length > 0);
                 card.Selected.SetActive(open && n == flow.Echelon);
             }
         }
@@ -806,6 +832,9 @@ namespace ThornThrone.Mobile
             card.Locked = Label(rect, "Locked", Vector2.zero, new Vector2(20, 56), new Vector2(400, 46), 34, TextAnchor.MiddleCenter);
             card.Locked.text = "НЕДОСТУПНО";
             card.Locked.color = new Color(.8f, .8f, .8f, 1);
+            // Mechanics §39 З5: the chosen hero's best score and victories on an open echelon, in place of «НЕДОСТУПНО».
+            card.Record = Label(rect, "Record", Vector2.zero, new Vector2(20, 56), new Vector2(400, 46), 28, TextAnchor.MiddleCenter);
+            card.Record.color = new Color(1, .82f, .4f, 1);
             var lockRect = Place(rect, "Lock", Vector2.one, new Vector2(-76, -76), new Vector2(60, 60));
             var lockImage = lockRect.gameObject.AddComponent<Image>();
             lockImage.sprite = LockSprite;

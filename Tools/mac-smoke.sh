@@ -2,7 +2,7 @@
 # Automatic macOS smoke check (design: .kiro/specs/build-readme-unity-tests-smoke/design.md §4).
 # Builds Builds/MacSmoke (MobileBuilder.BuildMacSmoke), runs the player with -thornSmoke in a 1280x720 window,
 # waits for it to quit and checks its log.
-# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [--flow] [--hud-alloc] [extra player args, e.g. -thornBoss]
+# Usage: Tools/mac-smoke.sh [--no-build] [--settings-restart] [--flow] [--hud-alloc] [--test-profile] [extra player args, e.g. -thornBoss]
 #        Tools/mac-smoke.sh --check-log FILE        (only the log check, step 4)
 #        Tools/mac-smoke.sh --check-flow-log FILE   (THORN_FLOW ok=1, then the log check)
 #        Tools/mac-smoke.sh --check-hud-alloc-log FILE (THORN_HUD_ALLOC with zero bytes, then the log check)
@@ -10,6 +10,10 @@
 #        Tools/mac-smoke.sh --check-force-log FILE KEY[,KEY…] (THORN_FORCE with hits of every key, then the log check)
 #        Tools/mac-smoke.sh --check-elite-log FILE   (the elite room's scepter was chosen, then the log check)
 #        Tools/mac-smoke.sh --check-recipe-log FILE KEY (THORN_RECIPE key=KEY combined=1, then the log check)
+#        Tools/mac-smoke.sh --check-test-profile-log FILE (THORN_TEST_PROFILE ok=1 unlocked=8 echelon=8, then the log check)
+# --test-profile: run 1 with -thornProfile=test (log mac-smoke-test-profile.log, every echelon open, the run on 8),
+#   run 2 with -thornProfile=user must quit with code 18 (mac-smoke-user-refused.log); user.save* of
+#   ~/Library/Application Support/<CFBundleIdentifier>/Saves are compared by SHA-256 before and after.
 # -thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): the hero has no abilities, so kills are not
 #   required; Imperia must spawn and attack (THORN_BOSS line), the rest of the log check is the same.
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
@@ -41,6 +45,10 @@
 #             17 -thornRecipe=KEY given and no THORN_RECIPE key=KEY line with combined=1: the components of recipe KEY were
 #                brought to the maximum and a treasure given, but the «Комбинация предметов» card was not offered or the
 #                recipe was not combined by the choice (design: .kiro/specs/recipes-item-ability-matrix, Mechanics §35).
+#             18 --test-profile / -thornProfile=test (design: .kiro/specs/unlocks-records-test-profile, Mechanics §39):
+#                no THORN_TEST_PROFILE ok=1 unlocked=8 echelon=8 line, the run did not use the test profile, the log's
+#                saves folder is not the one checked, -thornProfile=user was not refused with code 18, or a user.save*
+#                file of the player's saves folder appeared, changed or vanished.
 # -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"
@@ -171,6 +179,28 @@ check_recipe()
   fi
   print -r -- "$line"
 }
+# Test profile smoke (-thornProfile=test): all 8 echelons open, the run on echelon 8 (code 18 otherwise).
+check_test_profile()
+{
+  local file="$1" line
+  line="$(LC_ALL=C grep -a '^THORN_TEST_PROFILE ' "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ "$line" != "THORN_TEST_PROFILE ok=1 unlocked=8 echelon=8 "* ]]; then
+    echo "mac-smoke: test profile check failed: ${line:-no THORN_TEST_PROFILE line}, see $file" >&2
+    return 18
+  fi
+  if ! LC_ALL=C grep -aq '^THORN_PROFILE kind=test ' "$file"; then
+    echo "mac-smoke: the run did not use the test profile, see $file" >&2
+    return 18
+  fi
+  print -r -- "$line"
+}
+# SHA-256 of every user.save* file in a saves folder, one line per file (empty without files).
+user_saves_digest()
+{
+  local dir="$1" f
+  [[ -d "$dir" ]] || return 0
+  for f in "$dir"/user.save*(N); do shasum -a 256 "$f"; done
+}
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -209,6 +239,11 @@ if [[ "${1:-}" == "--check-recipe-log" ]]; then
   check_log "$2"
   exit $?
 fi
+if [[ "${1:-}" == "--check-test-profile-log" ]]; then
+  check_test_profile "${2:?log file}" || exit $?
+  check_log "$2"
+  exit $?
+fi
 if [[ "${1:-}" == "--check-hud-alloc-log" ]]; then
   check_hud_alloc "${2:?log file}" || exit $?
   check_log "$2"
@@ -219,9 +254,11 @@ build=1
 restart=0
 flow=0
 hud_alloc=0
+test_profile=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-build) build=0; shift ;;
+    --test-profile) test_profile=1; shift ;;
     --settings-restart) restart=1; shift ;;
     --flow) flow=1; shift ;;
     --hud-alloc) hud_alloc=1; shift ;;
@@ -254,7 +291,9 @@ if [[ -z "$exe" || ! -x "$player" ]]; then echo "mac-smoke: player not found in 
 
 mkdir -p "${log:h}"
 # One player run with the smoke checks of its log; returns the exit code of the script.
-run_once()
+# Runs the player with -thornSmoke and waits for it; its exit code goes to player_rc. Returns 3 on a timeout.
+player_rc=0
+launch_player()
 {
   local runlog="$1"; shift
   rm -f "$runlog"
@@ -270,8 +309,14 @@ run_once()
     echo "mac-smoke: player did not quit within ${timeout}s, see $runlog" >&2
     return 3
   fi
-  local rc=0
-  wait $pid || rc=$?
+  player_rc=0
+  wait $pid || player_rc=$?
+}
+run_once()
+{
+  local runlog="$1"; shift
+  launch_player "$runlog" "$@" || return $?
+  local rc=$player_rc
   if [[ " $* " == *" -thornInputScript="* ]]; then
     local script_line
     script_line="$(LC_ALL=C grep -a '^THORN_INPUT_SCRIPT ' "$runlog" | tail -n 1 || true)"
@@ -323,6 +368,9 @@ run_once()
     if [[ "$arg" == -thornElite ]]; then
       check_elite_scepter "$runlog" || return $?
     fi
+    if [[ "$arg" == -thornProfile=test ]]; then
+      check_test_profile "$runlog" || return $?
+    fi
     if [[ "$arg" == -thornRecipe=* ]]; then
       check_recipe "$runlog" "${arg#-thornRecipe=}" || return $?
     fi
@@ -348,6 +396,32 @@ if (( flow )); then
 fi
 if (( hud_alloc )); then
   run_once "${log%.log}-hud-alloc.log" -thornHudAlloc "$@" || exit $?
+  exit 0
+fi
+if (( test_profile )); then
+  # Mechanics §39 З9: the player's saves folder (persistentDataPath/Saves of the macOS player) must not change.
+  bundle="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Contents/Info.plist")"
+  saves="$HOME/Library/Application Support/$bundle/Saves"
+  before="$(user_saves_digest "$saves")"
+  run_once "${log%.log}-test-profile.log" -thornProfile=test "$@" || exit $?
+  if ! LC_ALL=C grep -aF "THORN_PROFILE kind=test " "${log%.log}-test-profile.log" | grep -aqF "root=$saves"; then
+    echo "mac-smoke: the saves folder of the log is not $saves, see ${log%.log}-test-profile.log" >&2
+    exit 18
+  fi
+  # A smoke run refuses the user profile with code 18 (Т4.4).
+  refused="${log%.log}-user-refused.log"
+  launch_player "$refused" -thornProfile=user "$@" || exit $?
+  if (( player_rc != 18 )) || ! LC_ALL=C grep -aq '^THORN_TEST_PROFILE ok=0 failed=user_profile_in_smoke' "$refused" \
+      || LC_ALL=C grep -aq '^THORN_PROFILE kind=user ' "$refused"; then
+    echo "mac-smoke: -thornProfile=user was not refused (exit $player_rc), see $refused" >&2
+    exit 18
+  fi
+  after="$(user_saves_digest "$saves")"
+  if [[ "$before" != "$after" ]]; then
+    echo "mac-smoke: user.save* changed in $saves" >&2
+    exit 18
+  fi
+  echo "mac-smoke: user.save* unchanged in $saves ($(print -r -- "$before" | grep -c . || true) files)"
   exit 0
 fi
 run_once "$log" "$@" || exit $?

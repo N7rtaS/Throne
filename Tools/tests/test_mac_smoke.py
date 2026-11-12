@@ -175,5 +175,22 @@ class MacSmokeEliteCheckTests(unittest.TestCase):
         self.assertEqual(check_elite("elite-no-scepter.log").returncode, 15)
     def test_absent_log_exits_fifteen(self):
         self.assertEqual(check_elite("absent.log").returncode, 15)
+def check_test_profile(name):
+    return subprocess.run(["zsh", SCRIPT, "--check-test-profile-log", os.path.join(LOGS, name)],
+                          capture_output=True, text=True, timeout=30)
+class MacSmokeTestProfileCheckTests(unittest.TestCase):
+    """-thornProfile=test (design: .kiro/specs/unlocks-records-test-profile, Mechanics §39 З8): code 18 unless every echelon is open."""
+    def test_all_echelons_open_exits_zero_and_prints_the_line(self):
+        result = check_test_profile("test-profile-ok.log")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_TEST_PROFILE ok=1 unlocked=8 echelon=8", result.stdout)
+    def test_failed_check_exits_eighteen(self):
+        self.assertEqual(check_test_profile("test-profile-locked.log").returncode, 18)
+    def test_user_profile_exits_eighteen(self):
+        self.assertEqual(check_test_profile("test-profile-user.log").returncode, 18)
+    def test_absent_log_exits_eighteen(self):
+        self.assertEqual(check_test_profile("absent.log").returncode, 18)
+    def test_usual_check_still_requires_kills(self):
+        self.assertEqual(check_test_profile("test-profile-no-kills.log").returncode, 5)
 if __name__ == "__main__":
     unittest.main()

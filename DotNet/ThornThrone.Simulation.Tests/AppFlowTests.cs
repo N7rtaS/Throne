@@ -14,7 +14,7 @@ namespace ThornThrone.Simulation.Tests
         private static readonly string[] Playable = { "dragonus" };
 
         /// <summary>Flow over a test profile in a <see cref="SaveStore"/> on a fake file system; counts saves.</summary>
-        private sealed class Harness
+        internal sealed class Harness
         {
             public readonly FakeFileSystem Files = new FakeFileSystem();
             public readonly SaveStore Store;

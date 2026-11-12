@@ -176,6 +176,60 @@ namespace ThornThrone.Mobile.Tests
         }
 
         [Test]
+        public void MenuShowsRecords()
+        {
+            Build();
+            var table = Root.Find("Menu/Content/Records").GetComponent<TMP_Text>();
+            Assert.That(table.text, Is.EqualTo(RecordsText.Menu(null, GameUi.HeroTitle)));
+            Assert.That(ui.MenuRecordsText, Does.Contain(RecordsText.Empty));
+            Press("Menu/Content/Play");
+            Press("Hero select/Content/kez");
+            Press("Hero select/Content/Next");
+            Press("Difficulty/Content/Start");
+            flow.Run.DebugWin();
+            screens.Finish();
+            Press("Results/Content/Menu");
+            AssertOnly("Menu");
+            Assert.That(table.text, Is.EqualTo(RecordsText.Menu(flow.TopRecords(Records.TableRows), GameUi.HeroTitle)));
+            Assert.That(table.text, Does.Contain("\n1. Кез, эшелон 1, победа"));
+            Assert.That(table.text, Does.Not.Contain(RecordsText.Empty));
+        }
+
+        [Test]
+        public void EchelonCardShowsHeroRecord()
+        {
+            Build(2);
+            profile.Results.Add(new RunResult
+            {
+                Id = "a", RulesVersion = ProfileSchema.RulesVersion, Hero = "dragonus", Difficulty = AppFlow.UnlockId(1),
+                Victory = true, DurationSeconds = 600, Level = 9, Score = 330000,
+            });
+            profile.Results.Add(new RunResult
+            {
+                Id = "b", RulesVersion = ProfileSchema.RulesVersion, Hero = "kez", Difficulty = AppFlow.UnlockId(2),
+                Victory = false, DurationSeconds = 60, Level = 2, Score = 50,
+            });
+            flow.Play();
+            flow.Next();
+            screens.Show();
+            Transform Line(int n) => Root.Find($"Difficulty/Content/Echelon {n}/Record");
+            Assert.That(Line(1).gameObject.activeSelf, Is.True);
+            Assert.That(Line(1).GetComponent<TMP_Text>().text, Is.EqualTo("Рекорд 330 000, побед 1"));
+            Assert.That(Line(2).gameObject.activeSelf, Is.False, "Dragonus has not played echelon 2");
+            for (int n = 3; n <= 8; n++)
+            {
+                Assert.That(Line(n).gameObject.activeSelf, Is.False, "a locked card shows no record " + n);
+                Assert.That(Root.Find($"Difficulty/Content/Echelon {n}/Locked").gameObject.activeSelf, Is.True);
+            }
+            flow.Back();
+            flow.SelectHero("kez");
+            flow.Next();
+            screens.Show();
+            Assert.That(Line(1).gameObject.activeSelf, Is.False);
+            Assert.That(Line(2).GetComponent<TMP_Text>().text, Is.EqualTo("Рекорд 50, побед 0"));
+        }
+
+        [Test]
         public void PlayableHeroesCanBePressed()
         {
             Build();

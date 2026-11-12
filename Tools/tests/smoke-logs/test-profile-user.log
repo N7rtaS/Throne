@@ -1,0 +1,4 @@
+Initialize engine version: 6000.6.7f1 (b22767f04f04)
+THORN_PROFILE kind=user status=Loaded preserved= root=/Users/x/Library/Application Support/com.example/Saves
+THORN_TEST_PROFILE ok=1 unlocked=8 echelon=8 records=0
+THORN_MOBILE_SMOKE hero=dragonus time=30.0 kills=30 level=1 hp=80/80 enemies=6 diagnostics=1

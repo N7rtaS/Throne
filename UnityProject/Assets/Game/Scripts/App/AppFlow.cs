@@ -256,6 +256,28 @@ namespace ThornThrone.App
             return result;
         }
 
+        /// <summary>Mechanics §39 З3: results of <paramref name="hero"/> on <paramref name="echelon"/> in this profile.</summary>
+        public HeroEchelonRecord RecordOf(string hero, int echelon) => Records.Of(data, profile, hero, echelon);
+
+        /// <summary>Mechanics §39 З4: the local records table, best scores first.</summary>
+        public List<RecordRow> TopRecords(int count) => Records.Top(data, profile, count);
+
+        /// <summary>
+        /// Mechanics §39 З6: the test profile gets every echelon 2..<see cref="EchelonCount"/> and is saved once if
+        /// something was added; results, currency, upgrades and the journal stay. Returns the number of echelons added.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">The profile is not the test one; nothing changes.</exception>
+        public int OpenAllEchelons()
+        {
+            if (profile.Kind != ProfileKind.Test)
+                throw new InvalidOperationException("Only the test profile opens every echelon, not " + ProfileSchema.KindName(profile.Kind));
+            int added = 0;
+            for (int n = 2; n <= EchelonCount; n++)
+                if (profile.Unlocks.Add(UnlockId(n))) added++;
+            if (added > 0) LastSave = save(profile);
+            return added;
+        }
+
         /// <summary>Ф11: saves again after a failed save; false if there is nothing to retry.</summary>
         public bool RetryFailedSave()
         {
