@@ -15,6 +15,9 @@ namespace ThornThrone.Mobile.Tests
         private const string SourceData = "Assets/Game/Data/Source";
         private static GameData data;
 
+        /// <summary>The imported data, shared with other fixtures (RecipeNoticeTests).</summary>
+        internal static GameData LoadData() => Data();
+
         private static GameData Data()
         {
             if (data != null) return data;

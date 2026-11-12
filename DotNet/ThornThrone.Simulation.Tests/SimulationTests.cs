@@ -207,6 +207,8 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(run.Build.Global[Attr.MovementSpeed], Is.EqualTo(280 + 3 * 25));
             Assert.That(run.ForceUpgrade("yasha"), Is.False, "max level 3");
             for (int i = 0; i < 3; i++) Assert.That(run.ForceUpgrade("kaya"), Is.True);
+            Assert.That(run.Build.Rank("yasha_and_kaya"), Is.EqualTo(0), "combined only by its card (Mechanics §35 Р1)");
+            Assert.That(run.ForceCombine("yasha_and_kaya"), Is.True);
             Assert.That(run.Build.Rank("yasha_and_kaya"), Is.EqualTo(1));
             Assert.That(run.Build.Rank("yasha"), Is.EqualTo(0));
             Assert.That(run.Build.Rank("kaya"), Is.EqualTo(0));

@@ -156,7 +156,7 @@ namespace ThornThrone.Mobile
             SmokeOptions(args);
         }
 
-        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce, -thornShowChoice).</summary>
+        /// <summary>Smoke options that act on the started run (-thornShowSettings, -thornPauseShot, -thornHudAlloc, -thornInputScript, -thornShowcase, -thornBoss, -thornElite, -thornForce, -thornShowChoice, -thornRecipe).</summary>
         private void SmokeOptions(string[] args)
         {
             showSettings = smoke && args.Contains("-thornShowSettings");
@@ -188,6 +188,13 @@ namespace ThornThrone.Mobile
                 force = new SmokeForce();
                 if (!force.Apply(run, SmokeForce.Parse(forceArg))) Debug.LogWarning("[Smoke] -thornForce: an upgrade was refused: " + forceArg);
                 force.KeepOnlyForced(run);
+            }
+            var recipeArg = args.FirstOrDefault(a => a.StartsWith(SmokeRecipe.Prefix));
+            if (smoke && recipeArg != null)
+            {
+                recipeSmoke = new SmokeRecipe(recipeArg.Substring(SmokeRecipe.Prefix.Length));
+                if (!recipeSmoke.Prepare(run)) Debug.LogWarning("[Smoke] -thornRecipe: the components were refused: " + recipeArg);
+                screenshotTime = 1.5f; // the notice lasts 3 s from the choice at the start (Mechanics §35 Р6)
             }
             var drawMode = args.FirstOrDefault(a => a.StartsWith("-thornDrawMode="));
             if (drawMode != null) WorldRenderer.DebugDrawMode = int.Parse(drawMode.Substring("-thornDrawMode=".Length));
@@ -292,6 +299,18 @@ namespace ThornThrone.Mobile
         /// <summary>-thornHudAlloc: allocations of the HUD after warm-up, logged as THORN_HUD_ALLOC at the end.</summary>
         private HudAllocMeter hudMeter;
 
+        /// <summary>RecipeCombined of this frame: the HUD notice «Собран предмет: …» (Mechanics §35 Р6) and the -thornRecipe count.</summary>
+        private void NoticeRecipes()
+        {
+            for (int i = 0; i < run.EventCount; i++)
+            {
+                var e = run.Events[i];
+                if (e.Kind == SimEventKind.RecipeCombined && run.Data.PowerUpsById.TryGetValue((int)e.Value, out var recipe))
+                    ui.Notice.Show(run, ui.PowerUpName(recipe));
+            }
+            recipeSmoke?.Count(run);
+        }
+
         /// <summary>-thornBoss: Imperia's attacks (missiles, burning ground, portals, rays) of this frame.</summary>
         private void CountBossAttacks()
         {
@@ -345,7 +364,7 @@ namespace ThornThrone.Mobile
             {
                 if (HoldForChoiceShot()) return;
                 LogAghanimChoice();
-                run.Choose(0);
+                run.Choose(recipeSmoke != null ? recipeSmoke.Choose(run) : 0);
                 AfterChoice();
             }
             // The -thornFlow script drives its own short runs; the 30 s smoke run starts after it.
@@ -363,6 +382,7 @@ namespace ThornThrone.Mobile
             if (eliteSmoke) FinishEliteFight();
             // The room's scepter flies to the standing hero (it may lie where the hero cannot walk).
             if (eliteSmoke) foreach (var p in run.Pickups) if (p.Active && p.Def.Key == "scepter") p.Attracted = true;
+            if (recipeSmoke != null) foreach (var p in run.Pickups) if (p.Active && p.Def.Key == SmokeRecipe.Treasure) p.Attracted = true;
             var shot = Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("-thornScreenshot="));
             if (shot != null && run.Time >= screenshotTime && !screenshotTaken)
             {
@@ -399,6 +419,7 @@ namespace ThornThrone.Mobile
                           $"bossHp={(spawned ? run.Boss.Health : 0):0}/{(spawned ? run.Boss.MaxHealth : 0):0} time={run.Time:0.0}");
             }
             if (force != null) Debug.Log(force.Report(run));
+            if (recipeSmoke != null) Debug.Log(recipeSmoke.Report());
             if (eliteSmoke) Debug.Log($"THORN_ELITE_SCEPTER ok={(eliteScepterChosen ? 1 : 0)} time={run.Time:0.0}");
             Debug.Log($"THORN_MOBILE_SMOKE hero={run.Hero.Key} time={run.Time:0.0} kills={run.Kills} level={run.HeroLevel} " +
                       $"hp={run.Health:0}/{run.MaxHealth:0} enemies={run.ActiveEnemies} diagnostics={run.Diagnostics.Messages.Count}");
@@ -479,6 +500,8 @@ namespace ThornThrone.Mobile
         private bool flowSmoke;
         /// <summary>Upgrades given by -thornForce=KEY[,KEY…] (Mechanics §28 Р11); null without the option.</summary>
         private SmokeForce force;
+        /// <summary>-thornRecipe=KEY (Mechanics §35); null without the option.</summary>
+        private SmokeRecipe recipeSmoke;
         /// <summary>Screens the flow went through during -thornFlow (FollowFlow appends).</summary>
         private List<string> flowScreens;
         private string flowFailed;
@@ -918,6 +941,7 @@ namespace ThornThrone.Mobile
                 world.Consume(run);
                 inputScript?.CountEvents(run);
                 if (bossSmoke) CountBossAttacks();
+                NoticeRecipes();
                 run.ClearEvents();
                 if (run.Choosing) { state = State.Choosing; ShowChoices(); }
                 if (run.Finished) screens.Finish();

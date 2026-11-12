@@ -3,6 +3,7 @@ namespace ThornThrone.Simulation
     /// <summary>
     /// Fallback reward of an empty choice list (Mechanics §33 Р8–Р9, Differences A19): the powerup «gold» gives
     /// m_nGoldAmount of the pickup «gold_bag» (owner's decision В3); no heal. The amount is a design decision (Р).
+    /// Also the recipe card's event and debug combine (Mechanics §35).
     /// </summary>
     public sealed partial class Run
     {
@@ -24,5 +25,26 @@ namespace ThornThrone.Simulation
         }
 
         private void GrantFallbackReward() => Gold += FallbackGold;
+
+        // ------------------------------------------------------------------ recipes (Mechanics §35)
+
+        /// <summary>The recipe of card <paramref name="index"/> when it is a «Комбинация предметов», else null.</summary>
+        private PowerUpDef RecipeCard(int index) =>
+            index >= 0 && index < Build.OfferCount && Build.Offers[index].Kind == OfferKind.Recipe ? Build.Choices[index] : null;
+
+        /// <summary>Event <see cref="SimEventKind.RecipeCombined"/> for presentation (Р6): Value the recipe's powerup ID.</summary>
+        private void EmitCombined(PowerUpDef recipe)
+        {
+            if (recipe != null) Emit(SimEventKind.RecipeCombined, -1, HeroPosition, recipe.Id);
+        }
+
+        /// <summary>Combines a ready recipe without a choice (tests, smoke -thornRecipe); false when it is not ready (Р1).</summary>
+        public bool ForceCombine(string key)
+        {
+            if (!Data.PowerUps.TryGetValue(key, out var def) || !Build.Combine(def)) return false;
+            OnBuildChanged();
+            EmitCombined(def);
+            return true;
+        }
     }
 }

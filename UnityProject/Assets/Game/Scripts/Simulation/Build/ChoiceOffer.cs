@@ -13,6 +13,8 @@ namespace ThornThrone.Simulation
         Scepter,
         /// <summary>Aghanim's Shard for an owned ability (Mechanics §34).</summary>
         Shard,
+        /// <summary>A recipe whose components are all at m_nMaxLevel: «Комбинация предметов» (Mechanics §35 Р1).</summary>
+        Recipe,
     }
 
     /// <summary>What opened the choice: a level, an item treasure, a scepter or a shard (Mechanics §34 Р3).</summary>

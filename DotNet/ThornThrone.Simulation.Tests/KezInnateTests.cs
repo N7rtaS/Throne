@@ -334,8 +334,9 @@ namespace ThornThrone.Simulation.Tests
                 Assert.Multiple(() =>
                 {
                     Assert.That(e.Status.VulnerableMultiplier, Is.EqualTo(Base(run, Attr.Id("VulnerabilityDamagePercent"))).Within(1e-5), "×2");
-                    Assert.That(e.Status.VulnerableStun, Is.EqualTo(Base(run, Attr.Id("VulnerabilityStunOnHitDuration")) + relic).Within(1e-5), $"1 + {relic} s");
-                    Assert.That(e.Status.VulnerableTime, Is.EqualTo(Base(run, Attr.Id("VulnerabilityDuration")) + relic).Within(1e-4), $"5.5 + {relic} s");
+                    // No DurationEffect in kez_innate: Timeless Relic does not lengthen the mark (owner's decision В4, Mechanics §35 Р8).
+                    Assert.That(e.Status.VulnerableStun, Is.EqualTo(Base(run, Attr.Id("VulnerabilityStunOnHitDuration"))).Within(1e-5), $"1 s, relic {relic}");
+                    Assert.That(e.Status.VulnerableTime, Is.EqualTo(Base(run, Attr.Id("VulnerabilityDuration"))).Within(1e-4), $"5.5 s, relic {relic}");
                 });
             }
         }

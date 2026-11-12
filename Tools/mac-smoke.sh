@@ -9,6 +9,7 @@
 #        Tools/mac-smoke.sh --check-boss-log FILE   (THORN_BOSS spawned=1 attacks>0, then the log check without kills)
 #        Tools/mac-smoke.sh --check-force-log FILE KEY[,KEY…] (THORN_FORCE with hits of every key, then the log check)
 #        Tools/mac-smoke.sh --check-elite-log FILE   (the elite room's scepter was chosen, then the log check)
+#        Tools/mac-smoke.sh --check-recipe-log FILE KEY (THORN_RECIPE key=KEY combined=1, then the log check)
 # -thornBoss (design: .kiro/specs/thorn-boss-smoke-fix/design.md): the hero has no abilities, so kills are not
 #   required; Imperia must spawn and attack (THORN_BOSS line), the rest of the log check is the same.
 # --settings-restart (design: .kiro/specs/settings-screen/design.md §5): run 1 changes settings (-thornSettings),
@@ -37,6 +38,9 @@
 #                elite room's scepter was not dropped, collected or chosen (design: .kiro/specs/aghanim-upgrades/design.md).
 #             16 -thornShowChoice=SOURCE given and no THORN_CHOICE_SHOT line: the choice of SOURCE (level, item, scepter,
 #                shard) did not open or was not shot (the picture goes to -thornScreenshot, see Tools/mac-screenshot.sh).
+#             17 -thornRecipe=KEY given and no THORN_RECIPE key=KEY line with combined=1: the components of recipe KEY were
+#                brought to the maximum and a treasure given, but the «Комбинация предметов» card was not offered or the
+#                recipe was not combined by the choice (design: .kiro/specs/recipes-item-ability-matrix, Mechanics §35).
 # -thornHero=KEY (e.g. -thornHero=kez): the smoke run picks this hero on the hero screen instead of Dragonus.
 set -euo pipefail
 root="${0:A:h:h}"
@@ -156,6 +160,17 @@ check_elite_scepter()
   fi
   print -r -- "$choice"
 }
+# Recipe smoke (-thornRecipe=KEY): the recipe was combined through its card (code 17 otherwise).
+check_recipe()
+{
+  local file="$1" key="$2" line
+  line="$(LC_ALL=C grep -a "^THORN_RECIPE key=${key} " "$file" 2> /dev/null | tail -n 1 || true)"
+  if [[ "$line" != "THORN_RECIPE key=${key} offered=1 combined=1"* ]]; then
+    echo "mac-smoke: recipe ${key} was not combined by its card: ${line:-no THORN_RECIPE line}, see $file" >&2
+    return 17
+  fi
+  print -r -- "$line"
+}
 # Batchmode cannot open a project that an Editor already has open.
 editor_lock()
 {
@@ -186,6 +201,11 @@ if [[ "${1:-}" == "--check-force-log" ]]; then
 fi
 if [[ "${1:-}" == "--check-elite-log" ]]; then
   check_elite_scepter "${2:?log file}" || exit $?
+  check_log "$2"
+  exit $?
+fi
+if [[ "${1:-}" == "--check-recipe-log" ]]; then
+  check_recipe "${2:?log file}" "${3:?recipe key}" || exit $?
   check_log "$2"
   exit $?
 fi
@@ -302,6 +322,9 @@ run_once()
     fi
     if [[ "$arg" == -thornElite ]]; then
       check_elite_scepter "$runlog" || return $?
+    fi
+    if [[ "$arg" == -thornRecipe=* ]]; then
+      check_recipe "$runlog" "${arg#-thornRecipe=}" || return $?
     fi
     if [[ "$arg" == -thornShowChoice=* ]] && ! LC_ALL=C grep -aq "^THORN_CHOICE_SHOT source=" "$runlog"; then
       echo "mac-smoke: the ${arg#-thornShowChoice=} choice was not shot, see $runlog" >&2

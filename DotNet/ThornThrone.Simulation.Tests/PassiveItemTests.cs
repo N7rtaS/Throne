@@ -69,15 +69,15 @@ namespace ThornThrone.Simulation.Tests
 
         private static int MaxLevel(PowerUpDef def) => (int)def.Raw["m_nMaxLevel"];
 
-        /// <summary>Brings a powerup to its maximum rank; a recipe is formed from its components (Mechanics §12.4).</summary>
+        /// <summary>Brings a powerup to its maximum rank; a recipe is combined from its components at maximum (Mechanics §35 Р1).</summary>
         private static void Complete(Run run, PowerUpDef def)
         {
             if (def.IsRecipe)
             {
                 foreach (int id in def.RecipeItems) Complete(run, run.Data.PowerUpsById[id]);
+                Assert.That(run.ForceCombine(def.Key), Is.True, def.Key + " combined");
                 return;
             }
-            // The last rank may form a recipe and consume the item, so the ranks are counted, not read back.
             for (int rank = run.Build.Rank(def.Key) + 1; rank <= MaxLevel(def); rank++)
                 Assert.That(run.ForceUpgrade(def.Key), Is.True, $"{def.Key} rank {rank}");
         }
@@ -106,10 +106,30 @@ namespace ThornThrone.Simulation.Tests
             var run = TestData.NewRun();
             Assert.That(run.Build.CanUpgrade(data.PowerUps["pile_of_coal"]), Is.False, "pile_of_coal is not rolled");
             foreach (var key in Passives) Assert.That(run.Build.CanUpgrade(data.PowerUps[key]), Is.True, key);
-            foreach (var key in Recipes) Assert.That(run.Build.CanUpgrade(data.PowerUps[key]), Is.False, $"{key}: recipes form by themselves");
+            foreach (var key in Recipes)
+            {
+                Assert.That(run.Build.CanUpgrade(data.PowerUps[key]), Is.False, $"{key}: a recipe has no ranks");
+                Assert.That(run.Build.CanCombine(data.PowerUps[key]), Is.False, $"{key}: no components");
+            }
         }
 
-        [TestCaseSource(nameof(Passives))]
+        // [TestCase] with the keys (not TestCaseSource): tools/audit.py links a test to a powerup by its key literal.
+        [TestCase("yasha")]
+        [TestCase("blade_mail")]
+        [TestCase("kaya")]
+        [TestCase("crystalys")]
+        [TestCase("reaver")]
+        [TestCase("ring_of_tarrasque")]
+        [TestCase("tome_of_knowledge")]
+        [TestCase("octarine_core")]
+        [TestCase("bloodstone")]
+        [TestCase("world_chasm_artifact")]
+        [TestCase("apex")]
+        [TestCase("echo_stone")]
+        [TestCase("sange")]
+        [TestCase("phylactery")]
+        [TestCase("demon_edge")]
+        [TestCase("timeless_relic")]
         public void PassiveAtRankOneAndMaxAddsDataValues(string key)
         {
             var run = Quiet();
@@ -123,7 +143,15 @@ namespace ThornThrone.Simulation.Tests
             AssertGain(run, before, Expected(def, max), $"{key} rank {max}");
         }
 
-        [TestCaseSource(nameof(Recipes))]
+        [TestCase("sange_and_yasha")]
+        [TestCase("kaya_and_sange")]
+        [TestCase("yasha_and_kaya")]
+        [TestCase("heart_of_tarrasque")]
+        [TestCase("daedalus")]
+        [TestCase("khanda")]
+        [TestCase("sny_trident")]
+        [TestCase("kns_trident")]
+        [TestCase("ynk_trident")]
         public void RecipeGivesOnlyItsOwnBonuses(string key)
         {
             var run = Quiet();
@@ -138,6 +166,26 @@ namespace ThornThrone.Simulation.Tests
                 Assert.That(run.Build.CanUpgrade(component), Is.False, $"{component.Key} is not offered again");
             }
             AssertGain(run, Snapshot(reference), Expected(recipe, 1), key);
+        }
+
+        [TestCase("skywrath_mage_innate")]
+        public void DragonusInnateAddsTargetCountAndLowersMaxHealth(string key)
+        {
+            var run = Quiet();
+            var innate = Def(key);
+            Assert.That(innate.IsInnate, Is.True);
+            Assert.That(run.Hero.InnatePowerUps, Does.Contain(innate.Id), "Dragonus has it in m_vecInnatePowerUps");
+            var gain = new float[Attr.Capacity];
+            AddRaw(gain, innate.Raw["m_vecMinorUpgradeChoices"][0]["m_vecGlobalUpgradeAttributes"], 1);
+            Assert.That(gain[Attr.TargetCount], Is.EqualTo(1), "TargetCount +1 (Research/Json)");
+            Assert.That(gain[Attr.MaxHP], Is.EqualTo(-20), "MaxHP −20 (Research/Json)");
+            float baseHp = 0;
+            foreach (var a in (JArray)run.Data.Heroes["dragonus"].Raw["m_vecBaseAttributes"])
+                if ((string)a["m_eType"] == "k_eSurvivorsAttribute_MaxHP") baseHp = (float)a["m_flValue"];
+            Assert.That(run.Build.Global[Attr.TargetCount], Is.EqualTo(gain[Attr.TargetCount]));
+            Assert.That(run.MaxHealth, Is.EqualTo(baseHp + gain[Attr.MaxHP]).Within(1e-4));
+            var bolt = (ArcaneBolt)AbilityFactory.Create(Owned(run, "arcane_bolt"), run);
+            Assert.That(bolt.Volley(run), Is.EqualTo(2), "Arcane Bolt TargetCount 1 + innate 1");
         }
 
         [Test]

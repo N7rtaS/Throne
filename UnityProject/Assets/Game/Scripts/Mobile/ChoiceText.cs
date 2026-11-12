@@ -52,6 +52,23 @@ namespace ThornThrone.Mobile
         public const string Scepter = "Скипетр Аганима";
         /// <summary>The Russian localization keeps «Aghanim's Shard» in English; text of the project (Р5).</summary>
         public const string Shard = "Осколок Аганима";
+        /// <summary>DOTA_Survivors_CombinedItem: type line of a recipe card (Mechanics §12.4, §35 Р5).</summary>
+        public const string CombinedItem = "Комбинация предметов";
+        /// <summary>DOTA_Survivors_CombinedItemTooltip, followed by the component names.</summary>
+        public const string CombinedItemTooltip = "Сочетает:";
+
+        /// <summary>«Сочетает: A, B» of a recipe card; empty without names.</summary>
+        public static string Combines(IReadOnlyList<string> names)
+        {
+            if (names == null || names.Count == 0) return "";
+            var sb = new StringBuilder(CombinedItemTooltip).Append(' ');
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (i > 0) sb.Append(", ");
+                sb.Append(names[i]);
+            }
+            return sb.ToString();
+        }
 
         /// <summary>Rarity line; the data has only RARITY_COMMON, its Russian name is a design decision (Р12).</summary>
         public static string Rarity(UpgradeRarity rarity) => "Обычное";
@@ -84,6 +101,7 @@ namespace ThornThrone.Mobile
                 case OfferKind.Minor: return MaxLevel;
                 case OfferKind.Scepter: return Scepter;
                 case OfferKind.Shard: return Shard;
+                case OfferKind.Recipe: return CombinedItem;
                 default: return $"Уровень {offer.Rank} -> <b>{offer.NextRank}</b> / {offer.Def.MaxLevel}";
             }
         }
@@ -93,7 +111,9 @@ namespace ThornThrone.Mobile
         /// Localized description, shown on a new active ability (Т5.5); on a scepter or shard card the Aghanim text with
         /// its numbers (<see cref="Substitute"/>, <see cref="ShardText"/>).
         /// </param>
-        public static string Format(ChoiceOffer offer, string name, string description, IReadOnlyDictionary<string, JObject> attributes)
+        /// <param name="combines">«Сочетает: …» line of a recipe card (<see cref="Combines"/>), shown before the changes.</param>
+        public static string Format(ChoiceOffer offer, string name, string description, IReadOnlyDictionary<string, JObject> attributes,
+            string combines = null)
         {
             var sb = new StringBuilder();
             sb.Append("<b>").Append(name).Append("</b>\n");
@@ -105,6 +125,7 @@ namespace ThornThrone.Mobile
             sb.Append('\n');
             bool aghanim = offer.Kind == OfferKind.Scepter || offer.Kind == OfferKind.Shard;
             if (aghanim) sb.Append(description).Append('\n');
+            if (!string.IsNullOrEmpty(combines)) sb.Append(combines).Append('\n');
             if (offer.Kind == OfferKind.New && offer.Def.IsActive && offer.ChangeCount == 0)
             {
                 sb.Append(description);

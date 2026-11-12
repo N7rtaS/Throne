@@ -96,6 +96,8 @@ namespace ThornThrone.Simulation
         // Swashbuckle, Stampede, Track (Mechanics §30).
         public static readonly int Directions = Id("Directions");
         public static readonly int Duration = Id("Duration");
+        /// <summary>Marker 1 of abilities whose durations DurationExtension lengthens (no definition in the data; Mechanics §35 Р8).</summary>
+        public static readonly int DurationEffect = Id("DurationEffect");
         public static readonly int StampedeMovementSpeed = Id("StampedeMovementSpeed");
         public static readonly int IncomingDamageAmplification = Id("IncomingDamageAmplification");
         public static readonly int IncomingDamageAmplificationDuration = Id("IncomingDamageAmplificationDuration");

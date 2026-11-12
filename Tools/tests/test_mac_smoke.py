@@ -145,6 +145,23 @@ class MacSmokeForceCheckTests(unittest.TestCase):
         result = check_force("force-aghanim.log", "arcane_bolt+scepter,magic_missile+shard")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(check_force("force-aghanim.log", "arcane_bolt+shard").returncode, 14)
+def check_recipe(name, key):
+    return subprocess.run(["zsh", SCRIPT, "--check-recipe-log", os.path.join(LOGS, name), key],
+                          capture_output=True, text=True, timeout=30)
+class MacSmokeRecipeCheckTests(unittest.TestCase):
+    """-thornRecipe=KEY (design: .kiro/specs/recipes-item-ability-matrix §2.4, Mechanics §35): code 17 unless combined by the card."""
+    def test_combined_recipe_exits_zero_and_prints_the_line(self):
+        result = check_recipe("recipe-ok.log", "yasha_and_kaya")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("THORN_RECIPE key=yasha_and_kaya offered=1 combined=1", result.stdout)
+    def test_not_combined_exits_seventeen(self):
+        self.assertEqual(check_recipe("recipe-not-combined.log", "yasha_and_kaya").returncode, 17)
+    def test_other_key_exits_seventeen(self):
+        self.assertEqual(check_recipe("recipe-ok.log", "sny_trident").returncode, 17)
+    def test_absent_log_exits_seventeen(self):
+        self.assertEqual(check_recipe("absent.log", "yasha_and_kaya").returncode, 17)
+    def test_usual_check_still_requires_kills(self):
+        self.assertEqual(check_recipe("recipe-no-kills.log", "yasha_and_kaya").returncode, 5)
 def check_elite(name):
     return subprocess.run(["zsh", SCRIPT, "--check-elite-log", os.path.join(LOGS, name)],
                           capture_output=True, text=True, timeout=30)

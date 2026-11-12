@@ -61,9 +61,11 @@ class SimulationCoverageTests(unittest.TestCase):
                          {"CSurvivorsPowerUpDefinition_InstantAttack": {"STRONGEST_TARGET_IN_RANGE", "RANDOM_TARGET_IN_RANGE"},
                           "CSurvivorsPowerUpDefinition_ProjectileAttack": {"STRONGEST_TARGET_IN_RANGE"}})
 
-    def test_supported_hero_attributes_has_thirty_four_entries(self):
-        # 20 before Task 18 plus 14 attributes of passive items (Mechanics §25).
-        self.assertEqual(len(self.coverage.hero_attributes), 34)
+    def test_supported_hero_attributes_has_thirty_six_entries(self):
+        # 20 before Task 18, 14 attributes of passive items (Mechanics §25), 2 of Shen's innate (Task 28, §35).
+        self.assertEqual(len(self.coverage.hero_attributes), 36)
+        self.assertIn("MagicDamageWeakensPhysicalDamageResistance_Percentage", self.coverage.hero_attributes)
+        self.assertIn("MagicDamageWeakensPhysicalDamageResistance_Duration", self.coverage.hero_attributes)
         self.assertIn("MaxHP", self.coverage.hero_attributes)
         self.assertIn("Luck", self.coverage.hero_attributes)
         self.assertIn("Lives", self.coverage.hero_attributes)
@@ -152,7 +154,36 @@ class ImplementationTests(unittest.TestCase):
         self.assertTrue(at_least("powerups/ynk_trident", "implemented"))
         self.assertTrue(at_least("powerups/yasha_and_kaya", "implemented"))
         self.assertTrue(at_least("powerups/skywrath_mage_innate", "implemented"))
-        self.assertEqual(level("powerups/gold"), "none")
+        self.assertTrue(at_least("powerups/vengeful_spirit_innate", "implemented"))
+
+    def test_every_powerup_is_at_least_implemented(self):
+        # Task 28: 47 of 47 powerups (design .kiro/specs/recipes-item-ability-matrix §4).
+        registry = Shared.registry()["definitions"]
+        powerups = [k for k, e in registry.items() if e["category"] == "powerups"]
+        self.assertEqual(len(powerups), 47)
+        for key in powerups:
+            self.assertTrue(at_least(key, "implemented"), key)
+        for key in ("sange_and_yasha", "kaya_and_sange", "heart_of_tarrasque", "daedalus", "khanda", "sny_trident",
+                    "kns_trident", "ynk_trident", "world_chasm_artifact", "skywrath_mage_innate", "gold", "pile_of_coal"):
+            self.assertEqual(level("powerups/" + key), "verified", key)
+
+    def test_coverage_reads_the_fallback_powerup_and_the_rollable_check(self):
+        coverage = audit.simulation_coverage()
+        self.assertEqual(coverage.fallback_powerup, "gold")
+        self.assertTrue(coverage.skips_unrollable)
+
+    def _levels(self, **changes):
+        types, defs = audit.load_all()
+        args = (types, defs, audit.localization(), None, audit.simulation_coverage()._replace(**changes), {})
+        return {k: e["implementation"] for k, e in audit.build_registry(*args)["definitions"].items()}
+
+    def test_gold_is_implemented_only_as_the_fallback_reward(self):
+        self.assertEqual(self._levels()["powerups/gold"], "implemented")
+        self.assertEqual(self._levels(fallback_powerup="nothing")["powerups/gold"], "none")
+
+    def test_pile_of_coal_is_implemented_only_while_never_rolled(self):
+        self.assertEqual(self._levels()["powerups/pile_of_coal"], "implemented")
+        self.assertEqual(self._levels(skips_unrollable=False)["powerups/pile_of_coal"], "none")
 
     def test_enemies(self):
         self.assertTrue(at_least("enemies/boss_tower", "implemented"))
@@ -175,7 +206,7 @@ class ImplementationTests(unittest.TestCase):
     def test_heroes_difficulty_and_mode(self):
         self.assertEqual(level("heroes/dragonus"), "verified")
         self.assertEqual(level("heroes/kez"), "verified")
-        self.assertEqual(level("heroes/shen"), "partial")
+        self.assertEqual(level("heroes/shen"), "verified")  # Shen's innate attributes are supported (Task 28)
         self.assertEqual(level("difficulty/meteor_mayhem"), "partial")
         self.assertEqual(level("game_modes/crownfall_act4"), "partial")
 
@@ -198,7 +229,7 @@ class VerifiedTests(unittest.TestCase):
         self.assertTrue(any(t.startswith("MagicMissileTests.cs:") for t in entry["tests"]), entry["tests"])
 
     def test_partial_is_not_raised_to_verified(self):
-        entry = Shared.registry()["definitions"]["heroes/shen"]
+        entry = Shared.registry()["definitions"]["game_modes/crownfall_act4"]
         self.assertTrue(entry["tests"])
         self.assertEqual(entry["implementation"], "partial")
 

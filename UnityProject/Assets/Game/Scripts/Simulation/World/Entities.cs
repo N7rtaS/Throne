@@ -208,6 +208,8 @@ namespace ThornThrone.Simulation
         CompanionSpawned,
         /// <summary>A companion ended: Slot, SpawnId, Position, Value the powerup ID.</summary>
         CompanionEnded,
+        /// <summary>A recipe was combined (Mechanics §35 Р6): not about a pooled entity, SpawnId 0; Value the recipe's powerup ID.</summary>
+        RecipeCombined,
     }
 
     /// <summary>

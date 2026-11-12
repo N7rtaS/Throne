@@ -188,7 +188,7 @@ inclusion: manual
 ✅ (2026-11-12) Task 27б: Aghanim, эффекты с новыми сущностями (Spec)
 - `IKillEffect` (вызов из `Run.Kill` до `RetireEnemy`), `Run.HeroHitSerial`; эффекты скипетра Counter Helix, Rot (заморозка, след облаков), Chain Frost (деление 50%), Frostbite (раскол 200), Land Mine (капкан, радиомина, вакуум), Spirits, Mortimer Kisses, Snotty Bat. Правила утверждены владельцем 12.11.2026: `.kiro/specs/aghanim-upgrades/design.md` §0 (В4б, В4г) и §5, задачи 13–17 `tasks.md`; добавить каждую способность в `AghanimEffects`.
 
-Task 28: Все рецепты и матрица «предмет × способность» (Spec)
+✅ (2026-11-12) Task 28: Все рецепты и матрица «предмет × способность» (Spec)
 - Трезубцы, Daedalus, Khanda и др.; момент объединения по клиенту, иначе Р; уведомление в UI; параметризованный тест матрицы. `audit.py`: все powerups implemented/verified.
 
 ## D. Полный сценарий (этап 5)

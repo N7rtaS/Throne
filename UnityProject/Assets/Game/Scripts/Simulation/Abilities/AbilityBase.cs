@@ -46,12 +46,13 @@ namespace ThornThrone.Simulation
 
         /// <summary>
         /// Duration of a status the ability puts on an enemy plus the hero's DurationExtension seconds, when the
-        /// own duration is above 0; status resistance applies later (Mechanics §25 Р5).
+        /// own duration is above 0 and the ability has DurationEffect (owner's decision В4, Mechanics §35 Р8; Rot gets
+        /// it with its scepter); status resistance applies later (Mechanics §25 Р5).
         /// </summary>
         public float EffectDuration(Run run, int attribute)
         {
             float duration = Stat(run, attribute);
-            return duration > 0 ? duration + run.Build.Global[Attr.DurationExtension] : duration;
+            return duration > 0 && Stat(run, Attr.DurationEffect) > 0 ? duration + run.Build.Global[Attr.DurationExtension] : duration;
         }
 
         /// <summary>

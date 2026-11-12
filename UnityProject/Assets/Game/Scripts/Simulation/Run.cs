@@ -134,6 +134,8 @@ namespace ThornThrone.Simulation
             Attr.CriticalStrike_Projectile_Chance, Attr.CriticalStrike_Projectile_DamageMultiplier, Attr.AoEIncrease,
             Attr.ActiveAbilitySlots, Attr.KnockbackDistanceMultiplier, Attr.Projectile_BonusMagicDamage,
             Attr.BonusPhysicalDamage, Attr.DurationExtension, Attr.Lives, Attr.Luck,
+            // Shen's innate, read by Status/MagicWeakening.cs (Mechanics §27, §35).
+            Attr.MagicDamageWeakensPhysicalDamageResistance_Percentage, Attr.MagicDamageWeakensPhysicalDamageResistance_Duration,
         };
 
         /// <summary>An upgrade is offered only if it does something in this build of the simulation.</summary>
@@ -306,8 +308,10 @@ namespace ThornThrone.Simulation
             }
             else
             {
+                var recipe = RecipeCard(index); // Run.Choices.cs
                 if (index < 0 || index >= Build.Choices.Count || !Build.Choose(Build.Choices[index])) return false;
                 OnBuildChanged();
+                EmitCombined(recipe);
             }
             ConsumeChoice(); // Run.Aghanim.cs
             Choosing = false;

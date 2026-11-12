@@ -38,22 +38,19 @@
   "heroes": {
    "role:hero": 3,
    "prototype:partial": 1,
-   "implementation:verified": 2,
+   "implementation:verified": 3,
    "reachable": 3,
-   "prototype:none": 2,
-   "implementation:partial": 1
+   "prototype:none": 2
   },
   "powerups": {
    "role:service:not-rollable": 1,
    "prototype:none": 37,
-   "implementation:none": 3,
+   "implementation:verified": 47,
    "unreachable": 2,
    "role:service:gold": 1,
    "role:passive-item": 16,
    "prototype:partial": 10,
-   "implementation:verified": 36,
    "reachable": 45,
-   "implementation:implemented": 8,
    "role:recipe": 9,
    "role:active-ability": 17,
    "role:innate": 3
@@ -101,8 +98,8 @@
    "prototype:none": 50,
    "implementation:none": 5,
    "unreachable": 6,
-   "implementation:verified": 32,
-   "implementation:implemented": 14
+   "implementation:verified": 34,
+   "implementation:implemented": 12
   }
  },
  "attributesUsedWithoutDefinition": [
@@ -523,8 +520,11 @@
     "KnifeThrowTests.cs:DuplicateProjectileAttackIntervalCountsOnce",
     "LuckTests.cs:HeroesStartWithLuckFromData",
     "PassiveItemTests.cs:ApexAllowsSixthActiveAbility",
+    "PassiveItemTests.cs:DragonusInnateAddsTargetCountAndLowersMaxHealth",
     "PassiveItemTests.cs:Quiet",
     "ProfileTests.cs:Sample",
+    "RecipeTests.cs:Quiet",
+    "RecipeTests.cs:StepsWithAReadyRecipeDoNotAllocateAfterWarmUp",
     "RenderInterpolationTests.cs:AlphaIsFractionOfStep",
     "RenderInterpolationTests.cs:BossSpawnTeleportResetsPreviousPosition",
     "RenderInterpolationTests.cs:ChoiceOpenedMidFrameDropsWholeSteps",
@@ -620,7 +620,7 @@
     "SimulationTests.cs:DashComesFromHeroData",
     "SwashStampedeTrackTests.cs:AllFourAreOfferedOnLevelUp"
    ],
-   "implementation": "partial",
+   "implementation": "verified",
    "required": true
   },
   "heroes/kez": {
@@ -666,6 +666,8 @@
     "AghanimEffectTests.cs:EchoStrikeScepterAlsoStrikesBehindTheHero",
     "AghanimEffectTests.cs:EchoStrikeScepterHitsAnEnemyInBothRectanglesOnce",
     "AghanimEffectTests.cs:StepsWithScepterEffectsDoNotAllocateAfterWarmUp",
+    "AghanimEntityEffectTests.cs:HelixArena",
+    "AghanimEntityEffectTests.cs:HeroHitSerialCountsEveryHitThatHurtsTheHero",
     "AghanimTests.cs:KnifeThrowScepterCardShowsTheHitCountChange",
     "AghanimTests.cs:ScepterRecordIsAppliedOnceFromTheFlag",
     "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold",
@@ -689,6 +691,7 @@
     "GroundObjectPoolTests.cs:Both",
     "GroundObjectPoolTests.cs:MineRun",
     "GroundObjectPoolTests.cs:PoolSizeComesFromRules",
+    "ItemAbilityMatrixTests.cs:Arena",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
     "KezInnateTests.cs:InnateArena",
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
@@ -699,6 +702,7 @@
     "LuckTests.cs:HeroesStartWithLuckFromData",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
     "ProfileTests.cs:Sample",
+    "RecipeTests.cs:RecipeCardNextValuesMatchTheBuildAfterChoosing",
     "ShenInnateTests.cs:OtherHeroesDoNotWeakenWithMagicalDamage",
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:DashComesFromHeroData",
@@ -742,7 +746,7 @@
     "ChoiceRulesTests.cs:ServicePowerUpsAreNeverOffered",
     "PassiveItemTests.cs:EveryPassiveAndRecipeIsImplemented"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/gold": {
@@ -773,7 +777,7 @@
     "SaveStoreTests.cs:OtherRulesVersionLoadsUnchanged",
     "SaveStoreTests.cs:SchemaOneWithGold"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/yasha": {
@@ -808,6 +812,9 @@
     "ChoiceRulesTests.cs:MaxedPassiveItemIsNotOffered",
     "ChoiceRulesTests.cs:NewPassiveCardShowsYashaSpeed280To305",
     "MinorUpgradeTests.cs:MinorCandidateUsesExistingItemWeight",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -842,7 +849,8 @@
    "tests": [
     "DamageTests.cs:HeroArmorReducesIncomingDamage",
     "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
-    "PassiveItemTests.cs:BladeMailFromItemReducesAndReflectsDamage"
+    "PassiveItemTests.cs:BladeMailFromItemReducesAndReflectsDamage",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -876,6 +884,9 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -913,7 +924,8 @@
    "tests": [
     "ChoiceRulesTests.cs:PassiveRankCardUsesNextAuthoredRecord",
     "DamageTests.cs:PhysicalCritUsesCrystalysMultiplier",
-    "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades"
+    "PassiveItemTests.cs:CrystalysRanksFollowAuthoredUpgrades",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -947,6 +959,7 @@
    "tests": [
     "PassiveItemTests.cs:HealthDeficitIsKeptWhenMaxHealthGrows",
     "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
     "PassiveItemTests.cs:ReaverRaisesMaxHealthAndKeepsDeficit"
    ],
    "implementation": "verified",
@@ -980,7 +993,8 @@
    "missingResources": [],
    "tests": [
     "PassiveItemTests.cs:HealthDeficitIsKeptWhenMaxHealthGrows",
-    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing"
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -1010,7 +1024,8 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -1040,7 +1055,8 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether"
+    "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -1073,6 +1089,7 @@
     "EchoStrikeTests.cs:BloodstoneWidensBothSides",
     "LandMineTests.cs:BloodstoneWidensTheMine",
     "PassiveItemTests.cs:BloodstoneWidensMagicMissileImpact",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
     "RotTests.cs:BloodstoneWidensTheCircle"
    ],
    "implementation": "verified",
@@ -1102,8 +1119,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/apex": {
@@ -1133,7 +1152,9 @@
    "tests": [
     "ChoiceRulesTests.cs:ApexSlotOffersNewAbilitiesAgain",
     "ChoiceRulesTests.cs:PlainPassives",
-    "PassiveItemTests.cs:ApexAllowsSixthActiveAbility"
+    "PassiveItemTests.cs:ApexAllowsSixthActiveAbility",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
+    "RecipeTests.cs:ReadyRecipeIsOfferedInsteadOfTheFallbackRewardWithFullSlots"
    ],
    "implementation": "verified",
    "required": true
@@ -1163,7 +1184,8 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley"
+    "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -1197,7 +1219,10 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:BoltPush"
+    "PassiveItemTests.cs:BoltPush",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe"
    ],
    "implementation": "verified",
    "required": true
@@ -1232,8 +1257,13 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/kaya_and_sange": {
@@ -1266,8 +1296,12 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/yasha_and_kaya": {
@@ -1301,6 +1335,14 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:ChoosingTheRecipeCardCombinesAndEmitsRecipeCombined",
+    "RecipeTests.cs:ReadyRecipeIsOfferedInsteadOfTheFallbackRewardWithFullSlots",
+    "RecipeTests.cs:RecipeCardShowsTheHeroTotalsAfterCombining",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:StepsWithAReadyRecipeDoNotAllocateAfterWarmUp",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -1335,7 +1377,11 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing"
+    "PassiveItemTests.cs:HeartOfTarrasqueReplacesReaverAndRing",
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:AbilityDamageStatsSurviveACombine",
+    "RecipeTests.cs:RecipeCardNextValuesMatchTheBuildAfterChoosing",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax"
    ],
    "implementation": "verified",
    "required": true
@@ -1368,6 +1414,7 @@
    "missingResources": [],
    "tests": [
     "DamageTests.cs:FlatBonusesFollowDamageType",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
     "PassiveItemTests.cs:PhylacteryAddsToArcaneBoltDamage"
    ],
    "implementation": "verified",
@@ -1401,7 +1448,8 @@
    "missingResources": [],
    "tests": [
     "DamageTests.cs:FlatBonusesFollowDamageType",
-    "PassiveItemTests.cs:DemonEdgeAddsToPhysicalDamageFormula"
+    "PassiveItemTests.cs:DemonEdgeAddsToPhysicalDamageFormula",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues"
    ],
    "implementation": "verified",
    "required": true
@@ -1436,8 +1484,14 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:ForceCombineEmitsTheEventAndRefusesAnUnreadyRecipe",
+    "RecipeTests.cs:RecipeCardNextValuesMatchTheBuildAfterChoosing",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax",
+    "RecipeTests.cs:StepsWithAReadyRecipeDoNotAllocateAfterWarmUp"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/khanda": {
@@ -1471,7 +1525,10 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "DamageTests.cs:ProjectileCritAppliesToMagicProjectile"
+    "DamageTests.cs:ProjectileCritAppliesToMagicProjectile",
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeCardNextValuesMatchTheBuildAfterChoosing",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax"
    ],
    "implementation": "verified",
    "required": true
@@ -1506,8 +1563,14 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeCardNextValuesMatchTheBuildAfterChoosing",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax",
+    "RecipeTests.cs:RecipesSharingAComponentAreSeparateCardsUntilOneIsTaken",
+    "RecipeTests.cs:TridentConsumesItsNestedRecipe"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/kns_trident": {
@@ -1540,8 +1603,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/ynk_trident": {
@@ -1574,8 +1640,11 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:RecipeGivesOnlyItsOwnBonuses",
+    "RecipeTests.cs:RecipeIsOfferedOnlyWithItsComponentsAtMax"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/timeless_relic": {
@@ -1603,7 +1672,12 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "ItemAbilityMatrixTests.cs:MatrixCoversEveryItemAndAbilityOfTheData",
+    "ItemAbilityMatrixTests.cs:RelicSeconds",
+    "ItemAbilityMatrixTests.cs:TimelessRelicDoesNotExtendKezVulnerabilityMark",
+    "ItemAbilityMatrixTests.cs:TimelessRelicExtendsTrackMark",
     "KezInnateTests.cs:MarkParametersComeFromData",
+    "PassiveItemTests.cs:PassiveAtRankOneAndMaxAddsDataValues",
     "PassiveItemTests.cs:TimelessRelicExtendsMagicMissileStun"
    ],
    "implementation": "verified",
@@ -1665,8 +1739,8 @@
     "AghanimEffectTests.cs:MagicMissileShardMultipliesTheDamage",
     "AghanimEffectTests.cs:StepsWithScepterEffectsDoNotAllocateAfterWarmUp",
     "AghanimTests.cs:EveryCandidateIsOfferedWithEqualChance",
+    "AghanimTests.cs:EveryScepterAbilityHasItsEffectAfterPartTwo",
     "AghanimTests.cs:MagicMissileReadsItsAghanimFieldsAndReportsAMissingOne",
-    "AghanimTests.cs:PartOneHasScepterEffectsAndPartTwoNotYet",
     "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
     "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
     "AghanimTests.cs:ScepterAndShardAreFlagsGivenOnce",
@@ -1762,9 +1836,11 @@
     "MinorUpgradeTests.cs:MinorCandidateUsesExistingItemWeight",
     "MinorUpgradeTests.cs:MinorUpgradeNeedsMaximumRank",
     "PassiveItemTests.cs:BoltPush",
+    "PassiveItemTests.cs:DragonusInnateAddsTargetCountAndLowersMaxHealth",
     "PassiveItemTests.cs:EchoStoneAddsArcaneBoltVolley",
     "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
     "PassiveItemTests.cs:PhylacteryAddsToArcaneBoltDamage",
+    "RecipeTests.cs:AbilityDamageStatsSurviveACombine",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
     "SimulationTests.cs:Shoot",
@@ -1977,6 +2053,9 @@
    "source": "axe",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:CounterHelixReadsItsAghanimFields",
+    "AghanimEntityEffectTests.cs:CounterHelixScepterDoesNotAnswerHitsTakenBeforeIt",
+    "AghanimEntityEffectTests.cs:HelixArena",
     "AghanimTests.cs:ScepterCardsAreDifferentOwnedAbilitiesWithAnEffectAndWithoutAScepter",
     "CounterHelixTests.cs:Arena",
     "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
@@ -2030,6 +2109,11 @@
    "source": "pudge",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:Clouds",
+    "AghanimEntityEffectTests.cs:RotAuraAndCloudsDoNotHitTheSameEnemyTwicePerCooldown",
+    "AghanimEntityEffectTests.cs:RotCloudHitsAndFreezesWhereTheHeroWas",
+    "AghanimEntityEffectTests.cs:RotScepterFreezesWhatItHits",
+    "AghanimEntityEffectTests.cs:RotScepterLeavesACloudEveryRadiusTheHeroMoves",
     "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "CounterHelixTests.cs:BotRunsWithRotAndCounterHelix",
     "CounterHelixTests.cs:StepsDoNotAllocateAfterWarmUpWithRotAndCounterHelix",
@@ -2150,6 +2234,8 @@
    "source": "lich",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:ChainFrostScepterSplitsAShotOnBouncesWithoutRepeatingTargets",
+    "AghanimEntityEffectTests.cs:Frost",
     "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "ChainFrostTests.cs:Arena",
@@ -2212,6 +2298,10 @@
    "source": "crystal_maiden",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:FrostbiteScepterIgnoresEnemiesThatDieWithoutIt",
+    "AghanimEntityEffectTests.cs:FrostbiteScepterShattersAFrozenEnemyOntoItsNeighbours",
+    "AghanimEntityEffectTests.cs:KillEffectGetsTheAbilitySourceAndIsNotCalledOnResurrection",
+    "AghanimEntityEffectTests.cs:KillEffectSeesTheEnemyWithItsStatusesBeforeItIsRetired",
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "ChainBeamFreezeTests.cs:PauseAndChoiceStopVolleysAndStatuses",
     "ChainBeamFreezeTests.cs:StrongestTargetsOrderByHealthThenDistanceThenSlot",
@@ -2327,6 +2417,9 @@
    "source": "techies",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:FirstMine",
+    "AghanimEntityEffectTests.cs:LandMineScepterPlantsEveryFourFifthsOfTheCooldownAndAllThreeKinds",
+    "AghanimEntityEffectTests.cs:MineArena",
     "GroundObjectPoolTests.cs:FullPoolSkipsNewObjectsAndReportsOnce",
     "GroundObjectPoolTests.cs:MineRun",
     "GroundObjectPoolTests.cs:ObjectWithoutItsAbilityEnds",
@@ -2458,7 +2551,9 @@
    "missingResources": [],
    "tests": [
     "AghanimEffectTests.cs:TrackScepterMakesEveryTreasureGiveTwoItems",
-    "DamageTests.cs:AmplificationAppliesToPhysicalAndMagical"
+    "DamageTests.cs:AmplificationAppliesToPhysicalAndMagical",
+    "ItemAbilityMatrixTests.cs:MatrixCoversEveryItemAndAbilityOfTheData",
+    "ItemAbilityMatrixTests.cs:TimelessRelicExtendsTrackMark"
    ],
    "implementation": "verified",
    "required": true
@@ -2503,6 +2598,7 @@
    "source": "wisp",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:SpiritsScepterExplodeOnEveryTouch",
     "CompanionPoolTests.cs:CompanionWithoutItsAbilityEnds",
     "CompanionPoolTests.cs:FullPoolSkipsNewCompanionsAndReportsOnce",
     "CompanionPoolTests.cs:SpiritRun",
@@ -2576,6 +2672,9 @@
    "source": null,
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:MortimerKissesReadsItsCookieFields",
+    "AghanimEntityEffectTests.cs:MortimerKissesScepterDropsACookieFromAboutOneKillInTwenty",
+    "AghanimEntityEffectTests.cs:MortimerKissesWithoutTheScepterDropsNoCookie",
     "MortimerKissesTests.cs:Base",
     "MortimerKissesTests.cs:DragonusInnateAddsAGlob",
     "MortimerKissesTests.cs:EnemyThatLeavesThePuddleMissesTheNextTicks",
@@ -2640,6 +2739,9 @@
    "source": "snotty",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:SnottyBatScepterAddsTheSecondBatToTheFirst",
+    "AghanimEntityEffectTests.cs:SnottyBatScepterBatsStrikeEachOnItsOwnCooldown",
+    "AghanimEntityEffectTests.cs:SnottyBatScepterGivesTwoBatsOnOppositeSidesOfTheOrbit",
     "MinorUpgradeTests.cs:MinorUpgradeOfOtherDamageTypeRaisesAbilityDamage",
     "SnottyBatTests.cs:Base",
     "SnottyBatTests.cs:BatIsNotAnEnemy",
@@ -2693,7 +2795,7 @@
     "ShenInnateTests.cs:ShenStartsWithMagicMissileAndWeakeningInnateFromData",
     "ShenInnateTests.cs:static"
    ],
-   "implementation": "none",
+   "implementation": "verified",
    "required": true
   },
   "powerups/skywrath_mage_innate": {
@@ -2724,8 +2826,10 @@
    "nameInClientBinary": false,
    "source": null,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "PassiveItemTests.cs:DragonusInnateAddsTargetCountAndLowersMaxHealth"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "powerups/kez_innate": {
@@ -2774,10 +2878,12 @@
    "source": null,
    "missingResources": [],
    "tests": [
-    "AghanimTests.cs:PartOneHasScepterEffectsAndPartTwoNotYet",
+    "AghanimTests.cs:EveryScepterAbilityHasItsEffectAfterPartTwo",
     "AnnihilationTests.cs:KezInnateKeepsTheStrongestTarget",
     "DamageTests.cs:VulnerabilityDoublesNextPhysicalHitAndStuns",
     "EchoStrikeTests.cs:KezStartsWithEchoStrikeFromData",
+    "ItemAbilityMatrixTests.cs:MatrixCoversEveryItemAndAbilityOfTheData",
+    "ItemAbilityMatrixTests.cs:TimelessRelicDoesNotExtendKezVulnerabilityMark",
     "KezInnateTests.cs:AnnihilationSharesTheClassAndIsImplemented",
     "KezInnateTests.cs:Base",
     "KezInnateTests.cs:InnateArena",
@@ -3004,6 +3110,7 @@
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
     "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
+    "ItemAbilityMatrixTests.cs:SpawnTargets",
     "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
     "LivesTests.cs:Attacker",
     "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
@@ -3534,6 +3641,7 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
+    "AghanimEntityEffectTests.cs:KillEffectGetsTheAbilitySourceAndIsNotCalledOnResurrection",
     "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
     "LagunaBladeTests.cs:ExtraHitsStopWhenTheEliteDies",
     "SimulationTests.cs:ResurrectorReturnsTwiceFaster"
@@ -4568,6 +4676,7 @@
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
     "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
+    "ItemAbilityMatrixTests.cs:SpawnTargets",
     "LagunaBladeTests.cs:EliteTargetTakesExtraHits",
     "LivesTests.cs:Attacker",
     "LivesTests.cs:DownedHeroAbilitiesDoNotFire",
@@ -5743,6 +5852,8 @@
     "AghanimEffectTests.cs:TrackScepterMakesEveryTreasureGiveTwoItems",
     "AghanimTests.cs:QueueIsAghanimThenItemThenLevelAndTheClockStands",
     "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
+    "RecipeTests.cs:ChoosingTheRecipeCardCombinesAndEmitsRecipeCombined",
+    "RecipeTests.cs:StepsWithAReadyRecipeDoNotAllocateAfterWarmUp",
     "RewardSourceTests.cs:ItemAndLevelRewardsKeepSeparateQueues",
     "RewardSourceTests.cs:MapItemGivesAnItemWithoutConsumingALevel",
     "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure",
@@ -5893,7 +6004,8 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
-    "KezInnateTests.cs:KezKeepsHeroBaseAttributes"
+    "KezInnateTests.cs:KezKeepsHeroBaseAttributes",
+    "PassiveItemTests.cs:DragonusInnateAddsTargetCountAndLowersMaxHealth"
    ],
    "implementation": "partial",
    "required": true
@@ -6173,6 +6285,7 @@
    "tests": [
     "DamageTests.cs:DamageMultiplierMatchesVideoProfile",
     "MinorUpgradeTests.cs:AbilityUsesMinorUpgradeOnItsNextHit",
+    "RecipeTests.cs:RecipeCardShowsTheHeroTotalsAfterCombining",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents"
    ],
    "implementation": "verified",
@@ -6298,6 +6411,7 @@
     "KezInnateTests.cs:KezInnateDoesNotLeakRangeIntoGlobals",
     "KezInnateTests.cs:KezRunsAtThreeHundred",
     "KezInnateTests.cs:ReferenceGlobal",
+    "RecipeTests.cs:RecipeCardShowsTheHeroTotalsAfterCombining",
     "SimulationTests.cs:PassivesStackAndRecipeConsumesComponents",
     "StampedeTests.cs:ChargeStartsWithoutEnemiesAndRunsAtItsSpeedForItsDuration",
     "StampedeTests.cs:StampedeIsImplementedAndUsesItsDataAtRankOne"
@@ -6829,8 +6943,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "ItemAbilityMatrixTests.cs:TimelessRelicDoesNotExtendKezVulnerabilityMark"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_VulnerabilityDamagePercent": {
@@ -6885,8 +7001,10 @@
    "notes": [],
    "nameInClientBinary": true,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "ItemAbilityMatrixTests.cs:TimelessRelicDoesNotExtendKezVulnerabilityMark"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "attributes/k_eSurvivorsAttribute_MaxRerolls": {
@@ -7302,6 +7420,7 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "ItemAbilityMatrixTests.cs:TimelessRelicDoesNotExtendKezVulnerabilityMark",
     "ShenInnateTests.cs:DurationExtensionLengthensWeakening",
     "SnottyBatTests.cs:DurationExtensionLengthensTheSlow",
     "SpiritsTests.cs:DurationExtensionExtendsTheSpiritsLife",
@@ -7945,6 +8064,7 @@
     "ChainBeamFreezeTests.cs:DragonusInnateAddsOneTargetToEachOfThem",
     "KezInnateTests.cs:ShenMagicMissileStatsAreUnchanged",
     "MortimerKissesTests.cs:MortimerKissesIsImplementedAndUsesItsDataAtRankOne",
+    "PassiveItemTests.cs:DragonusInnateAddsTargetCountAndLowersMaxHealth",
     "SimulationTests.cs:ArcaneBoltRanksApplyAuthoredUpgrades",
     "SimulationTests.cs:DragonusStartsWithInnateBonuses",
     "SpiritsTests.cs:SpiritsIsImplementedAndUsesItsDataAtRankOne",

@@ -77,6 +77,12 @@ namespace ThornThrone.Mobile
         private float fit = 1;
         private bool layoutDirty = true;
         private readonly HudText level, time, kills, boss;
+        /// <summary>«Собран предмет: …» under the boss line (Mechanics §35 Р6).</summary>
+        private readonly TMP_Text noticeText;
+        private string noticeShown;
+
+        /// <summary>The recipe notice of the HUD; MobileGame shows it on RecipeCombined, UpdateHud hides it after 3 s of game time.</summary>
+        public readonly RecipeNotice Notice = new RecipeNotice();
         private readonly CardButton[] cards = new CardButton[3];
         private readonly TMP_Text[] cardTexts = new TMP_Text[3];
         private readonly Button reroll;
@@ -130,6 +136,9 @@ namespace ThornThrone.Mobile
             bossText = Label(hud.transform, "Boss", new Vector2(.5f, 1), new Vector2(-400, -150), new Vector2(800, 60), 40, TextAnchor.UpperCenter);
             bossText.color = new Color(1, .5f, .9f);
             boss = new HudText(bossText, "Империя {0}");
+            noticeText = Label(hud.transform, "Recipe notice", new Vector2(.5f, 1), new Vector2(-700, -210), new Vector2(1400, 60), 40, TextAnchor.UpperCenter);
+            noticeText.color = new Color(1, .85f, .35f);
+            noticeText.gameObject.SetActive(false);
             // TMP grows its character and vertex buffers when a text gets longer (kills 9 → 10); size them once
             // for the widest values here so that later changes do not allocate.
             level.Warm(WidestValue, 0);
@@ -472,6 +481,7 @@ namespace ThornThrone.Mobile
             bool bossVisible = run.BossSpawned && run.Boss != null && run.Boss.Active;
             if (bossText.gameObject.activeSelf != bossVisible) bossText.gameObject.SetActive(bossVisible);
             if (bossVisible && boss.Set(Mathf.CeilToInt(run.Boss.Health))) HudTextChanges++;
+            UpdateNotice(run);
 
             bool joystick = touch.JoystickActive;
             if (joystickBase.gameObject.activeSelf != joystick) joystickBase.gameObject.SetActive(joystick);
@@ -481,6 +491,19 @@ namespace ThornThrone.Mobile
                 joystickBase.rectTransform.position = touch.JoystickOrigin;
                 joystickKnob.rectTransform.position = touch.JoystickOrigin + Vector2.ClampMagnitude(touch.JoystickPosition - touch.JoystickOrigin, touch.Layout.JoystickRadius);
             }
+        }
+
+        /// <summary>Shows the recipe notice while it lasts; the text is set only when a new notice comes (no allocation per frame).</summary>
+        private void UpdateNotice(Run run)
+        {
+            bool visible = Notice.Visible(run);
+            if (visible && !ReferenceEquals(Notice.Message, noticeShown))
+            {
+                noticeShown = Notice.Message;
+                noticeText.text = noticeShown;
+                HudTextChanges++;
+            }
+            if (noticeText.gameObject.activeSelf != visible) noticeText.gameObject.SetActive(visible);
         }
 
         /// <summary>
@@ -632,8 +655,19 @@ namespace ThornThrone.Mobile
             string description = offer.Kind == OfferKind.Scepter
                 ? ChoiceText.Substitute(Text(def, "LocScepterAbilityDesc"), name => ChoiceText.ScepterValue(run, def, name))
                 : offer.Kind == OfferKind.Shard ? ChoiceText.ShardText(def) : Text(def, "LocAbilityDesc");
-            return ChoiceText.Format(offer, Name(def), description, run.Data.AttributeDefinitions);
+            string combines = null;
+            if (offer.Kind == OfferKind.Recipe)
+            {
+                var components = new List<string>(def.RecipeItems.Length);
+                foreach (int id in def.RecipeItems)
+                    components.Add(run.Data.PowerUpsById.TryGetValue(id, out var c) ? Name(c) : id.ToString());
+                combines = ChoiceText.Combines(components);
+            }
+            return ChoiceText.Format(offer, Name(def), description, run.Data.AttributeDefinitions, combines);
         }
+
+        /// <summary>Localized name of a powerup (powerups_ru.json), its key without a translation.</summary>
+        public string PowerUpName(PowerUpDef def) => Name(def);
 
         private string GoldName(Run run) =>
             run.Data.PowerUps.TryGetValue(run.Rules.FallbackPowerUp, out var gold) ? Name(gold) : run.Rules.FallbackPowerUp;

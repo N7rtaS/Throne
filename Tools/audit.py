@@ -143,7 +143,8 @@ class CoverageError(Exception):
 
 Coverage = collections.namedtuple("Coverage", [
     "ability_classes", "hero_attributes", "used_attributes", "enemy_handled", "movements",
-    "pickup_conditions", "spawn_behaviors", "difficulty_unsupported", "field_maps", "ability_targeting"])
+    "pickup_conditions", "spawn_behaviors", "difficulty_unsupported", "field_maps", "ability_targeting",
+    "fallback_powerup", "skips_unrollable"])
 FieldMaps = collections.namedtuple("FieldMaps", ["fields", "computed"])
 
 
@@ -462,11 +463,17 @@ def simulation_coverage(root=SIMULATION):
     if not spawn_behaviors:
         raise CoverageError("Run.SpawnPosition handles no SpawnBehavior")
 
+    # Service powerups (design .kiro/specs/recipes-item-ability-matrix §4, Р): the fallback reward names «gold» in
+    # Rules.cs; Build.CanUpgrade refuses a definition with m_bRollable false.
+    fallback = _search(r'public string FallbackPowerUp = "(\w+)";', _read(root, "Rules.cs"), "Rules.FallbackPowerUp").group(1)
+    can_upgrade = _method_body(_read(root, "Build/Build.cs"), r"public bool CanUpgrade\(PowerUpDef def\)", "Build.CanUpgrade")
+    skips_unrollable = "!def.Rollable" in can_upgrade
     rules_body = _method_body(run, r"private void ReportUnsupportedRules\(\)", "Run.ReportUnsupportedRules")
     difficulty_unsupported = [CsCondition(c, "DifficultyDef", "Difficulty", maps)
                               for c, s in _if_branches(rules_body) if "Diagnostics.Report" in s]
     return Coverage(ability_classes, hero_attributes, used_attributes, enemy_handled, movements,
-                    pickup_conditions, spawn_behaviors, difficulty_unsupported, maps, ability_targeting)
+                    pickup_conditions, spawn_behaviors, difficulty_unsupported, maps, ability_targeting,
+                    fallback, skips_unrollable)
 
 
 _METHOD = re.compile(r"^\s*(?:public|private|internal|protected)\b[^=;{]*?\b(\w+)\s*\(")
@@ -598,7 +605,13 @@ def implementation_levels(defs, registry, coverage, targets):
                         + _attribute_names(choices[0].get("m_vecGlobalUpgradeAttributes")))
             hits = len(names & supported)
             level = "implemented" if names and hits == len(names) else "partial" if hits else "none"
-        else:  # service:* and unknown: the simulation does not give them
+        elif role == "service:gold":
+            # The fallback reward of an empty choice list (Mechanics §33 Р8–Р9).
+            level = "implemented" if key == coverage.fallback_powerup else "none"
+        elif role == "service:not-rollable":
+            # Unreachable from the mode and never rolled: «never given» is the whole behaviour (owner's decision В5).
+            level = "implemented" if coverage.skips_unrollable and not registry[entry_key]["reachable"] else "none"
+        else:  # unknown: the simulation does not give it
             level = "none"
         levels[entry_key] = level
         return level

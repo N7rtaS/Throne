@@ -108,6 +108,11 @@ namespace ThornThrone.Simulation
         /// </summary>
         public bool CanOffer(PowerUpDef def, out OfferKind kind)
         {
+            if (def.IsRecipe)
+            {
+                kind = OfferKind.Recipe;
+                return CanCombine(def);
+            }
             kind = Find(def) == null ? OfferKind.New : OfferKind.Rank;
             if (CanUpgrade(def)) return true;
             kind = OfferKind.Minor;
@@ -122,16 +127,34 @@ namespace ThornThrone.Simulation
         }
 
         /// <summary>
+        /// A recipe can be combined: implemented, not owned and not consumed, every component of m_vecRecipeItems owned
+        /// at m_nMaxLevel (owner's decision В2, Mechanics §35 Р2). A free slot is not needed: the recipe frees one.
+        /// </summary>
+        public bool CanCombine(PowerUpDef recipe)
+        {
+            if (recipe == null || !recipe.IsRecipe || !implemented(recipe) || consumed.Contains(recipe.Id) || Find(recipe) != null) return false;
+            var items = recipe.RecipeItems;
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (!data.PowerUpsById.TryGetValue(items[i], out var component)) return false;
+                var owned = Find(component);
+                if (owned == null || owned.Rank < component.MaxLevel) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Weight of the powerup in a choice list, 0 when it is not offered: new m_flNewItemWeight, owned (a rank or a
         /// minor upgrade) m_flExistingItemWeight, passive × m_flPassiveItemWeight. Level-ups offer active skills only,
-        /// treasure passive items only (Mechanics §12.3, §25, §33 Р1). Rarity does not change it (Р6).
+        /// treasure passive items only (Mechanics §12.3, §25, §33 Р1). Rarity does not change it (Р6). A ready recipe
+        /// weighs as a new passive item (owner's decision В3, Mechanics §35 Р3).
         /// </summary>
         public float OfferWeight(PowerUpDef def, bool items) => OfferWeight(def, items, out _);
 
         private float OfferWeight(PowerUpDef def, bool items, out OfferKind kind)
         {
             if (!CanOffer(def, out kind) || (items ? !def.IsPassive : !def.IsActive)) return 0;
-            float weight = kind == OfferKind.New ? mode.NewItemWeight : mode.ExistingItemWeight;
+            float weight = kind == OfferKind.New || kind == OfferKind.Recipe ? mode.NewItemWeight : mode.ExistingItemWeight;
             if (def.IsPassive) weight *= mode.PassiveItemWeight;
             return weight > 0 ? weight : 0;
         }
@@ -223,6 +246,17 @@ namespace ThornThrone.Simulation
                 AddChanges(offer, owned, def.Minor[variant].Local, MinorDamageAttribute(def));
                 AddChanges(offer, null, def.Minor[variant].Global, -1);
             }
+            else if (kind == OfferKind.Recipe)
+            {
+                // The hero's totals after combining: minus what the consumed components give, plus the recipe (§35 Р5).
+                var items = def.RecipeItems;
+                for (int i = 0; i < items.Length; i++)
+                {
+                    var component = data.PowerUpsById.TryGetValue(items[i], out var c) ? Find(c) : null;
+                    if (component != null) AddPassiveChanges(offer, component.Def, component.Rank, -1);
+                }
+                AddPassiveChanges(offer, def, 1, 1);
+            }
             else if (def.IsPassive)
             {
                 // The next rank of §25 Р1–Р2: authored record «rank» when the item has them, else the first minor.
@@ -240,14 +274,22 @@ namespace ThornThrone.Simulation
             }
         }
 
+        /// <summary>Hero attributes a passive gives at <paramref name="rank"/> (§25 Р1–Р2), × <paramref name="sign"/>.</summary>
+        private void AddPassiveChanges(ChoiceOffer offer, PowerUpDef def, int rank, float sign)
+        {
+            if (def.Authored.Length > 0)
+                for (int u = 0; u < rank && u < def.Authored.Length; u++) AddChanges(offer, null, def.Authored[u].Global, -1, sign);
+            else if (def.Minor.Length > 0) AddChanges(offer, null, def.Minor[0].Global, -1, sign * rank);
+        }
+
         /// <summary>Own attributes when <paramref name="owned"/> is set, else hero attributes.</summary>
-        private void AddChanges(ChoiceOffer offer, OwnedPowerUp owned, AttributeValue[] values, int damage)
+        private void AddChanges(ChoiceOffer offer, OwnedPowerUp owned, AttributeValue[] values, int damage, float scale = 1)
         {
             for (int i = 0; i < values.Length; i++)
             {
                 int id = Remap(values[i].Id, damage);
                 float current = owned != null ? Stat(owned, id) : Global[id];
-                if (!offer.Add(id, owned == null, current, values[i].Value))
+                if (!offer.Add(id, owned == null, current, values[i].Value * scale))
                     data.Diagnostics.Report("build:offer-changes", "A choice card changes more attributes than it can show");
             }
         }
@@ -290,6 +332,7 @@ namespace ThornThrone.Simulation
                 case OfferKind.Minor: return UpgradeMinor(def, offer.MinorIndex);
                 case OfferKind.Scepter: return UpgradeScepter(def);
                 case OfferKind.Shard: return UpgradeShard(def);
+                case OfferKind.Recipe: return Combine(def);
                 default: return Upgrade(def);
             }
         }
@@ -353,7 +396,6 @@ namespace ThornThrone.Simulation
             var owned = Find(def);
             if (owned == null) Acquire(def);
             else owned.Rank++;
-            CombineRecipes();
             Recalculate();
             Choices.Clear();
             return true;
@@ -365,28 +407,23 @@ namespace ThornThrone.Simulation
         }
 
         /// <summary>
-        /// A recipe forms when all of its components are at maximum rank; the components are consumed
-        /// and their slots freed (prototype rule, Mechanics §12.4).
+        /// Combines a ready recipe (<see cref="CanCombine"/>): the components leave the build and are never offered
+        /// again, the recipe is owned at rank 1, their slots are freed (owner's decision В1, Mechanics §35 Р1, Р4).
+        /// False and nothing changed when it is not ready. Used by a «Комбинация предметов» card, tests and debug tools.
         /// </summary>
-        private void CombineRecipes()
+        public bool Combine(PowerUpDef recipe)
         {
-            foreach (var recipe in data.PowerUps.Values)
+            if (!CanCombine(recipe)) return false;
+            var items = recipe.RecipeItems;
+            for (int i = 0; i < items.Length; i++)
             {
-                if (!recipe.IsRecipe || Find(recipe) != null) continue;
-                bool ready = true;
-                foreach (int id in recipe.RecipeItems)
-                {
-                    var component = data.PowerUpsById.TryGetValue(id, out var c) ? Find(c) : null;
-                    if (component == null || component.Rank < component.Def.MaxLevel) { ready = false; break; }
-                }
-                if (!ready) continue;
-                foreach (int id in recipe.RecipeItems)
-                {
-                    Owned.Remove(Find(data.PowerUpsById[id]));
-                    consumed.Add(id);
-                }
-                Acquire(recipe);
+                Owned.Remove(Find(data.PowerUpsById[items[i]]));
+                consumed.Add(items[i]);
             }
+            Acquire(recipe);
+            Recalculate();
+            Choices.Clear();
+            return true;
         }
 
         private void Recalculate()

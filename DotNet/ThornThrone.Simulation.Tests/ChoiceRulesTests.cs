@@ -237,7 +237,16 @@ namespace ThornThrone.Simulation.Tests
                 for (int round = 0; round < 120; round++)
                 {
                     run.Build.GenerateChoices(run.Rng, items: round % 2 == 1);
-                    Assert.That(run.Build.Choices.Any(c => c.Key == "gold" || c.Key == "pile_of_coal" || c.IsInnate || c.IsRecipe), Is.False);
+                    Assert.That(run.Build.Choices.Any(c => c.Key == "gold" || c.Key == "pile_of_coal" || c.IsInnate), Is.False);
+                    // A recipe is a «Комбинация предметов» card only with every component at m_nMaxLevel (Mechanics §35 Р2).
+                    for (int i = 0; i < run.Build.OfferCount; i++)
+                    {
+                        var offer = run.Build.Offers[i];
+                        if (!offer.Def.IsRecipe) continue;
+                        Assert.That(offer.Kind, Is.EqualTo(OfferKind.Recipe));
+                        foreach (int id in offer.Def.RecipeItems)
+                            Assert.That(run.Build.Rank(run.Data.PowerUpsById[id].Key), Is.EqualTo(run.Data.PowerUpsById[id].MaxLevel), offer.Def.Key);
+                    }
                     if (run.Build.Choices.Count > 0) run.Build.Choose(run.Build.Choices[random.Next(run.Build.Choices.Count)]);
                 }
             }
@@ -348,10 +357,8 @@ namespace ThornThrone.Simulation.Tests
                     var def = offer.Def;
                     var changes = new List<AttributeChange>();
                     for (int i = 0; i < offer.ChangeCount; i++) changes.Add(offer.Changes[i]);
-                    int recipes = run.Build.Owned.Count(o => o.Def.IsRecipe);
                     Assert.That(run.Build.Choose(def), Is.True, def.Key);
-                    if (run.Build.Owned.Count(o => o.Def.IsRecipe) != recipes) continue; // a recipe changes everything
-                    var owned = run.Build.Find(def);
+                    var owned = run.Build.Find(def); // a recipe card shows the totals after combining (Mechanics §35 Р5)
                     Assert.That(owned.Rank, Is.EqualTo(offer.NextRank), def.Key);
                     foreach (var c in changes)
                     {
