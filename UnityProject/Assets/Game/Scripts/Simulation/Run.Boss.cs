@@ -312,7 +312,8 @@ namespace ThornThrone.Simulation
             portal.NextSpawn = portal.Time + Math.Max(Rules.Step, spawner.SpawnInterval);
             portal.Alive = 0;
             for (int e = 0; e < Enemies.Length; e++) if (Enemies[e].Active && Enemies[e].Portal == index) portal.Alive++;
-            int missing = Math.Min(spawner.MinimumCount - portal.Alive, spawner.MaxSpawnCountPerInterval ?? 1);
+            int batch = spawner.MaxSpawnCountPerInterval ?? 1;
+            int missing = Overflow(spawner, Math.Min(spawner.MinimumCount - portal.Alive, batch), batch); // Mechanics §36 Р4
             float radius = spawner.OvalRadius.X > 0 ? spawner.OvalRadius.X : Rules.PortalSpawnRadius;
             for (int n = 0; n < missing; n++)
             {

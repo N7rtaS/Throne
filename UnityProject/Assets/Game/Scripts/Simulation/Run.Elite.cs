@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ThornThrone.Simulation
 {
-    public enum EliteRoomState { Locked, Open, Channeling, Fighting, Done }
+    public enum EliteRoomState { Locked, Open, Channeling, Fighting, Done, Closed }
 
     /// <summary>One elite room of the run (arena point elite_room).</summary>
     public sealed class EliteRoom
@@ -97,6 +97,26 @@ namespace ThornThrone.Simulation
                         }
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// The boss fight starts: a room in its fight loses its enemies without reward, every unfinished room closes and
+        /// never opens again; completed rooms stay done (ТЗ_Полная_игра_Unity.md §9, Mechanics §36 Р11).
+        /// </summary>
+        private void CloseEliteRooms()
+        {
+            for (int i = 0; i < EliteRooms.Count; i++)
+            {
+                var room = EliteRooms[i];
+                if (room.State == EliteRoomState.Done || room.State == EliteRoomState.Closed) continue;
+                if (room.State == EliteRoomState.Fighting)
+                    for (int e = 0; e < Enemies.Length; e++)
+                        if (Enemies[e].Active && Enemies[e].EliteRoom == i) RetireEnemy(Enemies[e], SimEventKind.EnemyDespawned);
+                room.State = EliteRoomState.Closed;
+                room.Progress = 0;
+                room.Alive = 0;
+                Emit(SimEventKind.EliteRoomClosed, i, room.Position, 0);
             }
         }
 

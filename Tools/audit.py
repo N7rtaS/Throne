@@ -108,6 +108,13 @@ class NativeStrings:
 
 
 IMPLEMENTATION_LEVELS = ("none", "partial", "implemented", "verified")
+
+# Project decisions about records (Research/FullGame/Mechanics.md), added to the registry notes.
+_UNUSED = "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
+DESIGN_NOTES = {
+    "enemies/hellbear": _UNUSED, "enemies/flyer_2": _UNUSED, "enemies/box": _UNUSED,
+    "spawners/hellbear": _UNUSED, "spawners/flyer_2_swarm": _UNUSED, "spawners/box": _UNUSED,
+}
 SIMULATION = os.path.join(UNITY, "Assets", "Game", "Scripts", "Simulation")
 TESTS = os.path.join(PROJECT, "DotNet")
 # Prototype coverage as recorded before the prototype was retired (its sources are in Удалить/ and are not read).
@@ -431,8 +438,8 @@ def simulation_coverage(root=SIMULATION):
             if member in declared:
                 used_attributes.add(declared[member])
 
-    enemy_method = _search(r"private void ReportUnsupportedEnemy\(EnemyDef (\w+)\)", run, "Run.ReportUnsupportedEnemy")
-    enemy_body = _method_body(run, r"private void ReportUnsupportedEnemy\(EnemyDef \w+\)", "Run.ReportUnsupportedEnemy")
+    enemy_method = _search(r"private void ReportUnsupportedEnemy\(EnemyDef (\w+)\)", runs, "Run.ReportUnsupportedEnemy")
+    enemy_body = _method_body(runs, r"private void ReportUnsupportedEnemy\(EnemyDef \w+\)", "Run.ReportUnsupportedEnemy")
     handled = _search(r"bool handled = (.*?);", enemy_body, "`bool handled` in Run.ReportUnsupportedEnemy").group(1)
     enemy_handled = CsCondition(" ".join(handled.split()), "EnemyDef", enemy_method.group(1), maps)
 
@@ -454,7 +461,7 @@ def simulation_coverage(root=SIMULATION):
         raise CoverageError("Run.Drop has no implemented branches")
 
     spawn_names = _enum_map(game_data, "ParseSpawn", "SpawnBehavior")
-    spawn_body = _method_body(run, r"private bool SpawnPosition\(", "Run.SpawnPosition")
+    spawn_body = _method_body(runs, r"private bool SpawnPosition\(", "Run.SpawnPosition")
     spawn_behaviors = set()
     for member in re.findall(r"case SpawnBehavior\.(\w+):", spawn_body):
         if member not in spawn_names:
@@ -780,6 +787,9 @@ def build_registry(types, defs, loc, native, coverage, tests, binary=None, targe
                 + ("the name appears in the client binary, likely spawned/used by native code"
                    if entry["nameInClientBinary"] else "possibly unused or created by native code under another name")
                 + " - verify by observation")
+    for key, note in DESIGN_NOTES.items():
+        if key in registry:
+            registry[key]["notes"].append(note)
     # Roles and names.
     for entry in registry.values():
         c, k, v = entry["category"], entry["key"], defs[entry["category"]][entry["key"]]

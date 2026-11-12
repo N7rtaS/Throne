@@ -309,6 +309,7 @@ namespace ThornThrone.Simulation
             Key = key, Raw = v, Id = I(v, "m_unPickupID"), HealAmount = I(v, "m_nHealAmount"),
             GoldAmount = I(v, "m_nGoldAmount"), TreasureVariant = I(v, "m_nTreasureVariant"),
             RewardsTreasure = B(v, "m_bRewardsTreasure"),
+            CanSpawnWithVelocity = B(v, "m_bCanSpawnWithVelocity"), MaxSpawnVelocity = F(v, "m_flMaxSpawnVelocity"),
         };
 
         private static SpawnBehavior ParseSpawn(string name)
@@ -355,6 +356,11 @@ namespace ThornThrone.Simulation
                 SpawnInfoTargetName = S(v, "m_sSpawnInfoTargetName"),
                 SpawnChance = F(v, "m_flSpawnChance", 1),
                 MinimumDistanceBetween = F(v, "m_flMinimumDistanceBetween"),
+                OverflowCount = I(v, "m_nOverflowEnemySpawnCount"),
+                ResetSpawnIntervalOnKill = B(v, "m_bResetSpawnIntervalOnKill"),
+                Destructibles = S(v, "_class") == "CSurvivorsSpawnerDestructiblesDefinition",
+                DestroyDistance = F(v, "m_flDestroyDistance"),
+                SpawnPositionsLayer = S(v, "m_eSpawnPositionsLayer"),
             };
         }
 
@@ -376,6 +382,7 @@ namespace ThornThrone.Simulation
                     Damage = F(a, "m_flDamage"), Cooldown = F(a, "m_flAttackCooldown", 1), Speed = F(a, "m_flSpeed"),
                     Range = F(a, "m_flRange"), MaxDistance = F(a, "m_flMaxDistance"), AttackPoint = F(a, "m_flAttackPoint"),
                     Radius = F(a, "m_flRadius", 50), LifeTime = F(a, "m_flLifeTime"),
+                    OffsetForward = F(a, "m_flAttackOffsetForward"),
                 }).ToArray()
                 : new EnemyAttackDef[0];
             return new EnemyDef
@@ -389,7 +396,9 @@ namespace ThornThrone.Simulation
                 Flying = S(v, "m_eMovementCapability") == "ENEMY_MOVEMENT_CAPABILITY_FLYING",
                 SeparationLayer = S(v, "m_eSeparationLayer") ?? "SMALL",
                 KnockbackResistance = F(v, "m_flKnockbackResistance"), StatusResistance = F(v, "m_flStatusResistance"),
-                TurnRate = F(v, "m_flTurnRate"),
+                TurnRate = F(v, "m_flTurnRate"), HasTurnRate = v.ContainsKey("m_flTurnRate"),
+                Mass = NF(v, "m_flMass"), DespawnBuffer = NF(v, "m_flOverrideDespawnRadiusBuffer"),
+                MinSeparationDistance = F(v, "m_flMinSeparationDistanceFromEnemies"),
                 SinMovementAngle = F(v, "m_flSinMovementAngle"), SinMovementPeriodMultiplier = F(v, "m_flSinMovementPeriodMultiplier", 1),
                 IsElite = B(v, "m_bIsElite"), IsDestructible = B(v, "m_bIsDestructible"), Invulnerable = B(v, "m_bInvulnerable"),
                 Undespawnable = B(v, "m_bUndespawnable"), PlayerFriendly = B(v, "m_bPlayerFriendly"), DieOnTouch = B(v, "m_bDieOnTouch"),

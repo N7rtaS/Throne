@@ -238,8 +238,8 @@ namespace ThornThrone.Simulation
         private void ReportUnsupportedRules()
         {
             Diagnostics.Include(Data.Diagnostics);
-            if (Difficulty.EnableMeteorModifier) Diagnostics.Report("difficulty:meteor", "Meteor modifier is not implemented");
-            if (Difficulty.EnemyTouchMovementSlowDuration > 0) Diagnostics.Report("difficulty:slow", "Touch movement slow is not implemented");
+            // Every difficulty field is implemented: the meteor modifier (Run.Meteors.cs) and the touch slow
+            // (Run.Charge.cs) since Task 29 (Mechanics §36). Tools/audit.py reads the conditions of this method.
         }
 
         // ------------------------------------------------------------------ public control
@@ -331,7 +331,9 @@ namespace ThornThrone.Simulation
             UpdateHero(dt, move, dash);
             UpdateSpawning();
             UpdateEliteRooms(dt);
+            UpdateMeteors(dt); // meteor_mayhem (Mechanics §36 Р8)
             if (BossSpawned) { UpdateBoss(dt); if (Finished) return; }
+            else if (MeteorsEnabled) { UpdateHazards(dt); if (Finished) return; }
             RebuildGrid();
             UpdateEnemies(dt);
             if (Finished) return;
@@ -355,6 +357,7 @@ namespace ThornThrone.Simulation
         {
             contactTimer -= dt;
             dashTimer -= dt;
+            UpdateTouchSlow(dt); // sticky_situation (Mechanics §36 Р2)
             int maxCharges = Math.Max(0, (int)Build.Global[Attr.NumDashes]);
             if (DashCharges < maxCharges)
             {
@@ -408,338 +411,6 @@ namespace ThornThrone.Simulation
         }
 
         private static float Clamp(float value, float min, float max) => value < min ? min : value > max ? max : value;
-
-        // ------------------------------------------------------------------ spawning
-
-        /// <summary>Debug hook: the level schedule spawns nothing (tests that place their own enemies).</summary>
-        public bool DebugNoSpawns;
-
-        private void UpdateSpawning()
-        {
-            if (DebugNoSpawns) return;
-            for (int i = 0; i < spawnEvents.Length; i++)
-            {
-                var e = spawnEvents[i];
-                if (Time < e.Def.Start || Time < e.Next || (e.Def.End.HasValue && Time >= e.Def.End.Value)) continue;
-                float interval = e.Def.IntervalOverride ?? e.Spawner.SpawnInterval;
-                e.Next = Time + Math.Max(Rules.Step, interval);
-                int minimum = e.Def.MinimumCountOverride ?? e.Spawner.MinimumCount;
-                if (!e.Spawner.IgnoreDifficultySpawnMultiplier)
-                    minimum = (int)Math.Round(minimum * (1 + Difficulty.EnemySpawnCountMultiplier));
-                // Absent batch size: 4 per interval (prototype value; no field in data).
-                int batch = e.Def.MaxSpawnCountPerIntervalOverride ?? e.Spawner.MaxSpawnCountPerInterval ?? 4;
-                int missing = Math.Min(minimum - e.Alive, batch);
-                for (int n = 0; n < missing; n++)
-                {
-                    if (!SpawnPosition(e, n, missing, out var position)) break;
-                    var enemy = SpawnEnemy(e.Enemy, position, i);
-                    if (enemy == null) break;
-                }
-            }
-            if (!BossSpawned && Time >= BossTime && bossDef != null) SpawnBoss();
-        }
-
-        /// <summary>Starts the final fight now (debug tools, tests); normally at m_flFirstFloorTimeLimit.</summary>
-        public void SpawnBossNow()
-        {
-            if (!BossSpawned && bossDef != null) SpawnBoss();
-        }
-
-        private void SpawnBoss()
-        {
-            BossSpawned = true;
-            // The arena has a separate boss room: player_spawn_boss for the hero, boss_spawn for Imperia
-            // (entity lump). Without arena data the boss appears in front of the hero (prototype rule).
-            Vec2 bossAt = ClampToMap(HeroPosition + Facing * (Mode.EnemyRadius * 0.6f));
-            if (Data.TryArenaPoint("player_spawn_boss", out var heroAt) && Data.TryArenaPoint("boss_spawn", out var spawnAt))
-            {
-                HeroPosition = heroAt;
-                PreviousHeroPosition = heroAt;
-                ResetHeroHistory();
-                bossAt = spawnAt;
-                NavMask = NavGrid.Walkable | NavGrid.BossRoom;
-                Emit(SimEventKind.HeroTeleported, -1, HeroPosition, 0);
-            }
-            Boss = SpawnEnemy(bossDef, bossAt, -1);
-            if (Boss != null) Emit(SimEventKind.BossSpawned, Boss, Boss.Position, 0);
-            else Emit(SimEventKind.BossSpawned, -1, HeroPosition, 0);
-            if (Boss != null) StartBossFight();
-        }
-
-        private Vec2 ClampToMap(Vec2 p) => new Vec2(Clamp(p.X, minX, maxX), Clamp(p.Y, minY, maxY));
-
-        private float SpawnDistance() => Mode.EnemyRadius + Rng.Range(-Mode.EnemyRadiusVariance, Mode.EnemyRadiusVariance);
-
-        /// <summary>Spawn position per m_eSpawnBehavior. Interpretations are listed in Mechanics.md §6.</summary>
-        private bool SpawnPosition(SpawnEvent e, int index, int count, out Vec2 position)
-        {
-            var s = e.Spawner;
-            switch (s.Behavior)
-            {
-                case SpawnBehavior.RandomDirection:
-                    position = HeroPosition + Vec2.FromAngle(Rng.Angle()) * SpawnDistance();
-                    break;
-                case SpawnBehavior.OvalAroundPlayer:
-                {
-                    var a = Vec2.FromAngle(Rng.Angle());
-                    position = HeroPosition + new Vec2(a.X * s.OvalRadius.X, a.Y * s.OvalRadius.Y);
-                    break;
-                }
-                case SpawnBehavior.FixedDirection:
-                case SpawnBehavior.FixedDirectionPerpendicularWall:
-                {
-                    if (!e.HasDirection) { e.Direction = Vec2.FromAngle(Rng.Angle()); e.HasDirection = true; }
-                    var side = e.Direction.Perpendicular;
-                    float lateral = s.Behavior == SpawnBehavior.FixedDirectionPerpendicularWall
-                        ? (index - (count - 1) * 0.5f) * Math.Max(1, s.PerpendicularWallSpacing)
-                        : Rng.Range(-1, 1) * Math.Max(s.FixedDirectionDistanceVariance, Mode.EnemyRadiusVariance);
-                    position = HeroPosition + e.Direction * Mode.EnemyRadius + side * lateral;
-                    break;
-                }
-                case SpawnBehavior.SpawnerOriginRadius:
-                {
-                    var origin = Boss != null && Boss.Active ? Boss.Position : HeroPosition;
-                    // Imperia's portal spawners only spawn from an open demon portal.
-                    if (PortalOrigin(s.Key, out var portal)) origin = portal;
-                    else if (bossDef != null && s.Key.StartsWith("imperia_portal", StringComparison.Ordinal)) { position = Vec2.Zero; return false; }
-                    float radius = s.OvalRadius.X > 0 ? s.OvalRadius.X : Rules.PortalSpawnRadius;
-                    position = origin + Vec2.FromAngle(Rng.Angle()) * radius;
-                    if (FirstTime(s))
-                        Diagnostics.Report("spawn:origin:" + s.Key, $"SPAWNER_ORIGIN_RADIUS ({s.Key}) uses the boss or hero as origin; portal positions are not implemented");
-                    break;
-                }
-                case SpawnBehavior.StaticInMap:
-                case SpawnBehavior.StaticInMapIgnorePlayerRadius:
-                    if (StaticPoint(e, s.Behavior == SpawnBehavior.StaticInMapIgnorePlayerRadius, out position)) return true;
-                    if (!Data.ArenaTargets.ContainsKey(s.SpawnInfoTargetName ?? "") && FirstTime(s))
-                        Diagnostics.Report("spawn:" + s.Key, $"Spawn behaviour {s.BehaviorName} needs arena point {s.SpawnInfoTargetName}; spawner {s.Key} skipped");
-                    return false;
-                default:
-                    if (FirstTime(s))
-                        Diagnostics.Report("spawn:" + s.Key, $"Spawn behaviour {s.BehaviorName} is not implemented; spawner {s.Key} skipped");
-                    position = Vec2.Zero;
-                    return false;
-            }
-            position = ClampToMap(position);
-            return true;
-        }
-
-        /// <summary>
-        /// A free named arena point for STATIC_IN_MAP (m_sSpawnInfoTargetName): no enemy of the same event on it
-        /// and, unless IGNORE_PLAYER_RADIUS, not within m_flEnemyRadius of the hero (interpretation, Mechanics §6).
-        /// </summary>
-        private bool StaticPoint(SpawnEvent e, bool ignorePlayer, out Vec2 position)
-        {
-            position = Vec2.Zero;
-            if (e.Spawner.SpawnInfoTargetName == null || !Data.ArenaTargets.TryGetValue(e.Spawner.SpawnInfoTargetName, out var points)) return false;
-            int start = Rng.Next(points.Length);
-            for (int k = 0; k < points.Length; k++)
-            {
-                var p = points[(start + k) % points.Length];
-                if (!ignorePlayer && Vec2.DistanceSquared(p, HeroPosition) < Mode.EnemyRadius * Mode.EnemyRadius) continue;
-                bool taken = false;
-                for (int i = 0; i < Enemies.Length && !taken; i++)
-                    taken = Enemies[i].Active && Enemies[i].Def == e.Enemy && Vec2.DistanceSquared(Enemies[i].Position, p) < 60 * 60;
-                if (taken) continue;
-                position = p;
-                return true;
-            }
-            return false;
-        }
-
-        public Enemy SpawnEnemy(EnemyDef def, Vec2 position, int eventIndex)
-        {
-            if (freeEnemyCount == 0)
-            {
-                if (FirstTime(Enemies))
-                    Diagnostics.Report("pool:enemies", $"Enemy pool limit {Rules.MaxEnemies} reached; further spawns skipped until slots free up");
-                return null;
-            }
-            var enemy = Enemies[freeEnemies[--freeEnemyCount]];
-            enemy.Active = true;
-            enemy.Def = def;
-            enemy.SpawnId = ++spawnSerial;
-            enemy.EventIndex = eventIndex;
-            // A ground enemy spawned over a pit (the spawn ring ignores the map) moves to the nearest
-            // walkable cell; up to 32 cells (2048 units) are searched (design decision, Mechanics §14).
-            if (Data.Nav != null && !def.Flying && def.Movement != MovementBehavior.Stationary
-                && Data.Nav.Nearest(position, GroundMask, 32, out var ground))
-                position = ground;
-            enemy.Position = position;
-            enemy.PreviousPosition = position;
-            enemy.SeparationVelocity = Vec2.Zero;
-            enemy.Direction = (HeroPosition - position).Normalized;
-            enemy.Age = 0;
-            enemy.OutOfRangeTime = 0;
-            float health = (def.MaxHealth + def.MaxHealthPerPlayerLevel * (HeroLevel - 1)) * (1 + Difficulty.EnemyHealthMultiplier);
-            enemy.MaxHealth = enemy.Health = Math.Max(1, health);
-            enemy.Speed = def.MoveSpeed * (1 + Difficulty.EnemyMovementSpeedMultiplier);
-            enemy.TouchDamage = def.TouchDamage * (1 + Difficulty.EnemyDamageMultiplier);
-            enemy.Radius = def.HasCollisionRadius ? def.CollisionRadius
-                : Rules.DefaultCollisionRadius.TryGetValue(def.SeparationLayer, out var r) ? r : 40;
-            MaxEnemyRadius = Math.Max(MaxEnemyRadius, enemy.Radius);
-            enemy.SeparationDistance = Mode.SeparationDistance.TryGetValue(def.SeparationLayer, out var d) ? d : enemy.Radius * 2;
-            enemy.KnockbackScale = Math.Max(0, 1 - def.KnockbackResistance);
-            enemy.EliteRoom = -1;
-            enemy.Portal = -1;
-            enemy.Shielded = false;
-            enemy.ClearPath = Flow != null && Flow.Clear(position, ChaseTarget);
-            enemy.Scale = 1;
-            enemy.AttackWindup = -1;
-            enemy.AttackCooldown = def.Attacks.Length > 0 ? Rng.Range(0, def.Attacks[0].Cooldown) : 0;
-            enemy.ResurrectionsLeft = def.ResurrectionTimes;
-            enemy.Status.Reset();
-            if (eventIndex >= 0) spawnEvents[eventIndex].Alive++;
-            ActiveEnemies++;
-            ReportUnsupportedEnemy(def);
-            Emit(SimEventKind.EnemySpawned, enemy, position, 0);
-            return enemy;
-        }
-
-        // Diagnostics are guarded by reference sets so that hot paths do not build strings.
-        // Pre-sized: growing the set mid-run is an allocation inside a step.
-        private readonly HashSet<object> reported = new HashSet<object>(256);
-
-        private bool FirstTime(object key) => reported.Add(key);
-        /// <summary>Key of the «projectile:max-hits» diagnostic (an object, so the check does not box).</summary>
-        private static readonly object MaxHitsKey = new object();
-
-        private void ReportUnsupportedEnemy(EnemyDef def)
-        {
-            if (!FirstTime(def)) return;
-            // Pillars (boss_tower): solid, invulnerable, friendly bodies of the boss room, handled in Run.Boss.cs (Mechanics §12).
-            bool handled = def.Class == "CSurvivorsEnemyDefinition" || def.IsBoss || def.ResurrectionTimes > 0
-                           || def.AbsorbRadius > 0 || def.SplitOnDeathNumUnits > 0 || def.Class.EndsWith("_Golem")
-                           || def.Class == "CSurvivorsEnemyDefinition_Pillar";
-            if (!handled)
-                Diagnostics.Report("enemy-class:" + def.Class, $"Special behaviour of {def.Class} ({def.Key}) is not implemented");
-            if (def.Movement == MovementBehavior.Unknown)
-                Diagnostics.Report("movement:" + def.MovementName, $"Movement {def.MovementName} is not implemented");
-        }
-
-        private void RetireEnemy(Enemy enemy, SimEventKind kind)
-        {
-            if (!enemy.Active) return;
-            enemy.Active = false;
-            if (enemy.EventIndex >= 0) spawnEvents[enemy.EventIndex].Alive--;
-            freeEnemies[freeEnemyCount++] = enemy.Slot;
-            ActiveEnemies--;
-            if (enemy == Boss && kind != SimEventKind.EnemyDied) Boss = null;
-            Emit(kind, enemy, enemy.Position, 0);
-        }
-
-        // ------------------------------------------------------------------ enemies
-
-        private void RebuildGrid()
-        {
-            grid.Clear();
-            for (int i = 0; i < Enemies.Length; i++)
-                if (Enemies[i].Active) grid.Insert(i, Enemies[i].Position);
-        }
-
-        private void UpdateEnemies(float dt)
-        {
-            float despawnDistance = Mode.EnemyRadius + Mode.EnemyRadiusVariance + Mode.EnemyDespawnBuffer;
-            float smoothing = Math.Min(1, Mode.SeparationInterpolationSpeed * dt);
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                var enemy = Enemies[i];
-                if (!enemy.Active) continue;
-                int spawnId = enemy.SpawnId;
-                enemy.Age += dt;
-                var def = enemy.Def;
-                Vec2 toHero = HeroPosition - enemy.Position;
-                Vec2 desired;
-                // Stunned: no own movement and attack timers stand still; separation and contact still apply
-                // (interpretation, Mechanics §15).
-                bool stunned = enemy.Stunned;
-                if (stunned) desired = Vec2.Zero;
-                else switch (def.Movement)
-                {
-                    case MovementBehavior.Tracking:
-                        // Ground walkers go straight while the line to the target is clear, otherwise follow
-                        // the flow field around pits; straight line when the field has no step either.
-                        Vec2 path;
-                        if (WalksOnGround(enemy))
-                        {
-                            if ((enemy.Slot + stepIndex) % 3 == 0) enemy.ClearPath = Flow.Clear(enemy.Position, ChaseTarget);
-                            if (enemy.ClearPath || !Flow.Direction(enemy.Position, out path))
-                                path = (ChaseTarget - enemy.Position).Normalized;
-                        }
-                        else path = (ChaseTarget - enemy.Position).Normalized;
-                        desired = path * enemy.Speed;
-                        break;
-                    case MovementBehavior.Linear: desired = enemy.Direction * enemy.Speed; break;
-                    case MovementBehavior.LinearSinWave:
-                    {
-                        double angle = def.SinMovementAngle * Math.PI / 180
-                            * Math.Sin(enemy.Age * Math.PI * 2 * def.SinMovementPeriodMultiplier);
-                        float c = (float)Math.Cos(angle), s = (float)Math.Sin(angle);
-                        var d = enemy.Direction;
-                        desired = new Vec2(d.X * c - d.Y * s, d.X * s + d.Y * c) * enemy.Speed;
-                        break;
-                    }
-                    default: desired = Vec2.Zero; break;
-                }
-                desired *= enemy.Status.MoveFactor; // slow and freeze (Mechanics §24)
-
-                if (def.Movement != MovementBehavior.Stationary)
-                {
-                    // Separation: soft push from neighbours within the layer distance (Mechanics §2).
-                    Vec2 push = Vec2.Zero;
-                    using var near = grid.Query(enemy.Position, enemy.SeparationDistance);
-                    int used = 0;
-                    for (int n = 0; n < near.Count && used < 16; n++)
-                    {
-                        var other = Enemies[near[n]];
-                        if (other == enemy) continue;
-                        Vec2 away = enemy.Position - other.Position;
-                        float distanceSquared = away.LengthSquared;
-                        float limit = enemy.SeparationDistance;
-                        if (distanceSquared >= limit * limit || distanceSquared < 1e-4f) continue;
-                        float distance = (float)Math.Sqrt(distanceSquared);
-                        push += away * ((1 - distance / limit) / distance);
-                        used++;
-                    }
-                    Vec2 target = push.LengthSquared > 1e-6f ? push.Normalized * (enemy.Speed * Mode.SeparationVelocityInfluence) : Vec2.Zero;
-                    enemy.SeparationVelocity += (target - enemy.SeparationVelocity) * smoothing;
-                    enemy.Position = MoveEnemyTo(enemy, enemy.Position + (desired + enemy.SeparationVelocity) * dt);
-                }
-
-                // Contact with the hero.
-                float reach = enemy.Radius + Rules.HeroRadius;
-                if (enemy.Hostile && enemy.TouchDamage > 0 && Vec2.DistanceSquared(enemy.Position, HeroPosition) < reach * reach)
-                {
-                    if (def.DieOnTouch) { RetireEnemy(enemy, SimEventKind.EnemyDespawned); continue; }
-                    if (contactTimer <= 0 && !(Rules.DashGrantsInvulnerability && Dashing))
-                    {
-                        contactTimer = Rules.ContactDamageInterval;
-                        DamageHero(enemy.TouchDamage, enemy);
-                        if (Finished) return;
-                        if (!enemy.Active || enemy.SpawnId != spawnId) continue; // killed by reflection
-                    }
-                }
-
-                if (def.Attacks.Length > 0 && !stunned) { UpdateEnemyAttack(enemy, dt); if (Finished) return; }
-                if (!enemy.Active || enemy.SpawnId != spawnId) continue;
-                if (def.AbsorbRadius > 0) Absorb(enemy);
-
-                // Despawn enemies left far behind.
-                if (!def.Undespawnable && !def.IsBoss && enemy.EventIndex >= 0 && !spawnEvents[enemy.EventIndex].Spawner.Persistent
-                    && toHero.LengthSquared > despawnDistance * despawnDistance)
-                {
-                    enemy.OutOfRangeTime += dt;
-                    if (enemy.OutOfRangeTime >= Mode.EnemyDespawnTime) RetireEnemy(enemy, SimEventKind.EnemyDespawned);
-                }
-                else enemy.OutOfRangeTime = 0;
-            }
-        }
-
-        public void Knockback(Enemy enemy, Vec2 direction, float distance)
-        {
-            if (!enemy.Active || enemy.Def.Movement == MovementBehavior.Stationary) return;
-            enemy.Position = MoveEnemyTo(enemy, enemy.Position + direction.Normalized * (distance * enemy.KnockbackScale));
-        }
 
         // ------------------------------------------------------------------ targeting
 
@@ -804,71 +475,6 @@ namespace ThornThrone.Simulation
         }
 
         // ------------------------------------------------------------------ projectiles
-
-        /// <summary>
-        /// m_vecAttacks[0]: when the hero is within Range and the cooldown is over, wind up for AttackPoint seconds,
-        /// then fire a straight projectile at the hero's position (Speed &gt; 0, flies MaxDistance) or hit everything
-        /// within Radius around the enemy (Speed 0).
-        /// </summary>
-        private void UpdateEnemyAttack(Enemy enemy, float dt)
-        {
-            var attack = enemy.Def.Attacks[0];
-            enemy.AttackCooldown -= dt;
-            if (enemy.AttackWindup >= 0)
-            {
-                enemy.AttackWindup -= dt;
-                if (enemy.AttackWindup >= 0) return;
-                enemy.AttackWindup = -1;
-                Emit(SimEventKind.EnemyAttacked, enemy, enemy.Position, attack.Speed);
-                if (attack.Speed <= 0)
-                {
-                    float reach = attack.Radius + Rules.HeroRadius;
-                    if (Vec2.DistanceSquared(enemy.Position, HeroPosition) < reach * reach && !(Rules.DashGrantsInvulnerability && Dashing))
-                        DamageHero(attack.Damage * (1 + Difficulty.EnemyDamageMultiplier), enemy);
-                    return;
-                }
-                var shot = SpawnProjectile(null);
-                if (shot == null) return;
-                shot.Hostile = true;
-                shot.Position = enemy.Position;
-                shot.Speed = attack.Speed;
-                shot.Velocity = (HeroPosition - enemy.Position).Normalized * attack.Speed;
-                shot.Radius = attack.Radius;
-                shot.Damage = attack.Damage * (1 + Difficulty.EnemyDamageMultiplier);
-                shot.RemainingHits = 1;
-                shot.Life = Math.Max(attack.MaxDistance, attack.Range) / attack.Speed;
-                return;
-            }
-            if (enemy.AttackCooldown > 0) return;
-            if (Vec2.DistanceSquared(enemy.Position, HeroPosition) > attack.Range * attack.Range) return;
-            enemy.AttackCooldown = attack.Cooldown;
-            enemy.AttackWindup = attack.AttackPoint;
-        }
-
-        /// <summary>
-        /// Absorber: takes in non-elite enemies within m_flAbsorbRadius (plus both radii), gains
-        /// m_flPercentHealthAbsorbed of their health and m_flModelScaleIncreasePerAbsorb of size up to m_flMaxModelScale.
-        /// </summary>
-        private void Absorb(Enemy absorber)
-        {
-            var def = absorber.Def;
-            float range = def.AbsorbRadius + absorber.Radius;
-            using var near = grid.Query(absorber.Position, range + 150);
-            for (int i = 0; i < near.Count; i++)
-            {
-                var other = Enemies[near[i]];
-                if (!other.Active || other == absorber || other.Def.IsElite || other.Def.IsDestructible || !other.Hostile || other.Def.IsBoss) continue;
-                float reach = range + other.Radius;
-                if (Vec2.DistanceSquared(other.Position, absorber.Position) > reach * reach) continue;
-                float gain = other.Health * def.PercentHealthAbsorbed;
-                absorber.Health += gain;
-                absorber.MaxHealth += gain;
-                float scale = Math.Min(absorber.Scale + def.ModelScaleIncreasePerAbsorb, def.MaxModelScale > 0 ? def.MaxModelScale : float.MaxValue);
-                absorber.Radius *= scale / absorber.Scale;
-                absorber.Scale = scale;
-                RetireEnemy(other, SimEventKind.EnemyDespawned);
-            }
-        }
 
         public Projectile SpawnProjectile(OwnedPowerUp source)
         {
@@ -1056,8 +662,8 @@ namespace ThornThrone.Simulation
         /// <summary>Treasure variants 0–2: item, shard, scepter (Run.Aghanim.cs; literals so Tools/audit.py reads the condition).</summary>
         private void Drop(PickupDef pickup, Vec2 position, int experience)
         {
-            if (pickup == experienceDef) AddExperiencePickup(position, experience);
-            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet" || (pickup.RewardsTreasure && pickup.TreasureVariant >= 0 && pickup.TreasureVariant <= 2)) SpawnPickup(pickup, ClampToMap(position), 0);
+            if (pickup == experienceDef) Launch(AddExperiencePickup(position, experience));
+            else if (pickup.HealAmount > 0 || pickup.GoldAmount > 0 || pickup.Key == "magnet" || (pickup.RewardsTreasure && pickup.TreasureVariant >= 0 && pickup.TreasureVariant <= 2)) Launch(SpawnPickup(pickup, ClampToMap(position), 0));
             else if (pickup.Key == "nothing") { }
             else if (FirstTime(pickup)) Diagnostics.Report("pickup:" + pickup.Key, $"Pickup {pickup.Key} is not implemented");
         }
@@ -1112,17 +718,37 @@ namespace ThornThrone.Simulation
             pickup.Position = position;
             pickup.PreviousPosition = position;
             pickup.Value = value;
+            pickup.Velocity = Vec2.Zero;
+            pickup.SlideTime = 0;
             ActivePickups++;
             if (def == experienceDef) ActiveExperiencePickups++;
             Emit(SimEventKind.PickupSpawned, pickup, position, value);
             return pickup;
         }
 
-        /// <summary>At the m_nMaxXPPickupsInWorld limit the value is added to the nearest gem (prototype rule).</summary>
-        private void AddExperiencePickup(Vec2 position, int value)
+        /// <summary>
+        /// A dropped pickup with m_bCanSpawnWithVelocity gets a random direction and a speed of 0..m_flMaxSpawnVelocity,
+        /// which falls linearly to zero in <see cref="Rules.PickupSlideTime"/> (Mechanics §36 Р9).
+        /// </summary>
+        private void Launch(Pickup pickup)
         {
-            if (value <= 0) return;
-            if (ActiveExperiencePickups < Mode.MaxXPPickupsInWorld && SpawnPickup(experienceDef, position, value) != null) return;
+            if (pickup == null || !pickup.Def.CanSpawnWithVelocity || pickup.Def.MaxSpawnVelocity <= 0) return;
+            pickup.Velocity = Vec2.FromAngle(Rng.Angle()) * Rng.Range(0, pickup.Def.MaxSpawnVelocity);
+            pickup.SlideTime = Rules.PickupSlideTime;
+        }
+
+        /// <summary>
+        /// At the m_nMaxXPPickupsInWorld limit the value is added to the nearest gem (prototype rule). Returns the new
+        /// gem, or null when the value went to an existing one.
+        /// </summary>
+        private Pickup AddExperiencePickup(Vec2 position, int value)
+        {
+            if (value <= 0) return null;
+            if (ActiveExperiencePickups < Mode.MaxXPPickupsInWorld)
+            {
+                var gem = SpawnPickup(experienceDef, position, value);
+                if (gem != null) return gem;
+            }
             Pickup nearest = null;
             float best = float.MaxValue;
             for (int i = 0; i < Pickups.Length; i++)
@@ -1133,6 +759,7 @@ namespace ThornThrone.Simulation
                 if (d < best) { best = d; nearest = p; }
             }
             if (nearest != null) nearest.Value += value;
+            return null;
         }
 
         private void UpdatePickups(float dt)
@@ -1144,12 +771,23 @@ namespace ThornThrone.Simulation
                 if (!p.Active) continue;
                 float d = Vec2.DistanceSquared(p.Position, HeroPosition);
                 if (!p.Attracted && d <= radius * radius) p.Attracted = true;
+                if (p.Attracted) p.SlideTime = 0;
+                else if (p.SlideTime > 0) Slide(p, dt);
                 if (!p.Attracted) continue;
                 Vec2 toHero = HeroPosition - p.Position;
                 p.Position += toHero.ClampLength(Rules.PickupAttractSpeed * dt);
                 if (Vec2.DistanceSquared(p.Position, HeroPosition) > Rules.PickupCollectDistance * Rules.PickupCollectDistance) continue;
                 Collect(p);
             }
+        }
+
+        /// <summary>One step of the slide; a cell the hero cannot enter stops the pickup where it is (Mechanics §36 Р9).</summary>
+        private void Slide(Pickup p, float dt)
+        {
+            p.SlideTime = Math.Max(0, p.SlideTime - dt);
+            var next = ClampToMap(p.Position + p.Velocity * (dt * p.SlideTime / Rules.PickupSlideTime));
+            if (Data.Nav != null && !Data.Nav.Allows(next, NavMask)) p.SlideTime = 0;
+            else p.Position = next;
         }
 
         private void Collect(Pickup p)

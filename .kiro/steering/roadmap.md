@@ -193,7 +193,7 @@ inclusion: manual
 
 ## D. Полный сценарий (этап 5)
 
-Task 29: Враги, спавн, модификаторы сложностей (Spec)
+✅ (2026-11-12) Task 29: Враги, спавн, модификаторы сложностей (Spec)
 - Поля: `TurnRate` + `EnemyTurnRateMultiplier`, `m_bCanSpawnWithVelocity`/`m_flMaxSpawnVelocity`, `m_nOverflowEnemySpawnCount`, `m_bResetSpawnIntervalOnKill`, `m_flDestroyDistance`, `m_flMinSeparationDistanceFromEnemies`, `m_flOverrideDespawnRadiusBuffer`, `m_flMass`, `m_flAttackOffsetForward`. ~~Убрать ложную диагностику `_Pillar`~~ (сделано после блока B, `pillar-false-diagnostic-fix`). Замедление от касания (`sticky_situation`), метеоры (`meteor_mayhem`). Награды элитных комнат. Решения по hellbear/flyer_2/box в реестре.
 - Тесты на поля и модификаторы, по тесту на каждую из 8 сложностей, бот по 8 сложностям без диагностики.
 

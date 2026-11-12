@@ -207,9 +207,19 @@ class ImplementationTests(unittest.TestCase):
         self.assertEqual(level("heroes/dragonus"), "verified")
         self.assertEqual(level("heroes/kez"), "verified")
         self.assertEqual(level("heroes/shen"), "verified")  # Shen's innate attributes are supported (Task 28)
-        self.assertEqual(level("difficulty/meteor_mayhem"), "partial")
-        self.assertEqual(level("game_modes/crownfall_act4"), "partial")
+        # The meteor modifier and the touch slow are implemented since Task 29 (Mechanics §36).
+        for key in ("story", "harder_punches", "sticky_situation", "footmen_frenzy", "spooky_follower",
+                    "endurance_run", "meteor_mayhem", "echelon_mastery"):
+            self.assertTrue(at_least(f"difficulty/{key}", "implemented"), key)
+        # Every part of the mode (level, difficulties, spawners) is at least implemented since Task 29.
+        self.assertEqual(level("game_modes/crownfall_act4"), "verified")
 
+    def test_unused_records_carry_the_design_note(self):
+        registry = Shared.registry()["definitions"]
+        for key in ("enemies/hellbear", "enemies/flyer_2", "enemies/box",
+                    "spawners/hellbear", "spawners/flyer_2_swarm", "spawners/box"):
+            self.assertFalse(registry[key]["reachable"], key)
+            self.assertTrue(any("Mechanics §36" in n for n in registry[key]["notes"]), key)
     def test_meta_progression_attribute_is_at_most_partial(self):
         registry = Shared.registry()["definitions"]
         for entry in registry.values():
@@ -229,7 +239,8 @@ class VerifiedTests(unittest.TestCase):
         self.assertTrue(any(t.startswith("MagicMissileTests.cs:") for t in entry["tests"]), entry["tests"])
 
     def test_partial_is_not_raised_to_verified(self):
-        entry = Shared.registry()["definitions"]["game_modes/crownfall_act4"]
+        # A meta-progression attribute stays partial (permanent upgrades, roadmap block E) although tests name it.
+        entry = Shared.registry()["definitions"]["attributes/k_eSurvivorsAttribute_MovementSpeed"]
         self.assertTrue(entry["tests"])
         self.assertEqual(entry["implementation"], "partial")
 

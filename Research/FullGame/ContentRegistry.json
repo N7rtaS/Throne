@@ -18,7 +18,7 @@
   "game_modes": {
    "role:game_mode": 1,
    "prototype:partial": 1,
-   "implementation:partial": 1,
+   "implementation:verified": 1,
    "reachable": 1
   },
   "levels": {
@@ -30,10 +30,8 @@
   "difficulty": {
    "role:difficulty": 8,
    "prototype:none": 8,
-   "implementation:verified": 4,
-   "reachable": 8,
-   "implementation:partial": 2,
-   "implementation:implemented": 2
+   "implementation:verified": 8,
+   "reachable": 8
   },
   "heroes": {
    "role:hero": 3,
@@ -58,9 +56,9 @@
   "enemies": {
    "role:horde": 28,
    "prototype:partial": 24,
-   "implementation:implemented": 29,
+   "implementation:verified": 22,
    "reachable": 38,
-   "implementation:verified": 14,
+   "implementation:implemented": 21,
    "role:split-spawn": 1,
    "unreachable": 5,
    "prototype:none": 19,
@@ -73,10 +71,10 @@
   "spawners": {
    "role:spawner": 39,
    "prototype:none": 26,
-   "implementation:implemented": 31,
+   "implementation:verified": 19,
    "unreachable": 7,
+   "implementation:implemented": 24,
    "reachable": 36,
-   "implementation:verified": 12,
    "prototype:partial": 17,
    "role:elite-room": 4
   },
@@ -174,7 +172,7 @@
     "SimulationTests.cs:CatalogMatchesAudit",
     "SimulationTests.cs:MovementCapabilityFromData"
    ],
-   "implementation": "partial",
+   "implementation": "verified",
    "required": true
   },
   "levels/skywrath": {
@@ -257,6 +255,8 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:StoryLowersEnemyHealth",
     "ProfileTests.cs:Sample"
    ],
    "implementation": "verified",
@@ -284,6 +284,9 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:HarderPunchesRaisesEnemyHealthAndEveryDamage",
+    "DifficultyTests.cs:OtherDifficultiesDoNotSlow",
     "ProfileTests.cs:Sample",
     "SimulationTests.cs:DifficultyScalesEnemies"
    ],
@@ -311,8 +314,15 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "partial",
+   "tests": [
+    "DifficultyTests.cs:BlockedTouchDoesNotSlow",
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:StepsDoNotAllocateWithTheModifier",
+    "DifficultyTests.cs:StickySituationSlowsTheHeroAfterATouch",
+    "DifficultyTests.cs:StickySlowDoesNotSlowTheDashAndStopsOnPause",
+    "DifficultyTests.cs:StickySlowIsRefreshedNotStacked"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "difficulty/footmen_frenzy": {
@@ -336,8 +346,12 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:FootmenFrenzyRaisesSpeedTurnRateAndHealth",
+    "EnemyFieldTests.cs:ZombieTurnsItsCourseAtTheTurnRate"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "difficulty/spooky_follower": {
@@ -363,8 +377,13 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:SpookyFollowerSendsTheInvulnerableReaper",
+    "SpawnRuleTests.cs:ReaperBeyondItsRingIsMovedBackWithItsHealth",
+    "SpawnRuleTests.cs:ReaperWithinItsBufferIsNotMoved"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "difficulty/endurance_run": {
@@ -389,6 +408,9 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:EnduranceRunLengthensTheFloorAndMovesImperiasThresholds",
+    "DifficultyTests.cs:OtherDifficultiesDropNoMeteors",
     "SimulationTests.cs:DifficultyChangesBossTime"
    ],
    "implementation": "verified",
@@ -415,8 +437,15 @@
    "notes": [],
    "nameInClientBinary": false,
    "missingResources": [],
-   "tests": [],
-   "implementation": "partial",
+   "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:DashSavesFromTheMeteorImpact",
+    "DifficultyTests.cs:MeteorImpactHurtsTheStandingHeroAndLeavesBurningGround",
+    "DifficultyTests.cs:MeteorMayhemDropsMeteorsNearTheHero",
+    "DifficultyTests.cs:MeteorsStopOnPauseAndChoiceAndKeepFallingInTheBossFight",
+    "DifficultyTests.cs:StepsDoNotAllocateWithTheModifier"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "difficulty/echelon_mastery": {
@@ -441,6 +470,9 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:EchelonMasteryLowersTheExperienceChance",
+    "DifficultyTests.cs:EchelonMasteryRaisesTheMinimumCount",
     "SimulationTests.cs:EchelonsStackDifficulties"
    ],
    "implementation": "verified",
@@ -514,6 +546,12 @@
     "DashInputTests.cs:DashRequestIsDroppedWhenUpgradeChoiceOpens",
     "DashInputTests.cs:DashRequestSurvivesFrameWithoutStep",
     "DashInputTests.cs:PropertyHero",
+    "DifficultyTests.cs:BotRunMeetsNothingUnsupported",
+    "DifficultyTests.cs:EchelonMasteryRaisesTheMinimumCount",
+    "DifficultyTests.cs:MeteorRunIsDeterministic",
+    "DifficultyTests.cs:SpookyFollowerSendsTheInvulnerableReaper",
+    "DifficultyTests.cs:StepsDoNotAllocateWithTheModifier",
+    "EnemyFieldTests.cs:Quiet",
     "GroundObjectPoolTests.cs:BotRunsWithBoth",
     "GroundObjectPoolTests.cs:StepsDoNotAllocateAfterWarmUpWithBoth",
     "KezInnateTests.cs:InnateAbilityNeverReachesGlobals",
@@ -2919,8 +2957,10 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:EchelonMasteryRaisesTheMinimumCount"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/skeleton": {
@@ -2949,8 +2989,13 @@
    "nameInClientBinary": true,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:EnemyWithoutTurnRateTurnsAtOnce",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "SpawnRuleTests.cs:OrdinaryEnemyBeyondTheRingStillDespawns",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/skeleton_gold": {
@@ -3106,7 +3151,25 @@
     "DamageTests.cs:DamageStatsCountDealtHealthBySource",
     "DamageTests.cs:Dummy",
     "DamageTests.cs:NoReflectionWhileDashingOrInvulnerable",
+    "DifficultyTests.cs:BlockedTouchDoesNotSlow",
+    "DifficultyTests.cs:EchelonMasteryLowersTheExperienceChance",
+    "DifficultyTests.cs:EnduranceRunLengthensTheFloorAndMovesImperiasThresholds",
+    "DifficultyTests.cs:FootmenFrenzyRaisesSpeedTurnRateAndHealth",
+    "DifficultyTests.cs:HarderPunchesRaisesEnemyHealthAndEveryDamage",
+    "DifficultyTests.cs:OtherDifficultiesDoNotSlow",
+    "DifficultyTests.cs:StickySituationSlowsTheHeroAfterATouch",
+    "DifficultyTests.cs:StickySlowDoesNotSlowTheDashAndStopsOnPause",
+    "DifficultyTests.cs:StickySlowIsRefreshedNotStacked",
+    "DifficultyTests.cs:StoryLowersEnemyHealth",
     "EchoStrikeTests.cs:Standing",
+    "EnemyFieldTests.cs:EqualMassesPushAsBefore",
+    "EnemyFieldTests.cs:HeavyGolemIsBarelyPushedByLightZombie",
+    "EnemyFieldTests.cs:MassIsReadFromDataWithDefaultForAbsentField",
+    "EnemyFieldTests.cs:SatyrBossReadsMinimumSeparation",
+    "EnemyFieldTests.cs:StunnedEnemyDoesNotTurn",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "EnemyFieldTests.cs:ZombieFinishesTheTurnAndThenHeadsForTheHero",
+    "EnemyFieldTests.cs:ZombieTurnsItsCourseAtTheTurnRate",
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
     "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
@@ -3134,6 +3197,7 @@
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
     "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
     "StatusTests.cs:Zombie",
@@ -3322,8 +3386,12 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:AttractedPickupDoesNotSlide",
+    "EnemyFieldTests.cs:ExperienceSlidesFromTheKillAndStops",
+    "EnemyFieldTests.cs:SlidingPickupStopsAtTheEdgeOfTheFloor"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/satyr_boss": {
@@ -3352,8 +3420,10 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:SatyrBossReadsMinimumSeparation"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/satyr_boss_2": {
@@ -3442,13 +3512,16 @@
    "prototype": "partial",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
     "DamageTests.cs:ReflectionHitsMeleeAttacker",
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly",
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties",
     "StatusTests.cs:FreezeStrengthOneStopsMovementButNotAttacks"
    ],
    "implementation": "verified",
@@ -3703,13 +3776,17 @@
    "prototype": "partial",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_LINEAR",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly",
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/skeleton_archer": {
@@ -3743,6 +3820,10 @@
    "missingResources": [],
    "tests": [
     "AghanimTests.cs:EliteOutsideARoomDropsAScepterThatOpensTheScepterChoice",
+    "DifficultyTests.cs:HarderPunchesRaisesEnemyHealthAndEveryDamage",
+    "EnemyFieldTests.cs:ArcherShotStartsAheadOfTheArcher",
+    "EnemyFieldTests.cs:StationaryArcherTurnsTowardsTheHeroAtItsTurnRate",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
     "SimulationTests.cs:ArchersShootTheHero"
    ],
    "implementation": "verified",
@@ -3808,7 +3889,9 @@
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
    "tests": [
-    "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure"
+    "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData",
+    "SpawnRuleTests.cs:TreasureHolderReturnsAFullIntervalAfterItsKill"
    ],
    "implementation": "verified",
    "required": true
@@ -3845,8 +3928,14 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:StationaryEnemyWithZeroTurnRateKeepsItsCourse",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "SpawnRuleTests.cs:OverflowLeavesTheLastPoolSlotsFree",
+    "SpawnRuleTests.cs:RandomVaseIsDestroyedOnlyBeyondItsDistance",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/vase_always_cheese": {
@@ -3905,12 +3994,16 @@
    "prototype": "none",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_STATIONARY",
    "missingResources": [],
    "tests": [
+    "EnemyFieldTests.cs:GoldFromABoxSlidesFurtherThanExperience",
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly",
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
    ],
    "implementation": "verified",
@@ -4008,8 +4101,11 @@
    "nameInClientBinary": false,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:HeavyGolemIsBarelyPushedByLightZombie",
+    "EnemyFieldTests.cs:MassIsReadFromDataWithDefaultForAbsentField"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/granite_golem_medium": {
@@ -4111,6 +4207,8 @@
    "missingResources": [],
    "tests": [
     "DamageTests.cs:BossThresholdClampIsNotCounted",
+    "DifficultyTests.cs:MeteorImpactHurtsTheStandingHeroAndLeavesBurningGround",
+    "DifficultyTests.cs:MeteorMayhemDropsMeteorsNearTheHero",
     "FrostbiteTests.cs:ImperiaIsNotFrozenButTakesThePeriodicDamage",
     "MagicMissileTests.cs:StatusResistanceScalesStun",
     "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
@@ -4268,8 +4366,13 @@
    "nameInClientBinary": true,
    "movement": "ENEMY_MOVEMENT_BEHAVIOR_TRACKING",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:SpookyFollowerSendsTheInvulnerableReaper",
+    "SpawnRuleTests.cs:ReaperBeyondItsRingIsMovedBackWithItsHealth",
+    "SpawnRuleTests.cs:ReaperWithinItsBufferIsNotMoved",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "enemies/snotty": {
@@ -4327,8 +4430,14 @@
    "nameInClientBinary": false,
    "spawnBehavior": "STATIC_IN_MAP",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:StationaryEnemyWithZeroTurnRateKeepsItsCourse",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "SpawnRuleTests.cs:OverflowLeavesTheLastPoolSlotsFree",
+    "SpawnRuleTests.cs:RandomVaseIsDestroyedOnlyBeyondItsDistance",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/vase_boss": {
@@ -4383,8 +4492,12 @@
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "SpawnRuleTests.cs:RandomVaseIsDestroyedOnlyBeyondItsDistance",
+    "SpawnRuleTests.cs:RandomVasesAppearWithTheirChanceApartAndOnTheMainFloor",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/box": {
@@ -4406,12 +4519,16 @@
    "prototype": "none",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "spawnBehavior": "STATIC_IN_MAP",
    "missingResources": [],
    "tests": [
+    "EnemyFieldTests.cs:GoldFromABoxSlidesFurtherThanExperience",
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly",
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero"
    ],
    "implementation": "verified",
@@ -4497,8 +4614,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:EchelonMasteryRaisesTheMinimumCount"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/skeleton": {
@@ -4525,8 +4644,13 @@
    "nameInClientBinary": true,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:EnemyWithoutTurnRateTurnsAtOnce",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "SpawnRuleTests.cs:OrdinaryEnemyBeyondTheRingStillDespawns",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/skeleton_gold": {
@@ -4672,7 +4796,25 @@
     "DamageTests.cs:DamageStatsCountDealtHealthBySource",
     "DamageTests.cs:Dummy",
     "DamageTests.cs:NoReflectionWhileDashingOrInvulnerable",
+    "DifficultyTests.cs:BlockedTouchDoesNotSlow",
+    "DifficultyTests.cs:EchelonMasteryLowersTheExperienceChance",
+    "DifficultyTests.cs:EnduranceRunLengthensTheFloorAndMovesImperiasThresholds",
+    "DifficultyTests.cs:FootmenFrenzyRaisesSpeedTurnRateAndHealth",
+    "DifficultyTests.cs:HarderPunchesRaisesEnemyHealthAndEveryDamage",
+    "DifficultyTests.cs:OtherDifficultiesDoNotSlow",
+    "DifficultyTests.cs:StickySituationSlowsTheHeroAfterATouch",
+    "DifficultyTests.cs:StickySlowDoesNotSlowTheDashAndStopsOnPause",
+    "DifficultyTests.cs:StickySlowIsRefreshedNotStacked",
+    "DifficultyTests.cs:StoryLowersEnemyHealth",
     "EchoStrikeTests.cs:Standing",
+    "EnemyFieldTests.cs:EqualMassesPushAsBefore",
+    "EnemyFieldTests.cs:HeavyGolemIsBarelyPushedByLightZombie",
+    "EnemyFieldTests.cs:MassIsReadFromDataWithDefaultForAbsentField",
+    "EnemyFieldTests.cs:SatyrBossReadsMinimumSeparation",
+    "EnemyFieldTests.cs:StunnedEnemyDoesNotTurn",
+    "EnemyFieldTests.cs:TurnRateIsReadFromData",
+    "EnemyFieldTests.cs:ZombieFinishesTheTurnAndThenHeadsForTheHero",
+    "EnemyFieldTests.cs:ZombieTurnsItsCourseAtTheTurnRate",
     "FrostbiteTests.cs:FrozenEnemyStandsStillForTheDuration",
     "GridQueryTests.cs:PiercingSetup",
     "GroundObjectPoolTests.cs:DownedHeroPlacesNothingButLyingMinesStillExplode",
@@ -4700,6 +4842,7 @@
     "SimulationTests.cs:ShotDoesNotFollowReusedPoolSlot",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
     "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData",
     "StatusTests.cs:ReusedSlotStartsWithoutStatuses",
     "StatusTests.cs:StatusTicksDoNotAllocate",
     "StatusTests.cs:Zombie",
@@ -4902,8 +5045,10 @@
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:SatyrBossReadsMinimumSeparation"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/satyr_boss_2": {
@@ -5037,13 +5182,16 @@
    "prototype": "partial",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
    "tests": [
     "DamageTests.cs:ReflectionHitsMeleeAttacker",
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly",
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties",
     "StatusTests.cs:FreezeStrengthOneStopsMovementButNotAttacks"
    ],
    "implementation": "verified",
@@ -5124,13 +5272,16 @@
    "prototype": "none",
    "testScenario": null,
    "notes": [
-    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation"
+    "no reference from the game mode in data; possibly unused or created by native code under another name - verify by observation",
+    "unused by the level, mode and difficulties; not spawned, works when spawned directly (Mechanics §36 Р12)"
    ],
    "nameInClientBinary": false,
    "spawnBehavior": "FIXED_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "EnemyFieldTests.cs:UnusedRecordsAreNotReferencedByLevelModeOrDifficulties"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "spawners/ghost_swarm": {
@@ -5330,7 +5481,8 @@
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
    "tests": [
-    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
+    "SpawnRuleTests.cs:BossFightClosesTheEliteRoomWithoutReward"
    ],
    "implementation": "verified",
    "required": true
@@ -5364,7 +5516,8 @@
    "missingResources": [],
    "tests": [
     "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
-    "SimulationTests.cs:TurretsBecomeVulnerableOneByOne"
+    "SimulationTests.cs:TurretsBecomeVulnerableOneByOne",
+    "SpawnRuleTests.cs:BossFightClosesTheEliteRoomWithoutReward"
    ],
    "implementation": "verified",
    "required": true
@@ -5396,7 +5549,9 @@
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
    "tests": [
-    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
+    "SpawnRuleTests.cs:BossFightClosesTheEliteRoomWithoutReward",
+    "SpawnRuleTests.cs:CompletedRoomStaysDoneAfterTheBossFightStarts"
    ],
    "implementation": "verified",
    "required": true
@@ -5428,7 +5583,8 @@
    "spawnBehavior": "OVAL_AROUND_PLAYER",
    "missingResources": [],
    "tests": [
-    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied"
+    "AghanimTests.cs:EveryEliteRoomDropsExactlyOneScepterWhereItsLastEnemyDied",
+    "SpawnRuleTests.cs:BossFightClosesTheEliteRoomWithoutReward"
    ],
    "implementation": "verified",
    "required": true
@@ -5461,7 +5617,8 @@
    "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
    "missingResources": [],
    "tests": [
-    "SimulationTests.cs:ImperiaDefinitionIsReadFromData"
+    "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
    ],
    "implementation": "verified",
    "required": true
@@ -5493,7 +5650,8 @@
    "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
    "missingResources": [],
    "tests": [
-    "SimulationTests.cs:ImperiaDefinitionIsReadFromData"
+    "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
    ],
    "implementation": "verified",
    "required": true
@@ -5525,7 +5683,8 @@
    "spawnBehavior": "SPAWNER_ORIGIN_RADIUS",
    "missingResources": [],
    "tests": [
-    "SimulationTests.cs:ImperiaDefinitionIsReadFromData"
+    "SimulationTests.cs:ImperiaDefinitionIsReadFromData",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
    ],
    "implementation": "verified",
    "required": true
@@ -5555,7 +5714,9 @@
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
    "tests": [
-    "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure"
+    "RewardSourceTests.cs:RoshanDropsCollectibleItemTreasure",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData",
+    "SpawnRuleTests.cs:TreasureHolderReturnsAFullIntervalAfterItsKill"
    ],
    "implementation": "verified",
    "required": true
@@ -5584,8 +5745,13 @@
    "nameInClientBinary": true,
    "spawnBehavior": "RANDOM_DIRECTION",
    "missingResources": [],
-   "tests": [],
-   "implementation": "implemented",
+   "tests": [
+    "DifficultyTests.cs:SpookyFollowerSendsTheInvulnerableReaper",
+    "SpawnRuleTests.cs:ReaperBeyondItsRingIsMovedBackWithItsHealth",
+    "SpawnRuleTests.cs:ReaperWithinItsBufferIsNotMoved",
+    "SpawnRuleTests.cs:SpawnerFieldsAreReadFromData"
+   ],
+   "implementation": "verified",
    "required": true
   },
   "pickups/experience": {
@@ -5636,6 +5802,12 @@
    "nameInClientBinary": true,
    "missingResources": [],
    "tests": [
+    "DifficultyTests.cs:EchelonMasteryLowersTheExperienceChance",
+    "EnemyFieldTests.cs:AttractedPickupDoesNotSlide",
+    "EnemyFieldTests.cs:DebugAndInitialPickupsDoNotSlide",
+    "EnemyFieldTests.cs:ExperienceSlidesFromTheKillAndStops",
+    "EnemyFieldTests.cs:PickupVelocityIsReadFromData",
+    "EnemyFieldTests.cs:SlidingPickupStopsAtTheEdgeOfTheFloor",
     "PassiveItemTests.cs:OctarineCoreAndTomeWorkTogether",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
     "SnottyBatTests.cs:DownedHeroBatFliesButDoesNotStrikeOrCollect"
@@ -5741,7 +5913,8 @@
     "AghanimTests.cs:RerollOnTheScepterScreenStaysOnTheScepterScreen",
     "AghanimTests.cs:SeventeenAbilitiesTakeTheScepterAndOnlyMagicMissileTheShard",
     "AghanimTests.cs:TwoScepterPickupsGiveTwoChoicesAndTwoScepters",
-    "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold"
+    "AghanimTests.cs:WithoutCandidatesTheScepterGivesTheFallbackGold",
+    "SpawnRuleTests.cs:BossFightClosesTheEliteRoomWithoutReward"
    ],
    "implementation": "verified",
    "required": true
@@ -5777,6 +5950,8 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "EnemyFieldTests.cs:GoldFromABoxSlidesFurtherThanExperience",
+    "EnemyFieldTests.cs:PickupVelocityIsReadFromData",
     "LuckTests.cs:Kill",
     "LuckTests.cs:LuckyLootIsReadFromMode",
     "SnottyBatTests.cs:BatCollectsPickupsAwayFromTheHero",
@@ -5816,6 +5991,7 @@
    "missingResources": [],
    "tests": [
     "ChoiceRulesTests.cs:FallbackRewardGivesGoldOfGoldBagWithoutHealing",
+    "EnemyFieldTests.cs:PickupVelocityIsReadFromData",
     "LuckTests.cs:Kill",
     "LuckTests.cs:LuckyLootIsReadFromMode",
     "TrackTests.cs:Kill"
@@ -5887,6 +6063,7 @@
    "nameInClientBinary": false,
    "missingResources": [],
    "tests": [
+    "EnemyFieldTests.cs:PickupVelocityIsReadFromData",
     "RewardSourceTests.cs:TwoItemsAndOneMagnetStartAtAuthoredMapPoints"
    ],
    "implementation": "verified",
@@ -6597,7 +6774,9 @@
     "DamageTests.cs:HeroArmorIsCapped",
     "DamageTests.cs:HeroArmorReducesIncomingDamage",
     "DamageTests.cs:NoReflectionFromEnemyProjectiles",
-    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage"
+    "DamageTests.cs:ReflectionHitsContactAttackerWithPureDamage",
+    "DifficultyTests.cs:Armor",
+    "EnemyFieldTests.cs:UnusedEnemiesWorkWhenSpawnedDirectly"
    ],
    "implementation": "partial",
    "required": true

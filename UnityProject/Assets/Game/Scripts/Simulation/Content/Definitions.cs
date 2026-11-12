@@ -85,6 +85,16 @@ namespace ThornThrone.Simulation
         public float FixedDirectionDistanceVariance, PerpendicularWallSpacing, SpawnChance, MinimumDistanceBetween;
         /// <summary>Arena entity name for STATIC_IN_MAP spawns (m_sSpawnInfoTargetName).</summary>
         public string SpawnInfoTargetName;
+        /// <summary>m_nOverflowEnemySpawnCount: enemies per interval above the minimum (Imperia's portals, Mechanics §36 Р4); 0 if absent.</summary>
+        public int OverflowCount;
+        /// <summary>m_bResetSpawnIntervalOnKill: a kill restarts the full interval (Mechanics §36 Р5).</summary>
+        public bool ResetSpawnIntervalOnKill;
+        /// <summary>_class CSurvivorsSpawnerDestructiblesDefinition (vase_random): chance, spacing, layer and destroy distance (Mechanics §36 Р6).</summary>
+        public bool Destructibles;
+        /// <summary>m_flDestroyDistance: a destructible this far from the hero disappears; 0 if absent.</summary>
+        public float DestroyDistance;
+        /// <summary>m_eSpawnPositionsLayer (DESTRUCTIBLE_MAIN), or null.</summary>
+        public string SpawnPositionsLayer;
     }
 
     public sealed class PickupChanceDef
@@ -98,6 +108,8 @@ namespace ThornThrone.Simulation
     public sealed class EnemyAttackDef
     {
         public float Damage, Cooldown, Speed, Range, MaxDistance, AttackPoint, Radius, LifeTime;
+        /// <summary>m_flAttackOffsetForward: the shot starts this far ahead of the enemy (m_flAttackOffsetUp is height, presentation only).</summary>
+        public float OffsetForward;
     }
 
     public sealed class LootEntryDef
@@ -122,6 +134,14 @@ namespace ThornThrone.Simulation
         public MovementBehavior Movement;
         public string MovementName, SeparationLayer;
         public float KnockbackResistance, StatusResistance, TurnRate, SinMovementAngle, SinMovementPeriodMultiplier;
+        /// <summary>m_flTurnRate is present: the course turns at TurnRate degrees per second (Mechanics §36 Р1).</summary>
+        public bool HasTurnRate;
+        /// <summary>m_flMass, or null (Rules.DefaultEnemyMass, Mechanics §36 Р3).</summary>
+        public float? Mass;
+        /// <summary>m_flOverrideDespawnRadiusBuffer, or null (the mode's m_flEnemyDespawnBuffer).</summary>
+        public float? DespawnBuffer;
+        /// <summary>m_flMinSeparationDistanceFromEnemies: lower bound of the separation distance; 0 if absent.</summary>
+        public float MinSeparationDistance;
         public bool IsElite, IsDestructible, Invulnerable, Undespawnable, PlayerFriendly, DieOnTouch, HasSolidBody;
         /// <summary>m_eMovementCapability FLYING: ignores the nav grid. GROUND enemies walk around pits.</summary>
         public bool Flying;
@@ -204,6 +224,9 @@ namespace ThornThrone.Simulation
         public JObject Raw;
         public int Id, HealAmount, GoldAmount, TreasureVariant;
         public bool RewardsTreasure;
+        /// <summary>m_bCanSpawnWithVelocity / m_flMaxSpawnVelocity: a dropped pickup slides from the kill (Mechanics §36 Р9).</summary>
+        public bool CanSpawnWithVelocity;
+        public float MaxSpawnVelocity;
     }
 
     public sealed class DifficultyDef

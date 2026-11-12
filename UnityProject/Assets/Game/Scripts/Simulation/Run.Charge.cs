@@ -23,8 +23,31 @@ namespace ThornThrone.Simulation
             ChargeTime = Math.Max(ChargeTime, duration);
         }
 
-        /// <summary>Walking speed of the hero now.</summary>
-        public float HeroSpeed => Charging ? Math.Max(Build.Global[Attr.MovementSpeed], ChargeSpeed) : Build.Global[Attr.MovementSpeed];
+        /// <summary>
+        /// Walking speed of the hero now. The charge ignores the touch slow of sticky_situation; the dash does not use
+        /// this speed (Mechanics §36 Р2).
+        /// </summary>
+        public float HeroSpeed => Charging ? Math.Max(Build.Global[Attr.MovementSpeed], ChargeSpeed)
+            : Build.Global[Attr.MovementSpeed] * (HeroSlowed ? 1 - Rules.TouchSlowStrength : 1);
+
+        /// <summary>Seconds left of the touch slow (m_flEnemyTouchMovementSlowDuration, sticky_situation); 0 without it.</summary>
+        public float HeroSlowTime { get; private set; }
+        public bool HeroSlowed => HeroSlowTime > 0;
+
+        /// <summary>A touch hurt the hero: the slow is refreshed to the full duration, never stacked (Mechanics §36 Р2).</summary>
+        private void SlowHeroByTouch()
+        {
+            float duration = Difficulty.EnemyTouchMovementSlowDuration;
+            if (duration > 0) HeroSlowTime = Math.Max(HeroSlowTime, duration);
+        }
+
+        /// <summary>Runs in the step only, so pause, choice and the end of the run stop the slow.</summary>
+        private void UpdateTouchSlow(float dt)
+        {
+            if (HeroSlowTime <= 0) return;
+            HeroSlowTime -= dt;
+            if (HeroSlowTime <= 1e-4f) HeroSlowTime = 0;
+        }
 
         /// <summary>Called after the hero moved: the step that started the charge walks at the old speed.</summary>
         private void UpdateCharge(float dt)

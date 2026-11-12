@@ -155,9 +155,10 @@ namespace ThornThrone.Mobile
 
         private Quaternion Facing(Run run, Enemy e) => Facing(run, e.Def, e.Position, e.Direction);
 
+        /// <summary>The model faces the enemy's course from the simulation (turn rate, Mechanics §36 Р1).</summary>
         private Quaternion Facing(Run run, EnemyDef def, Vec2 position, Vec2 direction)
         {
-            Vec2 d = def.Movement == MovementBehavior.Tracking ? run.HeroPosition - position : direction;
+            Vec2 d = direction;
             if (d.LengthSquared < 1e-4f) d = new Vec2(0, -1);
             return Quaternion.Euler(0, Mathf.Atan2(d.X, d.Y) * Mathf.Rad2Deg + yawOffset, 0);
         }

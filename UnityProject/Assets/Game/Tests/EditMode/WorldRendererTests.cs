@@ -116,6 +116,27 @@ namespace ThornThrone.Mobile.Tests
         }
 
         [Test]
+        public void TrackingEnemyCorpseFacesItsCourseNotTheHero()
+        {
+            var data = LoadSourceData();
+            var def = data.Enemies["zombie"];
+            Assert.That(def.Movement, Is.EqualTo(MovementBehavior.Tracking));
+            var look = Visual("zombie");
+            var world = Renderer(new MobileGame.EnemyLook { enemy = def.Key, variants = new[] { look } });
+            var run = new Run(data, new Rules(), "dragonus", null, 7);
+            run.ClearEvents();
+
+            var dead = run.SpawnEnemy(def, run.HeroPosition + new Vec2(0, 300), -1);
+            dead.Direction = new Vec2(0.8f, 0.6f); // the hero is straight below, at (0, -1)
+            Vec2 position = dead.Position, direction = dead.Direction;
+            run.DamageEnemy(dead, dead.MaxHealth);
+            world.Consume(run);
+
+            Assert.That(world.CorpseCount, Is.EqualTo(1));
+            AssertCorpse(world, 0, look, position, direction);
+        }
+
+        [Test]
         public void ConsumeSkipsEnemyWithoutDeathClip()
         {
             var data = LoadSourceData();

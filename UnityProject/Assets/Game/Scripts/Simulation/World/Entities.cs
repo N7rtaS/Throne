@@ -13,6 +13,10 @@ namespace ThornThrone.Simulation
         /// <summary>Position at the start of the last fixed step (render interpolation, Mechanics §17).</summary>
         public Vec2 PreviousPosition;
         public float Health, MaxHealth, Speed, TouchDamage, Radius, SeparationDistance, KnockbackScale;
+        /// <summary>Course turn rate, radians per second: m_flTurnRate × (1 + m_flEnemyTurnRateMultiplier) (Mechanics §36 Р1).</summary>
+        public float TurnRate;
+        /// <summary>m_flMass or Rules.DefaultEnemyMass; shares separation pushes between neighbours (Mechanics §36 Р3).</summary>
+        public float Mass;
         public float Age, OutOfRangeTime;
         /// <summary>Spawn event that owns this enemy (for its minimum count), or -1.</summary>
         public int EventIndex;
@@ -104,6 +108,9 @@ namespace ThornThrone.Simulation
         public Vec2 PreviousPosition;
         /// <summary>Experience for experience pickups.</summary>
         public int Value;
+        /// <summary>Slide from the kill (m_bCanSpawnWithVelocity): start velocity and seconds left (Mechanics §36 Р9).</summary>
+        public Vec2 Velocity;
+        public float SlideTime;
     }
 
     /// <summary>Stage of a <see cref="GroundObject"/>: a mine arms, waits and counts down; a glob flies and burns (Mechanics §31).</summary>
@@ -210,6 +217,8 @@ namespace ThornThrone.Simulation
         CompanionEnded,
         /// <summary>A recipe was combined (Mechanics §35 Р6): not about a pooled entity, SpawnId 0; Value the recipe's powerup ID.</summary>
         RecipeCombined,
+        /// <summary>An elite room closed without reward at the start of the boss fight (Mechanics §36 Р11): Slot is the room index.</summary>
+        EliteRoomClosed,
     }
 
     /// <summary>

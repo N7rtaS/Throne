@@ -103,6 +103,7 @@
 - Воскрешение (`resurrector`): `m_nNumResurrectionTimes`, ускорение после каждой смерти.
 - Поглощение (`absorber`): рост модели за каждое поглощение до `m_flMaxModelScale`.
 - Неуязвимость, неисчезаемость, прочность к отталкиванию и статусам, рост HP от уровня героя (`m_flMaxHealthPerPlayerLevel`, 13 врагов).
+- Поворот `m_flTurnRate`, масса `m_flMass`, смещение выстрела `m_flAttackOffsetForward`, буфер деспавна `m_flOverrideDespawnRadiusBuffer`, минимальная дистанция расталкивания — правила §36 Р1, Р3, Р7, Р10, Р13.
 - Награды: `m_vecPickupChances` (например, скелет: опыт 1 с шансом 0.7), таблицы `m_fullLootTable` и `m_vecLootTable`.
 
 ### 5.3. Нагрузка орды (**Д**, оценка)
@@ -175,11 +176,11 @@
 |---|---|
 | `story` | HP врагов −10% |
 | `harder_punches` | HP +20%, урон +20% |
-| `sticky_situation` | касание замедляет героя на 0.7 с |
+| `sticky_situation` | касание замедляет героя на 0.7 с (сила 30 %, §36 Р2) |
 | `footmen_frenzy` | скорость и поворот врагов +30%, HP +30% |
 | `spooky_follower` | дополнительное событие: спавнер `death`, 1 враг с 1 с |
 | `endurance_run` | HP +30%, урон +30%, основная часть +60 с, пороги ярости Империи 0.75 / 0.5 / 0.25 |
-| `meteor_mayhem` | HP +50%, урон +30%, метеоры |
+| `meteor_mayhem` | HP +50%, урон +30%, метеоры (§36 Р8) |
 | `echelon_mastery` | HP +50%, урон +50%, появлений +50%, шанс опыта −25% |
 
 Открытие (**Н**, со слов игрока 09.11.2026): эшелоны открываются по одному. Сначала доступен только эшелон 1. Победа над Империей на эшелоне N открывает эшелон N+1. Закрытый эшелон показан серым с замком. Синий цвет карточек 5 и 7 не объяснён. Порядок открытия совпадает с порядком в данных: эшелон 1 — `story`, 2 — `harder_punches`, …, 8 — `echelon_mastery`. Эшелон N включает сложности 1..N, множители складываются (**Н**, §13: Империя 33 000 HP на эшелоне 2 = 30 000 × (1 − 0.1 + 0.2)). Хранение открытий, запись результата и экран сложности — §23.
@@ -196,6 +197,7 @@
 
 - **Имя есть в коде:** `powerups/gold`, `enemies/tower`, `spawners/tower`, `spawners/tower_boss`, `pickups/shard`, `pickups/nothing`, атрибуты `Damage`, `DamageMultiplier_Physical`, `Dodge`, `LifeSteal`, `LimitBreak`, `SplashDamagePercentage`.
 - **Имени в коде нет:** `powerups/pile_of_coal`, `enemies/hellbear`, `enemies/flyer_2`, `enemies/box`, `enemies/boss_tower`, `spawners/vase`, `spawners/box`, `spawners/hellbear`, `spawners/flyer_2_swarm`, `spawners/eidolon_swarm`, `pickups/cheese`, `pickups/treasure_no_directional_arrow`. Возможно, это вырезанный или запасной контент.
+- `hellbear`, `flyer_2`, `box` и их спавнеры в игре не появляются, как в данных (решение §36 Р12).
 
 Атрибуты, которые используются в данных, но не описаны в `survivors_attributes`: `DashCooldown`, `DashDuration`, `DashSpeed`, `DurationEffect`, `InitialTickDelay`, `LifeTime`, `NumDashes`, `ProjectileRadius`, `TriggerTime`.
 
@@ -248,7 +250,7 @@
 Не читаются, но влияют на игру:
 - `m_eMovementCapability`: 37 врагов `GROUND`, 6 `FLYING` (eidolon, eidolon_2, ghost, flyer, flyer_2, snotty). Видимо, наземные враги не проходят через пропасти, а летающие проходят. Сейчас сеткой проходимости ограничен только герой.
 - `m_flPlayerPositionHistoryBufferDuration = 0.3` в режиме. Вероятно, враги идут к позиции героя 0.3 с назад (**Н**).
-- `m_bCanSpawnWithVelocity`, `m_flMaxSpawnVelocity`: опыт разлетается со скоростью до 200, монеты и мешки до 500.
+- `m_bCanSpawnWithVelocity`, `m_flMaxSpawnVelocity`: опыт разлетается со скоростью до 200, монеты и мешки до 500. Читаются с Task 29 (§36 Р9).
 - `m_nOverflowEnemySpawnCount = 1` у порталов Империи; `m_bResetSpawnIntervalOnKill` у держателя награды; `m_flDestroyDistance = 6000` и слой `DESTRUCTIBLE_MAIN` у ваз.
 - `m_flMinSeparationDistanceFromEnemies = 300` у сатиров-боссов; `m_flOverrideDespawnRadiusBuffer = 600` у жнеца (`death`); `m_flMass` у 12 тяжёлых врагов; `m_flAttackOffsetForward` у стрелков.
 - `m_vecMetaProgressionTiers` с `m_nMinigameCurrency`: постоянная прокачка не сделана.
@@ -656,3 +658,21 @@
 - **Р8. `DurationEffect`** (В4). `DurationExtension` продлевает длительности способности, только если у неё `DurationEffect` > 0 (`AbilityBase.EffectDuration`): Magic Missile, Stampede, Chain Frost, Frostbite, Track, Spirits, Snotty Bat, Rot со скипетром. Врождённая Kez (`DurationEffect` нет) больше не продлевает уязвимость Timeless Relic. Ослабление Shen (атрибуты героя, §27) по-прежнему продлевается. Определения атрибута в данных нет. **Р**.
 - **Р9. Аудит.** `gold` — реализован как запасная награда (`Rules.FallbackPowerUp`), `pile_of_coal` — как «никогда не выдаётся» (`m_bRollable` false, ссылки из режима нет; В5). Атрибуты врождённой Shen входят в `Run.SupportedHeroAttributes`. `python3 Tools/audit.py`: 47 из 47 powerups `verified`.
 - Не сделано: картинки компонентов на карточке и связь «Даёт бонусы способностям» (Task 35), звук объединения (Task 36).
+
+## 36. Враги, спавн, модификаторы сложностей (Task 29, 12.11.2026)
+Источники. **Д:** поля `survivors_enemies.json` (`m_flTurnRate` у 19 врагов, `m_flMass` у 12, `m_flOverrideDespawnRadiusBuffer` 600 у `death`, `m_flMinSeparationDistanceFromEnemies` 300 у `satyr_boss`, `satyr_boss_2`, `m_flAttackOffsetForward` у `catapult` 30, `skeleton_archer` 50, `skeleton_archer_normal` 30, `tower` 50), `survivors_spawners.json` (`m_nOverflowEnemySpawnCount` 1 у трёх порталов Империи, `m_bResetSpawnIntervalOnKill` у `baby_roshan_item_holder`, `vase_random` класса `CSurvivorsSpawnerDestructiblesDefinition`: шанс 0.3, расстояние 200, слой `DESTRUCTIBLE_MAIN`, `m_flDestroyDistance` 6000), `survivors_pickups.json` (`m_flMaxSpawnVelocity`: опыт 200, монета и мешок 500), `survivors_difficulty.json` (`m_flEnemyTouchMovementSlowDuration` 0.7, `m_bEnableMeteorModifier`). **К:** `CSurvivorsGame::SimulateMeteorModifier(float)` и два обработчика его снаряда в строках клиента 6972; частица удара Империи `meteor.vpcf` та же. Алгоритмов в данных и клиенте нет. Решения владельца 12.11.2026 (В1–В11, `.kiro/specs/enemies-spawn-difficulty-modifiers/design.md` §0).
+- **Р1. Поворот** (В1). `m_flTurnRate` — скорость поворота курса `Enemy.Direction` в градусах в секунду, × (1 + `m_flEnemyTurnRateMultiplier`). Преследующий враг с полем поворачивает курс к пути (прямая или поле расстояний, §14) не быстрее этой скорости и идёт по курсу; без поля курс сразу равен пути. Неподвижный враг с полем > 0 (`skeleton_archer`, 150) поворачивает курс к герою; с 0 (`vase`, `box`, `tower`, `boss_tower`) курс не меняется. Оглушённый не поворачивается. Довод: радиус разворота «скорость / поворот» у подвижных врагов с полем 180–320, `footmen_frenzy` поднимает скорость и поворот на те же +30 %. Модель врага смотрит по курсу (`WorldRenderer.Facing`). **Р**.
+- **Р2. Замедление от касания** (В2). Касание, которое нанесло герою урон (не заблокировано рывком, неуязвимостью, натиском Stampede), ставит замедление на `m_flEnemyTouchMovementSlowDuration`; повторное касание обновляет длительность, замедления не складываются. Сила `Rules.TouchSlowStrength` 30 % (в данных нет). Снаряды и удары по области не замедляют. Рывок и натиск Stampede не замедляются. Таймер идёт только в шаге. **Р**.
+- **Р3. Масса** (В5). В расталкивании (§2) вклад соседа умножается на `2·m_соседа / (m_свой + m_соседа)`, величина толчка — `скорость × m_flSeperationVelocityInfluence × |Σ взвешенных| / |Σ без весов|`. При равных массах толчок прежний; голем (90 000) от зомби сдвигается в 0.002 раза, зомби от голема — в 2 раза. Масса без поля — `Rules.DefaultEnemyMass` 100. Отталкивание способностями масса не меняет (там `m_flKnockbackResistance`). **Р**.
+- **Р4. Перелив порталов** (В4). Когда живых не меньше минимума, спавнер с `m_nOverflowEnemySpawnCount` всё равно выпускает min(перелив, партия) врагов за интервал: портал скелетов — 1 каждые 0.2 с, пока его не закроют. Перелив не занимает последние `Rules.OverflowPoolReserve` 128 мест пула врагов. **Р**.
+- **Р5. Сброс интервала** (`m_bResetSpawnIntervalOnKill`). Убийство врага такого события откладывает следующее появление на полный интервал от убийства (держатель награды — 30 с). Деспавн интервал не сбрасывает. **Р**.
+- **Р6. Спавнер разрушаемых** (В7). На каждое появление один бросок `m_flSpawnChance`; позиция по `m_eSpawnBehavior`, до `Rules.DestructibleSpawnAttempts` 8 попыток, пока точка не на клетке главного этажа (`DESTRUCTIBLE_MAIN` = биты 1 и 64 сетки, **Р**) и не ближе `m_flMinimumDistanceBetween` к живому разрушаемому того же события. Не нашлось — пропуск. Ваза такого спавнера дальше `m_flDestroyDistance` 6000 от героя исчезает без награды; кольцо деспавна к ней не применяется. Неизвестный слой — диагностика `spawn-layer:<имя>`. **Р**.
+- **Р7. `m_flMinSeparationDistanceFromEnemies`.** Дистанция расталкивания врага = max(дистанция слоя, поле). У обоих сатиров слой `ELITE` даёт 360 > 300, поведение не меняется. Имени поля в строках клиента нет. **Р**.
+- **Р8. Метеоры** (В3). При `m_bEnableMeteorModifier` каждые `Rules.MeteorModifierInterval` 2.5 с метеор Империи (`m_flBurningGround*` из `enemies/imperia`: красный круг радиуса 280, через 2 с удар 20, затем 5 с горящая земля по 4 в секунду) падает в случайной точке на расстоянии 0…280 от героя. Урон × (1 + `m_flEnemyDamageMultiplier`), рывок спасает от удара, бьют только героя. Весь забег, включая бой с Империей; пул опасностей 64 общий с ней, при полном пуле метеор пропускается. Таймер идёт только в шаге. Числа **Д** Империи, перенос на модификатор и период **Р**.
+- **Р9. Скорость подборов** (В10). Подбор из награды врага с `m_bCanSpawnWithVelocity` получает случайное направление и скорость 0…`m_flMaxSpawnVelocity`, которая линейно гаснет за `Rules.PickupSlideTime` 0.5 с (путь не больше `v·0.5/2`). Клетка, куда герой не может зайти, останавливает подбор на месте; притяжение к герою прекращает скольжение. Начальные сундуки и магнит, отладочные подборы не скользят. Разброс коллекций 20…120 (§9) сохраняется. **Р**.
+- **Р10. Буфер деспавна и перенос** (В6). Кольцо деспавна врага: `m_flEnemyRadius + m_flEnemyRadiusVariance + (m_flOverrideDespawnRadiusBuffer или m_flEnemyDespawnBuffer)`. Неисчезаемый подвижный враг события (жнец `death`, кольцо 2900), кроме босса, дольше `m_flEnemyDespawnTime` 2 с за кольцом переносится на новую позицию появления своего события (наземный — на ближайший пол) с прежним здоровьем и статусами, без интерполяции (§17 Р4). **Р**.
+- **Р11. Элитные комнаты и Империя** (В9). При начале боя с Империей враги комнаты в бою исчезают без награды и скипетра, каждая незавершённая комната получает состояние `Closed` и событие `EliteRoomClosed` и больше не открывается; пройденные остаются `Done`. Каждая из 4 комнат при прохождении даёт ровно один скипетр (§34 Р1) и обычный лут. **Р** (ТЗ_Полная_игра_Unity.md §9).
+- **Р12. Неиспользуемые записи** (В8). `hellbear`, `flyer_2`, `box` и спавнеры `hellbear`, `flyer_2_swarm`, `box` не появляются: на них не ссылаются уровень, режим и сложности. Данные не меняются. Появленные напрямую, они работают по своим данным без диагностики (тест `EnemyFieldTests.UnusedEnemiesWorkWhenSpawnedDirectly`). Заметка в `ContentRegistry.json`. **Р**.
+- **Р13. Смещение выстрела.** Снаряд врага стартует из `Position + направление на героя × m_flAttackOffsetForward`. `m_flAttackOffsetUp` — высота, только отображение. Смысл полей **Д** по имени, применение **Р**.
+- Структура: появление и деспавн — `Run.Spawning.cs`, движение и атаки врагов — `Run.Enemies.cs`, метеоры — `Run.Meteors.cs`, замедление — `Run.Charge.cs`. `Run.ReportUnsupportedRules` больше не сообщает `difficulty:meteor` и `difficulty:slow`; `python3 Tools/audit.py`: 8 из 8 сложностей `verified`. Бот 120 с на каждой сложности и на `echelon_8` проходит без диагностики, кроме `data:*`.
+- Не сделано: значок замедления в HUD (Task 35), частицы метеора и замедления (Task 37), звуки (Task 36).

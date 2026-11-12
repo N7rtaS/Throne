@@ -111,6 +111,26 @@ namespace ThornThrone.Simulation
         /// companions and keeps the old ones (Mechanics §32 Р1, Р2).
         /// </summary>
         public int MaxCompanions = 32;
+
+        // ---- Enemies, spawning and difficulty modifiers (Р, Mechanics §36) ----
+
+        /// <summary>sticky_situation: movement slow of the hero after a touch that hurt (data gives only the duration).</summary>
+        public float TouchSlowStrength = 0.3f;
+
+        /// <summary>meteor_mayhem: one meteor this often, seconds (data gives only the flag).</summary>
+        public float MeteorModifierInterval = 2.5f;
+
+        /// <summary>Mass of an enemy without m_flMass.</summary>
+        public float DefaultEnemyMass = 100;
+
+        /// <summary>Overflow spawns (m_nOverflowEnemySpawnCount) leave this many enemy pool slots free.</summary>
+        public int OverflowPoolReserve = 128;
+
+        /// <summary>Destructibles spawner: positions tried per interval before the tick is skipped.</summary>
+        public int DestructibleSpawnAttempts = 8;
+
+        /// <summary>A pickup spawned with velocity slows down linearly to rest in this many seconds.</summary>
+        public float PickupSlideTime = 0.5f;
     }
 
     /// <summary>Things the simulation met but does not implement yet. Reported once per key.</summary>
@@ -128,6 +148,9 @@ namespace ThornThrone.Simulation
         }
 
         public bool Has(string key) => seen.Contains(key);
+
+        /// <summary>Reported keys in order; data warnings start with «data:».</summary>
+        public IReadOnlyList<string> Keys => keys;
 
         /// <summary>Reports everything of <paramref name="other"/> (data load diagnostics into a run).</summary>
         public void Include(Diagnostics other)
