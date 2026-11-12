@@ -23,6 +23,8 @@ namespace ThornThrone.App
         public int Echelon;
         /// <summary>Echelon opened by this run; 0 — nothing new.</summary>
         public int UnlockedEchelon;
+        /// <summary>Fixed result of the run: score, gold, abilities and items (Mechanics §37 Р2).</summary>
+        public RunSummary Summary;
     }
 
     /// <summary>
@@ -172,8 +174,8 @@ namespace ThornThrone.App
                 DurationSeconds = Run.Time,
                 Level = Run.HeroLevel,
                 Kills = Run.Kills,
-                // Ф4: the score formula is unknown (Mechanics §13); gold is stored, not yet paid as currency (block D).
-                Score = 0,
+                // Ф4: the score of the run (Mechanics §37 Р4); gold is stored, not yet paid as currency (Task 31).
+                Score = Run.Score,
                 Gold = Run.Gold,
             };
             int unlocked = 0;
@@ -184,7 +186,7 @@ namespace ThornThrone.App
             }
             profile.Results.Add(result);
             profile.Journal.TryAdd(operation);
-            LastOutcome = new RunOutcome { Result = result, Echelon = Echelon, UnlockedEchelon = unlocked };
+            LastOutcome = new RunOutcome { Result = result, Echelon = Echelon, UnlockedEchelon = unlocked, Summary = Run.Summary };
             LastSave = save(profile);
             return true;
         }

@@ -222,10 +222,25 @@ namespace ThornThrone.Simulation.Tests
             Assert.That(result.Level, Is.EqualTo(run.HeroLevel));
             Assert.That(result.Kills, Is.EqualTo(run.Kills));
             Assert.That(result.Gold, Is.EqualTo(run.Gold));
-            Assert.That(result.Score, Is.EqualTo(0), "Ф4: the score formula is unknown (Mechanics §13)");
+            Assert.That(result.Score, Is.EqualTo(run.Score), "Ф4: the score of the run (Mechanics §37 Р4)");
             Assert.That(result.RulesVersion, Is.EqualTo(ProfileSchema.RulesVersion));
         }
 
+        [Test]
+        public void OutcomeCarriesSummary()
+        {
+            var h = new Harness();
+            var run = h.StartRun();
+            run.DebugInvulnerable = true;
+            TestData.Simulate(run, 20, TestData.Bot);
+            run.DebugWin();
+            Assert.That(h.Flow.Finish(), Is.True);
+            var outcome = h.Flow.LastOutcome;
+            Assert.That(outcome.Summary, Is.Not.Null);
+            Assert.That(outcome.Summary, Is.SameAs(run.Summary));
+            Assert.That(outcome.Result.Score, Is.EqualTo(run.Summary.Score));
+            Assert.That(outcome.Result.Score, Is.GreaterThan(0), "the bot killed something");
+        }
         [Test]
         public void VictoryOnEchelonNUnlocksNPlus1()
         {

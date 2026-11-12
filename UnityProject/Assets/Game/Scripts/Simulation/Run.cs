@@ -206,6 +206,7 @@ namespace ThornThrone.Simulation
             MaxHealth = Health = Math.Max(1, Build.Global[Attr.MaxHP]);
             DashCharges = Math.Max(0, (int)Build.Global[Attr.NumDashes]);
             CreateAbilities();
+            StampHistory(); // starting and innate powerups are held from 0 (Mechanics §37 Р5)
             CreateEliteRooms();
             SpawnInitialPickups();
             ReportUnsupportedRules();
@@ -319,7 +320,7 @@ namespace ThornThrone.Simulation
             return true;
         }
 
-        public bool Reroll() => Choosing && Build.Reroll(Rng);
+        public bool Reroll() => Choosing && !Finished && Build.Reroll(Rng);
 
         // ------------------------------------------------------------------ step
 
@@ -340,10 +341,17 @@ namespace ThornThrone.Simulation
             UpdateStatuses(dt);
             if (Finished) return;
             RebuildGrid();
-            if (!Downed) for (int i = 0; i < Build.Owned.Count; i++) Build.Owned[i].Ability?.Tick(this, dt);
+            if (!Downed && !fallen)
+                for (int i = 0; i < Build.Owned.Count && !Finished; i++) Build.Owned[i].Ability?.Tick(this, dt);
+            if (Finished) return; // nothing is collected or chosen after the end (Mechanics §37 Р1)
             UpdateProjectiles(dt);
+            if (Finished) return;
             UpdateGroundObjects(dt); // Mechanics §31 Р3
+            if (Finished) return;
             UpdateCompanions(dt); // Mechanics §32 Р3
+            if (Finished) return;
+            // A death without lives ends the run here, after the shots already in the world (Mechanics §37 Р3).
+            if (fallen) { Finish(false); return; }
             if (!Downed) UpdatePickups(dt);
             if ((PendingAghanim || PendingItems > 0) && !Choosing) OpenChoices(); // Mechanics §34 Р3
             if (PendingLevels > 0 && !Choosing)
@@ -792,6 +800,7 @@ namespace ThornThrone.Simulation
 
         private void Collect(Pickup p)
         {
+            if (Finished) return; // Mechanics §37 Р1
             p.Active = false;
             freePickups[freePickupCount++] = p.Slot;
             ActivePickups--;
@@ -838,6 +847,7 @@ namespace ThornThrone.Simulation
 
         private void OpenChoices()
         {
+            if (Finished) return; // Mechanics §37 Р1
             pendingDash = false; // a stop drops the pending dash (ТЗ_Мобильная_версия_v2.md §6, §8)
             ChoiceSource = NextSource();
             Build.GenerateChoices(Rng, ChoiceSource);
@@ -858,7 +868,7 @@ namespace ThornThrone.Simulation
         /// <summary>Upgrade outside of a level-up choice (tests and debug tools).</summary>
         public bool ForceUpgrade(string key)
         {
-            if (!Data.PowerUps.TryGetValue(key, out var def) || !Build.Upgrade(def)) return false;
+            if (Finished || !Data.PowerUps.TryGetValue(key, out var def) || !Build.Upgrade(def)) return false; // §37 Р1
             OnBuildChanged();
             return true;
         }
@@ -866,6 +876,7 @@ namespace ThornThrone.Simulation
         private void OnBuildChanged()
         {
             CreateAbilities();
+            StampHistory(); // Run.Results.cs
             float maximum = Math.Max(1, Build.Global[Attr.MaxHP]);
             float gain = Math.Max(0, maximum - MaxHealth);
             MaxHealth = maximum;
@@ -896,7 +907,7 @@ namespace ThornThrone.Simulation
 
         private void Heal(float amount)
         {
-            if (!Finished && !Downed && amount > 0) Health = Math.Min(MaxHealth, Health + amount);
+            if (!Finished && !Downed && !fallen && amount > 0) Health = Math.Min(MaxHealth, Health + amount);
         }
 
         private void Finish(bool victory)
@@ -904,6 +915,7 @@ namespace ThornThrone.Simulation
             if (Finished) return;
             Finished = true;
             Victory = victory;
+            finishTime = Time;
             Emit(SimEventKind.RunFinished, -1, HeroPosition, victory ? 1 : 0);
         }
     }

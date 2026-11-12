@@ -197,7 +197,7 @@ inclusion: manual
 - Поля: `TurnRate` + `EnemyTurnRateMultiplier`, `m_bCanSpawnWithVelocity`/`m_flMaxSpawnVelocity`, `m_nOverflowEnemySpawnCount`, `m_bResetSpawnIntervalOnKill`, `m_flDestroyDistance`, `m_flMinSeparationDistanceFromEnemies`, `m_flOverrideDespawnRadiusBuffer`, `m_flMass`, `m_flAttackOffsetForward`. ~~Убрать ложную диагностику `_Pillar`~~ (сделано после блока B, `pillar-false-diagnostic-fix`). Замедление от касания (`sticky_situation`), метеоры (`meteor_mayhem`). Награды элитных комнат. Решения по hellbear/flyer_2/box в реестре.
 - Тесты на поля и модификаторы, по тесту на каждую из 8 сложностей, бот по 8 сложностям без диагностики.
 
-Task 30: Завершение забега, счёт, результаты (Spec)
+✅ (2026-11-12) Task 30: Завершение забега, счёт, результаты (Spec)
 - Результат после фиксации не меняется; смерть с жизнями и без; счёт (клиент, иначе Р; +20 за скелета наблюдалось); экран: урон, время владения, DPS по способностям, золото, счёт.
 - Тесты: смерть в волне/комнате/на боссе, одновременная смерть героя и босса.
 

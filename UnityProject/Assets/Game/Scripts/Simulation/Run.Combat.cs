@@ -104,6 +104,7 @@ namespace ThornThrone.Simulation
             ResetIntervalOnKill(enemy); // Run.Spawning.cs
             RetireEnemy(enemy, SimEventKind.EnemyDied);
             Kills++;
+            Score += Rules.ScorePerKill; // before Imperia's victory (Mechanics §37 Р4)
             if (boss) { Finish(true); return true; }
             DropRewards(def, position, tracked, room);
             if (def.SplitOnDeathNumUnits > 0 && Data.EnemiesById.TryGetValue(def.SplitOnDeathEnemyId, out var split))
@@ -127,7 +128,7 @@ namespace ThornThrone.Simulation
         /// </summary>
         private bool DamageHero(float amount, Enemy attacker = null)
         {
-            if (amount <= 0 || Finished || DebugInvulnerable || Downed || Charging) return false; // Stampede (§30 Р12)
+            if (amount <= 0 || Finished || fallen || DebugInvulnerable || Downed || Charging) return false; // Stampede (§30 Р12), §37 Р3
             float armor = Math.Min(Build.Global[Attr.Armor], Rules.MaxHeroArmor);
             float taken = amount * (1 - armor);
             Health = Math.Max(0, Health - taken);

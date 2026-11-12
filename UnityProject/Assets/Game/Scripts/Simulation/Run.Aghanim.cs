@@ -92,7 +92,7 @@ namespace ThornThrone.Simulation
         /// <summary>Gives the scepter or the shard to an owned ability without a choice (tests, smoke -thornForce=KEY+scepter).</summary>
         public bool DebugGrant(string key, bool shard)
         {
-            if (!Data.PowerUps.TryGetValue(key, out var def)) return false;
+            if (Finished || !Data.PowerUps.TryGetValue(key, out var def)) return false; // §37 Р1
             if (!(shard ? Build.UpgradeShard(def) : Build.UpgradeScepter(def))) return false;
             OnBuildChanged();
             return true;

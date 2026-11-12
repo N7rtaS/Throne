@@ -54,7 +54,7 @@ namespace ThornThrone.Mobile
         private readonly Canvas canvas;
         private readonly GameObject menu, heroSelect, difficulty, hud, choices, pause, confirm, results, settings;
         private readonly Image healthFill, experienceFill, dashFill, joystickBase, joystickKnob, eliteArrow;
-        private readonly TMP_Text bossText, resultText, rerollText, choiceTitle, settingsError, profileWarning, resultUnlocked, resultSaveError;
+        private readonly TMP_Text bossText, resultText, resultAbilities, resultItems, rerollText, choiceTitle, settingsError, profileWarning, resultUnlocked, resultSaveError;
         private readonly Dictionary<string, string> difficultyNames;
         /// <summary>Hero cards in display order with their selection frames.</summary>
         private readonly List<(string Key, Button Button, GameObject Selected)> heroCards = new List<(string, Button, GameObject)>();
@@ -200,12 +200,15 @@ namespace ThornThrone.Mobile
             // Results
             results = Panel(safe, "Results", new Color(0, 0, 0, .8f));
             var resultsContent = Content(results);
-            resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-700, 360), new Vector2(1400, 440), 52, TextAnchor.MiddleCenter);
+            // Header, then the ability and item tables of the client's PostGameScreen (Mechanics §37 Р6).
+            resultText = Label(resultsContent, "Text", new Vector2(.5f, .5f), new Vector2(-900, 530), new Vector2(1800, 240), 40, TextAnchor.MiddleCenter);
+            resultAbilities = Label(resultsContent, "Abilities", new Vector2(.5f, .5f), new Vector2(-920, 280), new Vector2(1100, 410), 26, TextAnchor.UpperLeft);
+            resultItems = Label(resultsContent, "Items", new Vector2(.5f, .5f), new Vector2(230, 280), new Vector2(690, 410), 26, TextAnchor.UpperLeft);
             // DOTA_Survivors_NewDifficultyUnlocked.
-            resultUnlocked = Label(resultsContent, "Unlocked", new Vector2(.5f, .5f), new Vector2(-700, -100), new Vector2(1400, 80), 48, TextAnchor.MiddleCenter);
+            resultUnlocked = Label(resultsContent, "Unlocked", new Vector2(.5f, .5f), new Vector2(-700, -132), new Vector2(1400, 60), 40, TextAnchor.MiddleCenter);
             resultUnlocked.text = "Открыта новая сложность!";
             resultUnlocked.color = new Color(1, .82f, .4f);
-            resultSaveError = Label(resultsContent, "Save error", new Vector2(.5f, .5f), new Vector2(-700, -190), new Vector2(1400, 60), 34, TextAnchor.MiddleCenter);
+            resultSaveError = Label(resultsContent, "Save error", new Vector2(.5f, .5f), new Vector2(-700, -194), new Vector2(1400, 52), 34, TextAnchor.MiddleCenter);
             resultSaveError.text = "Не удалось сохранить результат";
             resultSaveError.color = new Color(1, .45f, .4f);
             // Ф8: four buttons in a row; «В меню» is the mobile addition (the original closes the window).
@@ -396,15 +399,18 @@ namespace ThornThrone.Mobile
         public string EchelonName(AppFlow flow, int echelon) =>
             echelon >= 1 && echelon <= flow.EchelonCount ? EchelonText(flow.EchelonDifficulty(echelon), "m_sLocDifficultyName") ?? flow.EchelonDifficulty(echelon).Key : "";
 
-        /// <summary>Ф8: outcome, echelon, time, level, kills; «Открыта новая сложность!» when the run opened one; Ф11 error line.</summary>
+        /// <summary>
+        /// Ф8: outcome, echelon, time, level, kills, score and gold, the ability and item tables (Mechanics §37 Р6);
+        /// «Открыта новая сложность!» when the run opened one; Ф11 error line. Texts are built once here, not per frame.
+        /// </summary>
         public void ShowResults(AppFlow flow)
         {
             Show(results);
             var outcome = flow.LastOutcome;
-            var r = outcome.Result;
-            resultText.text = (r.Victory ? "Победа!" : "Поражение") +
-                $"\n\nЭшелон {outcome.Echelon} — {EchelonName(flow, outcome.Echelon)}" +
-                $"\n\nВремя {FormatTime((float)r.DurationSeconds)}   Уровень {r.Level}   Убито {r.Kills}";
+            var summary = outcome.Summary;
+            resultText.text = ResultsText.Header(summary, outcome.Echelon, EchelonName(flow, outcome.Echelon));
+            resultAbilities.text = ResultsText.Abilities(summary.Abilities, Name);
+            resultItems.text = ResultsText.Items(summary.Items, Name);
             resultUnlocked.gameObject.SetActive(outcome.UnlockedEchelon > 0);
             SetResultSaveError(flow.SaveFailed);
         }
@@ -622,11 +628,6 @@ namespace ThornThrone.Mobile
             }
         }
 
-        private static string FormatTime(float seconds)
-        {
-            int s = Mathf.FloorToInt(seconds);
-            return $"{s / 60:00}:{s % 60:00}";
-        }
 
         private static readonly Vector3[] corners = new Vector3[4];
 

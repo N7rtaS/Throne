@@ -84,7 +84,7 @@ namespace ThornThrone.Simulation
         /// <summary>Collects a pickup for the hero wherever it lies (Snotty Bat, §32 Р16): the hero's own collection.</summary>
         internal void CollectPickup(Pickup p)
         {
-            if (p.Active) Collect(p);
+            if (p.Active && !fallen) Collect(p); // nothing is collected in the rest of a fatal step (Mechanics §37 Р3)
         }
     }
 }

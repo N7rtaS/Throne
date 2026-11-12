@@ -41,7 +41,7 @@ namespace ThornThrone.Simulation
         /// <summary>Combines a ready recipe without a choice (tests, smoke -thornRecipe); false when it is not ready (Р1).</summary>
         public bool ForceCombine(string key)
         {
-            if (!Data.PowerUps.TryGetValue(key, out var def) || !Build.Combine(def)) return false;
+            if (Finished || !Data.PowerUps.TryGetValue(key, out var def) || !Build.Combine(def)) return false; // §37 Р1
             OnBuildChanged();
             EmitCombined(def);
             return true;

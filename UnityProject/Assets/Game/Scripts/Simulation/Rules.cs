@@ -45,6 +45,11 @@ namespace ThornThrone.Simulation
         /// </summary>
         public string FallbackPowerUp = "gold";
         public string FallbackGoldPickup = "gold_bag";
+        /// <summary>
+        /// Score of one enemy death (not a resurrection), Imperia included. The data has no score field; +20 for a
+        /// skeleton was observed (Mechanics §13); the same 20 for every enemy is the owner's decision В1 (Mechanics §37 Р4).
+        /// </summary>
+        public int ScorePerKill = 20;
 
         /// <summary>Collision radius when m_flCollisionRadius is absent, by separation layer.</summary>
         public Dictionary<string, float> DefaultCollisionRadius = new Dictionary<string, float>

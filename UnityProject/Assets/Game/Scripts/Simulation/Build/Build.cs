@@ -19,6 +19,10 @@ namespace ThornThrone.Simulation
         public IAbility Ability;
         /// <summary>Damage statistics of this ability; kept in <see cref="Run.DamageStats"/> after a recipe consumes it.</summary>
         public DamageStatEntry Stats;
+        /// <summary>Run seconds when the powerup was acquired; −1 until <see cref="Run"/> stamps it (Mechanics §37 Р5).</summary>
+        public float AcquiredAt = -1;
+        /// <summary>Run seconds when a recipe consumed it; −1 while it is owned (Mechanics §37 Р5).</summary>
+        public float ReleasedAt = -1;
     }
 
     /// <summary>
@@ -45,6 +49,8 @@ namespace ThornThrone.Simulation
         private readonly List<OfferKind> kinds = new List<OfferKind>(64);
 
         public readonly List<OwnedPowerUp> Owned = new List<OwnedPowerUp>();
+        /// <summary>Every powerup acquired in the run in the order of acquisition, consumed recipe components included (results, Mechanics §37 Р5).</summary>
+        public readonly List<OwnedPowerUp> History = new List<OwnedPowerUp>();
         public readonly AttributeSet Global = new AttributeSet();
         public readonly List<PowerUpDef> Choices = new List<PowerUpDef>(8);
         /// <summary>Cards of <see cref="Choices"/> in the same order; the first <see cref="OfferCount"/> are valid.</summary>
@@ -403,7 +409,9 @@ namespace ThornThrone.Simulation
 
         private void Acquire(PowerUpDef def)
         {
-            Owned.Add(new OwnedPowerUp { Def = def, Rank = 1, MinorCounts = new int[def.Minor.Length] });
+            var owned = new OwnedPowerUp { Def = def, Rank = 1, MinorCounts = new int[def.Minor.Length] };
+            Owned.Add(owned);
+            History.Add(owned);
         }
 
         /// <summary>
